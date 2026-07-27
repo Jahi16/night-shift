@@ -1,2 +1,2 @@
 # night-shift
-A lil game to you study for the Sec+ exam
+A supplemental game to help you pass the CompTIA Sec+ exam
