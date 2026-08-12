@@ -3426,7 +3426,7 @@ function acrU(){ return allAcr().filter(a=>a.u); }
 const TIGHT=[115,98,84,70,58];
 function examDate(){ return S.exam?new Date(S.exam+"T12:00:00"):null; }
 
-let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},studyNotes:[],dumpNotes:[],noteSeq:0};
+let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},studyNotes:[],dumpNotes:[],noteSeq:0,manualTimer:false,manualTimerSec:45};
 for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0};
 
 let view="home", sess=null, sessStart=0, breakShown=false, tickHandle=null;
@@ -3446,7 +3446,7 @@ function dl(name,text){ const b=new Blob([text],{type:"text/plain;charset=utf-8"
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 
 /* ================= adaptive pressure ================= */
-function limit(){ return TIGHT[Math.max(0,Math.min(4,S.tight))]; }
+function limit(){ return S.manualTimer?S.manualTimerSec:TIGHT[Math.max(0,Math.min(4,S.tight))]; }
 function adapt(ok){
   S.roll.push(ok?1:0); if(S.roll.length>12) S.roll.shift();
   if(S.roll.length>=8){
@@ -3601,7 +3601,7 @@ function home(){
     <h1 class="neon" style="font-family:var(--mono);letter-spacing:.03em;text-transform:uppercase">Night Shift</h1>
     <p class="sub">A full <b>CompTIA Security+ SY0-701</b> trainer built around the official exam blueprint: every question, flashcard, and PBQ is mapped to one of the 28 exam objectives, and the mix is weighted to the real domain percentages. It leans harder on whatever you keep getting wrong, and it will tell you when you are actually ready.</p>
     <div class="facts">
-      <button class="fact link" onclick="heroJump(['t-soc','t-rapid'])"><b>${QUESTIONS.length}</b> questions</button>
+      <button class="fact link" onclick="shiftSetup()"><b>${QUESTIONS.length}</b> questions</button>
       <button class="fact link" onclick="pbqSetup()"><b>${PBQ.length}</b> PBQs</button>
       <button class="fact link" onclick="cardSetup()"><b>${allCards().length}</b> flashcards</button>
       <button class="fact link" onclick="acrSetup()"><b>${allAcr().length}</b> acronyms</button>
@@ -3618,7 +3618,7 @@ function home(){
       <h4>Practice Exams are the real thing</h4>
       <p><b>Five fixed 90-question exams</b>, 4 PBQs plus 86 multiple choice, weighted to the official domain percentages. Untimed, 90 minutes, or set your own clock, and you can hide the timer while you work. <b>No feedback at all until you submit.</b> The review then maps every miss to the exact Messer section and Gibson chapter to restudy.</p>
       <h4>SOC Watch and Rapid Response drill under pressure</h4>
-      <p>SOC Watch feeds you severity-coded tickets and costs you network integrity for wrong calls. Rapid Response is a speed run with a combo multiplier and three lives. <b>The drill timer is adaptive:</b> hold 85 percent and it tightens, drop below 60 percent and it loosens.</p>
+      <p>SOC Watch feeds you severity-coded tickets and costs you network integrity for wrong calls. Rapid Response, a toggle inside SOC Watch setup, is a speed run with a combo multiplier and three lives. <b>The timer defaults to adaptive:</b> hold 85 percent and it tightens, drop below 60 percent and it loosens. Switch to manual in setup to fix it anywhere from 15 to 90 seconds instead.</p>
       <h4>Flashcards use spaced repetition</h4>
       <p>Free-recall cards scheduled so material you keep missing comes back sooner and material you know fades into the background.</p>
       <h4>PBQs give partial credit</h4>
@@ -3650,17 +3650,12 @@ function home(){
     <button class="tile" id="t-soc" style="--accent:var(--amber)" onclick="shiftSetup()">
       <span class="tag">Mode 01</span><h3>SOC Watch</h3>
       <p>Alerts hit your queue as severity-coded tickets. Triage each one. Wrong calls cost network integrity.</p></button>
-    <button class="tile" id="t-rapid" style="--accent:var(--red)" onclick="drillStart()">
-      <span class="tag">Mode 02</span><h3>Rapid Response</h3>
-      <p>Speed drill with a combo multiplier. Three misses ends the run. Best score ${S.bestDrill}.</p></button>
     <button class="tile" id="t-cards" style="--accent:var(--cyan)" onclick="cardSetup()">
       <span class="tag">Recall</span><h3>Flashcards</h3>
       <p>Free-recall with spaced repetition. ${dueCount()} of ${allCards().length} cards due now.</p></button>
     <button class="tile" id="t-acr" style="--accent:var(--violet)" onclick="acrSetup()">
       <span class="tag">Range</span><h3>Acronym Range</h3>
       <p>${acrU().length} drillable acronyms in the all-acronym answer format, plus the full searchable list.</p></button>
-  </div>
-  <div class="tiles" style="margin-top:12px">
     <button class="tile" id="t-exams" style="--accent:var(--amber)" onclick="examHome()">
       <span class="tag">Full length</span>
       <h3>Practice Exams</h3>
@@ -3692,8 +3687,14 @@ function shiftSetup(){
   const pool=sd?QUESTIONS.filter(q=>q.d===sd).length:QUESTIONS.length;
   $("app").innerHTML=`
   <p class="eyebrow">Mode 01</p><h1>SOC Watch</h1>
-  <p class="lede">Tickets arrive weighted to the real exam blueprint, or locked to a single domain when you need to drill one down. Integrity starts at 100 and drops with every wrong call, more for a P1. Drop to zero and the shift is lost.</p>
-  <h2>Focus</h2>
+  <p class="lede">Tickets arrive weighted to the real exam blueprint, or locked to a single domain when you need to drill one down.</p>
+  <h2>Mode</h2>
+  <div class="seg">
+    <button class="on" disabled style="cursor:default">Standard shift</button>
+    <button onclick="drillStart()">Rapid Response</button>
+  </div>
+  <p class="dim" style="font-size:12.5px;margin:8px 0 0">Standard: integrity starts at 100 and drops with every wrong call, more for a P1. Drop to zero and the shift is lost. Rapid Response: a speed run with a combo multiplier and 3 lives. Three misses ends the run.</p>
+  <h2 style="margin-top:20px">Focus</h2>
   <div class="seg">
     <button class="${sd===0?"on":""}" onclick="setShiftDom(0)">All domains</button>
     ${[1,2,3,4,5].map(d=>`<button class="${sd===d?"on":""}" onclick="setShiftDom(${d})">D${d}.0</button>`).join("")}
@@ -3705,8 +3706,24 @@ function shiftSetup(){
     <button class="btn" onclick="shiftStart(20)">Standard - 20 tickets</button>
     <button class="btn" onclick="shiftStart(45)">Full - 45 tickets</button>
   </div>
-  <p class="dim" style="margin-top:18px;font-size:13px">Timer is adaptive and currently at ${limit()} seconds per ticket. It tightens as your rolling accuracy climbs.</p>
+  <h2 style="margin-top:20px">Timer</h2>
+  <div class="seg">
+    <button class="${S.manualTimer?"":"on"}" onclick="setManualTimer(false)">Adaptive</button>
+    <button class="${S.manualTimer?"on":""}" onclick="setManualTimer(true)">Manual</button>
+  </div>
+  ${S.manualTimer?`
+  <div style="margin-top:12px;display:flex;align-items:center;gap:14px">
+    <input type="range" id="mtSlider" min="15" max="90" step="5" value="${S.manualTimerSec}" style="flex:1" oninput="setManualTimerSec(this.value)">
+    <span class="mono" id="mtVal" style="min-width:52px;text-align:right;font-size:15px;font-weight:600">${S.manualTimerSec}s</span>
+  </div>
+  <p class="dim" style="margin-top:8px;font-size:13px">Every ticket gets exactly ${S.manualTimerSec} seconds. Range: 15s to 90s.</p>
+  `:`<p class="dim" style="margin-top:12px;font-size:13px">Currently at ${limit()} seconds per ticket. It tightens as your rolling accuracy climbs, and loosens if you drop below 60%.</p>`}
   <div class="row" style="margin-top:20px"><button class="btn ghost sm" onclick="home()">Back to home</button></div>`;
+}
+function setManualTimer(on){ S.manualTimer=on; save(); shiftSetup(); }
+function setManualTimerSec(v){
+  S.manualTimerSec=Math.max(15,Math.min(90,parseInt(v,10)||45)); save();
+  const el=$("mtVal"); if(el) el.textContent=S.manualTimerSec+"s";
 }
 function shiftStart(n){
   AT_SECTION=false; view="shift";
