@@ -3426,7 +3426,7 @@ function acrU(){ return allAcr().filter(a=>a.u); }
 const TIGHT=[115,98,84,70,58];
 function examDate(){ return S.exam?new Date(S.exam+"T12:00:00"):null; }
 
-let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},studyNotes:[],dumpNotes:[],noteSeq:0,manualTimer:false,manualTimerSec:45};
+let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},studyNotes:[],dumpNotes:[],noteSeq:0,manualTimer:false,manualTimerSec:45,shiftMode:"shift"};
 for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0};
 
 let view="home", sess=null, sessStart=0, breakShown=false, tickHandle=null;
@@ -3528,7 +3528,9 @@ function leaveSession(dest,label){
   } else if(sess&&sess.mode==="cards"){
     // flashcards have no timer and nothing at stake, so back/home always work instantly
   } else if(tickHandle && !confirm("Leave this session? Answers so far are already recorded, but you will not see the end-of-session report.")) return;
-  stopTimer(); RENDER_CB=null; sess=null; PB=null; PICK=null; dest();
+  stopTimer(); RENDER_CB=null; sess=null; PB=null; PICK=null;
+  if(window.scrollTo) window.scrollTo(0,0);
+  dest();
 }
 function goHome(){ leaveSession(home,"home"); }
 function goBack(){
@@ -3601,7 +3603,7 @@ function home(){
     <h1 class="neon" style="font-family:var(--mono);letter-spacing:.03em;text-transform:uppercase">Night Shift</h1>
     <p class="sub">A full <b>CompTIA Security+ SY0-701</b> trainer built around the official exam blueprint: every question, flashcard, and PBQ is mapped to one of the 28 exam objectives, and the mix is weighted to the real domain percentages. It leans harder on whatever you keep getting wrong, and it will tell you when you are actually ready.</p>
     <div class="facts">
-      <button class="fact link" onclick="shiftSetup()"><b>${QUESTIONS.length}</b> questions</button>
+      <button class="fact link" onclick="window.scrollTo(0,0);shiftSetup()"><b>${QUESTIONS.length}</b> questions</button>
       <button class="fact link" onclick="pbqSetup()"><b>${PBQ.length}</b> PBQs</button>
       <button class="fact link" onclick="cardSetup()"><b>${allCards().length}</b> flashcards</button>
       <button class="fact link" onclick="acrSetup()"><b>${allAcr().length}</b> acronyms</button>
@@ -3647,7 +3649,7 @@ function home(){
   </div>
 
   <div class="tiles">
-    <button class="tile" id="t-soc" style="--accent:var(--amber)" onclick="shiftSetup()">
+    <button class="tile" id="t-soc" style="--accent:var(--amber)" onclick="window.scrollTo(0,0);shiftSetup()">
       <span class="tag">Mode 01</span><h3>SOC Watch</h3>
       <p>Alerts hit your queue as severity-coded tickets. Triage each one. Wrong calls cost network integrity.</p></button>
     <button class="tile" id="t-cards" style="--accent:var(--cyan)" onclick="cardSetup()">
@@ -3685,13 +3687,14 @@ function shiftSetup(){
   view="setup"; SECTION=shiftSetup; AT_SECTION=true; strip("soc watch / setup",0);
   const sd=S.shiftDom||0;
   const pool=sd?QUESTIONS.filter(q=>q.d===sd).length:QUESTIONS.length;
+  const rapid=S.shiftMode==="drill";
   $("app").innerHTML=`
   <p class="eyebrow">Mode 01</p><h1>SOC Watch</h1>
   <p class="lede">Tickets arrive weighted to the real exam blueprint, or locked to a single domain when you need to drill one down.</p>
   <h2>Mode</h2>
   <div class="seg">
-    <button class="on" disabled style="cursor:default">Standard shift</button>
-    <button onclick="drillStart()">Rapid Response</button>
+    <button class="${rapid?"":"on"}" onclick="setShiftMode('shift')">Standard shift</button>
+    <button class="${rapid?"on":""}" onclick="setShiftMode('drill')">Rapid Response</button>
   </div>
   <p class="dim" style="font-size:12.5px;margin:8px 0 0">Standard: integrity starts at 100 and drops with every wrong call, more for a P1. Drop to zero and the shift is lost. Rapid Response: a speed run with a combo multiplier and 3 lives. Three misses ends the run.</p>
   <h2 style="margin-top:20px">Focus</h2>
@@ -3700,6 +3703,9 @@ function shiftSetup(){
     ${[1,2,3,4,5].map(d=>`<button class="${sd===d?"on":""}" onclick="setShiftDom(${d})">D${d}.0</button>`).join("")}
   </div>
   <p class="dim" style="font-size:12.5px;margin:8px 0 0">${sd?`Locked to Domain ${sd}.0 (${DOM_NAMES[sd]}) \u00b7 ${pool} questions in this pool \u00b7 misses from other domains will not appear`:`Blueprint weighting across all 5 domains \u00b7 ${pool} questions in the pool`}</p>
+  ${rapid?`
+  <div class="row" style="margin-top:20px"><button class="btn pri" onclick="drillStart()">Start Rapid Response</button></div>
+  `:`
   <h2 style="margin-top:20px">Shift length</h2>
   <div class="row">
     <button class="btn pri" onclick="shiftStart(10)">Short - 10 tickets</button>
@@ -3718,8 +3724,10 @@ function shiftSetup(){
   </div>
   <p class="dim" style="margin-top:8px;font-size:13px">Every ticket gets exactly ${S.manualTimerSec} seconds. Range: 15s to 90s.</p>
   `:`<p class="dim" style="margin-top:12px;font-size:13px">Currently at ${limit()} seconds per ticket. It tightens as your rolling accuracy climbs, and loosens if you drop below 60%.</p>`}
+  `}
   <div class="row" style="margin-top:20px"><button class="btn ghost sm" onclick="home()">Back to home</button></div>`;
 }
+function setShiftMode(m){ S.shiftMode=m; save(); shiftSetup(); }
 function setManualTimer(on){ S.manualTimer=on; save(); shiftSetup(); }
 function setManualTimerSec(v){
   S.manualTimerSec=Math.max(15,Math.min(90,parseInt(v,10)||45)); save();
@@ -3813,13 +3821,14 @@ function shiftReport(){
 /* ================= RAPID RESPONSE ================= */
 function drillStart(){
   AT_SECTION=false; view="drill";
-  sess={mode:"drill",used:new Set(),i:0,correct:0,lives:3,streak:0,mult:1,score:0,misses:[],byDom:{}};
+  sess={mode:"drill",used:new Set(),i:0,correct:0,lives:3,streak:0,mult:1,score:0,misses:[],byDom:{},dom:S.shiftDom||0};
   startSess(); nextDrill();
 }
 function nextDrill(){
   checkBreak();
   if(sess.lives<=0) return drillReport();
-  const q=pick(QUESTIONS,sess.used);
+  const drillPool=(sess.dom)?QUESTIONS.filter(x=>x.d===sess.dom):QUESTIONS;
+  const q=pick(drillPool,sess.used);
   if(!q) return drillReport();
   sess.used.add(q.i); sess.i++; sess.q=q; sess.order=shuffle([0,1,2,3]); sess.t0=Date.now();
   renderDrill(false);
