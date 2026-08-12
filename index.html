@@ -3499,11 +3499,11 @@ function record(q,ok){
 }
 function gateStatus(){
   const domOk=r=>Object.keys(r.byDom).every(d=>r.byDom[d].s<3||pct(r.byDom[d].c,r.byDom[d].s)>=75);
-  const qualExam=S.sessions.filter(x=>x.mode==="exam"&&x.pct>=85&&domOk(x)).slice(-1)[0];
-  const qualShift=S.sessions.filter(x=>x.mode==="shift"&&x.n>=45&&x.pct>=85&&domOk(x)).slice(-1)[0];
-  const met=(qualExam?1:0)+(qualShift?1:0);
+  const cutoff=Date.now()-14*86400000;
+  const qualExams=S.sessions.filter(x=>x.mode==="exam"&&x.pct>=85&&domOk(x)&&x.t>=cutoff);
+  const met=Math.min(2,qualExams.length);
   const pass=met===2;
-  return {pass:pass,label:met+" of 2 requirements met"};
+  return {pass:pass,label:met+" of 2 practice exams met"};
 }
 
 /* ================= status strip ================= */
@@ -3616,25 +3616,25 @@ function home(){
     <summary>How this works &nbsp;\u00b7&nbsp; read this first</summary>
     <div class="body">
       <h4>The question mix follows the real blueprint</h4>
-      <p>Domain 4 is 28 percent of the real exam, so it is 28 percent of your tickets. Domains you score badly in get pulled up automatically, so the app drifts toward whatever you are worst at.</p>
+      <p>Domain 4 is 28 percent of the real exam, so it is 28 percent of your tickets. Domains you score badly in get pulled up automatically, drifting the mix toward your weak spots.</p>
       <h4>Practice Exams are the real thing</h4>
-      <p><b>Five fixed 90-question exams</b>, 4 PBQs plus 86 multiple choice, weighted to the official domain percentages. Untimed, 90 minutes, or set your own clock, and you can hide the timer while you work. <b>No feedback at all until you submit.</b> The review then maps every miss to the exact Messer section and Gibson chapter to restudy.</p>
+      <p><b>Five fixed exams, 90 items each.</b> 2 to 5 PBQs picked at random per attempt, leaning toward 5, multiple choice filling the rest, weighted to the official domain percentages. Untimed, 90 minutes, or your own clock, and you can hide the timer while you work. <b>No feedback until you submit.</b> The review maps every miss to the exact Messer section and Gibson chapter.</p>
       <h4>SOC Watch and Rapid Response drill under pressure</h4>
-      <p>SOC Watch feeds you severity-coded tickets and costs you network integrity for wrong calls. Rapid Response, a toggle inside SOC Watch setup, is a speed run with a combo multiplier and three lives. <b>The timer defaults to adaptive:</b> hold 85 percent and it tightens, drop below 60 percent and it loosens. Switch to manual in setup to fix it anywhere from 15 to 90 seconds instead.</p>
+      <p>SOC Watch feeds severity-coded tickets and costs network integrity for wrong calls. Rapid Response, a toggle inside SOC Watch setup, is a speed run with a combo multiplier and three lives. <b>Timer defaults to adaptive:</b> tightens above 85 percent, loosens below 60. Switch to manual in setup for a fixed 15 to 90 seconds instead.</p>
       <h4>Flashcards use spaced repetition</h4>
-      <p>Free-recall cards scheduled so material you keep missing comes back sooner and material you know fades into the background.</p>
+      <p>Free-recall cards scheduled so material you keep missing comes back sooner, and material you know fades into the background.</p>
       <h4>PBQs give partial credit</h4>
-      <p>Drag items into place, or tap one to pick it up and tap where it goes. Every item is scored individually, the same way the real exam awards partial credit.</p>
+      <p>Drag items into place, or tap to pick up and tap where it goes. Every item scores individually, the same way the real exam awards partial credit.</p>
       <h4>Nothing repeats the way you expect</h4>
-      <p>Answer positions shuffle every single time, and recently seen questions are held back, so you cannot pass by memorizing that the answer was "C."</p>
+      <p>Answer positions shuffle every time, and recently seen questions are held back, so memorizing "the answer was C" will not work.</p>
       <h4>Your weak areas are tracked automatically</h4>
-      <p>Miss the same concept twice and it gets flagged as a pattern and resurfaces more often. <b>Export a coaching brief</b> from Weak areas and stats to hand your real performance data to any AI assistant, or export just the misses from any session for a targeted refresher and quiz.</p>
+      <p>Miss the same concept twice and it gets flagged as a pattern, resurfacing more often. <b>Export a coaching brief</b> from Weak areas and stats to hand your real performance data to any AI assistant, or export just the misses from any session for a targeted refresher.</p>
       <div class="gate-callout">
         <p class="gk">The line that matters most</p>
         <h4>The readiness gate</h4>
-        <p>One <b>practice exam</b> at <b>85 percent or better, with no single domain under 75 percent</b>, and one <b>45-ticket SOC Watch shift</b> at the same bar, before the gate reads MET. Both are required, not either-or.</p>
-        <p>Both conditions exist on purpose. The full exam proves you can hold that standard across all five domains and every PBQ type in one sitting. The full SOC Watch shift proves it holds under pressure, with integrity dropping on every miss, not just in a low-stakes review. Requiring <b>every domain above 75</b> on each, not just the overall average, catches the case where a strong Domain 2 is quietly covering for a weak Domain 4, exactly the kind of gap that turns into a real exam failure even when your total score looks fine.</p>
-        <p class="why">This is the actual decision point for booking the exam, not the calendar date. A date on the calendar just means CompTIA is ready for you. The gate means you are ready for CompTIA.</p>
+        <p>Two <b>practice exams</b> at <b>85 percent or better, no single domain under 75 percent</b>, both taken within the <b>last 14 days</b>, before the gate reads MET. SOC Watch is not part of this requirement.</p>
+        <p>Requiring two separate passing exams filters out a lucky run, since anyone can catch a good set of questions once. Requiring <b>every domain above 75</b>, not just the overall average, catches a strong Domain 2 quietly covering for a weak Domain 4, exactly the kind of gap that becomes a real exam failure even when the total score looks fine. The 14-day window keeps the gate reflecting where you stand right now: stop practicing and it closes again, even after two earlier passes.</p>
+        <p class="why">This is the actual decision point for booking the exam, not the calendar date. A date just means CompTIA is ready for you. The gate means you are ready for CompTIA.</p>
       </div>
       <div class="closebar"><button onclick="closeHiw()">Close &nbsp;&#8963;</button></div>
     </div>
@@ -3644,8 +3644,10 @@ function home(){
     <div class="gcell"><div class="k">Lifetime accuracy</div><div class="v">${pct(corr,total)}%</div><div class="s">${corr} of ${total} items</div></div>
     <div class="gcell key" style="--gatecolor:${g.pass?"var(--green)":"var(--red)"};background:${g.pass?"linear-gradient(160deg,rgba(62,208,122,.12),rgba(62,208,122,.02))":"linear-gradient(160deg,rgba(224,87,74,.10),rgba(224,87,74,.02))"}">
       <div class="k" style="color:${g.pass?"var(--green)":"var(--red)"}">Readiness gate</div>
-      <div class="v" style="color:${g.pass?"var(--green)":"var(--red)"}">${g.pass?"\ud83d\udd13 OPEN":"\ud83d\udd12 CLOSED"}</div>
-      <div class="s">${esc(g.label)}</div></div>
+      <div class="v" style="color:${g.pass?"var(--green)":"var(--red)"};display:flex;align-items:center;gap:6px;margin-left:-2px">
+        <span style="font-size:0.8em;line-height:1">${g.pass?"\ud83d\udd13":"\ud83d\udd12"}</span><span style="font-weight:700">${g.pass?"OPEN":"CLOSED"}</span>
+      </div>
+      <div class="s" style="line-height:1.25">${esc(g.label)}</div></div>
   </div>
 
   <div class="tiles">
@@ -3810,7 +3812,7 @@ function shiftReport(){
   <h1>${sess.integrity<=0?"Shift lost":"Shift complete"} - ${p}%</h1>
   <p class="lede">${sess.integrity<=0?"Integrity hit zero. Review the misses below before the next run.":"Network integrity closed at "+sess.integrity+"%."}</p>
   <div class="card"><h2 style="margin-top:0">Accuracy by domain</h2>${bars}
-    <p class="dim" style="font-size:13px;margin:14px 0 0">Gate requires one qualifying exam and one qualifying 45-ticket shift, both 85%+ with no domain under 75%. ${esc(g.label)}.</p></div>
+    <p class="dim" style="font-size:13px;margin:14px 0 0">Gate requires two qualifying practice exams, both 85%+ with no domain under 75%, taken within the last 14 days. ${esc(g.label)}.</p></div>
   <h2>Missed concepts</h2><div class="card"><ul class="weaklist">${missList}</ul></div>
   <div class="row" style="margin-top:18px">
     <button class="btn pri" onclick="shiftStart(${sess.n})">Run another shift</button>
@@ -4460,8 +4462,7 @@ function dgEnd(e){
 
 
 /* ================= PRACTICE EXAMS ================= */
-const EXAM_QUOTA={1:10,2:19,3:16,4:24,5:17};
-const EXAM_PBQS={A:[1,3,7,8],B:[2,4,10,6],C:[12,5,13,11],D:[14,16,18,20],E:[15,17,9,19]};
+const EXAM_QUOTA_PCT={1:10/86,2:19/86,3:16/86,4:24/86,5:17/86};
 const EXAM_NAMES=["A","B","C","D","E"];
 function m32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 function sShuffle(arr,seed){const r=m32(seed),a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));const tmp=a[i];a[i]=a[j];a[j]=tmp;}return a;}
@@ -4472,14 +4473,35 @@ function buildExams(){
   const byDom={};
   [1,2,3,4,5].forEach(d=>byDom[d]=sShuffle(QUESTIONS.filter(q=>q.d===d).map(q=>q.i),4200+d));
   EXAM_NAMES.forEach((nm,k)=>{
-    let mcq=[];
-    [1,2,3,4,5].forEach(d=>{
-      const pool=byDom[d], need=EXAM_QUOTA[d], start=Math.floor(k*pool.length/EXAM_NAMES.length);
-      for(let j=0;j<need;j++) mcq.push(pool[(start+j)%pool.length]);
-    });
-    EXAMS[nm]={pbq:EXAM_PBQS[nm].slice(),mcq:sShuffle(mcq,9000+k)};
+    EXAMS[nm]={byDom:byDom,k:k};
   });
   return EXAMS;
+}
+function mcqQuotaFor(mcqTotal){
+  const raw=[1,2,3,4,5].map(d=>mcqTotal*EXAM_QUOTA_PCT[d]);
+  const floors=raw.map(Math.floor);
+  let remainder=mcqTotal-floors.reduce((a,b)=>a+b,0);
+  const order=raw.map((v,i)=>[v-Math.floor(v),i]).sort((a,b)=>b[0]-a[0]);
+  const quota={}; [1,2,3,4,5].forEach((d,i)=>quota[d]=floors[i]);
+  for(let i=0;i<remainder;i++) quota[order[i][1]+1]++;
+  return quota;
+}
+function pickMcqSet(def,mcqTotal){
+  const quota=mcqQuotaFor(mcqTotal);
+  let mcq=[];
+  [1,2,3,4,5].forEach(d=>{
+    const pool=def.byDom[d], need=quota[d], start=Math.floor(def.k*pool.length/EXAM_NAMES.length);
+    for(let j=0;j<need;j++) mcq.push(pool[(start+j)%pool.length]);
+  });
+  return sShuffle(mcq,9000+def.k);
+}
+function randomPbqSet(){
+  const weights=[[2,1],[3,2],[4,3],[5,4]];
+  const total=weights.reduce((a,[,w])=>a+w,0);
+  let r=Math.random()*total;
+  let n=4;
+  for(const [count,w] of weights){ if(r<w){ n=count; break; } r-=w; }
+  return shuffle(PBQ.map(p=>p.id)).slice(0,n);
 }
 function qById(i){ return QUESTIONS.find(q=>q.i===i); }
 let SX=null;
@@ -4502,13 +4524,13 @@ function examHome(){
     const h=(S.examHist||{})[nm];
     const resume=act&&act.exam===nm&&!act.submitted;
     const st=h?`<span class="ct" style="color:${h.best>=85?"var(--cyan)":h.best>=70?"var(--amber)":"var(--red)"}">best ${h.best}% \u00b7 ${h.tries} attempt${h.tries>1?"s":""}</span>`:`<span class="ct dim">not attempted</span>`;
-    return `<li><span><b>Exam ${nm}</b><br><span class="dim" style="font-size:12px">90 items \u00b7 4 PBQs + 86 multiple choice \u00b7 blueprint weighted</span></span>
+    return `<li><span><b>Exam ${nm}</b><br><span class="dim" style="font-size:12px">90 items \u00b7 2\u20135 PBQs at random (leaning toward 5), rest multiple choice \u00b7 blueprint weighted</span></span>
       <span style="display:flex;gap:10px;align-items:center;flex-shrink:0">${st}
       <button class="btn sm ${resume?"pri":""}" onclick="examSetup('${nm}')">${resume?"Resume":"Start"}</button></span></li>`;
   }).join("");
   $("app").innerHTML=`
   <p class="eyebrow">Full length</p><h1>Practice Exams</h1>
-  <p class="lede">Five fixed 90-question exams built to the official domain weights, PBQs first like the real thing. Zero feedback until you submit, then a full review with a restudy plan mapped to Messer sections and Gibson chapters.</p>
+  <p class="lede">Five fixed 90-item exams built to the official domain weights, PBQs first like the real thing. Each attempt draws 2\u20135 PBQs at random, leaning toward 5, with multiple choice filling the rest, matching how CompTIA does not publish a fixed PBQ count. Zero feedback until you submit, then a full review with a restudy plan mapped to Messer sections and Gibson chapters.</p>
   <div class="card"><ul class="weaklist">${rows}</ul></div>
   <p class="dim" style="font-size:12px;margin-top:10px">Scoring: multiple choice items are 1 point each, PBQs are 1 point with partial credit. 85%+ is the readiness bar and exam scores count toward the gate. Gibson chapter numbers follow the Get Certified Get Ahead SY0-701 edition.</p>
   <div class="row" style="margin-top:14px"><button class="btn ghost sm" onclick="goHome()">Back to home</button></div>`;
@@ -4549,11 +4571,13 @@ function examBegin(nm,mins,checkMode){
   AT_SECTION=false;
   if(checkMode) mins=null;
   const def=buildExams()[nm];
+  const pbqSet=randomPbqSet();
+  const mcqSet=pickMcqSet(def,90-pbqSet.length);
   SX={exam:nm,i:0,answers:{},orders:{},flags:{},pbq:{},submitted:false,startTs:Date.now(),checkMode:!!checkMode,
       timer:mins?{total:mins*60,remain:mins*60,visible:true,expired:false}:null,
-      items:def.pbq.map(id=>({t:"p",id:id})).concat(def.mcq.map(id=>({t:"q",id:id})))};
-  def.mcq.forEach(id=>SX.orders[id]=shuffle([0,1,2,3]));
-  def.pbq.forEach(id=>SX.pbq[id]=initPbqStateX(id));
+      items:pbqSet.map(id=>({t:"p",id:id})).concat(mcqSet.map(id=>({t:"q",id:id})))};
+  mcqSet.forEach(id=>SX.orders[id]=shuffle([0,1,2,3]));
+  pbqSet.forEach(id=>SX.pbq[id]=initPbqStateX(id));
   persistX();
   view="exam"; RENDER_CB=examRender;
   if(SX.timer) startExamClock();
@@ -4762,7 +4786,7 @@ function examReview(){
   $("app").innerHTML=`
   <p class="eyebrow">Exam ${nm} complete${r.expired?" \u00b7 time expired":""}${SX.checkMode?" \u00b7 Practice mode":""}</p>
   <h1>${r.pct}%</h1>
-  <p class="lede">${SX.checkMode?"Practice mode \u2014 you saw answers as you went, so this score reflects a study run, not a blind test. It doesn't count toward exam history or the readiness gate. ":""}${r.pct>=85?"At or above the 85% readiness bar. If every domain held above 75%, this exam counts toward the gate \u2014 you still need a qualifying 45-ticket SOC Watch shift too.":r.pct>=70?"Closing in. The restudy plan below is the fastest path to the 85% bar.":"Below the bar for now. Work the restudy plan top to bottom, then retake."}</p>
+  <p class="lede">${SX.checkMode?"Practice mode \u2014 you saw answers as you went, so this score reflects a study run, not a blind test. It doesn't count toward exam history or the readiness gate. ":""}${r.pct>=85?"At or above the 85% readiness bar. If every domain held above 75%, this exam counts toward the gate \u2014 you still need one more like it within the last 14 days.":r.pct>=70?"Closing in. The restudy plan below is the fastest path to the 85% bar.":"Below the bar for now. Work the restudy plan top to bottom, then retake."}</p>
   <div class="card">${domBars}</div>
   <h2>Restudy plan \u2014 hit these first</h2>
   <div class="card"><ul class="weaklist">${planHtml}</ul></div>
@@ -5159,7 +5183,7 @@ function coachBrief(){
   if(ed) L.push("- Target exam date: "+ed.toISOString().slice(0,10)+" ("+days(ed)+" days out)");
   L.push("- Questions answered: "+total+", correct "+corr+" ("+pct(corr,total)+"%)");
   L.push("- Adaptive timer level: "+(S.tight+1)+" of 5 ("+limit()+" seconds per question)");
-  L.push("- Readiness gate (one practice exam AND one 45-ticket SOC Watch shift, both 85%+, no domain under 75%): "+(g.pass?"MET":"NOT MET")+" - "+g.label);
+  L.push("- Readiness gate (two practice exams, both 85%+, no domain under 75%, both within the last 14 days): "+(g.pass?"MET":"NOT MET")+" - "+g.label);
   L.push("- Sessions logged: "+S.sessions.length);
   L.push("");
   L.push("## Accuracy by domain");
