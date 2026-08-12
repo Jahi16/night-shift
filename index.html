@@ -2227,6 +2227,159 @@ e:"Attestation and acknowledgement captures each person's formal confirmation of
 w:["An examination is conducted by a regulator or outside party, not by employees confirming their own policy awareness.","A sanction is a penalty applied after non-compliance is found, not the confirmation activity itself.","Automation might deliver the workflow behind the scenes, but the specific named element being tested here is the acknowledgement itself.",""]}
 ];
 
+const Q12 = [
+{i:2001,d:1,o:"1.2",t:"n",g:"control-types-not",
+q:"An organization's control catalog lists a firewall, security awareness training, a fence around the data center, and an incident response runbook. Which of these is NOT an example of a technical control?",
+c:["Firewall","Security awareness training","Fence around the data center","Firewall rule change ticket requiring approval before deployment"],a:1,
+e:"Security awareness training is a managerial/operational control carried out by and for people; it is not implemented through technology, which is the defining trait of a technical control.",
+w:["A firewall is textbook technical: it is technology enforcing a security function.","","A fence is physical, not technical, but the question asks which is NOT technical, and training is the better fit since a fence still is not the answer being tested here.","An approval workflow enforced through a ticketing system still counts as technology-mediated control, making it technical in nature."]},
+{i:2002,d:1,o:"1.4",t:"n",g:"hashing-not",
+q:"A developer explains hashing to a junior teammate. Which statement about cryptographic hashing is FALSE?",
+c:["The same input always produces the same output hash","A good hash function makes it computationally infeasible to reverse the hash back to the original input","Hashing is used to verify data integrity by comparing hash values","Hashing encrypts data so it can later be decrypted with the correct key"],a:3,
+e:"Hashing is one-way. It produces a fixed-size digest that cannot be decrypted back into the original data, unlike encryption which is explicitly reversible with a key.",
+w:["This is true and is the defining property of a deterministic hash function.","This is true; irreversibility is exactly what makes a hash function cryptographically useful.","This is true and is the most common practical use of hashing.",""]},
+{i:2003,d:1,o:"1.2",t:"n",g:"auth-factors-not",
+q:"A security awareness poster lists examples of multifactor authentication components. Which listed item does NOT belong, because it is not actually an authentication factor?",
+c:["A one-time code sent to a registered phone","A fingerprint scan","A memorized PIN","The user's job title stored in the HR system"],a:3,
+e:"Job title is an attribute used for authorization decisions, not a credential the user proves during authentication. It is not something you know, have, or are.",
+w:["A one-time code is something you have.","A fingerprint is something you are.","A PIN is something you know.",""]},
+{i:2004,d:1,o:"1.1",t:"n",g:"cia-not",
+q:"A junior analyst is asked which security goal is addressed by each safeguard on a checklist. Which pairing is INCORRECT?",
+c:["Full-disk encryption protects confidentiality","A file integrity monitoring tool protects integrity","A load-balanced, redundant web server cluster protects availability","A digital signature primarily protects confidentiality"],a:3,
+e:"A digital signature primarily proves authenticity and integrity, that the message came from the claimed sender and was not altered. It does not by itself keep the message secret, which is confidentiality's job.",
+w:["Correct pairing: encryption is the standard confidentiality control.","Correct pairing: integrity monitoring is built specifically to detect unauthorized change.","Correct pairing: redundancy and load balancing are classic availability controls.",""]},
+{i:2005,d:2,o:"2.4",t:"n",g:"malware-types-not",
+q:"A briefing describes several malicious code samples found on a compromised host. Which description does NOT match a form of malware?",
+c:["Code that self-replicates and spreads across a network without user action, consuming bandwidth","Code that encrypts user files and demands payment for the decryption key","Code that silently logs every keystroke a user types","A network appliance that inspects packets and blocks traffic matching known attack signatures"],a:3,
+e:"An inspection appliance that blocks known attack signatures is a defensive security control, not malicious code. Everything else on the list describes an actual malware behavior.",
+w:["This describes a worm, self-propagating malware that needs no user interaction.","This describes ransomware, malware that encrypts files for extortion.","This describes a keylogger, malware that captures keystrokes.",""]},
+{i:2006,d:2,o:"2.2",t:"n",g:"social-eng-not",
+q:"A security trainer lists tactics attackers use to manipulate people into taking unsafe action. Which item is NOT a social engineering technique?",
+c:["Creating a false sense of urgency to rush a decision","Impersonating a trusted authority figure such as an executive","Patching a server's operating system to the latest version","Exploiting a person's natural desire to be helpful"],a:2,
+e:"Patching is a defensive maintenance activity performed by the organization, not a manipulation tactic used against a person. The other three are core psychological levers behind social engineering.",
+w:["Urgency is one of the most common social engineering pressure tactics.","Authority impersonation, such as CEO fraud, is a classic pretexting technique.","","Exploiting helpfulness underlies tactics like tailgating and pretext-based information requests."]},
+{i:2007,d:2,o:"2.4",t:"n",g:"network-attacks-not",
+q:"A packet capture shows evidence of several distinct attack techniques against a corporate network. Which of the following is NOT a network-based attack?",
+c:["ARP poisoning to redirect traffic through an attacker's machine","A SYN flood exhausting a server's connection table","DNS poisoning to return a forged IP address for a domain","SQL injection against a web application's login form"],a:3,
+e:"SQL injection targets an application's handling of user input at the data layer, not the network itself. The other three specifically manipulate network protocols (ARP, TCP handshake, DNS) to achieve their effect.",
+w:["ARP poisoning is a classic layer 2 network attack.","A SYN flood directly abuses the TCP three-way handshake, a network-layer attack.","DNS poisoning manipulates a core network name-resolution protocol.",""]},
+{i:2008,d:2,o:"2.3",t:"n",g:"vuln-types-not",
+q:"A code review flags several weaknesses in a legacy web application. Which flagged issue is NOT considered an application vulnerability?",
+c:["User input is concatenated directly into SQL queries without sanitization","A buffer has no bounds checking on the size of data written to it","The application's TLS certificate was issued by a properly trusted certificate authority","The application reflects unsanitized user input directly back into the rendered page"],a:2,
+e:"A properly issued, trusted TLS certificate is a sign of correct configuration, not a flaw. The other three are textbook vulnerability classes: SQL injection, buffer overflow, and reflected XSS.",
+w:["This unsanitized concatenation is the root cause of SQL injection.","This is the root cause of a buffer overflow.","","This describes reflected cross-site scripting."]},
+{i:2009,d:2,o:"2.1",t:"n",g:"threat-actors-not",
+q:"A threat intelligence report profiles several categories of adversary. Which description does NOT describe a distinct threat actor motivation or type recognized by the exam objectives?",
+c:["A nation-state group conducting espionage for strategic advantage","A former employee sabotaging systems out of resentment after termination","An organized crime group deploying ransomware purely for financial gain","A firewall administrator applying the principle of least privilege to new accounts"],a:3,
+e:"Applying least privilege is a defensive administrative action performed by security staff, not a threat actor or their motivation. The other three describe recognized actor categories: nation-state, insider threat, and organized crime.",
+w:["Nation-state actors pursuing strategic or political objectives are a defined actor category.","This describes an insider threat motivated by revenge.","Organized crime pursuing financial gain is a defined actor category.",""]},
+{i:2010,d:2,o:"2.5",t:"n",g:"hardening-not",
+q:"A systems administrator hardens a newly deployed server before putting it into production. Which action does NOT contribute to hardening the system?",
+c:["Disabling unused services and closing unneeded ports","Removing default administrative accounts and setting unique credentials","Applying the latest vendor security patches","Increasing the server's RAM to improve application response time"],a:3,
+e:"Adding RAM is a performance upgrade with no security benefit. Disabling unused services, removing default accounts, and patching are all core, named hardening activities that reduce attack surface.",
+w:["Disabling unused services directly reduces attack surface, a core hardening step.","Removing default credentials closes one of the most commonly exploited weaknesses.","Patching closes known vulnerabilities, a core hardening step.",""]},
+{i:2011,d:3,o:"3.1",t:"n",g:"cloud-models-not",
+q:"A cloud architecture diagram labels several deployment approaches under evaluation. Which labeled item is NOT a recognized cloud service model?",
+c:["Infrastructure as a Service, providing virtualized compute and storage","Platform as a Service, providing a managed runtime for application code","Software as a Service, providing a complete ready-to-use application","Network as a Service, a term for a company's on-premises router configuration"],a:3,
+e:"The three recognized service models tested on the exam are IaaS, PaaS, and SaaS. The fourth option describes ordinary on-premises networking, not a cloud service model at all.",
+w:["IaaS is one of the three core, named cloud service models.","PaaS is one of the three core, named cloud service models.","SaaS is one of the three core, named cloud service models.",""]},
+{i:2012,d:3,o:"3.2",t:"n",g:"network-devices-not",
+q:"A network diagram lists devices deployed across a campus network. Which device does NOT primarily perform a security function?",
+c:["An intrusion prevention system inline on the core switch","A web application firewall protecting a public-facing application","A jump server used to concentrate and audit administrative access","A managed switch providing basic VLAN segmentation for departments"],a:3,
+e:"A managed switch's core job is basic connectivity and traffic switching; VLAN segmentation is a network design feature, not a dedicated security control the way the other three devices are.",
+w:["An IPS is a dedicated security device that actively blocks threats.","A WAF is a dedicated security device protecting web applications specifically.","A jump server exists purely to concentrate and audit privileged access, a security function.",""]},
+{i:2013,d:3,o:"3.4",t:"n",g:"ha-concepts-not",
+q:"A disaster recovery plan lists several concepts the team must track. Which of the following is NOT a resilience or continuity concept covered in this domain?",
+c:["Recovery time objective, how long recovery is allowed to take","Recovery point objective, how much data loss is tolerable","Mean time between failures, the average time a system runs before failing","Common vulnerabilities and exposures, a public catalog of known vulnerabilities"],a:3,
+e:"CVE is a vulnerability management and identification concept, unrelated to resilience or disaster recovery planning. RTO, RPO, and MTBF are all named continuity and reliability metrics.",
+w:["RTO is a core, named continuity metric.","RPO is a core, named continuity metric.","MTBF is a core, named reliability metric.",""]},
+{i:2014,d:3,o:"3.1",t:"n",g:"virtualization-not",
+q:"A team lists benefits they expect after migrating physical servers to a virtualized environment. Which listed item is NOT a genuine benefit of virtualization?",
+c:["The ability to run multiple isolated operating systems on one physical host","Easier snapshotting and rollback of a virtual machine's state","Elimination of the need for any security patching on virtual machines","More efficient use of underlying physical hardware resources"],a:2,
+e:"Virtual machines still run full operating systems and applications that require ongoing patching; virtualization does not remove that need. The other three are genuine, well-documented benefits of virtualization.",
+w:["Running multiple isolated OS instances on one host is virtualization's core capability.","Snapshotting and rollback are a widely used virtualization benefit.","","Better hardware utilization is one of virtualization's primary business justifications."]},
+{i:2015,d:3,o:"3.4",t:"n",g:"backup-types-not",
+q:"A backup policy document lists strategies the team may choose between. Which listed item is NOT a recognized backup type?",
+c:["Full backup, copying all selected data every time","Incremental backup, copying only data changed since the last backup of any type","Differential backup, copying all data changed since the last full backup","Synchronous backup, a term describing real-time mirrored replication as a backup type"],a:3,
+e:"Synchronous replication mirrors data in real time but is a form of replication, not a backup type, and does not provide the historical recovery points a real backup strategy needs. Full, incremental, and differential are the three recognized backup types.",
+w:["Full backup is one of the three core, named backup types.","Incremental backup is one of the three core, named backup types.","Differential backup is one of the three core, named backup types.",""]},
+{i:2016,d:4,o:"4.1",t:"n",g:"hardening-controls-not",
+q:"A security engineer reviews controls applied to a newly deployed database server. Which control does NOT directly reduce the server's attack surface?",
+c:["Disabling the default administrative account and enforcing unique credentials","Closing all network ports except the one the database service requires","Applying the vendor's latest security patches","Increasing the database's maximum connection pool size for better throughput"],a:3,
+e:"Increasing the connection pool is a performance tuning change with no bearing on attack surface. The other three are core hardening actions that directly shrink what an attacker can exploit.",
+w:["Removing default credentials closes a commonly exploited weakness.","Closing unneeded ports reduces the number of exposed services an attacker can target.","Patching closes known vulnerabilities.",""]},
+{i:2017,d:4,o:"4.3",t:"n",g:"vuln-mgmt-not",
+q:"A vulnerability management program includes several recurring activities. Which activity is NOT part of vulnerability management?",
+c:["Scanning systems on a regular schedule to identify known weaknesses","Prioritizing remediation based on exploitability and business impact","Applying patches or compensating controls to close identified gaps","Drafting the organization's annual marketing budget"],a:3,
+e:"The marketing budget has no connection to identifying, prioritizing, or remediating vulnerabilities. Scanning, prioritization, and remediation are the three core stages of the vulnerability management lifecycle.",
+w:["Scanning is the discovery stage of vulnerability management.","Prioritization based on risk is a core vulnerability management activity.","Remediation is the closing stage of vulnerability management.",""]},
+{i:2018,d:4,o:"4.5",t:"n",g:"edr-capabilities-not",
+q:"A vendor lists capabilities of its endpoint detection and response platform. Which listed capability is NOT something EDR is designed to do?",
+c:["Continuously monitor endpoint behavior for signs of compromise","Allow analysts to isolate a compromised host remotely","Investigate the timeline and scope of an attack on the endpoint","Physically replace a failed hard drive in the affected machine"],a:3,
+e:"Physical hardware replacement is a facilities and IT operations task, not a software security capability. Continuous monitoring, remote isolation, and investigation are all core EDR functions.",
+w:["Continuous behavioral monitoring is EDR's foundational capability.","Remote isolation is a standard EDR response action.","Timeline investigation is a standard EDR capability used during incident response.",""]},
+{i:2019,d:4,o:"4.8",t:"n",g:"forensics-steps-not",
+q:"An incident responder documents steps taken while investigating a compromised workstation. Which step is NOT a forensic best practice?",
+c:["Establishing a clear chain of custody for all collected evidence","Creating a forensic image before analyzing the original drive","Collecting volatile memory before powering the system off","Immediately reformatting the drive to remove any malware present"],a:3,
+e:"Reformatting destroys the evidence needed to determine what happened and how, the opposite of sound forensic practice. Chain of custody, imaging before analysis, and capturing volatile memory first are all core forensic principles.",
+w:["Chain of custody is essential to preserving evidence integrity and admissibility.","Imaging before analysis preserves the original evidence unaltered.","Order of volatility means memory should be captured before the system is powered down.",""]},
+{i:2020,d:4,o:"4.4",t:"n",g:"siem-functions-not",
+q:"A SOC evaluates what its SIEM platform contributes to daily operations. Which listed function is NOT something a SIEM does?",
+c:["Aggregating log data from many different sources into one place","Correlating separate events into a single recognizable incident","Generating alerts when defined suspicious patterns are detected","Physically cabling new switches into the data center rack"],a:3,
+e:"Physical cabling is a hands-on infrastructure task unrelated to a SIEM's software function. Aggregation, correlation, and alerting are the three core things a SIEM is built to do.",
+w:["Log aggregation is a SIEM's foundational function.","Correlation across event sources is what gives a SIEM its analytical value.","Alerting on detected patterns is a core SIEM function.",""]},
+{i:2021,d:4,o:"4.2",t:"n",g:"asset-mgmt-not",
+q:"An asset management program includes several ongoing tasks. Which task is NOT part of asset management?",
+c:["Maintaining an inventory of all hardware and software in the environment","Tracking ownership and classification of each asset","Formally decommissioning and removing retired systems from the network","Designing the visual branding for the company's public website"],a:3,
+e:"Website branding is a marketing and design task with no connection to tracking or governing organizational assets. Inventory, ownership tracking, and decommissioning are all core asset management activities.",
+w:["Inventory is the foundational asset management activity.","Ownership and classification tracking is a core asset management task.","Decommissioning is the closing stage of the asset lifecycle.",""]},
+{i:2022,d:4,o:"4.9",t:"n",g:"log-sources-not",
+q:"An investigation pulls data from several log sources to reconstruct an incident timeline. Which of the following is NOT a log or data source typically used in an investigation?",
+c:["Firewall logs showing allowed and denied connections","Authentication logs showing login successes and failures","DNS query logs showing which domains were resolved","The organization's printed employee handbook"],a:3,
+e:"A printed handbook is a policy document, not a data source that records system or network activity. Firewall, authentication, and DNS logs are all named log sources used during investigations.",
+w:["Firewall logs are a primary network-layer investigation source.","Authentication logs are essential for tracing account activity.","DNS logs help reveal command-and-control or exfiltration activity.",""]},
+{i:2023,d:4,o:"4.6",t:"n",g:"iam-concepts-not",
+q:"An identity and access management review covers several concepts. Which listed item is NOT an IAM concept?",
+c:["Role-based access control, assigning permissions based on job function","Just-in-time access, granting elevated privileges only for a limited time window","Federation, extending a user's identity across separate organizations","Load balancing, distributing network traffic across multiple servers"],a:3,
+e:"Load balancing is a network availability concept unrelated to identity or access. Role-based access, just-in-time access, and federation are all core, named IAM concepts.",
+w:["RBAC is a foundational, named IAM access model.","Just-in-time access is a named privileged access management concept.","Federation is a core IAM concept for cross-organization identity trust.",""]},
+{i:2024,d:4,o:"4.7",t:"n",g:"automation-benefits-not",
+q:"A team lists reasons they are automating parts of their security operations. Which listed reason is NOT a genuine benefit of security automation?",
+c:["Reducing the time it takes to respond to a detected threat","Ensuring the same response steps are applied consistently every time","Eliminating the need for any human analyst to ever review an alert","Freeing analysts from repetitive manual tasks to focus on higher-value work"],a:2,
+e:"Automation supports and speeds up human decision-making but does not eliminate the need for analyst judgment, especially for novel or ambiguous threats. Faster response, consistency, and freeing analyst time are all genuine, named benefits.",
+w:["Faster response time is a well-documented automation benefit.","Consistency of response is a well-documented automation benefit.","","Freeing analysts for higher-value work is a well-documented automation benefit."]},
+{i:2025,d:5,o:"5.2",t:"n",g:"risk-strategies-not",
+q:"A risk register documents how the organization plans to handle several identified risks. Which listed response is NOT one of the four recognized risk response strategies?",
+c:["Mitigate, applying controls to reduce likelihood or impact","Transfer, shifting the financial consequence to a third party such as an insurer","Accept, a documented decision to tolerate the risk as-is","Escalate, immediately notifying the media of the risk's existence"],a:3,
+e:"Notifying the media is not a recognized risk response strategy and would typically be counterproductive. Mitigate, transfer, accept, and avoid are the four recognized risk response strategies.",
+w:["Mitigate is one of the four recognized risk response strategies.","Transfer is one of the four recognized risk response strategies.","Accept is one of the four recognized risk response strategies.",""]},
+{i:2026,d:5,o:"5.1",t:"n",g:"governance-docs-not",
+q:"A governance framework includes several types of documents. Which listed document type is NOT one of the standard governance document categories?",
+c:["Policy, a high-level mandatory statement of management intent","Standard, a mandatory, specific requirement supporting a policy","Procedure, the detailed step-by-step instructions for a task","Guideline, a legally binding contract between two companies"],a:3,
+e:"A guideline is a recommended best practice, not mandatory and not a legal contract; describing it as a binding contract misdefines the term. Policy, standard, and procedure are correctly defined governance document types.",
+w:["Policy is correctly defined as a high-level mandatory statement.","Standard is correctly defined as a mandatory supporting requirement.","Procedure is correctly defined as detailed step-by-step instructions.",""]},
+{i:2027,d:5,o:"5.5",t:"n",g:"audit-types-not",
+q:"A compliance calendar lists several types of assessments the organization undergoes each year. Which listed item is NOT a recognized audit or assessment type?",
+c:["Internal audit, performed by the organization's own staff","External audit, performed by an independent third party","Regulatory examination, performed by a government body with legal authority","Marketing survey, gathering customer opinions about a new product feature"],a:3,
+e:"A marketing survey has nothing to do with compliance or control assessment. Internal audit, external audit, and regulatory examination are all recognized assessment types covered under this domain.",
+w:["Internal audit is a recognized, named assessment type.","External audit is a recognized, named assessment type.","Regulatory examination is a recognized, named assessment type.",""]},
+{i:2028,d:5,o:"5.3",t:"n",g:"vendor-risk-not",
+q:"A third-party risk management program includes several ongoing activities. Which listed activity is NOT part of vendor risk management?",
+c:["Conducting due diligence before signing a contract with a new vendor","Reviewing a vendor's security questionnaire responses annually","Monitoring a vendor's SLA performance and incident history over time","Negotiating the vendor's product discount for the next fiscal year"],a:3,
+e:"Pricing negotiation is a procurement and finance activity, not a risk management one. Due diligence, questionnaire review, and SLA/incident monitoring are all core vendor risk management activities.",
+w:["Pre-contract due diligence is a core vendor risk management activity.","Recurring questionnaire review is a core ongoing vendor risk activity.","SLA and incident monitoring is a core ongoing vendor risk activity.",""]},
+{i:2029,d:5,o:"5.6",t:"n",g:"awareness-topics-not",
+q:"A security awareness curriculum covers several topics throughout the year. Which listed topic is NOT typically part of a security awareness program?",
+c:["Recognizing phishing emails and reporting them correctly","Following proper password hygiene and MFA usage","Understanding how to handle and report a suspected security incident","Learning the company's official brand color palette and logo usage rules"],a:3,
+e:"Brand guidelines are a marketing and design topic, unrelated to security behavior. Phishing recognition, password hygiene, and incident reporting are all core, named security awareness training topics.",
+w:["Phishing recognition is a core, named awareness training topic.","Password hygiene and MFA usage is a core, named awareness training topic.","Incident reporting is a core, named awareness training topic.",""]},
+{i:2030,d:5,o:"5.4",t:"n",g:"privacy-roles-not",
+q:"A data protection team reviews the roles involved in handling personal data. Which listed role or term is NOT a recognized data privacy role or concept?",
+c:["Data controller, the party that decides why and how data is processed","Data processor, the party that processes data on the controller's behalf","Data subject, the individual whose personal data is being processed","Data broker license, a term describing an internal IT support ticket category"],a:3,
+e:"That definition is fabricated; a data broker actually refers to a company that collects and sells personal data, and it is unrelated to internal IT ticketing. Controller, processor, and data subject are the three foundational, correctly defined privacy roles.",
+w:["Controller is a correctly defined, foundational privacy role.","Processor is a correctly defined, foundational privacy role.","Data subject is a correctly defined, foundational privacy role.",""]},
+];
+
 const CARDS = [
 // DOMAIN 1
 {d:1,o:"1.1",g:"control-categories",f:"Name the four control CATEGORIES.",b:"Technical, Managerial, Operational, Physical. Category answers WHO or WHAT implements it."},
@@ -3264,7 +3417,7 @@ const store={
 /* ================= state ================= */
 const DNAME={1:"General Security Concepts",2:"Threats & Vulnerabilities",3:"Security Architecture",4:"Security Operations",5:"Program Management"};
 const DWEIGHT={1:12,2:22,3:18,4:28,5:20};
-const QUESTIONS=Q1.concat(Q2).concat(Q3).concat(Q4).concat(Q5).concat(Q6).concat(Q7).concat(Q8).concat(Q9).concat(Q10).concat(Q11);
+const QUESTIONS=Q1.concat(Q2).concat(Q3).concat(Q4).concat(Q5).concat(Q6).concat(Q7).concat(Q8).concat(Q9).concat(Q10).concat(Q11).concat(Q12);
 ACR.forEach(a=>{ if(!a.u && EXTRA_U[a.a]) a.u=EXTRA_U[a.a]; });
 function allCards(){ CARDS.forEach((cd,i)=>{ if(cd.id===undefined) cd.id=i; }); return CARDS.concat(S.customCards||[]); }
 function cardById(id){ if(id<100000) return CARDS[id]; return (S.customCards||[]).find(x=>x.id===id) || {f:"(removed)",b:"",d:0,o:"",g:"",id:id}; }
@@ -3437,6 +3590,7 @@ function home(){
   view="home"; SECTION=null; AT_SECTION=true;
   const stripEl=document.querySelector(".strip"); if(stripEl) stripEl.classList.remove("strip-hidden");
   homeStrip(); stopTimer();
+  window.scrollTo(0,0);
   const g=gateStatus();
   const total=Object.values(S.dom).reduce((a,b)=>a+b.s,0);
   const corr=Object.values(S.dom).reduce((a,b)=>a+b.c,0);
@@ -3581,7 +3735,7 @@ function renderTicket(done,chosen){
     return `<button class="${cls}" ${done?"disabled":""} onclick="answer(${oi})">
       <span class="key">${String.fromCharCode(65+pos)}</span><span>${esc(q.c[oi])}</span></button>`;
   }).join("");
-  const typeLabel={s:"Scenario",b:"Best answer",m:"Multiple choice",a:"Acronym"}[q.t];
+  const typeLabel={s:"Scenario",b:"Best answer",m:"Multiple choice",a:"Acronym",n:"EXCEPT"}[q.t];
   $("app").innerHTML=`
   <div class="ticket">
     <div class="thead"><span class="sev ${sv}">${sv.toUpperCase()}</span>
@@ -3965,6 +4119,7 @@ function acrSetup(){
 let REF={q:"",g:"all"};
 function acrRef(){
   view="ref"; AT_SECTION=false; strip("acronym reference",0,"on","<b>"+allAcr().length+"</b> entries","",true);
+  window.scrollTo(0,0);
   $("app").innerHTML=`
   <p class="eyebrow">Reference</p><h1>Acronym list</h1>
   <input id="refQ" type="text" placeholder="Search acronym, expansion, or function" value="${esc(REF.q)}" oninput="REF.q=this.value;refRender()">
@@ -4313,6 +4468,7 @@ function initPbqStateX(id){
 function persistX(){ if(SX&&!SX.submitted){ S.activeExam=SX; save(); } }
 function examHome(){
   view="setup"; SECTION=examHome; AT_SECTION=true; strip("practice exams",0,"on","","",true);
+  window.scrollTo(0,0);
   stopTimer(); RENDER_CB=null; PB=null; PICK=null;
   buildExams();
   const act=S.activeExam;
@@ -4749,6 +4905,7 @@ function examExportAll(fmt){
 /* ================= STATS ================= */
 function stats(){
   view="stats"; SECTION=stats; AT_SECTION=true; homeStrip(); stopTimer();
+  window.scrollTo(0,0);
   const bars=[1,2,3,4,5].map(d=>{
     const b=S.dom[d], v=pct(b.c,b.s);
     return `<div class="dstat"><div class="nm"><span>${d}.0</span>${DNAME[d]}</div>
@@ -4766,7 +4923,7 @@ function stats(){
   $("app").innerHTML=`
   <p class="eyebrow">Tracking</p><h1>Weak areas &amp; stats</h1>
   <div class="card"><h2 style="margin-top:0">Accuracy by domain</h2>${bars}
-    <p class="dim" style="font-size:13px;margin:14px 0 0">Readiness gate: ${g.pass?"<b style='color:var(--cyan)'>MET</b>":"<b style='color:var(--amber)'>CLOSED</b>"}. ${esc(g.label)}.</p></div>
+    <p class="dim" style="font-size:13px;margin:14px 0 0">Readiness gate: ${g.pass?"<b style='color:var(--green)'>\ud83d\udd13 OPEN</b>":"<b style='color:var(--red)'>\ud83d\udd12 CLOSED</b>"}. ${esc(g.label)}.</p></div>
   <h2>Concepts you keep missing</h2><div class="card"><ul class="weaklist">${wl}</ul></div>
   <h2>Acronyms you keep missing</h2><div class="card"><ul class="weaklist">${aw}</ul></div>
   <h2>PBQ history</h2><div class="card"><ul class="weaklist">${
@@ -4796,6 +4953,7 @@ function profile(first){
   if(first){ if(stripEl) stripEl.classList.add("strip-hidden"); }
   else { if(stripEl) stripEl.classList.remove("strip-hidden"); strip("settings",0,"on","","",true); }
   stopTimer();
+  window.scrollTo(0,0);
   $("app").innerHTML=`
   ${first?`<div style="text-align:left;padding:28px 0 4px">
     <h1 style="margin:0;font-size:26px;font-weight:600;line-height:1.15">Welcome to<br><span class="neon" style="font-family:var(--mono);text-transform:uppercase;font-size:1.5em;word-spacing:-0.2em">Night Shift</span></h1>
