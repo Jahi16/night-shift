@@ -4044,7 +4044,87 @@ const PBQ = [
         "Hash the original and the forensic copy to prove they match",
         "Analyze only the working copy, never the original",
         "Report findings with documentation intact for legal review"],
- explain:"Securing the scene prevents evidence changing before capture. Chain of custody starts before collection because every moment of possession must be accounted for. Acquisition follows the order of volatility: RAM vanishes at power-off, disks persist. Hashing original and copy proves the analysis target is a faithful duplicate. Analysis happens on the copy so the original stays pristine for court. Reporting closes the loop with the custody record unbroken. Any gap in this order gives opposing counsel a tampering argument regardless of what the evidence shows."}
+ explain:"Securing the scene prevents evidence changing before capture. Chain of custody starts before collection because every moment of possession must be accounted for. Acquisition follows the order of volatility: RAM vanishes at power-off, disks persist. Hashing original and copy proves the analysis target is a faithful duplicate. Analysis happens on the copy so the original stays pristine for court. Reporting closes the loop with the custody record unbroken. Any gap in this order gives opposing counsel a tampering argument regardless of what the evidence shows."},
+{id:21,t:"match",d:2,o:"2.1",g:"threat-actor-profiling",
+ title:"Profile the Threat Actor",
+ brief:"Drag each described incident onto the threat actor type most consistent with it.",
+ buckets:["Nation-state","Organized crime","Hacktivist","Insider threat","Unskilled attacker"],
+ items:[{x:"A highly resourced group maintains stealthy access to a defense contractor's network for eighteen months, extracting design documents",b:0},{x:"A group deploys ransomware across a hospital network and demands payment in cryptocurrency",b:1},{x:"An activist group defaces a company website to protest its environmental record",b:2},{x:"A recently terminated employee uses still-active credentials to delete production databases",b:3},{x:"Someone runs a downloaded exploit script against a random IP range with no clear objective",b:4}],
+ explain:[["Nation-state","Long-dwell-time espionage against a high-value target is the classic nation-state signature: patient, well-funded, objective-driven."],["Organized crime","Ransomware for direct financial extortion is the defining organized crime motivation."],["Hacktivist","Defacement tied to a political or philosophical cause is hacktivism, not financial or espionage motivated."],["Insider threat","Access from someone who should have lost it is the defining insider threat signature, motive aside."],["Unskilled attacker","Running someone else's tool with no strategy or target selection is the low-sophistication signature of an unskilled attacker."]]},
+
+{id:22,t:"select",d:2,o:"2.4",g:"malware-indicators",
+ title:"Malware Triage: Select the Indicators",
+ brief:"A workstation is behaving oddly. Review the observed symptoms below and select EVERY one that is a genuine indicator of malware, not routine behavior.",
+ pre:"OBSERVED SYMPTOMS\n1. CPU usage sits at 95% with no user application open\n2. The user installed a new printer driver yesterday\n3. Antivirus reports it was disabled without user action\n4. The system's hosts file now redirects a banking domain to an unfamiliar IP\n5. A scheduled Windows Update ran overnight as expected\n6. New scheduled tasks appear that the user did not create\n7. The user's browser homepage changed without their input",
+ items:["High CPU usage with no visible cause","New printer driver installed by the user","Antivirus disabled without user action","Hosts file redirecting a banking domain","Scheduled Windows Update ran overnight","Unfamiliar new scheduled tasks","Browser homepage changed without input"],
+ correct:[0,2,3,5,6],
+ explain:"Unexplained high CPU, disabled security tools, a poisoned hosts file, unauthorized scheduled tasks, and a hijacked homepage are all classic symptoms of active malware doing something the user did not authorize. A user-installed printer driver and a routine scheduled Windows Update are ordinary, expected system activity and should not be flagged; treating normal operations as indicators is exactly the kind of false positive that wastes SOC time."},
+
+{id:23,t:"grid",d:2,o:"2.3",g:"vulnerability-classification",
+ title:"Classify the Vulnerability",
+ brief:"For each described weakness, select the vulnerability category it belongs to.",
+ rows:[{label:"Application writes more data to a buffer than it can hold, corrupting adjacent memory",opts:["Buffer overflow","Race condition","Directory traversal","Zero-day"],a:0},{label:"Two threads check a file's permissions and then use it moments later, during which an attacker swaps the file",opts:["Buffer overflow","Race condition","Directory traversal","Zero-day"],a:1},{label:"Manipulated file path input lets a user read files outside the intended web root",opts:["Buffer overflow","Race condition","Directory traversal","Zero-day"],a:2},{label:"A flaw is actively exploited in the wild before the vendor has released any patch",opts:["Buffer overflow","Race condition","Directory traversal","Zero-day"],a:3}],
+ explain:"A buffer overflow is a memory-corruption flaw from writing past an allocated boundary. A race condition, specifically time-of-check to time-of-use here, exploits the gap between validation and use. Directory traversal manipulates file paths to escape the intended directory. A zero-day is defined by timing: exploited before any fix exists, regardless of the underlying flaw type."},
+
+{id:24,t:"order",d:2,o:"2.4",g:"password-attack-recognition",
+ title:"Recognize the Password Attack in Progress",
+ brief:"A SOC analyst is watching authentication logs unfold in real time. Arrange the log events in the order they actually occurred, then use the pattern to identify the attack.",
+ items:["A single account, jsmith, fails login 40 times in 60 seconds from one IP","The same IP then succeeds on the jsmith account on attempt 41","Ten minutes later, that same account is used to access payroll records it has never touched before","The security team correlates the failed attempts, the success, and the unusual access into one incident"],
+ explain:"This is a brute force attack: the same account is hammered with many password guesses from one source until one succeeds, distinct from password spraying, which tries one password across many different accounts instead. The account's sudden access to payroll data it never touches is the giveaway that the account is now compromised, not just tested. Correlating the failed attempts, the eventual success, and the anomalous follow-on access into a single incident is exactly what a SIEM is built to do."},
+
+{id:25,t:"match",d:2,o:"2.4",g:"network-attack-recognition",
+ title:"Match the Network Attack to Its Signature",
+ brief:"Drag each network-layer symptom onto the attack it actually describes.",
+ buckets:["ARP poisoning","DNS poisoning","Amplified DDoS","On-path attack"],
+ items:[{x:"A workstation's ARP table shows the gateway's IP mapped to an unfamiliar MAC address",b:0},{x:"Every device on the local segment suddenly routes its traffic through one unexpected host",b:0},{x:"Queries for a legitimate banking domain resolve to an unfamiliar external IP address",b:1},{x:"A cached record for a well-known site was corrupted at the resolver, not just on one client",b:1},{x:"A small spoofed request to an open DNS resolver triggers a disproportionately large response flooding the victim",b:2},{x:"Attackers use unfiltered public resolvers to multiply the volume directed at one target",b:2},{x:"An attacker intercepts traffic between two parties by positioning themselves in the path, without either party noticing",b:3},{x:"Captured traffic shows session data being read or altered in transit between client and server",b:3}],
+ explain:[["ARP poisoning","Forged ARP replies rebind the gateway's IP to the attacker's MAC on the local segment, redirecting local traffic through them."],["DNS poisoning","Corrupting the resolution itself, whether client-side or at the resolver's cache, sends victims to the wrong address."],["Amplified DDoS","A small spoofed request generating a large response, multiplied across many open resolvers, is the defining amplification signature."],["On-path attack","Sitting in the traffic path to intercept or alter communication between two parties, invisibly, is the on-path definition."]]},
+
+{id:26,t:"select",d:2,o:"2.2",g:"social-engineering-recognition",
+ title:"Social Engineering: Identify the Techniques in Play",
+ brief:"An employee receives a phone call. Read the transcript excerpt and select EVERY social engineering technique actually being used against them.",
+ pre:"CALLER: \"Hi, this is Mark from IT Security. We're seeing suspicious login attempts on your account right now, and if we don't lock this down in the next five minutes your account could be compromised and you could face disciplinary action for the breach. I just need you to read me the verification code you're about to receive so I can secure your account before it's too late.\"",
+ items:["Impersonating an authority figure (IT Security)","Creating a false sense of urgency","Threatening a consequence to the victim","Requesting a one-time verification code","Sending the message over SMS instead of a phone call","Offering a monetary reward for compliance"],
+ correct:[0,1,2,3],
+ explain:"This call uses four layered techniques at once: impersonating IT Security to borrow authority, manufacturing a five-minute deadline to short-circuit careful thinking, threatening disciplinary action to add pressure, and asking for a live one-time code, which is the actual objective since that code can be used to complete an account takeover in real time. The call happened over voice, not SMS, and no reward was offered, so those two are not present in this transcript."},
+
+{id:27,t:"match",d:5,o:"5.2",g:"risk-analysis-metrics",
+ title:"Calculate the Risk: Match the Term to Its Role",
+ brief:"A server holds data worth $200,000. A specific risk event would destroy 40 percent of that value and is expected to occur twice per year. Drag each term onto what it represents in this scenario.",
+ buckets:["Asset value","Exposure factor","Single loss expectancy","Annualized rate of occurrence","Annualized loss expectancy"],
+ items:[{x:"$200,000",b:0},{x:"40%",b:1},{x:"$80,000 (asset value multiplied by exposure factor)",b:2},{x:"2 (expected occurrences per year)",b:3},{x:"$160,000 (single loss expectancy multiplied by annualized rate)",b:4}],
+ explain:[["Asset value","The total worth of the asset before any loss is applied."],["Exposure factor","The percentage of the asset's value expected to be lost in a single occurrence."],["Single loss expectancy","Asset value multiplied by exposure factor: the dollar loss from one occurrence."],["Annualized rate of occurrence","How many times per year the event is expected to happen."],["Annualized loss expectancy","Single loss expectancy multiplied by annualized rate of occurrence: the expected yearly financial impact, the number that actually drives budget decisions."]]},
+
+{id:28,t:"grid",d:5,o:"5.3",g:"vendor-agreement-selection",
+ title:"Select the Right Vendor Agreement",
+ brief:"For each described need, select the agreement type that actually fits it.",
+ rows:[{label:"Define the exact deliverables, timeline, and cost for one specific project with a vendor",opts:["SLA","MSA","SOW","NDA"],a:2},{label:"Guarantee a vendor's uptime commitment with penalties if they fall short",opts:["SLA","MSA","SOW","NDA"],a:0},{label:"Establish the general terms that will govern every future project with this vendor",opts:["SLA","MSA","SOW","NDA"],a:1},{label:"Legally bind both parties to keep shared information confidential",opts:["SLA","MSA","SOW","NDA"],a:3}],
+ explain:"A statement of work defines the specific deliverables and terms of one engagement. A service-level agreement is specifically about guaranteed performance, like uptime, with consequences for missing it. A master service agreement sets the overarching terms so future individual statements of work don't have to renegotiate everything from scratch. A non-disclosure agreement exists purely to bind confidentiality, unrelated to deliverables or performance."},
+
+{id:29,t:"select",d:5,o:"5.4",g:"compliance-consequences",
+ title:"Non-Compliance Fallout: Select What Actually Applies",
+ brief:"A healthcare company is found to have mishandled regulated patient data during an audit. Select EVERY consequence that is a realistic, direct result of this kind of non-compliance finding.",
+ items:["A regulatory fine","Automatic dissolution of the company","Loss of an industry license or certification","Reputational damage affecting customer trust","A mandatory increase in employee salaries","Contractual penalties from business partners"],
+ correct:[0,2,3,5],
+ explain:"Fines, loss of license or certification, reputational damage, and contractual penalties triggered by partner agreements are all named, realistic consequences of non-compliance. Company dissolution is not an automatic regulatory outcome, and a salary increase has no connection to a compliance failure at all; both are fabricated distractors that do not belong on this list."},
+
+{id:30,t:"match",d:5,o:"5.5",g:"audit-type-recognition",
+ title:"Match the Assessment to Its Type",
+ brief:"Drag each described review onto the audit or assessment category it belongs to.",
+ buckets:["Internal audit","External audit","Regulatory examination","Penetration test"],
+ items:[{x:"The organization's own compliance team reviews its controls ahead of the real audit",b:0},{x:"A department runs a self-assessment against its own checklist before year-end",b:0},{x:"An independent accounting firm is hired to certify the controls to outside stakeholders",b:1},{x:"A government banking regulator arrives with legal authority to examine the institution's practices",b:2},{x:"An authorized third party actively attempts to exploit the network to prove real-world impact",b:3}],
+ explain:[["Internal audit","Performed by the organization's own staff; useful preparation, but it lacks outside independence."],["External audit","An independent third party provides the outside assurance that an internal audit alone cannot."],["Regulatory examination","Conducted by a government body with legal authority over the organization, distinct from a voluntary audit."],["Penetration test","Active exploitation attempted by an authorized party, a technical assessment rather than a compliance review."]]},
+
+{id:31,t:"order",d:5,o:"5.3",g:"vendor-lifecycle",
+ title:"Order the Vendor Risk Lifecycle",
+ brief:"Arrange the stages of managing a third-party vendor relationship in the order they actually happen.",
+ items:["Conduct due diligence and check for conflicts of interest before selecting the vendor","Negotiate and sign agreement types such as an SLA, MSA, and NDA","Send security questionnaires and review the vendor's own audit evidence","Monitor the vendor's ongoing performance and incident history throughout the relationship","Conduct a right-to-audit review or independent assessment if concerns arise"],
+ explain:"Due diligence happens before signature, since discovering a disqualifying issue after the contract is signed is far more costly to unwind. Agreements are negotiated once the vendor is selected, formalizing the relationship's terms. Questionnaires and evidence review typically continue as part of onboarding and periodic review. Ongoing monitoring is what makes vendor risk management a continuous discipline rather than a one-time gate. The right-to-audit clause exists precisely so the organization can act if monitoring surfaces a concern, the final safety valve in the relationship."},
+
+{id:32,t:"grid",d:3,o:"3.4",g:"site-selection",
+ title:"Select the Right Recovery Site",
+ brief:"For each described recovery scenario, select the site type that best fits the stated priority.",
+ rows:[{label:"Lowest possible ongoing cost is the priority; the business can tolerate days of downtime",opts:["Hot site","Warm site","Cold site"],a:2},{label:"Near-instant failover is required; cost is a secondary concern",opts:["Hot site","Warm site","Cold site"],a:0},{label:"Hardware should already be in place, but data does not need to be fully current",opts:["Hot site","Warm site","Cold site"],a:1}],
+ explain:"A cold site is essentially prepared empty space: cheapest to maintain, but recovery means installing equipment and restoring everything from scratch, which takes days. A hot site is fully equipped and kept current, enabling near-instant failover at the highest ongoing cost. A warm site sits in between: hardware is ready, but the data isn't kept fully current, trading some recovery speed for lower cost than a hot site."}
 ];
 
 const STUDY = {
