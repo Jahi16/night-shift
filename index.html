@@ -2956,6 +2956,288 @@ const ACR = [
 {a:"WTLS",d:"Wireless TLS",g:"wifi",u:"An obsolete transport security layer once used in older WAP mobile protocols"}
 ];
 
+const GLOSS = [
+{term:"Honeypot",d:1,g:"deception",def:"A decoy system built to look like a real target, luring attackers in so defenders can observe their techniques without risking production assets."},
+{term:"Honeytoken",d:1,g:"deception",def:"A fake credential, file, or database record planted to detect unauthorized access; any use of it is a reliable signal of compromise since no legitimate process should ever touch it."},
+{term:"Honeynet",d:1,g:"deception",def:"A full network of honeypots designed to look like a real corporate environment, giving attackers a larger, more convincing decoy to explore."},
+{term:"Bollard",d:1,g:"physical",def:"A short, sturdy post installed in front of an entrance to stop a vehicle from ramming the building."},
+{term:"Air gap",d:1,g:"network",def:"Physical isolation of a system or network with no direct connection to any other network, the strongest form of network segmentation."},
+{term:"Zero trust",d:1,g:"architecture",def:"A security model that assumes no user or device is trustworthy by default, verifying every request continuously rather than granting broad access once inside the perimeter."},
+{term:"Control plane",d:1,g:"architecture",def:"In zero trust, the layer that evaluates policy and makes access decisions, separate from the data plane that actually carries traffic."},
+{term:"Data plane",d:1,g:"architecture",def:"In zero trust, the layer that carries traffic to and from resources, enforcing the decisions made by the control plane."},
+{term:"Policy engine",d:1,g:"architecture",def:"The zero trust component that evaluates access requests against defined rules and decides whether to grant or deny them."},
+{term:"Policy enforcement point",d:1,g:"architecture",def:"The zero trust component that carries out the policy engine's decision, actually allowing or blocking the connection."},
+{term:"Deterrent control",d:1,g:"controls",def:"A control that discourages an attacker from attempting an action, without necessarily stopping them if they proceed anyway."},
+{term:"Compensating control",d:1,g:"controls",def:"A substitute safeguard used when the primary required control cannot be implemented, intended to provide equivalent protection."},
+{term:"Non-repudiation",d:1,g:"crypto",def:"A property ensuring someone cannot credibly deny having performed an action, typically achieved through digital signatures."},
+{term:"Salting",d:1,g:"crypto",def:"Adding a unique random value to each password before hashing, so identical passwords produce different hashes and precomputed rainbow tables become useless."},
+{term:"Key stretching",d:1,g:"crypto",def:"Deliberately slowing down a hashing or key-derivation process to make brute-force and dictionary attacks more computationally expensive."},
+{term:"Digital signature",d:1,g:"crypto",def:"A cryptographic value created with a sender's private key that proves both the authenticity of the sender and the integrity of the message."},
+{term:"Steganography",d:1,g:"crypto",def:"Hiding data inside another file or medium, such as an image, so its presence is concealed rather than just its content encrypted."},
+{term:"Obfuscation",d:1,g:"crypto",def:"Deliberately making code or data difficult to understand, without necessarily encrypting it, often used to slow down reverse engineering."},
+{term:"Gap analysis",d:1,g:"governance",def:"A structured comparison between an organization's current security posture and a target framework or standard, identifying what is missing."},
+{term:"Attack surface",d:1,g:"architecture",def:"The complete set of points where an unauthorized user could attempt to enter or extract data from a system."},
+{term:"Shadow IT",d:2,g:"threats",def:"Technology adopted by employees without formal IT approval, usually to work around slow processes, which creates blind spots the security team cannot monitor."},
+{term:"Watering hole attack",d:2,g:"threats",def:"An attack that compromises a website the target is known to visit, rather than attacking the target directly."},
+{term:"Pretexting",d:2,g:"social-eng",def:"Fabricating a believable scenario or false identity to manipulate a victim into divulging information or granting access."},
+{term:"Business email compromise",d:2,g:"social-eng",def:"A targeted scam where an attacker impersonates an executive or trusted partner by email to trick an employee into a fraudulent wire transfer or data disclosure."},
+{term:"Typosquatting",d:2,g:"threats",def:"Registering a domain name that is a common misspelling of a legitimate one, hoping to catch users who mistype the real address."},
+{term:"Vishing",d:2,g:"social-eng",def:"Voice-based phishing conducted over a phone call, often impersonating a trusted authority to extract information."},
+{term:"Smishing",d:2,g:"social-eng",def:"Phishing conducted via SMS text message rather than email."},
+{term:"Whaling",d:2,g:"social-eng",def:"A phishing attack specifically targeting a high-value individual such as an executive."},
+{term:"Tailgating",d:2,g:"social-eng",def:"Following an authorized person through a secured door without presenting your own credentials."},
+{term:"Piggybacking",d:2,g:"social-eng",def:"Similar to tailgating, but with the authorized person's knowledge and consent, holding the door open for someone else."},
+{term:"Dumpster diving",d:2,g:"social-eng",def:"Searching through discarded trash to find sensitive documents, credentials, or other useful information."},
+{term:"Shoulder surfing",d:2,g:"social-eng",def:"Observing someone's screen or keyboard, in person, to capture credentials or sensitive information they are entering."},
+{term:"Credential stuffing",d:2,g:"threats",def:"Using username and password pairs stolen from one breach to attempt logins on other, unrelated services, betting on password reuse."},
+{term:"Password spraying",d:2,g:"threats",def:"Trying one common password against many different accounts, staying under lockout thresholds by not repeatedly guessing against a single account."},
+{term:"On-path attack",d:2,g:"threats",def:"An attack where the adversary positions themselves between two communicating parties to intercept or alter traffic; formerly called man-in-the-middle."},
+{term:"ARP poisoning",d:2,g:"threats",def:"Sending forged ARP replies to associate an attacker's MAC address with a legitimate IP, redirecting traffic through the attacker's machine."},
+{term:"DNS poisoning",d:2,g:"threats",def:"Corrupting DNS records or cache so that queries for a legitimate domain return an attacker-controlled IP address."},
+{term:"Domain hijacking",d:2,g:"threats",def:"Gaining unauthorized control over a domain's registration, allowing the attacker to redirect all traffic for that domain."},
+{term:"Bluejacking",d:2,g:"threats",def:"Sending unsolicited messages to a nearby Bluetooth-enabled device."},
+{term:"Bluesnarfing",d:2,g:"threats",def:"Unauthorized access to data on a device over an active Bluetooth connection."},
+{term:"Rogue access point",d:2,g:"threats",def:"An unauthorized wireless access point connected to a network, often installed without IT's knowledge, that creates an unmonitored entry point."},
+{term:"Evil twin",d:2,g:"threats",def:"A rogue access point broadcasting the same network name as a legitimate one, tricking devices into connecting to the attacker instead."},
+{term:"Deauthentication attack",d:2,g:"threats",def:"Forging wireless management frames that force a client to disconnect from its access point, often used to capture a reconnection handshake or push victims to a rogue AP."},
+{term:"Buffer overflow",d:2,g:"vulns",def:"A vulnerability where a program writes more data to a memory buffer than it can hold, corrupting adjacent memory and potentially allowing code execution."},
+{term:"Integer overflow",d:2,g:"vulns",def:"A flaw where a numeric value exceeds the maximum its data type can store, causing it to wrap around to an unexpected, often exploitable value."},
+{term:"Race condition",d:2,g:"vulns",def:"A vulnerability that arises when the outcome of a process depends on timing, letting an attacker exploit the gap between two operations that assume nothing changed in between."},
+{term:"Time-of-check to time-of-use",d:2,g:"vulns",def:"A specific race condition where a resource is validated at one moment but used at a later moment, during which an attacker swaps or alters it."},
+{term:"SQL injection",d:2,g:"vulns",def:"Inserting malicious SQL code into an input field so it is executed by the backend database, often to bypass authentication or extract data."},
+{term:"Cross-site scripting",d:2,g:"vulns",def:"Injecting malicious script into a web page viewed by other users, allowing the attacker to run code in the victim's browser session."},
+{term:"Cross-site request forgery",d:2,g:"vulns",def:"Tricking an authenticated user's browser into submitting an unwanted request to a site they are logged into, exploiting their existing session."},
+{term:"Zero-day",d:2,g:"vulns",def:"A vulnerability that is unknown to the vendor and has no available patch, meaning defenders have had zero days to prepare."},
+{term:"Malicious update",d:2,g:"threats",def:"A supply chain attack where a compromised or trojanized software update is pushed to users through a trusted, legitimate update channel."},
+{term:"Indicator of compromise",d:2,g:"threats",def:"Forensic evidence, such as an unusual file hash, IP address, or registry key, suggesting a system has been breached."},
+{term:"Impossible travel",d:2,g:"threats",def:"An account authenticating from two geographically distant locations in a time window too short for legitimate travel, indicating credential compromise."},
+{term:"Concurrent session usage",d:2,g:"threats",def:"Multiple simultaneous active logins on one account, often from different locations, suggesting the credentials are in more than one party's hands."},
+{term:"Living off the land",d:2,g:"threats",def:"An attack technique that uses legitimate, pre-installed system tools rather than custom malware, making detection harder since the tools themselves are not inherently malicious."},
+{term:"Infrastructure as code",d:3,g:"cloud",def:"Managing and provisioning infrastructure through machine-readable definition files rather than manual configuration, enabling version control and repeatable deployments."},
+{term:"Software-defined networking",d:3,g:"network",def:"A network architecture that separates the control plane from the data plane, allowing centralized, programmable management of network behavior."},
+{term:"Microsegmentation",d:3,g:"network",def:"Dividing a network into very small, tightly controlled segments, often down to the individual workload level, to limit lateral movement."},
+{term:"Screened subnet",d:3,g:"network",def:"A network segment isolated between two firewalls, used to expose public-facing services while shielding the internal network; formerly called a DMZ."},
+{term:"Jump server",d:3,g:"network",def:"A hardened, tightly monitored host that administrators must pass through to reach other systems, concentrating and auditing privileged access."},
+{term:"Software-defined WAN",d:3,g:"network",def:"A technology that centrally manages and intelligently steers traffic across multiple WAN connections, optimizing cost and performance."},
+{term:"Secure access service edge",d:3,g:"network",def:"A cloud-delivered architecture that converges networking and security functions into a single service for a distributed, identity-first workforce."},
+{term:"Network access control",d:3,g:"network",def:"A system that evaluates a device's identity and health before allowing it onto the network, often quarantining non-compliant devices."},
+{term:"Load balancer",d:3,g:"availability",def:"A device or service that distributes incoming traffic across multiple servers, improving both performance and availability."},
+{term:"Clustering",d:3,g:"availability",def:"Coupling multiple servers so they operate as a single logical system, often with shared storage, so if one node fails another takes over its work."},
+{term:"Recovery time objective",d:3,g:"resilience",def:"The maximum acceptable amount of time a system can be down before recovery, measuring how long an outage is tolerated."},
+{term:"Recovery point objective",d:3,g:"resilience",def:"The maximum acceptable amount of data loss, measured in time, that an organization can tolerate between backups."},
+{term:"Mean time between failures",d:3,g:"resilience",def:"The average time a system operates before it fails, used as a reliability metric."},
+{term:"Mean time to repair",d:3,g:"resilience",def:"The average time it takes to restore a failed system to working order."},
+{term:"Hot site",d:3,g:"resilience",def:"A fully equipped, ready-to-use backup facility with current data, allowing near-instant failover during a disaster, at the highest cost."},
+{term:"Warm site",d:3,g:"resilience",def:"A backup facility with hardware in place but data that is not fully current, offering a middle ground between cost and recovery speed."},
+{term:"Cold site",d:3,g:"resilience",def:"A backup facility that is essentially empty space, cheapest to maintain but slowest to bring online during a disaster."},
+{term:"Differential backup",d:3,g:"resilience",def:"A backup that copies all data changed since the last full backup, growing larger each day until the next full backup resets it."},
+{term:"Incremental backup",d:3,g:"resilience",def:"A backup that copies only data changed since the most recent backup of any type, producing the smallest individual backup files."},
+{term:"Journaling",d:3,g:"resilience",def:"Recording every change to a file system or database in a sequential log, enabling recovery to a precise point in time."},
+{term:"Snapshot",d:3,g:"resilience",def:"A point-in-time copy of a system's state, commonly used with virtual machines to enable quick rollback."},
+{term:"Containerization",d:3,g:"cloud",def:"Packaging an application with its dependencies into a lightweight, portable unit that runs consistently across different environments."},
+{term:"Serverless computing",d:3,g:"cloud",def:"A cloud model where the provider manages the underlying servers entirely, and the customer only supplies and pays for the code that runs."},
+{term:"Virtual private cloud",d:3,g:"cloud",def:"An isolated, private section of a public cloud provider's infrastructure, giving a customer network-level separation from other tenants."},
+{term:"Hybrid cloud",d:3,g:"cloud",def:"A deployment combining private, on-premises infrastructure with public cloud resources, often to balance control and scalability."},
+{term:"Real-time operating system",d:3,g:"iot",def:"An operating system built to guarantee task completion within a strict, predictable time window, commonly used in industrial and embedded control systems."},
+{term:"Supervisory control and data acquisition",d:3,g:"iot",def:"A system used to monitor and control industrial processes across a large geographic area, common in utilities and manufacturing."},
+{term:"Industrial control system",d:3,g:"iot",def:"A general term for the systems that manage and automate industrial processes, of which SCADA is one type."},
+{term:"Embedded system",d:3,g:"iot",def:"A computer system built into a larger device to perform a specific function, typically with constrained hardware and a long deployment life."},
+{term:"Data sovereignty",d:3,g:"data",def:"The principle that data is subject to the laws of the country in which it is physically stored, a key concern for cloud data residency."},
+{term:"Hardening",d:4,g:"ops",def:"The process of reducing a system's attack surface by disabling unused services, closing unneeded ports, removing default accounts, and applying patches."},
+{term:"Sandboxing",d:4,g:"ops",def:"Running untrusted code in an isolated environment to observe its behavior safely, without risking the production system."},
+{term:"Endpoint detection and response",d:4,g:"ops",def:"A security tool that continuously monitors endpoint behavior, enabling detection, investigation, and remote response to threats that signature-based antivirus would miss."},
+{term:"Security information and event management",d:4,g:"ops",def:"A platform that aggregates log data from many sources, correlates events, and generates alerts, forming the analytical backbone of a SOC."},
+{term:"Security orchestration, automation, and response",d:4,g:"ops",def:"A platform that automates and coordinates incident response actions across multiple security tools, reducing manual analyst effort."},
+{term:"NetFlow",d:4,g:"ops",def:"A protocol that records metadata about network conversations, such as source, destination, and volume, without capturing the actual payload content."},
+{term:"Packet capture",d:4,g:"ops",def:"Recording the full content of network traffic, providing complete visibility but consuming far more storage than flow-based logging."},
+{term:"Order of volatility",d:4,g:"forensics",def:"The forensic principle of collecting the most perishable evidence first, since data in memory vanishes at power-off while data on disk persists."},
+{term:"Chain of custody",d:4,g:"forensics",def:"A documented, unbroken record of who has handled a piece of evidence and when, required to preserve its integrity for legal proceedings."},
+{term:"Legal hold",d:4,g:"forensics",def:"A directive to preserve specific data because it may be relevant to pending or anticipated litigation, overriding normal retention or deletion schedules."},
+{term:"E-discovery",d:4,g:"forensics",def:"The process of identifying, collecting, and producing electronically stored information in response to a legal request or investigation."},
+{term:"Forensic image",d:4,g:"forensics",def:"A bit-for-bit copy of a storage device, created so analysis can occur on the copy while the original evidence remains untouched."},
+{term:"Root cause analysis",d:4,g:"incident",def:"A structured investigation into the underlying reason an incident occurred, aimed at preventing recurrence rather than just addressing symptoms."},
+{term:"Lessons learned",d:4,g:"incident",def:"The formal post-incident review stage where a team documents what happened and what should change going forward."},
+{term:"Playbook",d:4,g:"incident",def:"A predefined, step-by-step set of actions for responding to a specific type of incident, ensuring a consistent response regardless of who is on call."},
+{term:"Runbook",d:4,g:"incident",def:"A documented procedure for performing a routine operational task, similar to a playbook but typically for planned maintenance rather than incident response."},
+{term:"Tabletop exercise",d:4,g:"incident",def:"A discussion-based walkthrough of an incident response plan, where participants talk through their roles without touching live systems."},
+{term:"Simulation",d:4,g:"incident",def:"A hands-on exercise that stages a realistic scenario and has participants actually perform response actions, more resource-intensive than a tabletop."},
+{term:"Quarantine",d:4,g:"incident",def:"Isolating a compromised or suspicious file or device to prevent it from causing further harm while it is investigated."},
+{term:"Vulnerability scan",d:4,g:"vuln-mgmt",def:"An automated scan that identifies known weaknesses in a system without attempting to exploit them."},
+{term:"Penetration test",d:4,g:"vuln-mgmt",def:"An authorized, simulated attack that actively attempts to exploit vulnerabilities to prove real-world impact, going beyond what a scan alone reveals."},
+{term:"Credentialed scan",d:4,g:"vuln-mgmt",def:"A vulnerability scan performed with valid login credentials, giving visibility into installed software and configuration from inside the system."},
+{term:"Non-credentialed scan",d:4,g:"vuln-mgmt",def:"A vulnerability scan performed without login credentials, seeing the target only as an outside attacker would."},
+{term:"False positive",d:4,g:"vuln-mgmt",def:"An alert or finding that indicates a problem exists when it actually does not."},
+{term:"False negative",d:4,g:"vuln-mgmt",def:"A failure to detect an actual problem, the most dangerous kind of detection error since it creates false confidence."},
+{term:"Common Vulnerabilities and Exposures",d:4,g:"vuln-mgmt",def:"A public, standardized catalog assigning a unique identifier to each publicly known cybersecurity vulnerability."},
+{term:"Common Vulnerability Scoring System",d:4,g:"vuln-mgmt",def:"A standardized numeric scale used to rate the severity of a vulnerability, though it does not account for an individual organization's specific context."},
+{term:"Bug bounty",d:4,g:"vuln-mgmt",def:"A program that pays independent researchers for responsibly disclosing vulnerabilities they discover in an organization's systems."},
+{term:"Responsible disclosure",d:4,g:"vuln-mgmt",def:"The practice of privately reporting a discovered vulnerability to the vendor and giving them time to patch it before making the flaw public."},
+{term:"Attack surface management",d:4,g:"vuln-mgmt",def:"The ongoing process of discovering, monitoring, and reducing every external-facing asset an organization exposes to potential attackers."},
+{term:"Least privilege",d:4,g:"iam",def:"The principle of granting a user or process only the minimum access necessary to perform its function, nothing more."},
+{term:"Just-in-time access",d:4,g:"iam",def:"Granting elevated privileges only for a limited, specific time window when they are actually needed, rather than leaving them standing permanently."},
+{term:"Privileged access management",d:4,g:"iam",def:"A set of tools and practices specifically focused on securing, monitoring, and controlling accounts with elevated administrative privileges."},
+{term:"Role-based access control",d:4,g:"iam",def:"An access model that assigns permissions based on a user's job function or role, rather than to each individual user directly."},
+{term:"Attribute-based access control",d:4,g:"iam",def:"An access model that grants permissions based on a combination of user, resource, and environmental attributes, evaluated dynamically at request time."},
+{term:"Federation",d:4,g:"iam",def:"A trust relationship that allows a user's identity from one organization to be recognized and used to access resources in another."},
+{term:"Single sign-on",d:4,g:"iam",def:"Allowing a user to authenticate once and gain access to multiple independent systems without logging in again to each one."},
+{term:"Provisioning",d:4,g:"iam",def:"The process of creating a user account and granting the initial access appropriate to their role."},
+{term:"De-provisioning",d:4,g:"iam",def:"The process of removing a user's access and disabling their account, typically upon termination or role change."},
+{term:"Password vaulting",d:4,g:"iam",def:"Securely storing privileged credentials in a centralized system that controls, logs, and often rotates access to them."},
+{term:"Web application firewall",d:4,g:"network-sec",def:"A firewall purpose-built to inspect and filter HTTP traffic, protecting against web-specific attacks like SQL injection and cross-site scripting."},
+{term:"Next-generation firewall",d:4,g:"network-sec",def:"A firewall that inspects traffic at the application layer, going beyond simple port and protocol filtering to understand what an application is actually doing."},
+{term:"Intrusion detection system",d:4,g:"network-sec",def:"A system that monitors traffic for malicious activity and generates alerts, without taking action to block it."},
+{term:"Intrusion prevention system",d:4,g:"network-sec",def:"A system that sits inline in the traffic path and actively blocks malicious activity it detects, rather than only alerting."},
+{term:"Fail-open",d:4,g:"network-sec",def:"A failure mode where a security device passes traffic unblocked if it stops functioning, prioritizing availability over inspection."},
+{term:"Fail-closed",d:4,g:"network-sec",def:"A failure mode where a security device blocks all traffic if it stops functioning, prioritizing security over availability."},
+{term:"Data loss prevention",d:4,g:"data-sec",def:"A system that monitors and blocks sensitive data from leaving an organization's control through unauthorized channels."},
+{term:"Tokenization",d:4,g:"data-sec",def:"Replacing sensitive data with a non-sensitive substitute value that has no exploitable mathematical relationship to the original, with the real data stored separately in a secure vault."},
+{term:"Data masking",d:4,g:"data-sec",def:"Hiding part of a sensitive value at display time while the full value may still exist elsewhere in the system."},
+{term:"Due diligence",d:5,g:"governance",def:"The investigative process of researching and understanding a risk before taking action, such as evaluating a vendor before signing a contract."},
+{term:"Due care",d:5,g:"governance",def:"The ongoing, reasonable actions taken to address a known risk, following through on what due diligence uncovered."},
+{term:"Risk appetite",d:5,g:"risk",def:"The broad amount of risk an organization is willing to accept in pursuit of its objectives, set at the strategic level."},
+{term:"Risk tolerance",d:5,g:"risk",def:"The acceptable level of variation around a specific risk that an organization will allow before taking corrective action."},
+{term:"Risk register",d:5,g:"risk",def:"A documented, maintained list of identified risks, their assessed severity, and the organization's planned response to each."},
+{term:"Risk appetite statement",d:5,g:"risk",def:"A formal, published declaration of how much risk an organization is willing to accept, used to guide decision-making."},
+{term:"Qualitative risk analysis",d:5,g:"risk",def:"Assessing risk using descriptive categories like low, medium, and high rather than precise numeric values."},
+{term:"Quantitative risk analysis",d:5,g:"risk",def:"Assessing risk using numeric values such as monetary loss and statistical probability, enabling direct cost comparisons."},
+{term:"Single loss expectancy",d:5,g:"risk",def:"The monetary loss expected from a single occurrence of a risk event."},
+{term:"Annualized rate of occurrence",d:5,g:"risk",def:"The estimated number of times a specific risk event is expected to occur in a year."},
+{term:"Annualized loss expectancy",d:5,g:"risk",def:"The total expected yearly financial loss from a risk, calculated by multiplying single loss expectancy by annualized rate of occurrence."},
+{term:"Risk exemption",d:5,g:"risk",def:"A formal decision that a specific policy or standard does not apply to a particular case at all."},
+{term:"Risk exception",d:5,g:"risk",def:"A formal, usually time-bound decision to permit non-compliance with a policy that still applies, unlike an exemption."},
+{term:"Data controller",d:5,g:"privacy",def:"The party that determines the purposes and means of processing personal data, bearing primary legal accountability for that processing."},
+{term:"Data processor",d:5,g:"privacy",def:"The party that processes personal data on behalf of and under the direction of a data controller."},
+{term:"Data subject",d:5,g:"privacy",def:"The individual whose personal data is being collected or processed."},
+{term:"Right to be forgotten",d:5,g:"privacy",def:"An individual's legal right to request that an organization erase their personal data."},
+{term:"Data minimization",d:5,g:"privacy",def:"The principle of collecting and retaining only the personal data actually necessary for a stated purpose, nothing more."},
+{term:"Privacy impact assessment",d:5,g:"privacy",def:"A structured evaluation of how a new project or system will collect, use, and protect personal data, performed before deployment."},
+{term:"Data retention policy",d:5,g:"governance",def:"A formal policy defining how long different categories of data must be kept and when they should be destroyed."},
+{term:"Data sanitization",d:5,g:"governance",def:"The process of permanently and irreversibly removing data from a storage medium so it cannot be recovered."},
+{term:"Attestation",d:5,g:"compliance",def:"A formal confirmation, often signed, that a person has reviewed and agrees to comply with a policy."},
+{term:"Internal audit",d:5,g:"compliance",def:"An assessment of controls performed by an organization's own staff, useful for preparation but lacking external independence."},
+{term:"External audit",d:5,g:"compliance",def:"An independent assessment of controls performed by a third party, providing assurance that internal audits cannot offer alone."},
+{term:"Regulatory examination",d:5,g:"compliance",def:"A formal review conducted by a government body with legal authority over the organization, distinct from a voluntary audit."},
+{term:"Service level agreement",d:5,g:"vendor",def:"A contractual commitment defining the expected performance level a vendor will deliver, often including penalties for falling short."},
+{term:"Memorandum of understanding",d:5,g:"vendor",def:"A document expressing mutual intent to work together, generally less formal and less legally binding than a full contract."},
+{term:"Business partnership agreement",d:5,g:"vendor",def:"A formal contract defining the terms, responsibilities, and profit or loss sharing between two or more business partners."},
+{term:"Non-disclosure agreement",d:5,g:"vendor",def:"A legal contract obligating parties to keep specified information confidential."},
+{term:"Security awareness training",d:5,g:"awareness",def:"Ongoing education for all employees covering topics like phishing recognition, password hygiene, and incident reporting, aimed at reducing human-factor risk."},
+{term:"Honeyfile",d:1,g:"deception",def:"A file planted with fake, enticing information, such as passwords.txt, placed on a file share as bait; any access to it triggers an alert since no legitimate process should ever open it."},
+{term:"Key escrow",d:1,g:"crypto",def:"A practice where a copy of a private encryption key is held by a trusted third party, allowing data recovery if the original key is lost, at the cost of a broader attack surface for that key."},
+{term:"Implicit trust zones",d:1,g:"architecture",def:"In the zero trust data plane, network areas historically treated as automatically trusted simply by being inside the perimeter, an assumption zero trust explicitly removes."},
+{term:"Policy administrator",d:1,g:"architecture",def:"The zero trust control-plane component that establishes and communicates the actual access decision to the policy enforcement point, working alongside the policy engine."},
+{term:"Adaptive identity",d:1,g:"architecture",def:"A zero trust control-plane concept where access decisions factor in real-time context about the user, such as location or device health, rather than treating identity as a static, one-time check."},
+{term:"Threat scope reduction",d:1,g:"architecture",def:"A zero trust principle of limiting the paths and resources any single identity could reach if compromised, shrinking the blast radius of a breach."},
+{term:"Allow list",d:1,g:"controls",def:"A security approach that permits only explicitly approved applications, addresses, or activity, blocking everything else by default."},
+{term:"Deny list",d:1,g:"controls",def:"A security approach that blocks explicitly listed applications, addresses, or activity while permitting everything else by default, the inverse of an allow list."},
+{term:"Backout plan",d:1,g:"governance",def:"A predefined procedure for reversing a change if it fails or causes unexpected problems, restoring the system to its prior working state."},
+{term:"Maintenance window",d:1,g:"governance",def:"A scheduled time period during which changes are permitted to be made to a system, chosen to minimize business disruption."},
+{term:"Standard operating procedure",d:1,g:"governance",def:"A documented, repeatable set of instructions for performing a routine task consistently, reducing the risk of error introduced by relying on memory or improvisation."},
+{term:"Blockchain",d:1,g:"crypto",def:"A distributed, cryptographically linked ledger of records maintained across many participants, making past entries extremely difficult to alter without detection."},
+{term:"Trusted Platform Module",d:1,g:"crypto",def:"A dedicated hardware chip built into a device that securely generates and stores cryptographic keys, isolated from the main operating system."},
+{term:"Hardware security module",d:1,g:"crypto",def:"A dedicated physical device that manages and safeguards cryptographic keys and performs encryption operations, commonly used at the enterprise or data-center level."},
+{term:"Certificate signing request",d:1,g:"crypto",def:"The formal request a server or organization submits to a certificate authority, containing the public key and identifying details, in order to have a certificate issued."},
+{term:"Wildcard certificate",d:1,g:"crypto",def:"A single certificate that secures a domain and all of its first-level subdomains, avoiding the need to issue a separate certificate for each one."},
+{term:"Root of trust",d:1,g:"crypto",def:"The foundational, inherently trusted certificate authority at the top of a certificate chain, from which trust in every certificate below it is derived."},
+{term:"Self-signed certificate",d:1,g:"crypto",def:"A certificate signed by its own creator rather than a recognized certificate authority, encrypting traffic but providing no independent verification of identity."},
+{term:"Certificate authority",d:1,g:"crypto",def:"A trusted organization that verifies identity and issues digital certificates, forming the basis of trust in public key infrastructure."},
+{term:"Memory injection",d:2,g:"vulns",def:"An attack that inserts malicious code directly into a running process's memory space, executing it under the identity and privileges of that legitimate process."},
+{term:"VM escape",d:2,g:"vulns",def:"A vulnerability that allows an attacker to break out of an isolated virtual machine and gain access to the underlying host or other virtual machines on it."},
+{term:"Resource reuse",d:2,g:"vulns",def:"A virtualization vulnerability where data left behind in shared physical resources, like memory or storage, becomes accessible to a different tenant that is later allocated the same resource."},
+{term:"Directory traversal",d:2,g:"vulns",def:"An attack that manipulates file path input to access files and directories stored outside a web application's intended root folder."},
+{term:"Privilege escalation",d:2,g:"vulns",def:"Exploiting a flaw to gain a higher level of access than originally granted, moving from a limited account toward administrative control."},
+{term:"Downgrade attack",d:2,g:"vulns",def:"Forcing a connection to use an older, weaker version of a protocol or cipher, making it easier to break."},
+{term:"Collision attack",d:2,g:"vulns",def:"A cryptographic attack that finds two different inputs producing the same hash output, undermining the uniqueness a hash is supposed to guarantee."},
+{term:"Birthday attack",d:2,g:"vulns",def:"A cryptographic attack that exploits the mathematics of probability to find hash collisions faster than expected, named for the birthday paradox."},
+{term:"Credential replay",d:2,g:"threats",def:"Capturing valid authentication data or tokens and reusing them later to gain unauthorized access without ever knowing the actual password."},
+{term:"Logic bomb",d:2,g:"malware",def:"Malicious code that lies dormant until a specific condition or trigger, such as a date, is met, at which point it executes its payload."},
+{term:"Rootkit",d:2,g:"malware",def:"Malware designed to gain and maintain privileged access to a system while actively hiding its own presence from detection tools."},
+{term:"RFID cloning",d:2,g:"threats",def:"Copying the data from a legitimate radio-frequency identification badge onto a blank one, creating a working duplicate for unauthorized physical access."},
+{term:"Account lockout",d:2,g:"indicators",def:"An indicator of compromise where an account becomes locked, often after repeated failed login attempts, suggesting a brute-force or password-spraying attempt."},
+{term:"Blocked content",d:2,g:"indicators",def:"An indicator of compromise where a spike in traffic denied by a filtering or content-inspection device suggests something is actively probing or attempting to reach a restricted destination."},
+{term:"Out-of-cycle logging",d:2,g:"indicators",def:"An indicator of compromise where log activity occurs outside its normal, expected schedule, suggesting manipulation or unauthorized access."},
+{term:"Application allow list",d:2,g:"controls",def:"A mitigation technique that permits only pre-approved applications to run on a system, blocking any software not explicitly authorized."},
+{term:"Denial of service",d:2,g:"threats",def:"An attack that overwhelms a system or service so it cannot respond to legitimate requests, disrupting availability."},
+{term:"Distributed denial of service",d:2,g:"threats",def:"A denial of service attack launched from many different sources simultaneously, typically a botnet, making it far harder to block than a single-source attack."},
+{term:"Amplified DDoS",d:2,g:"threats",def:"A denial of service technique where a small request to a vulnerable service generates a disproportionately large response directed at the victim, multiplying the attack's impact."},
+{term:"Reflected DDoS",d:2,g:"threats",def:"A denial of service technique where an attacker spoofs the victim's address in requests sent to third-party servers, causing the responses to flood the victim instead of the attacker."},
+{term:"Brute force attack",d:2,g:"threats",def:"Systematically attempting every possible password combination against a single account until the correct one is found."},
+{term:"Insider threat",d:2,g:"threats",def:"A threat actor operating from within the organization, whose institutional knowledge can make their attacks difficult to distinguish from legitimate activity."},
+{term:"Nation-state actor",d:2,g:"threats",def:"A threat actor backed by a government, typically highly resourced and sophisticated, often described as an advanced persistent threat."},
+{term:"Hacktivist",d:2,g:"threats",def:"A threat actor motivated by political or philosophical beliefs rather than financial gain, using attacks to advance a cause."},
+{term:"Unskilled attacker",d:2,g:"threats",def:"A threat actor with little technical skill who runs pre-made scripts and tools without understanding how they work, sometimes still called a script kiddie."},
+{term:"Organized crime",d:2,g:"threats",def:"A professional, well-funded threat actor group motivated by financial gain, often operating with specialized roles across the attack chain."},
+{term:"Advanced persistent threat",d:2,g:"threats",def:"A sophisticated, well-resourced adversary, typically a nation-state, that maintains long-term, stealthy access to a target network."},
+{term:"Misinformation",d:2,g:"threats",def:"False information spread without the intent to deceive, distinct from disinformation by the absence of malicious intent behind it."},
+{term:"Disinformation",d:2,g:"threats",def:"False information deliberately created or spread with the intent to mislead, distinguishing it from misinformation by its underlying intent."},
+{term:"Brand impersonation",d:2,g:"threats",def:"Falsely representing a well-known, trusted brand to deceive victims into trusting a malicious email, website, or message."},
+{term:"Removable device",d:2,g:"threats",def:"A threat vector referring to portable storage media, such as USB drives, that can carry malware onto a network or be used to exfiltrate data."},
+{term:"Default credentials",d:2,g:"threats",def:"Factory-set usernames and passwords that ship with a device or application, which become a serious threat vector if never changed."},
+{term:"Managed service provider",d:2,g:"threats",def:"A third-party company that manages IT infrastructure or services on a client's behalf, representing a supply-chain threat vector if the provider itself is compromised."},
+{term:"Unified Threat Management",d:3,g:"network",def:"An all-in-one security appliance combining functions like firewall, IDS/IPS, content filtering, and antivirus into a single device."},
+{term:"VPN concentrator",d:3,g:"network",def:"A device dedicated to establishing, managing, and terminating a large number of simultaneous VPN connections, often integrated into a firewall."},
+{term:"Responsibility matrix",d:3,g:"cloud",def:"A document defining which security responsibilities belong to the cloud provider and which belong to the customer, varying by service model."},
+{term:"Fail over",d:3,g:"resilience",def:"The automatic or manual process of switching to a backup system or component when the primary one fails, maintaining availability."},
+{term:"Capacity planning",d:3,g:"resilience",def:"Forecasting and preparing the people, technology, and infrastructure resources needed to maintain operations, including during a disruption."},
+{term:"Microservices",d:3,g:"cloud",def:"An architectural style that breaks an application into small, independently deployable services, each handling one function and communicating over a network."},
+{term:"Choose your own device",d:3,g:"mobile",def:"A mobile deployment model where the organization provides a selection of approved devices for the employee to choose from, balancing control and personal preference."},
+{term:"Static analysis",d:4,g:"vuln-mgmt",def:"Examining application source code for vulnerabilities without executing the program, catching flaws early in development."},
+{term:"Dynamic analysis",d:4,g:"vuln-mgmt",def:"Testing an application for vulnerabilities while it is actually running, observing its real behavior rather than just its code."},
+{term:"Package monitoring",d:4,g:"vuln-mgmt",def:"Tracking the versions of third-party libraries and dependencies an application uses, flagging any with known vulnerabilities."},
+{term:"Threat feed",d:4,g:"vuln-mgmt",def:"A continuously updated stream of information about current threats, indicators, and attacker techniques, used to keep defenses current."},
+{term:"Open-source intelligence",d:4,g:"vuln-mgmt",def:"Information gathered from publicly available sources, such as websites, social media, and public records, used for research or reconnaissance."},
+{term:"Information-sharing organization",d:4,g:"vuln-mgmt",def:"A group that facilitates the exchange of threat intelligence between member organizations, often within the same industry."},
+{term:"Alert tuning",d:4,g:"ops",def:"Adjusting detection thresholds and rules so a monitoring system generates meaningful alerts without overwhelming analysts with noise."},
+{term:"Security Content Automation Protocol",d:4,g:"ops",def:"A standardized framework for automating vulnerability management, measurement, and policy compliance checking across systems."},
+{term:"Benchmark",d:4,g:"ops",def:"A published, vendor- or industry-recognized secure configuration standard used as the target when hardening a system."},
+{term:"Guard rails",d:4,g:"ops",def:"Automated checks that constantly validate a system or process stays within safe, approved boundaries, catching and preventing unsafe configurations."},
+{term:"Security groups",d:4,g:"ops",def:"Named collections of users or resources that share the same access permissions, allowing bulk changes to be applied to everyone in the group at once."},
+{term:"NIST SP 800-61",d:4,g:"incident",def:"A widely referenced NIST publication defining the standard incident response lifecycle: preparation, detection and analysis, containment/eradication/recovery, and post-incident activity."},
+{term:"Eradication",d:4,g:"incident",def:"The incident response phase that removes the threat entirely from the environment, such as deleting malware or closing the exploited vulnerability."},
+{term:"Threat hunting",d:4,g:"incident",def:"Proactively searching an environment for signs of compromise that automated tools have not yet detected, rather than waiting for an alert."},
+{term:"Right-to-audit clause",d:5,g:"vendor",def:"A contractual provision giving an organization the legal right to perform a security audit of a vendor at any time, verifying controls before a breach occurs."},
+{term:"Memorandum of agreement",d:5,g:"vendor",def:"A formal, signed document expressing a mutual agreement between parties, more binding than an MOU but typically less detailed than a full contract."},
+{term:"Master service agreement",d:5,g:"vendor",def:"An overarching contract establishing the general terms that will govern future, more specific work orders or statements of work between two parties."},
+{term:"Statement of work",d:5,g:"vendor",def:"A document defining the specific deliverables, timeline, and terms of a particular engagement, often issued under a master service agreement."},
+{term:"Conflict of interest",d:5,g:"vendor",def:"A situation where a personal or competing interest could improperly influence a vendor selection or business decision."},
+{term:"Rules of engagement",d:5,g:"vendor",def:"A document defining the boundaries, scope, and permitted techniques for a penetration test before it begins."},
+{term:"Known environment",d:5,g:"vendor",def:"A penetration test conducted with full knowledge of the target's internal systems and architecture provided in advance, also called white-box testing."},
+{term:"Partially known environment",d:5,g:"vendor",def:"A penetration test conducted with some but not complete knowledge of the target's internal systems, also called gray-box testing."},
+{term:"Unknown environment",d:5,g:"vendor",def:"A penetration test conducted with no advance knowledge of the target's internal systems, simulating an genuine outside attacker; also called black-box testing."},
+{term:"Passive reconnaissance",d:5,g:"vendor",def:"Gathering information about a target without directly interacting with their systems, such as reviewing public records or social media."},
+{term:"Active reconnaissance",d:5,g:"vendor",def:"Gathering information about a target by directly interacting with their systems, such as port scanning, which carries a higher chance of detection."},
+{term:"Data owner",d:5,g:"governance",def:"The individual, often a senior officer, formally accountable for a specific category of data, distinct from the controller and processor who handle its actual processing."},
+{term:"Data custodian",d:5,g:"governance",def:"The role responsible for the day-to-day technical management and protection of data, carrying out the policies set by the data owner."},
+{term:"Acceptable use policy",d:5,g:"governance",def:"A policy defining what employees are and are not permitted to do with an organization's technology and network resources."},
+{term:"Adaptive authentication",d:4,g:"iam",def:"An authentication approach that adjusts its requirements dynamically based on contextual risk signals, such as requiring extra verification for an unusual login location."},
+{term:"Group Policy",d:4,g:"ops",def:"A Windows feature that centrally enforces configuration and security settings across many computers and users in a domain."},
+{term:"SELinux",d:4,g:"ops",def:"A Linux security module that enforces mandatory access control policies, restricting what actions processes are allowed to take beyond standard permissions."},
+{term:"Content categorization",d:4,g:"network-sec",def:"A web filtering method that classifies websites into categories, such as gambling or social media, allowing policy to be applied by category rather than individual site."},
+{term:"Reputation filtering",d:4,g:"network-sec",def:"A web filtering method that blocks or allows sites based on a continuously updated score of how trustworthy or malicious they are known to be."},
+{term:"User behavior analytics",d:4,g:"ops",def:"A monitoring approach that establishes a baseline of normal user activity and flags deviations that may indicate compromise or insider threat."},
+{term:"Lightweight Directory Access Protocol",d:4,g:"iam",def:"A protocol used to access and maintain distributed directory information, commonly underlying centralized authentication systems."},
+{term:"Open authorization",d:4,g:"iam",def:"An open standard that allows a user to grant a third-party application limited access to their resources without sharing their actual password."},
+{term:"Security Assertions Markup Language",d:4,g:"iam",def:"An XML-based standard for exchanging authentication and authorization data between an identity provider and a service, commonly used for single sign-on."},
+{term:"Interoperability",d:4,g:"iam",def:"The ability of different identity and access systems to work together and exchange information reliably, essential for federation and SSO to function."},
+{term:"Time-of-day restrictions",d:4,g:"iam",def:"An access control that limits when an account is permitted to log in or perform actions, reducing exposure outside expected working hours."},
+{term:"Mandatory access control",d:4,g:"iam",def:"An access model where a central authority defines fixed access rules that users cannot alter, commonly used in high-security environments."},
+{term:"Discretionary access control",d:4,g:"iam",def:"An access model where the owner of a resource decides who else may access it, offering flexibility at the cost of centralized consistency."},
+{term:"Rule-based access control",d:4,g:"iam",def:"An access model that grants or denies access based on a defined set of rules, such as time or location, applied uniformly regardless of role."},
+{term:"Hard authentication token",d:4,g:"iam",def:"A physical device, such as a key fob, that generates or stores authentication credentials, representing the something-you-have factor."},
+{term:"Soft authentication token",d:4,g:"iam",def:"A software-based authenticator, such as an app generating one-time codes, serving the same something-you-have role as a hard token without dedicated hardware."},
+{term:"Security key",d:4,g:"iam",def:"A physical hardware device, often USB or NFC based, used as a strong authentication factor, commonly supporting standards like FIDO2."},
+{term:"Password manager",d:4,g:"iam",def:"An application that securely generates, stores, and autofills unique passwords for each account, reducing password reuse."},
+{term:"Passwordless authentication",d:4,g:"iam",def:"An authentication method that verifies identity without requiring a traditional password, typically using biometrics, security keys, or device-based trust instead."},
+{term:"Ephemeral credentials",d:4,g:"iam",def:"Temporary access credentials that automatically expire after a short window, limiting the damage if they are ever intercepted."},
+{term:"Identity proofing",d:4,g:"iam",def:"The process of verifying that a person is who they claim to be before issuing them credentials, typically during onboarding."},
+{term:"Risk threshold",d:5,g:"risk",def:"The defined point at which a risk's severity requires action, marking the boundary between an acceptable and unacceptable level of exposure."},
+{term:"Exposure factor",d:5,g:"risk",def:"The percentage of an asset's value expected to be lost if a specific risk event occurs, used to calculate single loss expectancy."},
+{term:"Key risk indicators",d:5,g:"risk",def:"Measurable metrics tracked over time that provide early warning that a particular risk is increasing before it becomes a full incident."},
+{term:"Platform diversity",d:3,g:"resilience",def:"Deliberately using different hardware or software platforms across redundant systems, so a single vulnerability or flaw cannot take down every instance at once."},
+{term:"Parallel processing",d:3,g:"resilience",def:"A recovery testing method that runs the backup and production systems simultaneously, comparing their output to validate the backup actually works correctly."},
+{term:"Geographic dispersion",d:3,g:"resilience",def:"Distributing backup sites and infrastructure across physically separate locations, so a single regional disaster cannot take down every site at once."},
+];
+
 const EXTRA_U = {
 "AES-256":"The 256-bit key variant of the standard symmetric cipher, common for full-disk encryption",
 "AP":"The device wireless clients associate with to join a network",
@@ -3624,6 +3906,7 @@ function home(){
       <button class="fact link" onclick="pbqSetup()"><b>${PBQ.length}</b> PBQs</button>
       <button class="fact link" onclick="cardSetup()"><b>${allCards().length}</b> flashcards</button>
       <button class="fact link" onclick="acrSetup()"><b>${allAcr().length}</b> acronyms</button>
+      <button class="fact link" onclick="window.scrollTo(0,0);glossRef()"><b>${GLOSS.length}</b> glossary terms</button>
       <button class="fact link" onclick="examHome()"><b>${EXAM_NAMES.length}</b> full practice exams</button>
       <button class="fact link" onclick="stats()">Weak areas and stats</button>
       <button class="fact link" onclick="notesSetup()"><b>Notes</b></button>
@@ -3674,23 +3957,26 @@ function home(){
     <button class="tile" id="t-cards" style="--accent:var(--cyan)" onclick="cardSetup()">
       <span class="tag">Recall</span><h3>Flashcards</h3>
       <p>Free-recall with spaced repetition. ${dueCount()} of ${allCards().length} cards due now.</p></button>
-    <button class="tile" id="t-acr" style="--accent:var(--violet)" onclick="acrSetup()">
-      <span class="tag">Range</span><h3>Acronym Range</h3>
-      <p>${acrU().length} drillable acronyms in the all-acronym answer format, plus the full searchable list.</p></button>
+    <button class="tile" id="t-pbq" style="--accent:var(--blue)" onclick="pbqSetup()">
+      <span class="tag">Mode 03</span><h3>PBQ Lab</h3>
+      <p>${PBQ.length} performance-based questions. Drag to order, drag to classify, configure rule sets, analyse logs. Partial credit, same as the real thing.</p></button>
     <button class="tile" id="t-exams" style="--accent:var(--amber)" onclick="examHome()">
       <span class="tag">Full length</span>
       <h3>Practice Exams</h3>
       <p>Five fixed 90-question exams, blueprint weighted, PBQs included. Feedback and a restudy plan only after you submit.</p>
     </button>
-    <button class="tile" id="t-pbq" style="--accent:var(--blue)" onclick="pbqSetup()">
-      <span class="tag">Mode 03</span><h3>PBQ Lab</h3>
-      <p>${PBQ.length} performance-based questions. Drag to order, drag to classify, configure rule sets, analyse logs. Partial credit, same as the real thing.</p></button>
-    <button class="tile" id="t-weak" style="--accent:var(--faint)" onclick="stats()">
-      <span class="tag">Tracking</span><h3>Weak areas &amp; stats</h3>
-      <p>Domain accuracy, repeated misses, PBQ history, and readiness gate status.</p></button>
+    <button class="tile" id="t-acr" style="--accent:var(--violet)" onclick="acrSetup()">
+      <span class="tag">Range</span><h3>Acronym Range</h3>
+      <p>${acrU().length} drillable acronyms in the all-acronym answer format, plus the full searchable list.</p></button>
+    <button class="tile" id="t-gloss" style="--accent:var(--violet)" onclick="window.scrollTo(0,0);glossRef()">
+      <span class="tag">Reference</span><h3>Glossary</h3>
+      <p>${GLOSS.length} terms and concepts, searchable by name or definition, filterable by domain.</p></button>
     <button class="tile" id="t-notes" style="--accent:var(--cyan)" onclick="notesSetup()">
       <span class="tag">Journal</span><h3>Notes</h3>
       <p>${(S.studyNotes||[]).length} study note${(S.studyNotes||[]).length===1?"":"s"}, ${(S.dumpNotes||[]).length} in the struggle log.</p></button>
+    <button class="tile" id="t-weak" style="--accent:var(--faint)" onclick="stats()">
+      <span class="tag">Tracking</span><h3>Weak areas &amp; stats</h3>
+      <p>Domain accuracy, repeated misses, PBQ history, and readiness gate status.</p></button>
   </div>
   <div class="row" style="margin-top:14px">
     <button class="btn ghost sm" onclick="content('cards')">Add new content</button>
@@ -4162,6 +4448,7 @@ function acrSetup(){
 }
 /* ---- reference browser ---- */
 let REF={q:"",g:"all"};
+let GREF={q:"",d:0};
 function acrRef(){
   view="ref"; AT_SECTION=false; strip("acronym reference",0,"on","<b>"+allAcr().length+"</b> entries","",true);
   window.scrollTo(0,0);
@@ -4210,6 +4497,53 @@ function refRender(){
         <span class="mono" style="font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-left:auto">${esc(a.g)}</span>
       </div>
       ${a.u?`<div class="dim" style="font-size:13px;margin-top:5px;line-height:1.5">${esc(a.u)}</div>`:`<div style="font-size:12px;margin-top:5px;color:var(--faint)">No function description yet</div>`}
+    </div>`).join(""):`<p class="dim" style="padding:16px;margin:0">Nothing matches that search.</p>`}
+  </div>`;
+}
+function glossRef(){
+  view="ref"; AT_SECTION=false; strip("glossary",0,"on","<b>"+GLOSS.length+"</b> terms","",true);
+  window.scrollTo(0,0);
+  $("app").innerHTML=`
+  <p class="eyebrow">Reference</p><h1>Glossary</h1>
+  <input id="glossQ" type="text" placeholder="Search a term or its definition" value="${esc(GREF.q)}" oninput="GREF.q=this.value;glossRender()">
+  <div id="glossBody"></div>
+  <div class="row" style="margin-top:18px"><button class="btn ghost sm" onclick="home()">Home</button></div>`;
+  glossRender();
+}
+function glossRender(){
+  const body=$("glossBody"); if(!body) return;
+  let list=GLOSS.slice();
+  if(GREF.d!==0) list=list.filter(g=>g.d===GREF.d);
+  if(GREF.q){
+    const q=GREF.q.toLowerCase();
+    list=list.filter(g=>g.term.toLowerCase().includes(q)||g.def.toLowerCase().includes(q));
+    const rank=g=>{
+      const term=g.term.toLowerCase();
+      if(term===q) return 0;
+      if(term.startsWith(q)) return 1;
+      if(term.includes(q)) return 2;
+      return 3;
+    };
+    list=list.sort((a,b)=>{
+      const ra=rank(a), rb=rank(b);
+      return ra!==rb?ra-rb:a.term.localeCompare(b.term);
+    });
+  } else {
+    list=list.sort((a,b)=>a.term.localeCompare(b.term));
+  }
+  body.innerHTML=`
+  <div class="seg" style="margin-top:12px">
+    <button class="${GREF.d===0?'on':''}" onclick="GREF.d=0;glossRender()">All</button>
+    ${[1,2,3,4,5].map(d=>`<button class="${GREF.d===d?'on':''}" onclick="GREF.d=${d};glossRender()">D${d}.0</button>`).join("")}
+  </div>
+  <p class="dim" style="font-size:13px;margin:0 0 12px">${list.length} shown</p>
+  <div class="card" style="padding:0">
+    ${list.length?list.map(g=>`<div style="padding:12px 15px;border-bottom:1px solid var(--line)">
+      <div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap">
+        <b style="color:var(--violet);font-size:15px">${esc(g.term)}</b>
+        <span class="mono" style="font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-left:auto">D${g.d}.0</span>
+      </div>
+      <div class="dim" style="font-size:13px;margin-top:5px;line-height:1.5">${esc(g.def)}</div>
     </div>`).join(""):`<p class="dim" style="padding:16px;margin:0">Nothing matches that search.</p>`}
   </div>`;
 }
