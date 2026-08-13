@@ -3396,6 +3396,23 @@ function studyLine(o){
   const s=STUDY[o]||{t:"",g:""};
   return "Messer videos & course notes, section "+o+(s.t?" ("+s.t+")":"")+" \u00b7 Gibson GCGA "+s.g;
 }
+function studyLineFor(o){
+  const s=STUDY[o]||{t:"",g:""};
+  const src=(S.studySource||"").trim();
+  const low=src.toLowerCase();
+  const wantsMesser=low.includes("messer");
+  const wantsGibson=low.includes("gibson");
+  if(!src){
+    return "Objective "+o+(s.t?" ("+s.t+")":"");
+  }
+  if(wantsMesser||wantsGibson){
+    const parts=[];
+    if(wantsMesser) parts.push("Messer videos & course notes, section "+o+(s.t?" ("+s.t+")":""));
+    if(wantsGibson) parts.push("Gibson GCGA "+s.g);
+    return parts.join(" \u00b7 ");
+  }
+  return "Objective "+o+(s.t?" ("+s.t+")":"")+" in "+src;
+}
 
 
 /* ================= storage ================= */
@@ -3426,7 +3443,7 @@ function acrU(){ return allAcr().filter(a=>a.u); }
 const TIGHT=[115,98,84,70,58];
 function examDate(){ return S.exam?new Date(S.exam+"T12:00:00"):null; }
 
-let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},studyNotes:[],dumpNotes:[],noteSeq:0,manualTimer:false,manualTimerSec:45,shiftMode:"shift"};
+let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},studyNotes:[],dumpNotes:[],noteSeq:0,manualTimer:false,manualTimerSec:45,shiftMode:"shift",studySource:""};
 for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0};
 
 let view="home", sess=null, sessStart=0, breakShown=false, tickHandle=null;
@@ -3618,7 +3635,7 @@ function home(){
       <h4>The question mix follows the real blueprint</h4>
       <p>Domain 4 is 28 percent of the real exam, so it is 28 percent of your tickets. Domains you score badly in get pulled up automatically, drifting the mix toward your weak spots.</p>
       <h4>Practice Exams are the real thing</h4>
-      <p><b>Five fixed exams, 90 items each.</b> 2 to 5 PBQs picked at random per attempt, leaning toward 5, multiple choice filling the rest, weighted to the official domain percentages. Untimed, 90 minutes, or your own clock, and you can hide the timer while you work. <b>No feedback until you submit.</b> The review maps every miss to the exact Messer section and Gibson chapter.</p>
+      <p><b>Five fixed exams, 90 items each.</b> 2 to 5 PBQs picked at random per attempt, leaning toward 5, multiple choice filling the rest, weighted to the official domain percentages. Untimed, 90 minutes, or your own clock, and you can hide the timer while you work. <b>No feedback until you submit.</b> The review maps every miss to the exact objective to restudy.</p>
       <h4>SOC Watch and Rapid Response drill under pressure</h4>
       <p>SOC Watch feeds severity-coded tickets and costs network integrity for wrong calls. Rapid Response, a toggle inside SOC Watch setup, is a speed run with a combo multiplier and three lives. <b>Timer defaults to adaptive:</b> tightens above 85 percent, loosens below 60. Switch to manual in setup for a fixed 15 to 90 seconds instead.</p>
       <h4>Flashcards use spaced repetition</h4>
@@ -3632,9 +3649,9 @@ function home(){
       <div class="gate-callout">
         <p class="gk">The line that matters most</p>
         <h4>The readiness gate</h4>
-        <p>Two <b>practice exams</b> at <b>85 percent or better, no single domain under 75 percent</b>, both taken within the <b>last 14 days</b>, before the gate reads MET. SOC Watch is not part of this requirement.</p>
-        <p>Requiring two separate passing exams filters out a lucky run, since anyone can catch a good set of questions once. Requiring <b>every domain above 75</b>, not just the overall average, catches a strong Domain 2 quietly covering for a weak Domain 4, exactly the kind of gap that becomes a real exam failure even when the total score looks fine. The 14-day window keeps the gate reflecting where you stand right now: stop practicing and it closes again, even after two earlier passes.</p>
-        <p class="why">This is the actual decision point for booking the exam, not the calendar date. A date just means CompTIA is ready for you. The gate means you are ready for CompTIA.</p>
+        <p>Two <b>practice exams</b> at <b>85 percent or better, no single domain under 75 percent</b>, both within the <b>last 14 days</b>, before the gate reads MET.</p>
+        <p>Two passes filters out a lucky run. Requiring <b>every domain above 75</b>, not just the average, catches a strong Domain 2 quietly covering for a weak Domain 4, the kind of gap that becomes a real exam failure even with a good total score. The 14-day window keeps the gate reflecting where you stand now: stop practicing and it closes again, even after two earlier passes.</p>
+        <p class="why">This is the real decision point for booking the exam, not the calendar date. A date means CompTIA is ready for you. The gate means you are ready for CompTIA.</p>
       </div>
       <div class="closebar"><button onclick="closeHiw()">Close &nbsp;&#8963;</button></div>
     </div>
@@ -4161,8 +4178,24 @@ function refRender(){
   const fams=[...new Set(allAcr().map(a=>a.g))].sort();
   let list=allAcr();
   if(REF.g!=="all") list=list.filter(a=>a.g===REF.g);
-  if(REF.q){ const q=REF.q.toLowerCase(); list=list.filter(a=>a.a.toLowerCase().includes(q)||a.d.toLowerCase().includes(q)||(a.u||"").toLowerCase().includes(q)); }
-  list=list.slice().sort((a,b)=>a.a.localeCompare(b.a));
+  if(REF.q){
+    const q=REF.q.toLowerCase();
+    list=list.filter(a=>a.a.toLowerCase().includes(q)||a.d.toLowerCase().includes(q)||(a.u||"").toLowerCase().includes(q));
+    const rank=a=>{
+      const acr=a.a.toLowerCase();
+      if(acr===q) return 0;
+      if(acr.startsWith(q)) return 1;
+      if(acr.includes(q)) return 2;
+      if(a.d.toLowerCase().includes(q)) return 3;
+      return 4;
+    };
+    list=list.slice().sort((a,b)=>{
+      const ra=rank(a), rb=rank(b);
+      return ra!==rb?ra-rb:a.a.localeCompare(b.a);
+    });
+  } else {
+    list=list.slice().sort((a,b)=>a.a.localeCompare(b.a));
+  }
   body.innerHTML=`
   <div class="seg" style="margin-top:12px">
     <button class="${REF.g==='all'?'on':''}" onclick="REF.g='all';refRender()">All</button>
@@ -4530,7 +4563,7 @@ function examHome(){
   }).join("");
   $("app").innerHTML=`
   <p class="eyebrow">Full length</p><h1>Practice Exams</h1>
-  <p class="lede">Five fixed 90-item exams built to the official domain weights, PBQs first like the real thing. Each attempt draws 2\u20135 PBQs at random, leaning toward 5, with multiple choice filling the rest, matching how CompTIA does not publish a fixed PBQ count. Zero feedback until you submit, then a full review with a restudy plan mapped to Messer sections and Gibson chapters.</p>
+  <p class="lede">Five fixed 90-item exams built to the official domain weights, PBQs first like the real thing. Each attempt draws 2\u20135 PBQs at random, leaning toward 5, with multiple choice filling the rest, matching how CompTIA does not publish a fixed PBQ count. Zero feedback until you submit, then a full review with a restudy plan mapped to Messer sections and Gibson chapters in-app; set your own study material in Settings for exports.</p>
   <div class="card"><ul class="weaklist">${rows}</ul></div>
   <p class="dim" style="font-size:12px;margin-top:10px">Scoring: multiple choice items are 1 point each, PBQs are 1 point with partial credit. 85%+ is the readiness bar and exam scores count toward the gate. Gibson chapter numbers follow the Get Certified Get Ahead SY0-701 edition.</p>
   <div class="row" style="margin-top:14px"><button class="btn ghost sm" onclick="goHome()">Back to home</button></div>`;
@@ -4841,7 +4874,7 @@ function examExport(fmt){
     });
     L.push("");
     L.push("## Restudy plan, ranked by miss count");
-    if(plan.length) plan.forEach(o=>L.push("- Objective "+o+" ("+missObj[o]+" miss"+(missObj[o]>1?"es":"")+"): "+studyLine(o)));
+    if(plan.length) plan.forEach(o=>L.push("- Objective "+o+" ("+missObj[o]+" miss"+(missObj[o]>1?"es":"")+"): "+studyLineFor(o)));
     else L.push("- Nothing missed.");
     L.push("");
     L.push("## Every item");
@@ -4927,7 +4960,7 @@ function examExportAll(fmt){
         });
         L.push("");
         L.push("Restudy plan, ranked by miss count:");
-        if(plan.length) plan.forEach(o=>L.push("- Objective "+o+" ("+missObj[o]+" miss"+(missObj[o]>1?"es":"")+"): "+studyLine(o)));
+        if(plan.length) plan.forEach(o=>L.push("- Objective "+o+" ("+missObj[o]+" miss"+(missObj[o]>1?"es":"")+"): "+studyLineFor(o)));
         else L.push("- Nothing missed.");
         L.push("");
         L.push("Missed items:");
@@ -5016,8 +5049,11 @@ function profile(first){
   <div class="card">
     <label style="display:block;margin-bottom:16px"><div class="zlab-lg">Your name (optional)</div>
       <input id="pn" type="text" value="${esc(S.name||"")}" placeholder="What should the console call you"></label>
-    <label style="display:block"><div class="zlab-lg">Target exam date</div>
+    <label style="display:block${first?"":";margin-bottom:16px"}"><div class="zlab-lg">Target exam date</div>
       <input id="pd" type="date" value="${esc(S.exam||"")}"></label>
+    ${first?"":`<label style="display:block"><div class="zlab-lg">Study guide or material (optional)</div>
+      <input id="pss" type="text" value="${esc(S.studySource||"")}" placeholder="e.g. Messer, Gibson, Dion, or your own notes">
+      <p class="dim" style="font-size:12px;margin:6px 0 0">Used when exporting to an AI assistant. Type Messer or Gibson to get the built-in section/chapter references; anything else gets a generic objective citation instead.</p></label>`}
   </div>
   <div class="row" style="margin-top:16px">
     <button class="btn pri" onclick="saveProfile()">${first?"Start Your Shift":"Save"}</button>
@@ -5028,6 +5064,7 @@ function profile(first){
 function saveProfile(){
   S.name=($("pn").value||"").trim().slice(0,40);
   S.exam=$("pd").value||"";
+  const ssEl=$("pss"); if(ssEl) S.studySource=(ssEl.value||"").trim().slice(0,60);
   save(); toast("Saved"); home();
 }
 function wipe(){ if(!confirm("Erase all progress, weak areas, and card scheduling? Flashcards, acronyms, and notes you added are kept.")) return;
@@ -5146,7 +5183,7 @@ function exportMissesToAI(){
       L.push("**Why the other options are tempting:**");
       tempting.forEach(t=>L.push("- "+t));
     }
-    if(typeof studyLine==="function") L.push("**Restudy:** "+studyLine(q.o));
+    if(typeof studyLineFor==="function") L.push("**Restudy:** "+studyLineFor(q.o));
   });
   dl("missed-concepts-for-ai-"+new Date().toISOString().slice(0,10)+".md",L.join("\n"));
   toast("Paste this into any AI assistant for a refresher and quiz");
