@@ -204,6 +204,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 .pbqbucket{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--panel);min-height:92px}
 .zlab{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:9px}
 .zlab-lg{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;font-weight:600}
+.zlab-pbq{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--txt);margin-bottom:9px;font-weight:600}
 .chips{display:flex;flex-wrap:wrap;gap:7px}
 .pbqchip{background:var(--raise);border:1px solid var(--line);border-radius:7px;padding:8px 11px;font-size:13px;
   line-height:1.35;touch-action:none;cursor:grab;user-select:none;display:inline-flex;align-items:center;gap:8px}
@@ -3316,7 +3317,10 @@ const GLOSS = [
 {term:"CERT",d:4,g:"acronym-ops",def:"Computer Emergency Response Team. The organized group that responds to security incidents."},
 {term:"CFB",d:1,g:"acronym-crypto",def:"Cipher Feedback. Block cipher mode that turns a block cipher into a self-synchronizing stream cipher."},
 {term:"CHAP (Challenge Handshake Authentication Protocol)",d:4,g:"acronym-auth",def:"Authenticates using a challenge and hashed response rather than sending a password"},
-{term:"CIA (Confidentiality, Integrity, Availability)",d:5,g:"acronym-gov",def:"The three core security objectives every control supports"},
+{term:"CIA (Confidentiality, Integrity, Availability)",d:1,g:"cia",def:"The three core security objectives every control supports. Confidentiality keeps data readable only by those authorized to see it. Integrity keeps data accurate and unaltered, detecting or preventing unauthorized change. Availability keeps systems and data accessible to authorized users when needed. Every security control maps to protecting at least one of these three."},
+{term:"Confidentiality",d:1,g:"cia",def:"The security objective of keeping data readable only by those authorized to see it, typically enforced through encryption, access controls, and permissions. It is one of the three pillars of the CIA triad, alongside integrity and availability."},
+{term:"Integrity",d:1,g:"cia",def:"The security objective of keeping data accurate and unaltered, so any unauthorized change is either prevented or detected. Hashing and file integrity monitoring are common integrity controls. It is one of the three pillars of the CIA triad, alongside confidentiality and availability."},
+{term:"Availability",d:1,g:"cia",def:"The security objective of keeping systems and data accessible to authorized users when they need them, protected through redundancy, backups, and resilience planning. It is one of the three pillars of the CIA triad, alongside confidentiality and integrity."},
 {term:"CIO",d:5,g:"acronym-gov",def:"Chief Information Officer. Executive accountable for the organization's overall technology strategy."},
 {term:"CIRT",d:4,g:"acronym-ops",def:"Computer Incident Response Team. The team assembled to investigate and remediate a security incident."},
 {term:"CMS",d:1,g:"acronym-misc",def:"Content Management System. Platform for publishing website content; a frequent breach entry point when plugins go unpatched."},
@@ -5203,13 +5207,13 @@ function pbqMatch(p){
   const pool=p.items.map((_,i)=>i).filter(i=>PB.place[i]===null);
   return `
   <div class="pbqpool" data-zone="pool" ${PB.done?"":`onclick="pbqZone('pool')"`}>
-    <div class="zlab">Unassigned (${pool.length})</div>
+    <div class="zlab-pbq">Unassigned (${pool.length})</div>
     <div class="chips">${pool.length?pool.map(chip).join(""):`<span class="dim" style="font-size:13px">All items placed.</span>`}</div>
   </div>
   <div class="pbqbuckets">${p.buckets.map((b,bi)=>{
     const inB=p.items.map((_,i)=>i).filter(i=>PB.place[i]===bi);
     return `<div class="pbqbucket" data-zone="b${bi}" ${PB.done?"":`onclick="pbqZone('b${bi}')"`}>
-      <div class="zlab">${esc(b)}</div><div class="chips">${inB.map(chip).join("")}</div></div>`;}).join("")}</div>`;
+      <div class="zlab-pbq">${esc(b)}</div><div class="chips">${inB.map(chip).join("")}</div></div>`;}).join("")}</div>`;
 }
 function pbqGrid(p){
   return `<div class="card" style="padding:0">${p.rows.map((r,ri)=>{
