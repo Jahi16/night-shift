@@ -274,8 +274,9 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 .hiw>summary{cursor:pointer;list-style:none;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;
   font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);font-weight:600}
 .hiw>summary::-webkit-details-marker{display:none}
-.hiw>summary::after{content:"+";font-size:17px;color:var(--faint)}
-.hiw[open]>summary::after{content:"\2212"}
+.hiw>summary::after{content:"+";font-size:17px;color:var(--violet);display:inline-block;animation:hiwPulse 1.8s ease-in-out infinite}
+.hiw[open]>summary::after{content:"\2212";animation:none}
+@keyframes hiwPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(1.25)}}
 .hiw>summary:hover{background:var(--raise)}
 .hiw .body{padding:4px 18px 18px;border-top:1px solid var(--line)}
 .hiw .body h4{margin:16px 0 5px;font-size:14.5px;color:var(--amber)}
@@ -3014,7 +3015,11 @@ const GLOSS = [
 {term:"Time-of-check to time-of-use",d:2,g:"vulns",def:"A specific race condition where a resource is validated at one moment but used at a later moment, during which an attacker swaps or alters it."},
 {term:"SQLi (SQL injection)",d:2,g:"vulns",def:"Inserting malicious SQL code into an input field so it is executed by the backend database, often to bypass authentication or extract data."},
 {term:"XSS (Cross-site scripting)",d:2,g:"vulns",def:"Injecting malicious script into a web page viewed by other users, allowing the attacker to run code in the victim's browser session."},
+{term:"Secure cookie attribute",d:4,g:"app-sec",def:"A flag set on a cookie instructing the browser to never transmit it over plain HTTP, only over HTTPS, closing off interception on an unencrypted connection."},
+{term:"HttpOnly cookie attribute",d:4,g:"app-sec",def:"A flag set on a cookie that hides it from JavaScript entirely, so client-side script cannot read or steal it, blunting theft via cross-site scripting."},
+{term:"SameSite cookie attribute",d:4,g:"app-sec",def:"A flag set on a cookie that restricts whether it is sent along with cross-site requests, fighting cross-site request forgery rather than encrypting or hiding the cookie's contents."},
 {term:"XSRF (CSRF (Cross-site request forgery))",d:2,g:"vulns",def:"Tricking an authenticated user's browser into submitting an unwanted request to a site they are logged into, exploiting their existing session."},
+{term:"Misconfiguration",d:2,g:"vulns",def:"A vulnerability introduced not by flawed code but by an incorrectly set option, such as a default password left unchanged, an exposed admin panel, or overly permissive storage bucket access. It's one of the most common real-world causes of breaches precisely because the underlying software isn't broken, someone just set it up wrong."},
 {term:"Zero-day",d:2,g:"vulns",def:"A vulnerability that is unknown to the vendor and has no available patch, meaning defenders have had zero days to prepare."},
 {term:"Malicious update",d:2,g:"threats",def:"A supply chain attack where a compromised or trojanized software update is pushed to users through a trusted, legitimate update channel."},
 {term:"IoC (Indicator of compromise)",d:2,g:"threats",def:"Forensic evidence, such as an unusual file hash, IP address, or registry key, suggesting a system has been breached."},
@@ -3048,7 +3053,7 @@ const GLOSS = [
 {term:"Containerization",d:3,g:"cloud",def:"Packaging an application with its dependencies into a lightweight, portable unit that runs consistently across different environments."},
 {term:"Serverless computing",d:3,g:"cloud",def:"A cloud model where the provider manages the underlying servers entirely, and the customer only supplies and pays for the code that runs."},
 {term:"VPC (Virtual private cloud)",d:3,g:"cloud",def:"An isolated, private section of a public cloud provider's infrastructure, giving a customer network-level separation from other tenants."},
-{term:"Hybrid cloud",d:3,g:"cloud",def:"A deployment combining private, on-premises infrastructure with public cloud resources, often to balance control and scalability."},
+{term:"Hybrid cloud",d:3,g:"cloud",def:"A deployment mixing multiple cloud environments, such as private plus public infrastructure, or multiple providers, rather than living entirely in one. Each environment tends to carry its own separate security configuration, authentication setup, and permission model, and when they're connected together, mismatches between those different environments' protections become the defining risk: inconsistent security posture across the combined infrastructure, not any single environment's weakness alone."},
 {term:"RTOS (Real-time operating system)",d:3,g:"iot",def:"An operating system built to guarantee task completion within a strict, predictable time window, commonly used in industrial and embedded control systems."},
 {term:"SCADA (Supervisory control and data acquisition)",d:3,g:"iot",def:"A system used to monitor and control industrial processes across a large geographic area, common in utilities and manufacturing."},
 {term:"ICS (Industrial control system)",d:3,g:"iot",def:"A general term for the systems that manage and automate industrial processes, of which SCADA is one type."},
@@ -3066,6 +3071,7 @@ const GLOSS = [
 {term:"Legal hold",d:4,g:"forensics",def:"A directive to preserve specific data because it may be relevant to pending or anticipated litigation, overriding normal retention or deletion schedules."},
 {term:"E-discovery",d:4,g:"forensics",def:"The process of identifying, collecting, and producing electronically stored information in response to a legal request or investigation."},
 {term:"Forensic image",d:4,g:"forensics",def:"A bit-for-bit copy of a storage device, created so analysis can occur on the copy while the original evidence remains untouched."},
+{term:"Image (Imaging)",d:4,g:"ops",def:"A disk image is a complete snapshot of an entire hard drive's contents, the operating system, settings, and sometimes data, captured so it can be written back onto a machine to bring it to that exact known-good state. Imaging a system means wiping it and applying that snapshot: restoring the OS from a known-good disk image, essentially reinstalling a clean, verified copy of the operating system rather than trying to manually clean an infected one."},
 {term:"Root cause analysis",d:4,g:"incident",def:"A structured investigation into the underlying reason an incident occurred, aimed at preventing recurrence rather than just addressing symptoms."},
 {term:"Lessons learned",d:4,g:"incident",def:"The formal post-incident review stage where a team documents what happened and what should change going forward."},
 {term:"Playbook",d:4,g:"incident",def:"A predefined, step-by-step set of actions for responding to a specific type of incident, ensuring a consistent response regardless of who is on call."},
@@ -3085,6 +3091,7 @@ const GLOSS = [
 {term:"Responsible disclosure",d:4,g:"vuln-mgmt",def:"The practice of privately reporting a discovered vulnerability to the vendor and giving them time to patch it before making the flaw public."},
 {term:"Attack surface management",d:4,g:"vuln-mgmt",def:"The ongoing process of discovering, monitoring, and reducing every external-facing asset an organization exposes to potential attackers."},
 {term:"Least privilege",d:4,g:"iam",def:"The principle of granting a user or process only the minimum access necessary to perform its function, nothing more."},
+{term:"Configuration enforcement",d:2,g:"vulns",def:"Continuously checking systems against an approved baseline and automatically correcting any deviation, so configuration drift is remediated rather than merely observed and reported on."},
 {term:"Just-in-time access",d:4,g:"iam",def:"Granting elevated privileges only for a limited, specific time window when they are actually needed, rather than leaving them standing permanently."},
 {term:"Privileged access management",d:4,g:"iam",def:"A set of tools and practices specifically focused on securing, monitoring, and controlling accounts with elevated administrative privileges."},
 {term:"Role-based access control",d:4,g:"iam",def:"An access model that assigns permissions based on a user's job function or role, rather than to each individual user directly."},
@@ -3125,6 +3132,7 @@ const GLOSS = [
 {term:"Data retention policy",d:5,g:"governance",def:"A formal policy defining how long different categories of data must be kept and when they should be destroyed."},
 {term:"Data sanitization",d:5,g:"governance",def:"The process of permanently and irreversibly removing data from a storage medium so it cannot be recovered."},
 {term:"Attestation",d:5,g:"compliance",def:"A formal confirmation, often signed, that a person has reviewed and agrees to comply with a policy."},
+{term:"Access attestation",d:4,g:"iam",def:"A periodic review where a manager or system owner formally confirms that a user's currently granted access is still appropriate for their role, catching permissions left over from a past assignment that should have been revoked. Distinct from the general policy-acknowledgment attestation, this one specifically certifies access itself."},
 {term:"Internal audit",d:5,g:"compliance",def:"An assessment of controls performed by an organization's own staff, useful for preparation but lacking external independence."},
 {term:"External audit",d:5,g:"compliance",def:"An independent assessment of controls performed by a third party, providing assurance that internal audits cannot offer alone."},
 {term:"Regulatory examination",d:5,g:"compliance",def:"A formal review conducted by a government body with legal authority over the organization, distinct from a voluntary audit."},
@@ -3282,6 +3290,7 @@ const GLOSS = [
 {term:"Forgery",d:2,g:"vulns",def:"An attack that tricks a victim's authenticated session into submitting a request the victim never intended, such as cross-site request forgery."},
 {term:"Firmware vulnerability",d:2,g:"vulns",def:"A weakness in the low-level software controlling a hardware device, often overlooked since firmware updates happen far less frequently than OS or application patches."},
 {term:"End-of-life system",d:2,g:"vulns",def:"A system the vendor no longer sells or actively develops, though it may still receive limited support."},
+{term:"Decommissioning",d:4,g:"ops",def:"Formally retiring a system: disabling its accounts, removing its DNS entries and firewall rules, and physically or logically removing it from the network. A half-retired system that's powered off but left racked, domain-joined, and reachable keeps its credentials and access paths while losing its owner, patching, and monitoring, exactly the gap this process is meant to close."},
 {term:"Legacy system",d:2,g:"vulns",def:"An outdated system still in use, often because replacing it is costly or disruptive, that no longer receives security patches and cannot defend against current threats."},
 {term:"Message-based threat vector",d:2,g:"threats",def:"An attack delivered through email, SMS, or instant messaging, the most common category of social engineering delivery."},
 {term:"Image-based threat vector",d:2,g:"threats",def:"An attack hidden inside an image file, exploiting how browsers or applications parse image formats to execute malicious code."},
@@ -3291,6 +3300,7 @@ const GLOSS = [
 {term:"SAE (Simultaneous Authentication of Equals)",d:4,g:"network-sec",def:"The key exchange method introduced in WPA3-Personal that replaces the crackable four-way handshake, giving every session a unique key even when everyone shares the same passphrase."},
 {term:"AAA framework",d:4,g:"iam",def:"The security framework of Authentication, Authorization, and Accounting: proving who you are, determining what you're allowed to do, and logging what you actually did."},
 {term:"CRL (Certificate revocation list)",d:4,g:"crypto",def:"A list published by a certificate authority naming every certificate it has revoked before its natural expiration, checked by clients to confirm a certificate is still valid."},
+{term:"KMS (Key management system)",d:1,g:"crypto",def:"A centralized system for generating, storing, rotating, and retiring cryptographic keys throughout their lifecycle, so keys aren't managed manually or scattered across individual applications."},
 {term:"Secure enclave",d:4,g:"crypto",def:"An isolated hardware processor separate from a device's main CPU, dedicated to securely handling cryptographic keys and sensitive operations."},
 {term:"SPF (Sender Policy Framework)",d:4,g:"email",def:"An email authentication record listing which mail servers are authorized to send email for a domain, helping receivers detect spoofed senders."},
 {term:"DKIM (DomainKeys Identified Mail)",d:4,g:"email",def:"An email authentication method that adds a cryptographic signature to outgoing mail, letting the receiver verify the message was not altered in transit."},
@@ -3430,6 +3440,8 @@ const GLOSS = [
 {term:"MD5 (Message Digest 5)",d:1,g:"acronym-crypto",def:"Legacy hash function, broken by practical collision attacks"},
 {term:"MDF",d:3,g:"acronym-hw",def:"Main Distribution Frame. The primary wiring point where external circuits meet the internal network."},
 {term:"MDM (Mobile Device Management)",d:4,g:"acronym-ops",def:"Centrally enforces policy, encryption, and remote wipe on mobile devices"},
+{term:"Sideloading",d:4,g:"mobile",def:"Installing an application on a mobile device directly from a file, bypassing the official app store and the vetting process it applies, creating a mobile vulnerability that MDM policy typically aims to block."},
+{term:"Jailbreaking",d:4,g:"mobile",def:"Removing a mobile device's manufacturer-imposed restrictions to gain root-level control, which also strips away the platform's built-in security sandboxing and makes side-loaded and unvetted software far easier to install."},
 {term:"MFA (Multifactor Authentication)",d:4,g:"acronym-auth",def:"Requires proof from two or more different factor categories"},
 {term:"MFD",d:3,g:"acronym-hw",def:"Multifunction Device. Networked printer and scanner combination that stores images and needs sanitizing."},
 {term:"ML",d:1,g:"acronym-misc",def:"Machine Learning. A branch of AI that learns patterns from data; used in behavior analytics and anomaly detection."},
@@ -3515,6 +3527,8 @@ const GLOSS = [
 {term:"SMTP",d:4,g:"acronym-mail",def:"Simple Mail Transfer Protocol, used to send email, traditionally on TCP port 25"},
 {term:"SMTPS",d:4,g:"acronym-mail",def:"Simple Mail Transfer Protocol Secure, encrypted mail submission on TCP port 465 or 587"},
 {term:"SNMP (Simple Network Management Protocol)",d:4,g:"acronym-proto",def:"Manages and monitors network devices on UDP port 161, and pushes traps on thresholds over UDP port 162"},
+{term:"SNMP trap",d:4,g:"network-sec",def:"An unsolicited alert a monitored device sends to a management station the instant a defined threshold or event occurs, over UDP port 162, without waiting to be asked. It's the push counterpart to polling."},
+{term:"Polling",d:4,g:"network-sec",def:"A monitoring approach where the management station periodically reaches out and asks each device for its status, rather than waiting for the device to report in on its own. Slower to detect a sudden change than a trap, since it only learns of a problem on the next scheduled check-in."},
 {term:"SOAP",d:4,g:"acronym-proto",def:"Simple Object Access Protocol. XML-based protocol for exchanging structured data between web services."},
 {term:"SoC",d:3,g:"acronym-hw",def:"System on Chip. Single chip integrating processor, memory, and peripherals, common in embedded devices."},
 {term:"SOC",d:4,g:"acronym-ops",def:"Security Operations Center. The team and facility that monitors and responds to security events around the clock."},
