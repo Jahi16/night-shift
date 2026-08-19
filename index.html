@@ -4224,7 +4224,7 @@ function ls(){ try{ const t="__ns"; localStorage.setItem(t,t); localStorage.remo
 const store={
   async get(k){
     try{ const r=await window.storage.get(k); if(r) return JSON.parse(r.value); }catch(e){}
-    const L=ls(); if(L){ const v=L.getItem(k); if(v) return JSON.parse(v); }
+    const L=ls(); if(L){ const v=L.getItem(k); if(v){ try{ return JSON.parse(v); }catch(e){} } }
     return MEM[k]!==undefined?MEM[k]:null;
   },
   async set(k,v){
@@ -4251,6 +4251,7 @@ for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0};
 
 let view="home", sess=null, sessStart=0, breakShown=false, tickHandle=null;
 let SECTION=null, AT_SECTION=true;
+let ENTRY_TILE=null, PENDING_JUMP=null;
 
 async function load(){ const v=await store.get("ns_state"); if(v&&v.v===2){ S=Object.assign(S,v); for(let d=1;d<=5;d++) if(!S.dom[d]) S.dom[d]={s:0,c:0}; } S.studyNotes=S.studyNotes||[]; S.dumpNotes=S.dumpNotes||[]; }
 function save(){ store.set("ns_state",S); }
@@ -4349,12 +4350,13 @@ function leaveSession(dest,label){
     // flashcards have no timer and nothing at stake, so back/home always work instantly
   } else if(tickHandle && !confirm("Leave this session? Answers so far are already recorded, but you will not see the end-of-session report.")) return;
   stopTimer(); RENDER_CB=null; sess=null; PB=null; PICK=null;
-  if(window.scrollTo) window.scrollTo(0,0);
+  if(!PENDING_JUMP && window.scrollTo) window.scrollTo(0,0);
   dest();
 }
-function goHome(){ leaveSession(home,"home"); }
+function goHome(){ PENDING_JUMP=null; leaveSession(home,"home"); }
 function goBack(){
   const canBack=SECTION&&!AT_SECTION;
+  PENDING_JUMP=canBack?null:ENTRY_TILE;
   leaveSession(canBack?SECTION:home, canBack?"back":"home");
 }
 function homeStrip(){
@@ -4378,7 +4380,7 @@ function closeHiw(){
     window.scrollTo({top:y,behavior:"smooth"});
   }
 }
-function heroJump(ids){
+function heroJump(ids,instant){
   const els=ids.map(id=>$(id)).filter(Boolean);
   if(!els.length) return;
   if(els[0].getBoundingClientRect){
@@ -4392,7 +4394,7 @@ function heroJump(ids){
     const avail=vh-stripH;
     const offset = groupH<avail-24 ? stripH+Math.max(12,(avail-groupH)/2) : stripH+14;
     const y=(window.pageYOffset||0)+top-offset;
-    if(window.scrollTo) window.scrollTo({top:Math.max(0,y),behavior:"smooth"});
+    if(window.scrollTo) window.scrollTo({top:Math.max(0,y),behavior:instant?"auto":"smooth"});
   }
   els.forEach(el=>{
     if(!el.classList) return;
@@ -4412,7 +4414,6 @@ function home(){
   view="home"; SECTION=null; AT_SECTION=true;
   const stripEl=document.querySelector(".strip"); if(stripEl) stripEl.classList.remove("strip-hidden");
   homeStrip(); stopTimer();
-  window.scrollTo(0,0);
   const g=gateStatus();
   const total=Object.values(S.dom).reduce((a,b)=>a+b.s,0);
   const corr=Object.values(S.dom).reduce((a,b)=>a+b.c,0);
@@ -4436,26 +4437,25 @@ function home(){
   <details class="hiw" id="hiw">
     <summary>How this works &nbsp;\u00b7&nbsp; read this first</summary>
     <div class="body">
-      <h4>The question mix follows the real blueprint</h4>
-      <p>Domain 4 is 28 percent of the real exam, so it is 28 percent of your tickets. Domains you score badly in get pulled up automatically, drifting the mix toward your weak spots.</p>
+      <h4>Question mix follows the real blueprint</h4>
+      <p>Weighted to the official domain percentages: General Security Concepts 12, Threats &amp; Vulnerabilities 22, Security Architecture 18, Security Operations 28, Program Management 20. Weak domains get weighted up automatically.</p>
       <h4>Practice Exams are the real thing</h4>
-      <p><b>Five fixed exams, 90 items each.</b> 2 to 5 PBQs picked at random per attempt, leaning toward 5, multiple choice filling the rest, weighted to the official domain percentages. Untimed, 90 minutes, or your own clock, and you can hide the timer while you work. <b>No feedback until you submit.</b> The review maps every miss to the exact objective to restudy.</p>
+      <p><b>Five fixed exams, 90 items each.</b> 2\u20135 PBQs, weighted to the official domain percentages. Untimed or your own clock. <b>No feedback until you submit</b> \u2014 review maps every miss to its objective.</p>
       <h4>SOC Watch and Rapid Response drill under pressure</h4>
-      <p>SOC Watch feeds severity-coded tickets and costs network integrity for wrong calls. Rapid Response, a toggle inside SOC Watch setup, is a speed run with a combo multiplier and three lives. <b>Timer defaults to adaptive:</b> tightens above 85 percent, loosens below 60. Switch to manual in setup for a fixed 15 to 90 seconds instead.</p>
+      <p>Severity-coded tickets; wrong calls cost network integrity. Rapid Response adds a combo multiplier and three lives. <b>Timer defaults to adaptive</b> (tightens above 85 percent, loosens below 60) or set it manually.</p>
       <h4>Flashcards use spaced repetition</h4>
-      <p>Free-recall cards scheduled so material you keep missing comes back sooner, and material you know fades into the background.</p>
+      <p>Cards you keep missing come back sooner; cards you know fade out.</p>
       <h4>PBQs give partial credit</h4>
-      <p>Drag items into place, or tap to pick up and tap where it goes. Every item scores individually, the same way the real exam awards partial credit.</p>
+      <p>Drag or tap to place. Every item scores individually, like the real exam.</p>
       <h4>Nothing repeats the way you expect</h4>
-      <p>Answer positions shuffle every time, and recently seen questions are held back, so memorizing "the answer was C" will not work.</p>
-      <h4>Your weak areas are tracked automatically</h4>
-      <p>Miss the same concept twice and it gets flagged as a pattern, resurfacing more often. <b>Export a coaching brief</b> from Weak areas and stats to hand your real performance data to any AI assistant, or export just the misses from any session for a targeted refresher.</p>
+      <p>Answer positions shuffle and recent questions are held back, so memorizing "the answer was C" won't work.</p>
+      <h4>Weak areas are tracked automatically</h4>
+      <p>Miss the same concept twice and it's flagged as a pattern. <b>Export a coaching brief</b> from Weak areas and stats, or export just a session's misses for a targeted refresher.</p>
       <div class="gate-callout">
         <p class="gk">The line that matters most</p>
         <h4>The readiness gate</h4>
-        <p>Two <b>practice exams</b> at <b>85 percent or better, no single domain under 75 percent</b>, both within the <b>last 14 days</b>, before the gate reads MET.</p>
-        <p>Two passes filters out a lucky run. Requiring <b>every domain above 75</b>, not just the average, catches a strong Domain 2 quietly covering for a weak Domain 4, the kind of gap that becomes a real exam failure even with a good total score. The 14-day window keeps the gate reflecting where you stand now: stop practicing and it closes again, even after two earlier passes.</p>
-        <p class="why">This is the real decision point for booking the exam, not the calendar date. A date means CompTIA is ready for you. The gate means you are ready for CompTIA.</p>
+        <p>Two <b>practice exams</b> at <b>85 percent or better, no single domain under 75 percent</b>, both within the <b>last 14 days</b> \u2014 then the gate reads OPEN.</p>
+        <p class="why">This is the real decision point for booking the exam, not the calendar date. A date means CompTIA is ready for you. The gate means you're ready for CompTIA.</p>
       </div>
       <div class="closebar"><button onclick="closeHiw()">Close &nbsp;&#8963;</button></div>
     </div>
@@ -4466,7 +4466,7 @@ function home(){
     <div class="gcell key" style="--gatecolor:${g.pass?"var(--green)":"var(--red)"};background:${g.pass?"linear-gradient(160deg,rgba(62,208,122,.12),rgba(62,208,122,.02))":"linear-gradient(160deg,rgba(224,87,74,.10),rgba(224,87,74,.02))"}">
       <div class="k" style="color:${g.pass?"var(--green)":"var(--red)"}">Readiness gate</div>
       <div class="v" style="color:${g.pass?"var(--green)":"var(--red)"};display:flex;align-items:center;gap:6px;margin-left:-2px">
-        <span style="font-size:0.8em;line-height:1">${g.pass?"\ud83d\udd13":"\ud83d\udd12"}</span><span style="font-weight:700">${g.pass?"OPEN":"CLOSED"}</span>
+        <span aria-hidden="true" style="font-size:0.8em;line-height:1">${g.pass?"\ud83d\udd13":"\ud83d\udd12"}</span><span style="font-weight:700">${g.pass?"OPEN":"CLOSED"}</span>
       </div>
       <div class="s" style="line-height:1.25">${esc(g.label)}</div></div>
   </div>
@@ -4504,13 +4504,14 @@ function home(){
     <button class="btn ghost sm" onclick="coachBrief()">Export coaching brief for AI</button>
     <button class="btn ghost sm" onclick="profile(false)">Settings</button>
   </div>`;
+  if(PENDING_JUMP){ const t=PENDING_JUMP; PENDING_JUMP=null; heroJump([t],true); }
+  else if(window.scrollTo) window.scrollTo(0,0);
 }
 
 /* ================= SOC WATCH ================= */
-const DOM_NAMES={1:"General Security Concepts",2:"Threats & Vulnerabilities",3:"Security Architecture",4:"Security Operations",5:"Program Management"};
 function setShiftDom(d){ S.shiftDom=d; save(); shiftSetup(); }
 function shiftSetup(){
-  view="setup"; SECTION=shiftSetup; AT_SECTION=true; strip("soc watch / setup",0);
+  view="setup"; SECTION=shiftSetup; AT_SECTION=true; ENTRY_TILE="t-soc"; strip("soc watch / setup",0);
   const sd=S.shiftDom||0;
   const pool=sd?QUESTIONS.filter(q=>q.d===sd).length:QUESTIONS.length;
   const rapid=S.shiftMode==="drill";
@@ -4528,7 +4529,7 @@ function shiftSetup(){
     <button class="${sd===0?"on":""}" onclick="setShiftDom(0)">All domains</button>
     ${[1,2,3,4,5].map(d=>`<button class="${sd===d?"on":""}" onclick="setShiftDom(${d})">D${d}.0</button>`).join("")}
   </div>
-  <p class="dim" style="font-size:12.5px;margin:8px 0 0">${sd?`Locked to Domain ${sd}.0 (${DOM_NAMES[sd]}) \u00b7 ${pool} questions in this pool \u00b7 misses from other domains will not appear`:`Blueprint weighting across all 5 domains \u00b7 ${pool} questions in the pool`}</p>
+  <p class="dim" style="font-size:12.5px;margin:8px 0 0">${sd?`Locked to Domain ${sd}.0 (${DNAME[sd]}) \u00b7 ${pool} questions in this pool \u00b7 misses from other domains will not appear`:`Blueprint weighting across all 5 domains \u00b7 ${pool} questions in the pool`}</p>
   ${rapid?`
   <div class="row" style="margin-top:20px"><button class="btn pri" onclick="drillStart()">Start Rapid Response</button></div>
   `:`
@@ -4851,7 +4852,7 @@ function notesSectionHTML(kind,title,desc){
   <div class="row" style="margin-top:10px"><button class="btn ghost sm" onclick="exportNotesAI('${kind}')">Export ${kind==='study'?'study notes':'struggle log'} for AI</button></div>`;
 }
 function notesSetup(){
-  view="setup"; SECTION=notesSetup; AT_SECTION=true; strip("notes",0); stopTimer();
+  view="setup"; SECTION=notesSetup; AT_SECTION=true; ENTRY_TILE="t-notes"; strip("notes",0); stopTimer();
   if(window.scrollTo) window.scrollTo(0,0);
   $("app").innerHTML=`
   <p class="eyebrow">Notes</p><h1>Notes &amp; Struggle Log</h1>
@@ -4867,7 +4868,7 @@ function notesSetup(){
 function srsOf(i){ return S.srs[i]||{ease:2.3,iv:0,due:0,reps:0}; }
 function dueCount(){ const now=Date.now(); return allCards().filter(c=>srsOf(c.id).due<=now).length; }
 function cardSetup(){
-  SECTION=cardSetup; AT_SECTION=true;
+  SECTION=cardSetup; AT_SECTION=true; ENTRY_TILE="t-cards";
   view="setup"; strip("flashcards / setup",0); stopTimer();
   const all=allCards();
   const per={}; all.forEach(c=>{ per[c.d]=(per[c.d]||0)+(srsOf(c.id).due<=Date.now()?1:0); });
@@ -4949,7 +4950,7 @@ function acrSrsUpdate(a,ok){
   S.acrStat[a]=st;
 }
 function acrSetup(){
-  SECTION=acrSetup; AT_SECTION=true;
+  SECTION=acrSetup; AT_SECTION=true; ENTRY_TILE="t-acr";
   view="setup"; strip("acronym range / setup",0); stopTimer();
   $("app").innerHTML=`
   <p class="eyebrow">Range</p><h1>Acronym Range</h1>
@@ -5022,7 +5023,7 @@ function refRender(){
   </div>`;
 }
 function glossRef(){
-  view="ref"; AT_SECTION=false; strip("glossary",0,"on","<b>"+GLOSS.length+"</b> terms","",true);
+  view="ref"; AT_SECTION=false; ENTRY_TILE="t-gloss"; strip("glossary",0,"on","<b>"+GLOSS.length+"</b> terms","",true);
   window.scrollTo(0,0);
   $("app").innerHTML=`
   <p class="eyebrow">Reference</p><h1>Glossary</h1>
@@ -5147,7 +5148,7 @@ function acrReport(){
 let PB=null, PICK=null, RENDER_CB=null;
 function rerender(){ (RENDER_CB||pbqRender)(); }
 function pbqSetup(){
-  view="setup"; SECTION=pbqSetup; AT_SECTION=true; strip("pbq lab / setup",0); stopTimer();
+  view="setup"; SECTION=pbqSetup; AT_SECTION=true; ENTRY_TILE="t-pbq"; strip("pbq lab / setup",0); stopTimer();
   const rows=PBQ.map(p=>{
     const st=S.pbqStat[p.id];
     const badge=st?`<span class="ct" style="color:${st.best>=90?"var(--cyan)":st.best>=70?"var(--amber)":"var(--red)"}">best ${st.best}%</span>`:`<span class="ct dim">not attempted</span>`;
@@ -5403,7 +5404,7 @@ function initPbqStateX(id){
 }
 function persistX(){ if(SX&&!SX.submitted){ S.activeExam=SX; save(); } }
 function examHome(){
-  view="setup"; SECTION=examHome; AT_SECTION=true; strip("practice exams",0,"on","","",true);
+  view="setup"; SECTION=examHome; AT_SECTION=true; ENTRY_TILE="t-exams"; strip("practice exams",0,"on","","",true);
   window.scrollTo(0,0);
   stopTimer(); RENDER_CB=null; PB=null; PICK=null;
   buildExams();
@@ -5842,7 +5843,7 @@ function examExportAll(fmt){
 
 /* ================= STATS ================= */
 function stats(){
-  view="stats"; SECTION=stats; AT_SECTION=true; homeStrip(); stopTimer();
+  view="stats"; SECTION=stats; AT_SECTION=true; ENTRY_TILE="t-weak"; homeStrip(); stopTimer();
   window.scrollTo(0,0);
   const bars=[1,2,3,4,5].map(d=>{
     const b=S.dom[d], v=pct(b.c,b.s);
@@ -5861,7 +5862,7 @@ function stats(){
   $("app").innerHTML=`
   <p class="eyebrow">Tracking</p><h1>Weak areas &amp; stats</h1>
   <div class="card"><h2 style="margin-top:0">Accuracy by domain</h2>${bars}
-    <p class="dim" style="font-size:13px;margin:14px 0 0">Readiness gate: ${g.pass?"<b style='color:var(--green)'>\ud83d\udd13 OPEN</b>":"<b style='color:var(--red)'>\ud83d\udd12 CLOSED</b>"}. ${esc(g.label)}.</p></div>
+    <p class="dim" style="font-size:13px;margin:14px 0 0">Readiness gate: ${g.pass?"<b style='color:var(--green)'><span aria-hidden='true'>\ud83d\udd13</span> OPEN</b>":"<b style='color:var(--red)'><span aria-hidden='true'>\ud83d\udd12</span> CLOSED</b>"}. ${esc(g.label)}.</p></div>
   <h2>Concepts you keep missing</h2><div class="card"><ul class="weaklist">${wl}</ul></div>
   <h2>Acronyms you keep missing</h2><div class="card"><ul class="weaklist">${aw}</ul></div>
   <h2>PBQ history</h2><div class="card"><ul class="weaklist">${
