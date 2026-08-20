@@ -72,8 +72,12 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 4px}
 @media(max-width:620px){.tiles{grid-template-columns:1fr}}
 .tile{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent,var(--amber));
-  border-radius:10px;padding:15px 16px;text-align:left;transition:transform .15s,border-color .15s}
+  border-radius:10px;padding:15px 16px;text-align:left;transition:transform .15s,border-color .15s;position:relative}
 .tile:hover{transform:translateY(-2px);border-color:var(--accent,var(--amber))}
+.tile::after{content:"+";position:absolute;top:8px;right:12px;font-size:19px;line-height:1;font-weight:400;
+  color:var(--accent,var(--amber));animation:tileCornerPulse 2s ease-in-out infinite}
+@keyframes tileCornerPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(1.25)}}
+@media(prefers-reduced-motion:reduce){.tile::after{animation:none;opacity:.7}}
 .tile h3{margin:0 0 4px;font-size:16px;animation:tileTitlePulse 2.4s ease-in-out infinite}
 @keyframes tileTitlePulse{0%,100%{text-shadow:0 0 0 transparent}50%{text-shadow:0 0 8px var(--accent,var(--amber))}}
 @media(prefers-reduced-motion:reduce){.tile h3{animation:none}}
