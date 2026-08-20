@@ -74,7 +74,9 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 .tile{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent,var(--amber));
   border-radius:10px;padding:15px 16px;text-align:left;transition:transform .15s,border-color .15s}
 .tile:hover{transform:translateY(-2px);border-color:var(--accent,var(--amber))}
-.tile h3{margin:0 0 4px;font-size:16px}
+.tile h3{margin:0 0 4px;font-size:16px;animation:tileTitlePulse 2.4s ease-in-out infinite}
+@keyframes tileTitlePulse{0%,100%{text-shadow:0 0 0 transparent}50%{text-shadow:0 0 8px var(--accent,var(--amber))}}
+@media(prefers-reduced-motion:reduce){.tile h3{animation:none}}
 .tile p{margin:0;color:var(--dim);font-size:14px;line-height:1.45}
 .tile .tag{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:7px}
 
@@ -243,7 +245,9 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 .hero .fact b{color:var(--amber)}
 .hero .fact.link{cursor:pointer;transition:box-shadow .15s,background .15s,transform .1s;position:relative;padding-right:22px}
 .hero .fact.link::after{content:"\2192";position:absolute;right:10px;top:50%;transform:translateY(-50%);
-  font-size:11px;color:var(--amber);opacity:.7;transition:transform .15s,opacity .15s}
+  font-size:11px;color:var(--amber);opacity:.7;transition:transform .15s,opacity .15s;animation:factArrowPulse 1.8s ease-in-out infinite}
+@keyframes factArrowPulse{0%,100%{opacity:.4}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.hero .fact.link::after{animation:none}}
 .hero .fact.link:hover{background:var(--raise);box-shadow:0 0 0 2px var(--amber);transform:translateY(-1px)}
 .hero .fact.link:hover::after{transform:translateY(-50%) translateX(2px);opacity:1}
 .hero .fact.link:active{box-shadow:0 0 0 2px var(--amber);transform:scale(.96)}
