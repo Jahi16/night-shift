@@ -74,15 +74,21 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 .tile{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent,var(--amber));
   border-radius:10px;padding:15px 16px;text-align:left;transition:transform .15s,border-color .15s;position:relative}
 .tile:hover{transform:translateY(-2px);border-color:var(--accent,var(--amber))}
-.tile::after{content:"+";position:absolute;top:8px;right:12px;font-size:19px;line-height:1;font-weight:400;
-  color:var(--accent,var(--amber));animation:tileCornerPulse 2s ease-in-out infinite}
+.tile::after{content:none}
+.tile .tag-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.tile-plus{font-size:19px;line-height:1;font-weight:400;color:var(--accent,var(--amber));display:inline-block;animation:tileCornerPulse 2s ease-in-out infinite}
 @keyframes tileCornerPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(1.25)}}
-@media(prefers-reduced-motion:reduce){.tile::after{animation:none;opacity:.7}}
+@media(prefers-reduced-motion:reduce){.tile-plus{animation:none;opacity:.7}}
 .tile h3{margin:0 0 4px;font-size:16px;animation:tileTitlePulse 2.4s ease-in-out infinite}
 @keyframes tileTitlePulse{0%,100%{text-shadow:0 0 0 transparent}50%{text-shadow:0 0 8px var(--accent,var(--amber))}}
 @media(prefers-reduced-motion:reduce){.tile h3{animation:none}}
 .tile p{margin:0;color:var(--dim);font-size:14px;line-height:1.45}
 .tile .tag{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:7px}
+.jcchips{display:flex;flex-wrap:wrap;gap:8px}
+.jcchip{display:inline-flex;align-items:center;gap:7px;background:rgba(224,87,74,.1);border:1px solid var(--red);
+  color:var(--txt);border-radius:16px;padding:5px 8px 5px 12px;font-size:13px}
+.jcchip button{color:var(--red);font-size:16px;line-height:1;padding:0 2px;opacity:.75}
+.jcchip button:hover{opacity:1}
 
 /* ---- gate / countdown ---- */
 .gate{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:20px}
@@ -160,9 +166,12 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 @media(max-width:560px){.dstat .nm{flex-basis:100px;font-size:12px}}
 
 .weaklist{list-style:none;padding:0;margin:0}
-.weaklist li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.weaklist li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;align-items:center;flex-wrap:wrap}
 .weaklist li:last-child{border-bottom:none}
 .weaklist .ct{font-family:var(--mono);font-size:12px;color:var(--red);white-space:nowrap}
+.weaklist .ct-row{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.jcadd{color:var(--red);border-color:var(--red);padding:4px 9px;font-size:11.5px;white-space:nowrap}
+.jcadd:hover{background:rgba(224,87,74,.12)}
 
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;margin-bottom:14px;flex-wrap:wrap}
 .seg button{padding:7px 13px;font-size:13px;background:var(--panel);border-right:1px solid var(--line)}
@@ -4295,6 +4304,46 @@ const CARDS = [
 ];
 
 
+/* ================= JOSH'S CORNER (personal, hideable, never counted in public stats) ================= */
+const JC_CARDS = [
+{topic:"jump-proxy",f:"Admin needs to manage 5 internal servers. What sits between them and outside access?",b:"Jump server \u2014 the hardened checkpoint FOR ADMINS reaching internal systems. Not proxy: proxy forwards general user traffic, not admin management access."},
+{topic:"jump-proxy",f:"Employees' web browsing is cached, filtered, and their IPs hidden from external sites. What device does this?",b:"Proxy server \u2014 forwards general client traffic outbound. Not jump server: jump server is for admins reaching internal systems, not outbound browsing."},
+{topic:"jump-proxy",f:"One-line tiebreak: which one is for ADMINS, which is for EVERYONE ELSE's traffic?",b:"Jump server = admins only, reaching internal systems. Proxy = general user/client traffic, usually outbound."},
+{topic:"jump-proxy",f:"Quiz trap: 'A hardened intermediary administrators must pass through before reaching other internal systems.' Jump or proxy?",b:"Jump server. The words \u201cadministrators\u201d + \u201creaching internal systems\u201d are the tell."},
+{topic:"jump-proxy",f:"Quiz trap: 'Caches content, filters URLs, hides employee IPs from the sites they visit.' Jump or proxy?",b:"Proxy server. The words \u201ccaches\u201d + \u201chides IPs\u201d + \u201csites they visit\u201d are the tell."},
+{topic:"jump-proxy",f:"Fastest possible tiebreak: does the sentence mention ADMIN ACCESS TO INTERNAL SYSTEMS, or GENERAL OUTBOUND TRAFFIC?",b:"Internal admin access \u2192 jump server. Outbound general traffic \u2192 proxy server. That's the whole test, every time."},
+{topic:"jump-proxy",f:"A company funnels every SSH session to internal boxes through ONE hardened bastion host. Name it.",b:"Jump server."},
+{topic:"jump-proxy",f:"A company funnels every employee's WEB REQUEST through one appliance for caching and filtering. Name it.",b:"Proxy server."},
+{topic:"jump-proxy",f:"Under time pressure your brain wants to say 'proxy' by reflex. What's the one word in the question that should override that reflex?",b:"\u201cAdministrator\u201d (or \u201cmanage internal systems\u201d). If that word is present, it's jump server \u2014 full stop, don't let proxy win the tiebreak."},
+{topic:"enclave-hsm",f:"Dedicated STANDALONE hardware appliance, often shared across many servers over a network, generating and storing keys. What is it?",b:"HSM (Hardware Security Module)."},
+{topic:"enclave-hsm",f:"Isolated processing area WITHIN a single chip or device, used for that one device's own sensitive operations. What is it?",b:"Secure enclave."},
+{topic:"enclave-hsm",f:"Tiebreak: standalone / networked / shared across servers = ___. Built into one chip, local to that device = ___.",b:"HSM = standalone / shared / networked. Secure enclave = built into one chip, local to that device."},
+{topic:"enclave-hsm",f:"A payment processor needs a SHARED appliance multiple servers call over the network for signing operations. HSM or enclave?",b:"HSM."},
+{topic:"enclave-hsm",f:"A phone protects its fingerprint data in an isolated area of its own processor. HSM or enclave?",b:"Secure enclave."},
+{topic:"enclave-hsm",f:"Quick gut-check: if the question says 'appliance,' 'shared,' or 'multiple servers,' lean ___. If it says 'chip,' 'this device,' or 'isolated area of the processor,' lean ___.",b:"Appliance/shared/multiple servers \u2192 HSM. Chip/this device/isolated area \u2192 Secure enclave."},
+{topic:"spf-dkim-dmarc",f:"Which record lists the IP addresses/servers ALLOWED to send mail for a domain?",b:"SPF (Sender Policy Framework)."},
+{topic:"spf-dkim-dmarc",f:"Which record adds a cryptographic SIGNATURE to outgoing mail so the recipient can verify it wasn't altered in transit?",b:"DKIM (DomainKeys Identified Mail)."},
+{topic:"spf-dkim-dmarc",f:"Which record tells receiving servers WHAT TO DO if SPF or DKIM fails, and sends reports back to the domain owner?",b:"DMARC \u2014 the policy layer sitting on top of SPF and DKIM, deciding quarantine/reject/none plus reporting."},
+{topic:"spf-dkim-dmarc",f:"One-line memory hook: SPF = ___. DKIM = ___. DMARC = ___.",b:"SPF = allowed-sender list. DKIM = signature. DMARC = policy + reporting for when the first two fail."},
+{topic:"spf-dkim-dmarc",f:"An email arrives from the right IP but the signature is missing or invalid. Which check passed, which failed?",b:"SPF passed (right IP, correct sending server). DKIM failed (no valid signature)."},
+{topic:"spf-dkim-dmarc",f:"Are SPF and DKIM checked one after the other, or independently \u2014 and where does DMARC fit?",b:"SPF and DKIM are checked independently of each other. DMARC evaluates the RESULTS of both together and decides the final action, plus sends reports."},
+];
+const JC_Q = [
+{q:"An admin connects to a single hardened bastion host before being allowed to reach any other internal server. Which appliance is this?",c:["Jump server","Proxy server","Load balancer","VPN concentrator"],a:0,e:"Jump server \u2014 the checkpoint admins pass through to reach other internal systems. The giveaway is \u201cadmin\u201d + \u201creach other internal systems.\u201d",topic:"jump-proxy"},
+{q:"Every employee's outbound web request is routed through one appliance that caches pages and hides individual IP addresses from external sites. Which appliance is this?",c:["Proxy server","Jump server","IPS","Sensor"],a:0,e:"Proxy server \u2014 forwards general client traffic and hides IPs. The giveaway is \u201coutbound web request\u201d + \u201chides IPs from external sites,\u201d not admin access.",topic:"jump-proxy"},
+{q:"Which detail in a question is the single fastest tiebreak between jump server and proxy server?",c:["Whether it's admin access to internal systems, or general outbound traffic","Whether it uses TCP or UDP","Whether it's on-premises or in the cloud","Whether it's hardware or software"],a:0,e:"Admin + internal systems = jump server. General outbound client traffic = proxy. Every other detail is noise for this specific tiebreak.",topic:"jump-proxy"},
+{q:"A bank needs a dedicated, tamper-resistant appliance that multiple application servers call over the network to perform signing operations, with private keys never leaving the appliance. Which is this?",c:["Hardware security module (HSM)","Secure enclave","Trusted Platform Module (TPM)","Key escrow"],a:0,e:"HSM \u2014 shared, network-reachable, tamper-resistant hardware appliance. \u201cMultiple servers\u201d + \u201cappliance\u201d is the tell.",topic:"enclave-hsm"},
+{q:"A smartphone isolates and processes fingerprint data within its own chip, never exposing it to the rest of the device's operating system. Which is this?",c:["Secure enclave","Hardware security module (HSM)","Key escrow","VPN concentrator"],a:0,e:"Secure enclave \u2014 an isolated area within a single chip, local to that one device. \u201cWithin its own chip\u201d is the tell.",topic:"enclave-hsm"},
+{q:"An email fails DMARC evaluation and gets quarantined. Which two checks does DMARC evaluate the results of to make that decision?",c:["SPF and DKIM","TLS and SSH","MFA and SSO","IPS and IDS"],a:0,e:"DMARC sits on top of SPF (allowed senders) and DKIM (signature), deciding the final action based on how each performed.",topic:"spf-dkim-dmarc"},
+{q:"Which DNS record cryptographically signs outgoing email so a recipient can verify the message wasn't altered in transit?",c:["DKIM","SPF","DMARC","MX"],a:0,e:"DKIM adds the cryptographic signature. SPF only lists allowed sending servers; it doesn't sign anything.",topic:"spf-dkim-dmarc"},
+{q:"Which DNS record specifically lists which mail servers are authorized to send email on behalf of a domain?",c:["SPF","DKIM","DMARC","DNSSEC"],a:0,e:"SPF is the authorized-sender list. DKIM signs; DMARC sets policy and reporting based on SPF/DKIM results.",topic:"spf-dkim-dmarc"},
+];
+const JC_TOPICS = {
+  "jump-proxy":{name:"Jump server vs Proxy server",note:"5 misses across 5 explanation styles \u2014 the fix is repetition volume, not more teaching."},
+  "enclave-hsm":{name:"Secure enclave vs HSM",note:"Confirmed second miss, same pattern as jump/proxy."},
+  "spf-dkim-dmarc":{name:"SPF vs DKIM vs DMARC",note:"Proved it wasn't as solid as it looked."}
+};
+
 const ACR = [
 {a:"2FA",d:"Two-factor Authentication",g:"auth",u:"Requires exactly two different categories of proof to sign in"},
 {a:"3DES",d:"Triple Data Encryption Standard",g:"crypto",u:"Legacy symmetric cipher that runs DES three times, now deprecated"},
@@ -6184,14 +6233,14 @@ function acrU(){ return allAcr().filter(a=>a.u); }
 const TIGHT=[115,98,84,70,58];
 function examDate(){ return S.exam?new Date(S.exam+"T12:00:00"):null; }
 
-let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},studyNotes:[],dumpNotes:[],noteSeq:0,manualTimer:false,manualTimerSec:45,shiftMode:"shift",studySource:""};
+let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},studyNotes:[],dumpNotes:[],noteSeq:0,manualTimer:false,manualTimerSec:45,shiftMode:"shift",studySource:"",jcTopics:["jump server","proxy","secure enclave","hsm","spf","dkim","dmarc"]};
 for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0};
 
 let view="home", sess=null, sessStart=0, breakShown=false, tickHandle=null;
 let SECTION=null, AT_SECTION=true;
 let ENTRY_TILE=null, PENDING_JUMP=null;
 
-async function load(){ const v=await store.get("ns_state"); if(v&&v.v===2){ S=Object.assign(S,v); for(let d=1;d<=5;d++) if(!S.dom[d]) S.dom[d]={s:0,c:0}; } S.studyNotes=S.studyNotes||[]; S.dumpNotes=S.dumpNotes||[]; }
+async function load(){ const v=await store.get("ns_state"); if(v&&v.v===2){ S=Object.assign(S,v); for(let d=1;d<=5;d++) if(!S.dom[d]) S.dom[d]={s:0,c:0}; } S.studyNotes=S.studyNotes||[]; S.dumpNotes=S.dumpNotes||[]; S.jcTopics=S.jcTopics||["jump server","proxy","secure enclave","hsm","spf","dkim","dmarc"]; }
 function save(){ store.set("ns_state",S); }
 
 /* ================= helpers ================= */
@@ -6370,6 +6419,7 @@ function home(){
       <button class="fact link" onclick="examHome()"><b>${EXAM_NAMES.length}</b> full practice exams</button>
       <button class="fact link" onclick="stats()">Weak areas and stats</button>
       <button class="fact link" onclick="notesSetup()"><b>Notes</b></button>
+      <button class="fact link" onclick="jcSetup()"><b>The Drill Down</b></button>
     </div>
   </div>
   <details class="hiw" id="hiw">
@@ -6389,6 +6439,8 @@ function home(){
       <p>Answer positions shuffle and recent questions are held back, so memorizing "the answer was C" won't work.</p>
       <h4>Weak areas are tracked automatically</h4>
       <p>Miss the same concept twice and it's flagged as a pattern. <b>Export a coaching brief</b> from Weak areas and stats, or export just a session's misses for a targeted refresher.</p>
+      <h4>The Drill Down is for whatever isn't sticking</h4>
+      <p>Add a word or phrase for anything you keep missing \u2014 typed in directly, or added with one tap from "Terms and acronyms you keep missing" on the stats page \u2014 and it pulls every matching question and flashcard already in the bank into one focused, high-repetition pool. No new explanations, just reps, cycling indefinitely until you close it out.</p>
       <div class="gate-callout">
         <p class="gk">The line that matters most</p>
         <h4>The readiness gate</h4>
@@ -6411,31 +6463,34 @@ function home(){
 
   <div class="tiles">
     <button class="tile" id="t-soc" style="--accent:var(--amber)" onclick="window.scrollTo(0,0);shiftSetup()">
-      <span class="tag">Mode 01</span><h3>SOC Watch</h3>
+      <span class="tag-row"><span class="tag">Mode 01</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>SOC Watch</h3>
       <p>Alerts hit your queue as severity-coded tickets. Triage each one. Wrong calls cost network integrity.</p></button>
     <button class="tile" id="t-cards" style="--accent:var(--cyan)" onclick="cardSetup()">
-      <span class="tag">Recall</span><h3>Flashcards</h3>
+      <span class="tag-row"><span class="tag">Recall</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Flashcards</h3>
       <p>Free-recall with spaced repetition. ${dueCount()} of ${allCards().length} cards due now.</p></button>
     <button class="tile" id="t-pbq" style="--accent:var(--blue)" onclick="pbqSetup()">
-      <span class="tag">Mode 03</span><h3>PBQ Lab</h3>
+      <span class="tag-row"><span class="tag">Mode 03</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>PBQ Lab</h3>
       <p>${PBQ.length} performance-based questions. Drag to order, drag to classify, configure rule sets, analyse logs. Partial credit, same as the real thing.</p></button>
     <button class="tile" id="t-exams" style="--accent:var(--amber)" onclick="examHome()">
-      <span class="tag">Full length</span>
+      <span class="tag-row"><span class="tag">Full length</span><span class="tile-plus" aria-hidden="true">+</span></span>
       <h3>Practice Exams</h3>
       <p>Five fixed 90-question exams, blueprint weighted, PBQs included. Feedback and a restudy plan only after you submit.</p>
     </button>
     <button class="tile" id="t-acr" style="--accent:var(--violet)" onclick="acrSetup()">
-      <span class="tag">Range</span><h3>Acronym Range</h3>
+      <span class="tag-row"><span class="tag">Range</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Acronym Range</h3>
       <p>${acrU().length} drillable acronyms in the all-acronym answer format, plus the full searchable list.</p></button>
     <button class="tile" id="t-gloss" style="--accent:var(--violet)" onclick="window.scrollTo(0,0);glossRef()">
-      <span class="tag">Reference</span><h3>Glossary</h3>
+      <span class="tag-row"><span class="tag">Reference</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Glossary</h3>
       <p>${GLOSS.length} terms and concepts, searchable by name or definition, filterable by domain.</p></button>
     <button class="tile" id="t-notes" style="--accent:var(--cyan)" onclick="notesSetup()">
-      <span class="tag">Journal</span><h3>Notes</h3>
-      <p>${(S.studyNotes||[]).length} study note${(S.studyNotes||[]).length===1?"":"s"}, ${(S.dumpNotes||[]).length} in the struggle log.</p></button>
+      <span class="tag-row"><span class="tag">Journal</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Notes</h3>
+      <p>${(S.studyNotes||[]).length} study note${(S.studyNotes||[]).length===1?"":"s"}.</p></button>
     <button class="tile" id="t-weak" style="--accent:var(--faint)" onclick="stats()">
-      <span class="tag">Tracking</span><h3>Weak areas &amp; stats</h3>
+      <span class="tag-row"><span class="tag">Tracking</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Weak areas &amp; stats</h3>
       <p>Domain accuracy, repeated misses, PBQ history, and readiness gate status.</p></button>
+    <button class="tile" id="t-josh" style="--accent:var(--red)" onclick="jcSetup()">
+      <span class="tag-row"><span class="tag">Focused drilling</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>The Drill Down</h3>
+      <p>High-repetition drilling on whatever you keep missing. Fed from your tracked weak terms and acronyms.</p></button>
   </div>
   <div class="row" style="margin-top:14px">
     <button class="btn ghost sm" onclick="content('cards')">Add new content</button>
@@ -6506,9 +6561,11 @@ function shiftStart(n){
 function sevFor(){ const r=Math.random(); return r<.22?"p1":(r<.6?"p2":"p3"); }
 function nextTicket(){
   checkBreak();
-  if(sess.i>=sess.n||sess.integrity<=0) return shiftReport();
-  const shiftPool=(sess.mode==="shift"&&sess.dom)?QUESTIONS.filter(x=>x.d===sess.dom):QUESTIONS;
-  const q=pick(shiftPool,sess.used);
+  if(sess.customPool){ if(sess.integrity<=0) return shiftReport(); }
+  else if(sess.i>=sess.n||sess.integrity<=0) return shiftReport();
+  const shiftPool=sess.customPool?sess.customPool:((sess.mode==="shift"&&sess.dom)?QUESTIONS.filter(x=>x.d===sess.dom):QUESTIONS);
+  let q=pick(shiftPool,sess.used);
+  if(!q&&sess.customPool){ sess.used=new Set(); q=pick(shiftPool,sess.used); }
   if(!q) return shiftReport();
   sess.used.add(q.i); sess.i++; sess.q=q; sess.sev=sevFor(); sess.order=shuffle([0,1,2,3]);
   renderTicket(false);
@@ -6518,7 +6575,7 @@ function renderTicket(done,chosen){
   if(!done&&window.scrollTo) window.scrollTo(0,0);
   const q=sess.q, sv=sess.sev;
   const im=sess.integrity>60?"on":(sess.integrity>30?"warn":"crit");
-  strip("soc watch",sess.integrity,im,"Integrity <b>"+sess.integrity+"%</b> &nbsp; Ticket <b>"+sess.i+"/"+sess.n+"</b>","<b id='clk'>--</b>s");
+  strip("soc watch",sess.integrity,im,"Integrity <b>"+sess.integrity+"%</b> &nbsp; "+(sess.customPool?"Rep <b>"+sess.i+"</b>":"Ticket <b>"+sess.i+"/"+sess.n+"</b>"),"<b id='clk'>--</b>s");
   const opts=sess.order.map((oi,pos)=>{
     let cls="opt";
     if(done){ if(oi===q.a) cls+=" correct"; else if(oi===chosen) cls+=" wrong"; else cls+=" faded"; }
@@ -6570,6 +6627,17 @@ function shiftReport(){
   }).join("");
   const missList=sess.misses.length?sess.misses.map(q=>`<li><span>${esc(q.g.replace(/-/g," "))} <span class="dim">(obj ${q.o})</span></span><span class="ct">D${q.d}</span></li>`).join(""):`<li class="dim">Nothing missed. Clean shift.</li>`;
   strip("shift report",p,p>=85?"on":p>=70?"warn":"crit","Score <b>"+p+"%</b>","<b>"+sess.correct+"/"+sess.i+"</b> resolved");
+  if(sess.customPool){
+    $("app").innerHTML=`
+    <p class="eyebrow">The Drill Down &middot; drill complete</p>
+    <h1>${sess.i} reps &middot; ${p}%</h1>
+    <p class="lede">${sess.integrity<=0?"Integrity hit zero. That's fine here, the point was the reps, not the score.":"Reps logged against your real stats and weak-area tracking, same as any other session."}</p>
+    <h2>Missed this round</h2><div class="card"><ul class="weaklist">${missList}</ul></div>
+    <div class="row" style="margin-top:18px">
+      <button class="btn pri" onclick="jcQuizStart()">Keep drilling</button>
+      <button class="btn ghost" onclick="jcSetup()">Back to The Drill Down</button></div>`;
+    return;
+  }
   $("app").innerHTML=`
   <p class="eyebrow">Shift report</p>
   <h1>${sess.integrity<=0?"Shift lost":"Shift complete"} - ${p}%</h1>
@@ -6793,13 +6861,11 @@ function notesSetup(){
   view="setup"; SECTION=notesSetup; AT_SECTION=true; ENTRY_TILE="t-notes"; strip("notes",0); stopTimer();
   if(window.scrollTo) window.scrollTo(0,0);
   $("app").innerHTML=`
-  <p class="eyebrow">Notes</p><h1>Notes &amp; Struggle Log</h1>
-  <p class="lede">Two places to write in your own words, organized by domain alone or by domain and objective, however loose you want it.</p>
+  <p class="eyebrow">Notes</p><h1>Notes</h1>
+  <p class="lede">Write in your own words, organized by domain alone or by domain and objective, however loose you want it.</p>
   ${notesSectionHTML("study","Study Notes","Your own explanations, mnemonics, and summaries. The stuff you'd want to reread the night before.")}
-  <div style="height:30px"></div>
-  ${notesSectionHTML("dump","Struggle Log","Things that are confusing you or are not clicking yet, mix-ups between similar concepts, an answer you can never remember, a distinction that keeps tripping you up. Write it down the moment you notice it, nothing here needs to be polished.")}
   <div class="row" style="margin-top:20px"><button class="btn ghost sm" onclick="home()">Back to home</button></div>`;
-  renderNoteList("study"); renderNoteList("dump");
+  renderNoteList("study");
 }
 
 /* ================= FLASHCARDS ================= */
@@ -6830,6 +6896,12 @@ function cardStart(d,dueOnly){
   let ids=allCards().filter(c=>(!d||c.d===d)&&(!dueOnly||srsOf(c.id).due<=now)).map(c=>c.id);
   if(!ids.length){ toast("Nothing due in that deck yet"); return; }
   sess={mode:"cards",queue:shuffle(ids),done:0,total:ids.length,again:[]};
+  startSess(); nextCard();
+}
+function cardStartIds(ids,josh){
+  AT_SECTION=false; view="cards";
+  if(!ids.length){ toast("Nothing to study yet"); return; }
+  sess={mode:"cards",queue:shuffle(ids),done:0,total:ids.length,again:[],josh:!!josh};
   startSess(); nextCard();
 }
 function nextCard(){
@@ -6867,13 +6939,87 @@ function rate(r){
 function cardReport(){
   const uniq=[...new Set(sess.again)];
   strip("session complete",100,"on","<b>"+sess.done+"</b> cards cleared","");
+  const isJosh=!!sess.josh;
   $("app").innerHTML=`
-  <p class="eyebrow">Session complete</p><h1>${sess.done} cards cleared</h1>
+  <p class="eyebrow">${isJosh?"The Drill Down":"Session complete"}</p><h1>${sess.done} cards cleared</h1>
   <p class="lede">${uniq.length?uniq.length+" card"+(uniq.length>1?"s":"")+" needed a second pass. Those are due again soon.":"Nothing needed a second pass."}</p>
   ${uniq.length?`<div class="card"><ul class="weaklist">${uniq.map(i=>`<li><span>${esc(cardById(i).f)}</span><span class="ct">D${cardById(i).d}</span></li>`).join("")}</ul></div>
   <div class="row" style="margin-top:16px"><button class="btn" onclick="exportCards([${uniq.join(",")}])">Export these as flashcards</button></div>`:""}
-  <div class="row" style="margin-top:18px"><button class="btn pri" onclick="cardSetup()">Another deck</button>
-    <button class="btn ghost" onclick="home()">Home</button></div>`;
+  <div class="row" style="margin-top:18px">
+    <button class="btn pri" onclick="${isJosh?"jcCardStart()":"cardSetup()"}">${isJosh?"Run it again":"Another deck"}</button>
+    <button class="btn ghost" onclick="${isJosh?"jcSetup()":"home()"}">${isJosh?"Back to The Drill Down":"Home"}</button></div>`;
+}
+
+/* ================= THE DRILL DOWN ================= */
+/* High-repetition drilling on whatever's actually being missed. Topics live in
+   S.jcTopics and are matched against the tag and full text of every question
+   and flashcard in the real bank, so no content is duplicated -- this just
+   filters and resurfaces what already exists, at far higher repetition than
+   normal weighting allows. Topics can be typed in here, or added with one tap
+   from "Terms and acronyms you keep missing" on the Weak areas & stats page. */
+function jcMatch(text,kws){ const t=(text||"").toLowerCase(); return kws.some(k=>t.includes(k)); }
+function jcQText(q){ return [q.g,q.q,q.c.join(" "),q.e,(q.w||[]).join(" ")].join(" "); }
+function jcPool(){
+  const kws=(S.jcTopics||[]).map(t=>t.toLowerCase().trim()).filter(Boolean);
+  if(!kws.length) return {qs:[],cs:[]};
+  const qs=QUESTIONS.filter(q=>jcMatch(jcQText(q),kws));
+  const cs=allCards().filter(c=>jcMatch(c.g,kws)||jcMatch(c.f,kws)||jcMatch(c.b,kws));
+  return {qs,cs};
+}
+function jcAddTopic(){
+  const el=$("jcNewTopic"); if(!el) return;
+  const v=(el.value||"").trim().toLowerCase();
+  if(!v) return;
+  S.jcTopics=S.jcTopics||[];
+  if(S.jcTopics.map(t=>t.toLowerCase()).indexOf(v)>=0){ toast("Already on the list"); return; }
+  S.jcTopics.push(v); save(); jcSetup();
+}
+function jcAddTopicDirect(term){
+  S.jcTopics=S.jcTopics||[];
+  const v=(term||"").trim().toLowerCase();
+  if(!v) return;
+  if(S.jcTopics.map(t=>t.toLowerCase()).indexOf(v)>=0){ toast("Already in the Drill Down"); return; }
+  S.jcTopics.push(v); save(); toast("Added to the Drill Down"); stats();
+}
+function jcRemoveTopic(i){ S.jcTopics.splice(i,1); save(); jcSetup(); }
+function jcSetup(){
+  view="setup"; SECTION=jcSetup; AT_SECTION=true; ENTRY_TILE="t-josh"; strip("the drill down",0); stopTimer();
+  const {qs,cs}=jcPool();
+  const chips=(S.jcTopics||[]).length?S.jcTopics.map((t,i)=>`<span class="jcchip">${esc(t)}<button onclick="jcRemoveTopic(${i})" aria-label="Remove ${esc(t)}">&times;</button></span>`).join(""):`<span class="dim" style="font-size:13px">No topics yet. Add one below.</span>`;
+  $("app").innerHTML=`
+  <p class="eyebrow">Focused drilling</p><h1>The Drill Down</h1>
+  <p class="lede">High-repetition drilling on whatever you keep missing. Add a word or phrase for anything that isn't sticking, and this pulls every matching question and flashcard already in the bank into one focused, repeating pool. No new explanations, just reps. Topics also arrive automatically when you add them from Weak areas &amp; stats.</p>
+  <div class="card">
+    <div class="zlab-lg" style="margin-bottom:10px">Your weak topics</div>
+    <div class="jcchips">${chips}</div>
+    <div class="row" style="margin-top:12px">
+      <input id="jcNewTopic" type="text" placeholder="e.g. proxy vs jump server" style="flex:1;min-width:160px" onkeydown="if(event.key==='Enter'){event.preventDefault();jcAddTopic();}">
+      <button class="btn sm" onclick="jcAddTopic()">Add</button>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="zlab-lg" style="margin-bottom:6px">Current pool</div>
+    <p class="dim" style="font-size:13px;margin:0 0 14px"><b style="color:var(--txt)">${qs.length}</b> question${qs.length===1?"":"s"} and <b style="color:var(--txt)">${cs.length}</b> flashcard${cs.length===1?"":"s"} match right now.</p>
+    <div class="row">
+      <button class="btn pri" ${qs.length?"":"disabled"} onclick="jcQuizStart()">Start MCQ drill</button>
+      <button class="btn" ${cs.length?"":"disabled"} onclick="jcCardStart()">Start flashcard drill</button>
+    </div>
+    ${!qs.length&&!cs.length&&(S.jcTopics||[]).length?`<p class="dim" style="font-size:12px;margin:12px 0 0">Nothing matches yet. Try a broader word, like just "proxy" instead of a full phrase.</p>`:""}
+  </div>
+  <p class="dim" style="font-size:12px;margin:14px 0 0">Reps here count toward your real domain accuracy and weak-area tracking, same as any other session.</p>
+  <div class="row" style="margin-top:14px"><button class="btn ghost sm" onclick="home()">Back to home</button></div>`;
+}
+function jcQuizStart(){
+  const {qs}=jcPool();
+  if(!qs.length){ toast("No questions match your topics yet"); return; }
+  AT_SECTION=false; view="shift";
+  sess={mode:"shift",n:qs.length,i:0,used:new Set(),correct:0,integrity:100,byDom:{},misses:[],dom:0,customPool:qs};
+  startSess(); nextTicket();
+}
+function jcCardStart(){
+  const {cs}=jcPool();
+  if(!cs.length){ toast("No flashcards match your topics yet"); return; }
+  cardStartIds(cs.map(c=>c.id),true);
 }
 
 /* ================= ACRONYM RANGE ================= */
@@ -7796,19 +7942,28 @@ function stats(){
       <div class="pc">${b.s?v+"%":"--"}</div></div>`;
   }).join("");
   const weak=Object.keys(S.tag).filter(t=>S.tag[t].m>0).sort((a,b)=>S.tag[b].m-S.tag[a].m).slice(0,15);
-  const wl=weak.length?weak.map(t=>`<li><span>${esc(t.replace(/-/g," "))}${S.flagged.indexOf(t)>=0?' <b style="color:var(--amber);font-size:11px;font-family:var(--mono)">PATTERN</b>':""}</span>
-    <span class="ct">${S.tag[t].m} miss${S.tag[t].m>1?"es":""} / ${S.tag[t].s}</span></li>`).join(""):`<li class="dim">No misses recorded yet.</li>`;
   const acrWeak=Object.keys(S.acrStat).filter(a=>S.acrStat[a].m>0).sort((a,b)=>S.acrStat[b].m-S.acrStat[a].m).slice(0,12);
-  const aw=acrWeak.length?acrWeak.map(a=>{const o=allAcr().find(x=>x.a===a)||{d:""};
-    return `<li><span><b class="mono">${esc(a)}</b> ${esc(o.d)}</span><span class="ct">${S.acrStat[a].m}x</span></li>`;}).join(""):`<li class="dim">No acronym misses yet.</li>`;
+  const termRows=weak.map(t=>{
+    const term=t.replace(/-/g," ");
+    return `<li><span>${esc(term)}${S.flagged.indexOf(t)>=0?' <b style="color:var(--amber);font-size:11px;font-family:var(--mono)">PATTERN</b>':""}</span>
+      <span class="ct-row"><span class="ct">${S.tag[t].m} miss${S.tag[t].m>1?"es":""} / ${S.tag[t].s}</span>
+      <button class="btn ghost sm jcadd" onclick="jcAddTopicDirect('${esc(term)}')" title="Add to The Drill Down">+ Drill Down</button></span></li>`;
+  }).join("");
+  const acrRows=acrWeak.map(a=>{const o=allAcr().find(x=>x.a===a)||{d:""};
+    return `<li><span><b class="mono">${esc(a)}</b> ${esc(o.d)}</span>
+      <span class="ct-row"><span class="ct">${S.acrStat[a].m}x</span>
+      <button class="btn ghost sm jcadd" onclick="jcAddTopicDirect('${esc(a)}')" title="Add to The Drill Down">+ Drill Down</button></span></li>`;
+  }).join("");
+  const missedCombined=(termRows+acrRows)||`<li class="dim">No misses recorded yet.</li>`;
   const g=gateStatus();
   const recent=S.sessions.slice(-8).reverse().map(s=>`<li><span>${new Date(s.t).toLocaleDateString()} &nbsp;<span class="dim">${s.mode==="shift"?"SOC Watch":s.mode==="pbq"?"PBQ":"Rapid Response"}, ${s.n} items</span></span><span class="ct" style="color:${s.pct>=85?"var(--cyan)":s.pct>=75?"var(--amber)":"var(--red)"}">${s.pct}%</span></li>`).join("")||`<li class="dim">No sessions yet.</li>`;
   $("app").innerHTML=`
   <p class="eyebrow">Tracking</p><h1>Weak areas &amp; stats</h1>
   <div class="card"><h2 style="margin-top:0">Accuracy by domain</h2>${bars}
     <p class="dim" style="font-size:13px;margin:14px 0 0">Readiness gate: ${g.pass?"<b style='color:var(--green)'><span aria-hidden='true'>\ud83d\udd13</span> OPEN</b>":"<b style='color:var(--red)'><span aria-hidden='true'>\ud83d\udd12</span> CLOSED</b>"}. ${esc(g.label)}.</p></div>
-  <h2>Concepts you keep missing</h2><div class="card"><ul class="weaklist">${wl}</ul></div>
-  <h2>Acronyms you keep missing</h2><div class="card"><ul class="weaklist">${aw}</ul></div>
+  <h2>Terms and acronyms you keep missing</h2>
+  <p class="dim" style="font-size:13px;margin:-6px 0 12px">Stored here, and this is what feeds The Drill Down. Tap "+ Drill Down" on anything you want higher-repetition practice on.</p>
+  <div class="card"><ul class="weaklist">${missedCombined}</ul></div>
   <h2>PBQ history</h2><div class="card"><ul class="weaklist">${
     PBQ.filter(p=>S.pbqStat[p.id]).length
       ? PBQ.filter(p=>S.pbqStat[p.id]).map(p=>{const st=S.pbqStat[p.id];
@@ -7868,8 +8023,8 @@ function saveProfile(){
   save(); toast("Saved"); home();
 }
 function wipe(){ if(!confirm("Erase all progress, weak areas, and card scheduling? Flashcards, acronyms, and notes you added are kept.")) return;
-  const cc=S.customCards,ca=S.customAcr,cs=S.cardSeq,sn=S.studyNotes,dn=S.dumpNotes,ns=S.noteSeq;
-  S={v:2,name:S.name,exam:S.exam,dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:cc,customAcr:ca,cardSeq:cs,recent:[],pbqStat:{},studyNotes:sn,dumpNotes:dn,noteSeq:ns};
+  const cc=S.customCards,ca=S.customAcr,cs=S.cardSeq,sn=S.studyNotes,dn=S.dumpNotes,ns=S.noteSeq,jt=S.jcTopics;
+  S={v:2,name:S.name,exam:S.exam,dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:cc,customAcr:ca,cardSeq:cs,recent:[],pbqStat:{},studyNotes:sn,dumpNotes:dn,noteSeq:ns,jcTopics:jt};
   for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0}; save(); toast("Progress reset"); home(); }
 
 /* ================= ADD CONTENT ================= */
