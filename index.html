@@ -4991,6 +4991,8 @@ const GLOSS = [
 {term:"Insider threat",d:2,g:"threats",def:"A threat actor operating from within the organization, whose institutional knowledge can make their attacks difficult to distinguish from legitimate activity."},
 {term:"Nation-state actor",d:2,g:"threats",def:"A threat actor backed by a government, typically highly resourced and sophisticated, often described as an advanced persistent threat."},
 {term:"Hacktivist",d:2,g:"threats",def:"A threat actor motivated by political or philosophical beliefs rather than financial gain, using attacks to advance a cause."},
+{term:"Threat",d:2,g:"threats",def:"Anything capable of causing harm to an asset by exploiting a vulnerability, whether that's a person, a piece of malware, a natural event, or an accident. A threat needs a vulnerability to actually exploit before it becomes a real risk."},
+{term:"Vulnerability",d:2,g:"vulns",def:"A weakness in a system, process, or control that a threat could exploit to cause harm. A vulnerability with no matching threat capable of exploiting it poses far less real-world risk."},
 {term:"Unskilled attacker",d:2,g:"threats",def:"A threat actor with little technical skill who runs pre-made scripts and tools without understanding how they work, sometimes still called a script kiddie."},
 {term:"Organized crime",d:2,g:"threats",def:"A professional, well-funded threat actor group motivated by financial gain, often operating with specialized roles across the attack chain."},
 {term:"APT (Advanced persistent threat)",d:2,g:"threats",def:"A sophisticated, well-resourced adversary, typically a nation-state, that maintains long-term, stealthy access to a target network."},
@@ -5162,6 +5164,10 @@ const GLOSS = [
 {term:"CFB",d:1,g:"acronym-crypto",def:"Cipher Feedback. Block cipher mode that turns a block cipher into a self-synchronizing stream cipher."},
 {term:"CHAP (Challenge Handshake Authentication Protocol)",d:4,g:"acronym-auth",def:"Authenticates using a challenge and hashed response rather than sending a password"},
 {term:"CIA (Confidentiality, Integrity, Availability)",d:1,g:"cia",def:"The three core security objectives every control supports. Confidentiality keeps data readable only by those authorized to see it. Integrity keeps data accurate and unaltered, detecting or preventing unauthorized change. Availability keeps systems and data accessible to authorized users when needed. Every security control maps to protecting at least one of these three."},
+{term:"Information security",d:1,g:"fundamentals",def:"The broader discipline of protecting information itself, in any form, spoken, printed, or digital, from unauthorized access, disclosure, alteration, or destruction. Information system security is the narrower application of that same goal specifically to the computer systems that store, process, and transmit it."},
+{term:"Information system security",d:1,g:"fundamentals",def:"Protecting the specific hardware, software, and networks that store, process, and transmit information, the technical subset of the broader discipline of information security."},
+{term:"Enterprise systems",d:1,g:"fundamentals",def:"The organization-wide collection of hardware, software, networks, and data an organization depends on to operate, the full scope a security program is built to protect, not just one department's tools."},
+{term:"Security controls",d:1,g:"controls",def:"A safeguard or countermeasure put in place to reduce risk to an asset's confidentiality, integrity, or availability, whether that's a technology, a policy, or a physical barrier. Every specific control type, preventive, detective, technical, managerial, and so on, is a category underneath this umbrella term."},
 {term:"Confidentiality",d:1,g:"cia",def:"The security objective of keeping data readable only by those authorized to see it, typically enforced through encryption, access controls, and permissions. It is one of the three pillars of the CIA triad, alongside integrity and availability."},
 {term:"Integrity",d:1,g:"cia",def:"The security objective of keeping data accurate and unaltered, so any unauthorized change is either prevented or detected. Hashing and file integrity monitoring are common integrity controls. It is one of the three pillars of the CIA triad, alongside confidentiality and availability."},
 {term:"Availability",d:1,g:"cia",def:"The security objective of keeping systems and data accessible to authorized users when they need them, protected through redundancy, backups, and resilience planning. It is one of the three pillars of the CIA triad, alongside confidentiality and integrity."},
@@ -5470,6 +5476,8 @@ const GLOSS = [
 {term:"Cryptanalysis",d:1,g:"crypto",def:"The study of analyzing and breaking cryptographic systems, working to recover plaintext or the key without authorized access to either."},
 {term:"Cryptographic hash",d:1,g:"crypto",def:"A one-way function that converts input data into a fixed-size digest, used to verify integrity since even a tiny change to the input produces a completely different hash."},
 {term:"Checksum",d:1,g:"crypto",def:"A calculated value derived from a block of data, sent or stored alongside it, used to detect accidental changes or corruption."},
+{term:"Hashing",d:1,g:"crypto",def:"Running data through a one-way mathematical function to produce a fixed-size output unique to that input, used to verify integrity without needing to compare the entire original data. Unlike encryption, hashing cannot be reversed back to the original input."},
+{term:"Hash digest",d:1,g:"crypto",def:"The fixed-size output a hash function produces for a given input, sometimes called a hash value. Comparing digests before and after is how hashing detects whether the underlying data changed."},
 {term:"Cyclic redundancy check",d:1,g:"crypto",def:"A specific type of checksum algorithm used to detect accidental changes to raw data, commonly used in networking and storage rather than as a cryptographic integrity control."},
 {term:"Digital envelope",d:1,g:"crypto",def:"A message encrypted with a fast symmetric key, where that symmetric key is itself encrypted with the recipient's public key, combining the speed of symmetric encryption with the key-exchange convenience of asymmetric encryption."},
 {term:"Kerberos",d:1,g:"auth",def:"A ticket-based network authentication protocol that uses symmetric key cryptography and a trusted third party to verify identity without repeatedly transmitting passwords across the network."},
@@ -5496,6 +5504,7 @@ const GLOSS = [
 {term:"Cookie",d:2,g:"vulns",def:"A small piece of data a website stores in a user's browser to maintain state between requests, which can become a security risk if it holds sensitive session information without proper protection."},
 {term:"Cross-site request forgery",d:2,g:"vulns",def:"An attack that tricks an authenticated user's browser into submitting an unwanted request to a site they are logged into, exploiting their existing session without their knowledge."},
 {term:"Router",d:3,g:"network",def:"A network device that forwards traffic between different networks based on IP address, determining the best path for each packet to reach its destination."},
+{term:"Networks",d:3,g:"network",def:"A group of interconnected devices, computers, servers, and appliances, that communicate and share resources with each other, forming the pathways security controls are built to monitor and protect."},
 {term:"Bandwidth",d:3,g:"network",def:"The capacity of a communication channel to carry data over a given period of time, commonly measured in bits per second."},
 {term:"Topology",d:3,g:"network",def:"The physical or logical arrangement of devices and connections in a network, such as a star, bus, or ring layout."},
 {term:"Tunnel",d:3,g:"network",def:"A method of encapsulating one network protocol's data inside another, commonly used to carry private traffic securely across a public network like the internet."},
@@ -6233,14 +6242,14 @@ function acrU(){ return allAcr().filter(a=>a.u); }
 const TIGHT=[115,98,84,70,58];
 function examDate(){ return S.exam?new Date(S.exam+"T12:00:00"):null; }
 
-let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},studyNotes:[],dumpNotes:[],noteSeq:0,manualTimer:false,manualTimerSec:45,shiftMode:"shift",studySource:"",jcTopics:["jump server","proxy","secure enclave","hsm","spf","dkim","dmarc"]};
+let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},manualTimer:false,manualTimerSec:45,shiftMode:"shift",studySource:"",jcTopics:["jump server","proxy","secure enclave","hsm","spf","dkim","dmarc"]};
 for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0};
 
 let view="home", sess=null, sessStart=0, breakShown=false, tickHandle=null;
 let SECTION=null, AT_SECTION=true;
 let ENTRY_TILE=null, PENDING_JUMP=null;
 
-async function load(){ const v=await store.get("ns_state"); if(v&&v.v===2){ S=Object.assign(S,v); for(let d=1;d<=5;d++) if(!S.dom[d]) S.dom[d]={s:0,c:0}; } S.studyNotes=S.studyNotes||[]; S.dumpNotes=S.dumpNotes||[]; S.jcTopics=S.jcTopics||["jump server","proxy","secure enclave","hsm","spf","dkim","dmarc"]; }
+async function load(){ const v=await store.get("ns_state"); if(v&&v.v===2){ S=Object.assign(S,v); for(let d=1;d<=5;d++) if(!S.dom[d]) S.dom[d]={s:0,c:0}; } S.jcTopics=S.jcTopics||["jump server","proxy","secure enclave","hsm","spf","dkim","dmarc"]; }
 function save(){ store.set("ns_state",S); }
 
 /* ================= helpers ================= */
@@ -6418,7 +6427,6 @@ function home(){
       <button class="fact link" onclick="window.scrollTo(0,0);glossRef()"><b>${GLOSS.length}</b> glossary terms</button>
       <button class="fact link" onclick="examHome()"><b>${EXAM_NAMES.length}</b> full practice exams</button>
       <button class="fact link" onclick="stats()">Weak areas and stats</button>
-      <button class="fact link" onclick="notesSetup()"><b>Notes</b></button>
       <button class="fact link" onclick="jcSetup()"><b>The Drill Down</b></button>
     </div>
   </div>
@@ -6482,9 +6490,6 @@ function home(){
     <button class="tile" id="t-gloss" style="--accent:var(--violet)" onclick="window.scrollTo(0,0);glossRef()">
       <span class="tag-row"><span class="tag">Reference</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Glossary</h3>
       <p>${GLOSS.length} terms and concepts, searchable by name or definition, filterable by domain.</p></button>
-    <button class="tile" id="t-notes" style="--accent:var(--cyan)" onclick="notesSetup()">
-      <span class="tag-row"><span class="tag">Journal</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Notes</h3>
-      <p>${(S.studyNotes||[]).length} study note${(S.studyNotes||[]).length===1?"":"s"}.</p></button>
     <button class="tile" id="t-weak" style="--accent:var(--faint)" onclick="stats()">
       <span class="tag-row"><span class="tag">Tracking</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Weak areas &amp; stats</h3>
       <p>Domain accuracy, repeated misses, PBQ history, and readiness gate status.</p></button>
@@ -6732,141 +6737,6 @@ function runTimer(secs,onEnd){
   tickFn(); tickHandle=setInterval(tickFn,1000);
 }
 function stopTimer(){ if(tickHandle){ clearInterval(tickHandle); tickHandle=null; } }
-
-/* ================= NOTES ================= */
-const OBJS_BY_DOMAIN={1:["1.1","1.2","1.3","1.4"],2:["2.1","2.2","2.3","2.4","2.5"],3:["3.1","3.2","3.3","3.4"],
-  4:["4.1","4.2","4.3","4.4","4.5","4.6","4.7","4.8","4.9"],5:["5.1","5.2","5.3","5.4","5.5","5.6"]};
-let NOTES_UI={study:{filterD:0,editing:null},dump:{filterD:0,editing:null}};
-function notesArr(kind){ return kind==="study"?S.studyNotes:S.dumpNotes; }
-function domainObjOptions(){
-  let h="";
-  for(let d=1;d<=5;d++){
-    h+=`<optgroup label="Domain ${d}.0 \u2014 ${esc(DNAME[d])}">`;
-    h+=`<option value="${d}">Domain ${d}.0 (general, no specific objective)</option>`;
-    OBJS_BY_DOMAIN[d].forEach(o=>{ h+=`<option value="${o}">Objective ${o}</option>`; });
-    h+="</optgroup>";
-  }
-  return h;
-}
-function domainObjOptionsSelected(sel){
-  let h="";
-  for(let d=1;d<=5;d++){
-    h+=`<optgroup label="Domain ${d}.0 \u2014 ${esc(DNAME[d])}">`;
-    h+=`<option value="${d}"${sel===String(d)?" selected":""}>Domain ${d}.0 (general, no specific objective)</option>`;
-    OBJS_BY_DOMAIN[d].forEach(o=>{ h+=`<option value="${o}"${sel===o?" selected":""}>Objective ${o}</option>`; });
-    h+="</optgroup>";
-  }
-  return h;
-}
-function noteAdd(kind){
-  const sel=$("ns-"+kind).value;
-  const text=($("nt-"+kind).value||"").trim();
-  if(!text){ toast("Write something first"); return; }
-  const arr=notesArr(kind);
-  S.noteSeq=(S.noteSeq||0)+1;
-  arr.push({id:S.noteSeq,sel:sel,text:text,t:Date.now()});
-  save(); $("nt-"+kind).value=""; renderNoteList(kind); toast("Note saved");
-}
-function noteDel(kind,id){
-  if(!confirm("Delete this note?")) return;
-  if(kind==="study") S.studyNotes=S.studyNotes.filter(n=>n.id!==id); else S.dumpNotes=S.dumpNotes.filter(n=>n.id!==id);
-  save(); renderNoteList(kind);
-}
-function noteEdit(kind,id){ NOTES_UI[kind].editing=id; renderNoteList(kind); }
-function noteEditCancel(kind){ NOTES_UI[kind].editing=null; renderNoteList(kind); }
-function noteSave(kind,id){
-  const sel=$("nedit-sel-"+kind+"-"+id).value;
-  const text=($("nedit-txt-"+kind+"-"+id).value||"").trim();
-  if(!text){ toast("Note can't be empty"); return; }
-  const arr=notesArr(kind);
-  const n=arr.find(x=>x.id===id);
-  if(n){ n.sel=sel; n.text=text; n.edited=Date.now(); }
-  save(); NOTES_UI[kind].editing=null; renderNoteList(kind); toast("Note updated");
-}
-function setNoteFilter(kind,d){ NOTES_UI[kind].filterD=d; renderNoteList(kind); }
-function renderNoteList(kind){
-  const body=$("nlist-"+kind); if(!body) return;
-  const fd=NOTES_UI[kind].filterD;
-  const editingId=NOTES_UI[kind].editing;
-  let list=notesArr(kind).slice();
-  if(fd) list=list.filter(n=>parseInt(n.sel)===fd);
-  list.sort((a,b)=>b.t-a.t);
-  body.innerHTML = list.length ? list.map(n=>{
-    const d=parseInt(n.sel), isObj=n.sel.indexOf(".")>=0;
-    const label = isObj ? ("Objective "+n.sel) : ("Domain "+d+".0 \u2014 general");
-    if(n.id===editingId){
-      return `<div class="card" style="margin-bottom:10px;border-color:var(--amber)">
-        <div class="zlab">Editing note</div>
-        <select id="nedit-sel-${kind}-${n.id}" style="margin-bottom:8px">${domainObjOptionsSelected(n.sel)}</select>
-        <textarea id="nedit-txt-${kind}-${n.id}" rows="3">${esc(n.text)}</textarea>
-        <div class="row" style="margin-top:8px">
-          <button class="btn pri sm" onclick="noteSave('${kind}',${n.id})">Save changes</button>
-          <button class="btn ghost sm" onclick="noteEditCancel('${kind}')">Cancel</button>
-        </div>
-      </div>`;
-    }
-    return `<div class="card" style="margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
-        <span class="mono" style="font-size:10.5px;color:var(--violet);letter-spacing:.08em;text-transform:uppercase">${esc(label)}</span>
-        <div class="row" style="gap:6px">
-          <button class="btn ghost sm" onclick="noteEdit('${kind}',${n.id})">Edit</button>
-          <button class="btn ghost sm" onclick="noteDel('${kind}',${n.id})">Delete</button>
-        </div>
-      </div>
-      <p style="margin:8px 0 0;white-space:pre-wrap;line-height:1.55;font-size:14px">${esc(n.text)}</p>
-      ${n.edited?`<p class="dim" style="margin:6px 0 0;font-size:11px">Edited ${new Date(n.edited).toLocaleDateString()}</p>`:""}
-    </div>`;
-  }).join("") : `<p class="dim" style="padding:14px 0;font-size:14px">No notes yet${fd?" in Domain "+fd+".0":""}. Write one above.</p>`;
-}
-function exportNotesAI(kind){
-  const arr=notesArr(kind);
-  if(!arr.length){ toast("Nothing to export yet"); return; }
-  const grouped={}; arr.forEach(n=>{ const d=parseInt(n.sel); (grouped[d]=grouped[d]||[]).push(n); });
-  const intro = kind==="study"
-    ? "I am studying for the CompTIA Security+ SY0-701 exam. Below are my own study notes, organized by domain and objective. Read them, point out anything that looks incomplete, vague, or slightly off, fill the gap with a short correct explanation, then quiz me with a few new scenario-based questions covering these same notes so I can prove I actually understand them rather than just wrote them down."
-    : "I am studying for the CompTIA Security+ SY0-701 exam. Below are things I have written down that are confusing me, that I keep mixing up, or that are not clicking yet. Read each one, give me a plain-language explanation with a real-world analogy where it helps, flag anything where the exam answer differs from real-world practice, and then quiz me with one new question on each so I can check whether it has actually landed.";
-  let L=["# CompTIA Security+ SY0-701 \u2014 "+(kind==="study"?"Study Notes":"Struggle Log"),
-    "Exported "+new Date().toLocaleDateString(),"",
-    "## How to use this","Paste this whole document into an AI assistant with a request like:","",
-    "> "+intro,""];
-  [1,2,3,4,5].forEach(d=>{
-    if(!grouped[d]||!grouped[d].length) return;
-    L.push("## Domain "+d+".0 \u2014 "+DNAME[d]);
-    grouped[d].sort((a,b)=>a.sel.localeCompare(b.sel)).forEach(n=>{
-      L.push(n.sel.indexOf(".")>=0 ? "### Objective "+n.sel : "### General");
-      L.push(n.text); L.push("");
-    });
-  });
-  dl("sy0701-"+kind+"-notes-"+new Date().toISOString().slice(0,10)+".md", L.join("\n"));
-  toast("Exported");
-}
-function notesSectionHTML(kind,title,desc){
-  return `
-  <h2>${title}</h2>
-  <p class="dim" style="margin:-4px 0 14px;font-size:14px;line-height:1.55">${desc}</p>
-  <div class="card">
-    <div class="zlab">Add a note</div>
-    <select id="ns-${kind}" style="margin-bottom:8px">${domainObjOptions()}</select>
-    <textarea id="nt-${kind}" rows="3" placeholder="${kind==='study'?'What do you want to remember about this...':"What isn't clicking, what keeps tripping you up..."}"></textarea>
-    <div class="row" style="margin-top:8px"><button class="btn pri sm" onclick="noteAdd('${kind}')">Save note</button></div>
-  </div>
-  <div class="seg" style="margin-top:14px">
-    <button class="${NOTES_UI[kind].filterD===0?'on':''}" onclick="setNoteFilter('${kind}',0)">All</button>
-    ${[1,2,3,4,5].map(d=>`<button class="${NOTES_UI[kind].filterD===d?'on':''}" onclick="setNoteFilter('${kind}',${d})">D${d}.0</button>`).join("")}
-  </div>
-  <div id="nlist-${kind}" style="margin-top:10px"></div>
-  <div class="row" style="margin-top:10px"><button class="btn ghost sm" onclick="exportNotesAI('${kind}')">Export ${kind==='study'?'study notes':'struggle log'} for AI</button></div>`;
-}
-function notesSetup(){
-  view="setup"; SECTION=notesSetup; AT_SECTION=true; ENTRY_TILE="t-notes"; strip("notes",0); stopTimer();
-  if(window.scrollTo) window.scrollTo(0,0);
-  $("app").innerHTML=`
-  <p class="eyebrow">Notes</p><h1>Notes</h1>
-  <p class="lede">Write in your own words, organized by domain alone or by domain and objective, however loose you want it.</p>
-  ${notesSectionHTML("study","Study Notes","Your own explanations, mnemonics, and summaries. The stuff you'd want to reread the night before.")}
-  <div class="row" style="margin-top:20px"><button class="btn ghost sm" onclick="home()">Back to home</button></div>`;
-  renderNoteList("study");
-}
 
 /* ================= FLASHCARDS ================= */
 function srsOf(i){ return S.srs[i]||{ease:2.3,iv:0,due:0,reps:0}; }
@@ -8023,8 +7893,8 @@ function saveProfile(){
   save(); toast("Saved"); home();
 }
 function wipe(){ if(!confirm("Erase all progress, weak areas, and card scheduling? Flashcards, acronyms, and notes you added are kept.")) return;
-  const cc=S.customCards,ca=S.customAcr,cs=S.cardSeq,sn=S.studyNotes,dn=S.dumpNotes,ns=S.noteSeq,jt=S.jcTopics;
-  S={v:2,name:S.name,exam:S.exam,dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:cc,customAcr:ca,cardSeq:cs,recent:[],pbqStat:{},studyNotes:sn,dumpNotes:dn,noteSeq:ns,jcTopics:jt};
+  const cc=S.customCards,ca=S.customAcr,cs=S.cardSeq,jt=S.jcTopics;
+  S={v:2,name:S.name,exam:S.exam,dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:cc,customAcr:ca,cardSeq:cs,recent:[],pbqStat:{},jcTopics:jt};
   for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0}; save(); toast("Progress reset"); home(); }
 
 /* ================= ADD CONTENT ================= */
