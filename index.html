@@ -41,6 +41,10 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--amber);out
 .readout{color:var(--dim);white-space:nowrap}
 .readout b{color:var(--txt)}
 .readout.hot b{color:var(--red)}
+.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.confirm-overlay.on{display:flex}
+.confirm-box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;max-width:380px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.confirm-box p{margin:0;font-size:14.5px;line-height:1.5;color:var(--txt)}
 .hbtn{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
   border:1px solid var(--line);border-radius:5px;padding:5px 11px;background:var(--panel);white-space:nowrap;flex:0 0 auto;
   font-weight:600;min-width:0;display:inline-flex;align-items:center;justify-content:center;gap:5px;
@@ -347,6 +351,15 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 </div>
 
 <div class="wrap" id="app"></div>
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <p id="confirmMsg"></p>
+    <div class="row" style="margin-top:16px;justify-content:flex-end">
+      <button class="btn ghost sm" onclick="confirmCancel()">Cancel</button>
+      <button class="btn pri sm" onclick="confirmYes()">Continue</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -4697,7 +4710,16 @@ const GLOSS = [
 {term:"Directive control",d:1,g:"controls",def:"A control that tells people what they are required to do through policy or instruction, without any automatic technical enforcement, such as an acceptable use policy."},
 {term:"Detective control",d:1,g:"controls",def:"A control that identifies that an event already occurred, typically through logging, monitoring, or after-the-fact review, rather than stopping it in advance."},
 {term:"Compensating control",d:1,g:"controls",def:"A substitute safeguard used when the primary required control cannot be implemented, intended to provide equivalent protection."},
+{term:"Technical control",d:1,g:"controls",def:"A control implemented through technology acting on systems automatically, such as a firewall rule or encryption, with no person needing to be in the loop for it to function."},
+{term:"Managerial control",d:1,g:"controls",def:"A control that comes from risk decisions and policy set by leadership, such as approving a security budget or signing off on a risk acceptance, rather than a hands-on technical or physical safeguard."},
+{term:"Operational control",d:1,g:"controls",def:"A control carried out day to day by people following a procedure, such as a guard checking badges or an employee completing a signed policy acknowledgment during onboarding."},
+{term:"Physical control",d:1,g:"controls",def:"A tangible, real-world barrier or safeguard, such as a fence, lock, or badge reader, that physically restricts access rather than acting through software or policy."},
 {term:"Non-repudiation",d:1,g:"crypto",def:"A property ensuring someone cannot credibly deny having performed an action, typically achieved through digital signatures."},
+{term:"Security",d:1,g:"fundamentals",def:"The practice of protecting the confidentiality, integrity, and availability of information and systems against threats, the umbrella goal every specific control ultimately supports."},
+{term:"Transparency",d:1,g:"fundamentals",def:"Being open and clear about what data is collected, how systems operate, and how decisions are made, so stakeholders can trust and verify what an organization actually does rather than take it on faith."},
+{term:"Accountability",d:1,g:"fundamentals",def:"Holding a specific person or system responsible for an action, made possible by logging and tracking who did what, the practical outcome AAA's accounting piece and non-repudiation are built to support."},
+{term:"Audit trail",d:1,g:"fundamentals",def:"A chronological record of system activity, who did what and when, that makes accountability and non-repudiation actually enforceable after the fact rather than just theoretical."},
+{term:"User accountability",d:1,g:"fundamentals",def:"Accountability applied specifically to individual user actions, tying a logged action back to the one account and person responsible for it, rather than a shared or anonymous credential."},
 {term:"Salting",d:1,g:"crypto",def:"Adding a unique random value to each password before hashing, so identical passwords produce different hashes and precomputed rainbow tables become useless."},
 {term:"Key stretching",d:1,g:"crypto",def:"Deliberately slowing down a hashing or key-derivation process to make brute-force and dictionary attacks more computationally expensive."},
 {term:"Digital signature",d:1,g:"crypto",def:"A cryptographic value created with a sender's private key that proves both the authenticity of the sender and the integrity of the message."},
@@ -4709,7 +4731,11 @@ const GLOSS = [
 {term:"Shadow IT",d:2,g:"threats",def:"Technology adopted by employees without formal IT approval, usually to work around slow processes, which creates blind spots the security team cannot monitor."},
 {term:"Espionage",d:2,g:"threats",def:"A threat actor motivation centered on covert intelligence gathering, typically state-sponsored, aimed at informing political or military decisions rather than direct profit or public exposure."},
 {term:"Blackmail",d:2,g:"threats",def:"A threat actor motivation where an attacker threatens to expose or misuse stolen material specifically to extort payment or concessions from the victim."},
+{term:"Ethical",d:2,g:"threats",def:"A threat actor motivation where someone acts on a personal belief that they're serving a greater good, such as exposing wrongdoing, even though the act itself is unauthorized and against policy. One of the ten official threat actor motivations for objective 2.1."},
+{term:"Ethical hacker",d:2,g:"threats",def:"A security professional authorized to attack systems the same way a real attacker would, in order to find and report flaws before someone malicious does. Not an official SY0-701 term, this hacker-classification language belongs to the previous exam version, but the role is what a penetration tester actually is."},
 {term:"Watering hole attack",d:2,g:"threats",def:"An attack that compromises a website the target is known to visit, rather than attacking the target directly."},
+{term:"Drive-by download",d:2,g:"threats",def:"Malware that installs automatically just from visiting a compromised or malicious webpage, with no click or download prompt required. Often the actual delivery mechanism behind a watering hole attack once the victim's browser loads the compromised site."},
+{term:"Supply chain (attack vector)",d:2,g:"threats",def:"A threat vector where an attacker compromises a trusted vendor, supplier, or service provider upstream, then uses that trusted relationship, such as a software update channel, to reach every downstream customer at once, rather than attacking each victim directly."},
 {term:"Pretexting",d:2,g:"social-eng",def:"Fabricating a believable scenario or false identity to manipulate a victim into divulging information or granting access."},
 {term:"Business email compromise",d:2,g:"social-eng",def:"A targeted scam where an attacker impersonates an executive or trusted partner by email to trick an employee into a fraudulent wire transfer or data disclosure."},
 {term:"Typosquatting",d:2,g:"threats",def:"Registering a domain name that is a common misspelling of a legitimate one, hoping to catch users who mistype the real address."},
@@ -4736,6 +4762,8 @@ const GLOSS = [
 {term:"Integer overflow",d:2,g:"vulns",def:"A flaw where a numeric value exceeds the maximum its data type can store, causing it to wrap around to an unexpected, often exploitable value."},
 {term:"Race condition",d:2,g:"vulns",def:"A vulnerability that arises when the outcome of a process depends on timing, letting an attacker exploit the gap between two operations that assume nothing changed in between."},
 {term:"Time-of-check to time-of-use",d:2,g:"vulns",def:"A specific race condition where a resource is validated at one moment but used at a later moment, during which an attacker swaps or alters it."},
+{term:"TOC (Time-of-check)",d:2,g:"vulns",def:"A TOC vulnerability occurs when an attacker exploits the time gap between the verification of data and its use, potentially leading to unauthorized or malicious activities. TOC specifically refers to the validation moment itself, the first half of a time-of-check to time-of-use race condition."},
+{term:"TOU (Time-of-use)",d:2,g:"vulns",def:"The moment a previously validated resource is actually acted upon, the second half of a time-of-check to time-of-use race condition. If the resource changed in the gap since TOC, the action executes against something different than what was approved."},
 {term:"SQLi (SQL injection)",d:2,g:"vulns",def:"Inserting malicious SQL code into an input field so it is executed by the backend database, often to bypass authentication or extract data."},
 {term:"XSS (Cross-site scripting)",d:2,g:"vulns",def:"Injecting malicious script into a web page viewed by other users, allowing the attacker to run code in the victim's browser session."},
 {term:"Secure cookie attribute",d:4,g:"app-sec",def:"A flag set on a cookie instructing the browser to never transmit it over plain HTTP, only over HTTPS, closing off interception on an unencrypted connection."},
@@ -4750,6 +4778,8 @@ const GLOSS = [
 {term:"Impossible travel",d:2,g:"threats",def:"An account authenticating from two geographically distant locations in a time window too short for legitimate travel, indicating credential compromise."},
 {term:"Concurrent session usage",d:2,g:"threats",def:"Multiple simultaneous active logins on one account, often from different locations, suggesting the credentials are in more than one party's hands."},
 {term:"Resource inaccessibility",d:2,g:"threats",def:"An indicator where a resource, such as files or a service, becomes unusable or unreachable to legitimate users, for example after a ransomware infection encrypts a file server even though the server itself keeps running."},
+{term:"Resource consumption",d:2,g:"threats",def:"An indicator of unusually high usage of a resource like CPU, memory, or bandwidth, such as a server pegged at 100 percent utilization with no scheduled job to explain it."},
+{term:"Resource exhaustion",d:2,g:"vulns",def:"A vulnerability or attack where available resources, CPU, memory, bandwidth, disk space, or open connections, are deliberately or accidentally consumed until none remain for legitimate use, the underlying mechanism behind many denial-of-service attacks."},
 {term:"Living off the land",d:2,g:"threats",def:"An attack technique that uses legitimate, pre-installed system tools rather than custom malware, making detection harder since the tools themselves are not inherently malicious."},
 {term:"IaC (Infrastructure as code)",d:3,g:"cloud",def:"Managing and provisioning infrastructure through machine-readable definition files rather than manual configuration, enabling version control and repeatable deployments."},
 {term:"SDN (Software-defined networking)",d:3,g:"network",def:"A network architecture that separates the control plane from the data plane, allowing centralized, programmable management of network behavior."},
@@ -4761,6 +4791,8 @@ const GLOSS = [
 {term:"Software-defined WAN",d:3,g:"network",def:"A technology that centrally manages and intelligently steers traffic across multiple WAN connections, optimizing cost and performance."},
 {term:"SASE (Secure access service edge)",d:3,g:"network",def:"A cloud-delivered architecture that converges networking and security functions into a single service for a distributed, identity-first workforce."},
 {term:"NAC (Network access control)",d:3,g:"network",def:"A system that evaluates a device's identity and health before allowing it onto the network, often quarantining non-compliant devices."},
+{term:"Agent-based NAC",d:3,g:"network",def:"NAC that requires installing persistent software on each device to continuously report its health and identity, giving deeper visibility at the cost of needing that software deployed everywhere. Not an official NAC-specific sub-bullet, though agent-based and agentless deployment models are each named elsewhere in the objectives."},
+{term:"Agentless NAC",d:3,g:"network",def:"NAC that evaluates a device from the network side, scanning or querying it without installing anything locally, trading some visibility for far easier deployment across devices the organization doesn't fully control."},
 {term:"Load balancer",d:3,g:"availability",def:"A device or service that distributes incoming traffic across multiple servers, improving both performance and availability."},
 {term:"Clustering",d:3,g:"availability",def:"Coupling multiple servers so they operate as a single logical system, often with shared storage, so if one node fails another takes over its work."},
 {term:"RTO (Recovery time objective)",d:3,g:"resilience",def:"The maximum acceptable amount of time a system can be down before recovery, measuring how long an outage is tolerated."},
@@ -4782,6 +4814,9 @@ const GLOSS = [
 {term:"Centralized architecture",d:3,g:"architecture",def:"A design that concentrates processing and decision-making in one main location that everything else depends on, simplifying control at the cost of a single point of failure."},
 {term:"Decentralized architecture",d:3,g:"architecture",def:"A design that distributes processing and decision-making across many independent locations rather than funneling everything through one central point, trading some central control for resilience."},
 {term:"High availability",d:3,g:"architecture",def:"Architecture specifically designed to keep a system continuously operational with minimal downtime, commonly achieved through redundant instances and automatic failover."},
+{term:"Redundancy",d:3,g:"architecture",def:"Building in duplicate components, systems, or paths so that if one fails, another takes over automatically, the underlying mechanism that makes high availability possible."},
+{term:"Three nines (99.9%)",d:3,g:"architecture",def:"An availability target of 99.9 percent uptime, allowing about 8.76 hours of downtime per year, a common baseline SLA commitment."},
+{term:"Five nines (99.999%)",d:3,g:"architecture",def:"An availability target of 99.999 percent uptime, allowing only about 5.26 minutes of downtime per year, the gold-standard commitment for mission-critical systems, requiring extensive redundancy to achieve."},
 {term:"VPC (Virtual private cloud)",d:3,g:"cloud",def:"An isolated, private section of a public cloud provider's infrastructure, giving a customer network-level separation from other tenants."},
 {term:"Hybrid cloud",d:3,g:"cloud",def:"A deployment mixing multiple cloud environments, such as private plus public infrastructure, or multiple providers, rather than living entirely in one. Each environment tends to carry its own separate security configuration, authentication setup, and permission model, and when they're connected together, mismatches between those different environments' protections become the defining risk: inconsistent security posture across the combined infrastructure, not any single environment's weakness alone."},
 {term:"RTOS (Real-time operating system)",d:3,g:"iot",def:"An operating system built to guarantee task completion within a strict, predictable time window, commonly used in industrial and embedded control systems."},
@@ -4793,11 +4828,18 @@ const GLOSS = [
 {term:"Workstation",d:4,g:"ops",def:"An end-user laptop or desktop, hardened through measures like full-disk encryption, disabling unused ports, and removing local admin rights from standard accounts."},
 {term:"Cellular",d:4,g:"mobile",def:"A connection method using a mobile carrier's data network, commonly relied on when Wi-Fi isn't available, such as at a remote job site."},
 {term:"Sandboxing",d:4,g:"ops",def:"Running untrusted code in an isolated environment to observe its behavior safely, without risking the production system."},
+{term:"Input validation",d:4,g:"ops",def:"Checking that user-submitted data matches what's actually expected, in format, length, and type, before an application processes it, the primary defense against injection attacks like SQL injection and XSS."},
+{term:"Secure cookies (session cookies)",d:4,g:"ops",def:"Cookies flagged so they're only ever sent over an encrypted HTTPS connection and can't be read by client-side scripts, protecting the session identifier a cookie carries from being intercepted or stolen."},
+{term:"Code signing",d:4,g:"ops",def:"Cryptographically signing software so users and systems can verify it came from the claimed publisher and hasn't been tampered with since it was signed."},
+{term:"Session management",d:4,g:"ops",def:"How an application tracks a logged-in user across multiple requests, including how session identifiers are generated, stored, and eventually expired. Not an official SY0-701 bullet by this exact name, but the umbrella concept secure cookies and timeout policies both support."},
+{term:"Token handling",d:4,g:"ops",def:"How an application generates, stores, and invalidates the tokens used to prove an authenticated session is still valid, a related but distinct mechanism from a physical or software MFA authentication token."},
+{term:"Timeout policies",d:4,g:"ops",def:"Rules that automatically end an inactive session after a set period, limiting how long a stolen or abandoned session token remains usable."},
 {term:"EDR (Endpoint detection and response)",d:4,g:"ops",def:"A security tool that continuously monitors endpoint behavior, enabling detection, investigation, and remote response to threats that signature-based antivirus would miss."},
 {term:"User behavior analytics",d:4,g:"ops",def:"Building a behavioral baseline of what's normal for each individual user, such as typical login times and data access volumes, then flagging significant deviations from that personal pattern."},
 {term:"SIEM (Security information and event management)",d:4,g:"ops",def:"A platform that aggregates log data from many sources, correlates events, and generates alerts, forming the analytical backbone of a SOC."},
 {term:"SOAR (Security orchestration, automation, and response)",d:4,g:"ops",def:"A platform that automates and coordinates incident response actions across multiple security tools, reducing manual analyst effort."},
 {term:"NetFlow",d:4,g:"ops",def:"A protocol that records metadata about network conversations, such as source, destination, and volume, without capturing the actual payload content."},
+{term:"Network analyzers",d:4,g:"ops",def:"A tool, such as a protocol analyzer or packet sniffer, that captures and inspects live network traffic to troubleshoot problems or investigate suspicious activity, going deeper than NetFlow by examining actual packet content."},
 {term:"Firewall logs",d:4,g:"ops",def:"Records of which addresses and ports traffic came from and whether it was allowed or blocked at the network perimeter."},
 {term:"Application logs",d:4,g:"ops",def:"Records of events generated by a specific piece of software, such as user input, logins, and errors, at the application level rather than the network or device level."},
 {term:"Endpoint logs",d:4,g:"ops",def:"Records of activity on an individual device, such as process execution, file creation, and registry changes."},
@@ -4806,6 +4848,7 @@ const GLOSS = [
 {term:"OS-specific security logs",d:4,g:"ops",def:"Operating-system-level event records, such as local account logins and privilege use, distinct from logs generated by a specific application or the network perimeter."},
 {term:"PCAP (Packet capture)",d:4,g:"ops",def:"Recording the full content of network traffic, providing complete visibility but consuming far more storage than flow-based logging."},
 {term:"Order of volatility",d:4,g:"forensics",def:"The forensic principle of collecting the most perishable evidence first, since data in memory vanishes at power-off while data on disk persists."},
+{term:"Forensic analysis",d:4,g:"forensics",def:"The structured investigation of digital evidence after an incident to determine what happened, how, and by whom, following a defined process so findings hold up under scrutiny."},
 {term:"Chain of custody",d:4,g:"forensics",def:"A documented, unbroken record of who has handled a piece of evidence and when, required to preserve its integrity for legal proceedings."},
 {term:"Legal hold",d:4,g:"forensics",def:"A directive to preserve specific data because it may be relevant to pending or anticipated litigation, overriding normal retention or deletion schedules."},
 {term:"E-discovery",d:4,g:"forensics",def:"The process of identifying, collecting, and producing electronically stored information in response to a legal request or investigation."},
@@ -4826,11 +4869,14 @@ const GLOSS = [
 {term:"False negative",d:4,g:"vuln-mgmt",def:"A failure to detect an actual problem, the most dangerous kind of detection error since it creates false confidence."},
 {term:"Common Vulnerabilities and Exposures",d:4,g:"vuln-mgmt",def:"A public, standardized catalog assigning a unique identifier to each publicly known cybersecurity vulnerability."},
 {term:"CVSS (Common Vulnerability Scoring System)",d:4,g:"vuln-mgmt",def:"A standardized numeric scale used to rate the severity of a vulnerability, though it does not account for an individual organization's specific context."},
+{term:"Environmental variables",d:4,g:"vuln-mgmt",def:"Factors specific to an organization's own environment, such as how critical the affected asset is or what compensating controls are already in place, used to adjust a vulnerability's base CVSS score up or down to reflect real-world context."},
 {term:"Bug bounty",d:4,g:"vuln-mgmt",def:"A program that pays independent researchers for responsibly disclosing vulnerabilities they discover in an organization's systems."},
+{term:"Bug bounty hunter",d:4,g:"vuln-mgmt",def:"An independent researcher who participates in bug bounty programs, searching for and reporting vulnerabilities in exchange for payment. Not an official SY0-701 term itself, only the program is, but this is who the program actually pays."},
 {term:"Responsible disclosure",d:4,g:"vuln-mgmt",def:"The practice of privately reporting a discovered vulnerability to the vendor and giving them time to patch it before making the flaw public."},
 {term:"System/process audit",d:4,g:"vuln-mgmt",def:"An identification method that reviews whether documented security procedures are actually being followed in practice, through interviews and record sampling, rather than scanning or attacking systems directly."},
 {term:"Vulnerability classification",d:4,g:"vuln-mgmt",def:"Grouping vulnerability findings into categories by type, such as injection flaws or misconfigurations, organizing the analysis before deciding on a response strategy for each category."},
 {term:"Exceptions and exemptions",d:4,g:"vuln-mgmt",def:"A formally documented, management-approved, time-bound departure from standard remediation policy when a vulnerability can't be fixed within the normal window for a legitimate business reason."},
+{term:"Remediate",d:4,g:"vuln-mgmt",def:"To actually fix or resolve a confirmed vulnerability, such as applying a patch, closing a port, or reconfiguring a setting, the action that turns a finding into a closed issue."},
 {term:"Verification",d:4,g:"vuln-mgmt",def:"Manually confirming a remediation actually worked, such as checking configuration and testing the specific exploit path by hand, providing assurance beyond what an automated rescan alone offers."},
 {term:"Attack surface management",d:4,g:"vuln-mgmt",def:"The ongoing process of discovering, monitoring, and reducing every external-facing asset an organization exposes to potential attackers."},
 {term:"Least privilege",d:4,g:"iam",def:"The principle of granting a user or process only the minimum access necessary to perform its function, nothing more."},
@@ -4840,9 +4886,11 @@ const GLOSS = [
 {term:"Access control list (ACL)",d:2,g:"mitigation",def:"An ordered set of explicit allow or deny rules evaluated against traffic or requests, such as a firewall's rule table deciding which sources, destinations, and ports are permitted."},
 {term:"Permissions",d:2,g:"mitigation",def:"The access rights assigned to a user or group over a specific resource, such as a file or folder, controlling what they can read, write, or execute."},
 {term:"Patching",d:2,g:"mitigation",def:"Applying vendor-released software updates to close known vulnerabilities, directly shrinking the window during which a disclosed flaw remains exploitable."},
-{term:"Monitoring",d:2,g:"mitigation",def:"The continuous observation of systems, logs, and alerts to detect abnormal or malicious activity as it happens, rather than discovering it later through a periodic review."},
+{term:"Patch management",d:2,g:"mitigation",def:"The overall program governing how patches are identified, tested, approved, and deployed across an organization, the process patching itself is one step within."},
+{term:"Monitoring",d:2,g:"mitigation",def:"The continuous observation of systems, logs, and alerts to detect abnormal or malicious activity as it happens, rather than discovering it later through a periodic review. In practice this means continuously collecting data from across the environment and analyzing it for patterns worth flagging, not just watching a dashboard passively."},
 {term:"Installation of endpoint protection",d:2,g:"mitigation",def:"Deploying anti-malware or EDR software directly onto a device, a hardening technique typically required before a workstation is allowed onto the network."},
 {term:"Default password changes",d:2,g:"mitigation",def:"Replacing a device's factory-set administrator credentials before deployment, closing off one of the most commonly exploited and easily avoidable weaknesses in new hardware."},
+{term:"Disabling ports/protocols",d:2,g:"mitigation",def:"Closing unused network ports and turning off unneeded protocols and services on a device, shrinking the number of ways it can be reached or exploited even if nothing running on those ports is currently vulnerable."},
 {term:"Removal of unnecessary software",d:2,g:"mitigation",def:"Uninstalling programs and utilities a system doesn't need for its role, shrinking the attack surface by eliminating tools an attacker could otherwise repurpose after a compromise."},
 {term:"Published/documented",d:2,g:"threats",def:"An indicator where observed attacker activity matches a publicly available, documented attack pattern or threat intelligence report, helping analysts recognize and attribute an incident faster than working from raw evidence alone."},
 {term:"Just-in-time access",d:4,g:"iam",def:"Granting elevated privileges only for a limited, specific time window when they are actually needed, rather than leaving them standing permanently."},
@@ -4857,6 +4905,10 @@ const GLOSS = [
 {term:"WAF (Web application firewall)",d:4,g:"network-sec",def:"A firewall purpose-built to inspect and filter HTTP traffic, protecting against web-specific attacks like SQL injection and cross-site scripting."},
 {term:"NGFW (Next-generation firewall)",d:4,g:"network-sec",def:"A firewall that inspects traffic at the application layer, going beyond simple port and protocol filtering to understand what an application is actually doing."},
 {term:"IDS (Intrusion detection system)",d:4,g:"network-sec",def:"A system that monitors traffic for malicious activity and generates alerts, without taking action to block it."},
+{term:"Inline device",d:3,g:"network",def:"A device placed directly in the actual path of network traffic, designed to interact with that traffic actively and take real-time action such as accepting, rejecting, or modifying packets, making it the right choice whenever a scenario calls for actually stopping something rather than just observing it."},
+{term:"Tap/monitor device",d:3,g:"network",def:"A device that receives a copy of network traffic from a tap or mirrored switch port rather than sitting in the actual path, letting it observe and analyze traffic without any ability to block or modify it in real time."},
+{term:"Active device (attribute)",d:3,g:"network",def:"A device that actively injects itself into the network, whether generating its own traffic or sitting inline and modifying what passes through, distinct from a passive device that only observes."},
+{term:"Passive device (attribute)",d:3,g:"network",def:"A device that only observes and reports on traffic without altering or injecting anything into it, such as a sensor reading a mirrored port, distinct from an active device that can act on what it sees."},
 {term:"IPS (Intrusion prevention system)",d:4,g:"network-sec",def:"A system that sits inline in the traffic path and actively blocks malicious activity it detects, rather than only alerting."},
 {term:"Fail-open",d:4,g:"network-sec",def:"A failure mode where a security device passes traffic unblocked if it stops functioning, prioritizing availability over inspection."},
 {term:"Fail-closed",d:4,g:"network-sec",def:"A failure mode where a security device blocks all traffic if it stops functioning, prioritizing security over availability."},
@@ -4868,6 +4920,7 @@ const GLOSS = [
 {term:"Risk appetite",d:5,g:"risk",def:"The broad amount of risk an organization is willing to accept in pursuit of its objectives, set at the strategic level."},
 {term:"Risk tolerance",d:5,g:"risk",def:"The acceptable level of variation around a specific risk that an organization will allow before taking corrective action."},
 {term:"Risk register",d:5,g:"risk",def:"A documented, maintained list of identified risks, their assessed severity, and the organization's planned response to each."},
+{term:"Plan of Action and Milestones (POA&M)",d:5,g:"risk",def:"A federal risk-management document tracking identified weaknesses, the remediation steps planned for each, and target completion dates. Not part of the official SY0-701 objectives, but common in FISMA/RMF-governed environments, worth knowing if you're headed toward federal work."},
 {term:"Risk identification",d:5,g:"risk",def:"The foundational first step of discovering and naming a risk, before it can be assessed, analyzed, or added to the risk register."},
 {term:"Risk mitigation",d:5,g:"risk",def:"A risk management strategy that reduces a risk's likelihood or impact through controls, without eliminating the risk entirely or shifting its cost elsewhere."},
 {term:"Risk avoidance",d:5,g:"risk",def:"A risk management strategy that eliminates a risk entirely by discontinuing the risky activity or system altogether, rather than reducing or transferring it."},
@@ -4888,10 +4941,14 @@ const GLOSS = [
 {term:"Privacy impact assessment",d:5,g:"privacy",def:"A structured evaluation of how a new project or system will collect, use, and protect personal data, performed before deployment."},
 {term:"Data retention policy",d:5,g:"governance",def:"A formal policy defining how long different categories of data must be kept and when they should be destroyed."},
 {term:"Acquisition/procurement process",d:4,g:"asset-mgmt",def:"The stage where security requirements are built into purchasing itself, such as vetting a vendor's reputation and confirming a device supports required encryption standards before it's ever bought."},
+{term:"Hardware",d:4,g:"asset-mgmt",def:"The physical devices, servers, workstations, network appliances, that make up an organization's infrastructure, one of the two asset categories objective 4.2 covers alongside software, each requiring its own acquisition, tracking, and decommissioning process."},
+{term:"Software",d:4,g:"asset-mgmt",def:"The applications, operating systems, and licenses an organization runs, the second asset category objective 4.2 covers alongside hardware, tracked separately since licensing, patching, and end-of-life timelines differ from physical equipment."},
+{term:"Dependency check",d:4,g:"asset-mgmt",def:"Scanning an application's third-party libraries and components for known vulnerable versions, closely related to package monitoring but focused specifically on flagging outdated dependencies before they ship."},
+{term:"Application rollback",d:4,g:"asset-mgmt",def:"Reverting a deployed application to its previous working version after an update causes problems, the software-specific version of a change management backout plan. Not an official SY0-701 term by this exact name."},
 {term:"Asset classification",d:4,g:"asset-mgmt",def:"A label indicating how critical an asset is to business operations, distinct from data classification, which labels the sensitivity of the data the asset happens to store."},
 {term:"Asset ownership",d:4,g:"asset-mgmt",def:"Assigning a specific accountable person or team to an asset, so there's a clear point of contact for decisions and consequences involving it."},
 {term:"Asset inventory",d:4,g:"asset-mgmt",def:"A maintained record of every asset an organization owns, the foundation for tracking, securing, and eventually decommissioning equipment."},
-{term:"Enumeration",d:4,g:"asset-mgmt",def:"The process of actively discovering and listing what assets actually exist on a network, often used to catch unauthorized or forgotten devices missing from the inventory."},
+{term:"Enumeration",d:4,g:"asset-mgmt",def:"The process of actively discovering and listing what actually exists, often used to catch unauthorized or forgotten items missing from the inventory. Applies broadly: network devices, hardware, installed software, user accounts, shares, and services can all be enumerated, not just assets on the network."},
 {term:"Sanitization",d:4,g:"asset-mgmt",def:"Rendering data unrecoverable from storage media, commonly through overwriting or cryptographic erase, without necessarily destroying the physical media itself."},
 {term:"Degaussing",d:4,g:"asset-mgmt",def:"Using a strong magnetic field to erase data from magnetic storage media like hard drives; it does not affect flash memory, so data on an SSD would remain recoverable after degaussing."},
 {term:"Certificate of destruction",d:4,g:"asset-mgmt",def:"A signed, formal document proving that destruction or sanitization actually occurred as claimed, providing the auditable evidence a regulator or auditor would require."},
@@ -4910,6 +4967,7 @@ const GLOSS = [
 {term:"Self-assessment",d:5,g:"compliance",def:"The organization evaluating its own controls against a framework or checklist directly, without an outside party involved."},
 {term:"External audit",d:5,g:"compliance",def:"An independent assessment of controls performed by a third party, providing assurance that internal audits cannot offer alone."},
 {term:"Assessment (external)",d:5,g:"compliance",def:"An external review commissioned by the organization itself for a specific purpose, distinct from a regulator-initiated examination."},
+{term:"Regulatory compliance",d:5,g:"compliance",def:"Meeting legally mandated requirements imposed by a governing body, with real consequences like fines or loss of license for failing to do so."},
 {term:"Regulatory examination",d:5,g:"compliance",def:"A formal review conducted by a government body with legal authority over the organization, distinct from a voluntary audit."},
 {term:"Physical penetration testing",d:5,g:"vendor",def:"A penetration test that specifically evaluates physical security controls, such as doors, badges, and locks, rather than network or system-based attacks."},
 {term:"Offensive team",d:5,g:"vendor",def:"The red team in a penetration test, exclusively responsible for attacking and attempting to breach defenses, with detection and response left to a separate defensive team."},
@@ -4939,6 +4997,8 @@ const GLOSS = [
 {term:"Policy administrator",d:1,g:"architecture",def:"The zero trust control-plane component that establishes and communicates the actual access decision to the policy enforcement point, working alongside the policy engine."},
 {term:"Adaptive identity",d:1,g:"architecture",def:"A zero trust control-plane concept where access decisions factor in real-time context about the user, such as location or device health, rather than treating identity as a static, one-time check."},
 {term:"Threat scope reduction",d:1,g:"architecture",def:"A zero trust principle of limiting the paths and resources any single identity could reach if compromised, shrinking the blast radius of a breach."},
+{term:"Policy-driven access control",d:1,g:"architecture",def:"A zero trust control-plane concept where access decisions are governed by defined, consistently applied policy rather than ad hoc judgment calls, giving the policy engine a clear rule set to evaluate every request against."},
+{term:"Subject/System",d:1,g:"architecture",def:"In the zero trust data plane, the user or device actually requesting access to a resource, the entity every policy decision is being evaluated for."},
 {term:"Allow list",d:1,g:"controls",def:"A security approach that permits only explicitly approved applications, addresses, or activity, blocking everything else by default."},
 {term:"Deny list",d:1,g:"controls",def:"A security approach that blocks explicitly listed applications, addresses, or activity while permitting everything else by default, the inverse of an allow list."},
 {term:"Backout plan",d:1,g:"governance",def:"A predefined procedure for reversing a change if it fails or causes unexpected problems, restoring the system to its prior working state."},
@@ -4979,6 +5039,8 @@ const GLOSS = [
 {term:"Logic bomb",d:2,g:"malware",def:"Malicious code that lies dormant until a specific condition or trigger, such as a date, is met, at which point it executes its payload."},
 {term:"Rootkit",d:2,g:"malware",def:"Malware designed to gain and maintain privileged access to a system while actively hiding its own presence from detection tools."},
 {term:"RFID cloning",d:2,g:"threats",def:"Copying the data from a legitimate radio-frequency identification badge onto a blank one, creating a working duplicate for unauthorized physical access."},
+{term:"Hardware cloning",d:2,g:"threats",def:"Duplicating a physical device or credential so the copy behaves identically to the original, most commonly tested on the exam through the specific case of RFID cloning. Not an official SY0-701 term on its own; RFID cloning is the actual named example."},
+{term:"Hardware tampering",d:2,g:"threats",def:"Physically opening, modifying, or implanting something into a device without authorization, such as inserting a hidden skimmer into a card reader. Not an official SY0-701 bullet by this exact name, but the physical-attack concept underlies several tested topics like RFID cloning and environmental attacks."},
 {term:"Account lockout",d:2,g:"indicators",def:"An indicator of compromise where an account becomes locked, often after repeated failed login attempts, suggesting a brute-force or password-spraying attempt."},
 {term:"Blocked content",d:2,g:"indicators",def:"An indicator of compromise where a spike in traffic denied by a filtering or content-inspection device suggests something is actively probing or attempting to reach a restricted destination."},
 {term:"Out-of-cycle logging",d:2,g:"indicators",def:"An indicator of compromise where log activity occurs outside its normal, expected schedule, suggesting manipulation or unauthorized access."},
@@ -5002,11 +5064,19 @@ const GLOSS = [
 {term:"Removable device",d:2,g:"threats",def:"A threat vector referring to portable storage media, such as USB drives, that can carry malware onto a network or be used to exfiltrate data."},
 {term:"Default credentials",d:2,g:"threats",def:"Factory-set usernames and passwords that ship with a device or application, which become a serious threat vector if never changed."},
 {term:"MSP (Managed service provider)",d:2,g:"threats",def:"A third-party company that manages IT infrastructure or services on a client's behalf, representing a supply-chain threat vector if the provider itself is compromised."},
-{term:"UTM (Unified Threat Management)",d:3,g:"network",def:"An all-in-one security appliance combining functions like firewall, IDS/IPS, content filtering, and antivirus into a single device."},
+{term:"UTM (Unified Threat Management)",d:3,g:"network",def:"An all-in-one security appliance combining functions like firewall, IDS/IPS, content filtering, and antivirus into a single device. Running every function through one box can introduce latency, since all that inspection happens on a single piece of hardware rather than being distributed across specialized devices."},
 {term:"VPN concentrator",d:3,g:"network",def:"A device dedicated to establishing, managing, and terminating a large number of simultaneous VPN connections, often integrated into a firewall."},
 {term:"Remote access",d:3,g:"network",def:"An off-site user securely connecting into an organization's network from outside its physical boundary, commonly implemented through a VPN tunnel."},
 {term:"Connectivity",d:3,g:"architecture",def:"An infrastructure consideration covering how devices and systems reach each other, including bandwidth, redundancy, and the paths traffic must travel."},
+{term:"OSI model",d:3,g:"network",def:"A seven-layer conceptual framework describing how network communication happens, from the physical cable up to the application a user interacts with. Not explicitly named as its own SY0-701 bullet, but the foundation underneath why Layer 4 versus Layer 7 firewalls behave so differently."},
+{term:"Layer 1 (Physical)",d:3,g:"network",def:"The OSI layer covering the actual physical medium, cables, radio signals, and connectors, that carries raw bits from one device to another."},
+{term:"Layer 2 (Data Link)",d:3,g:"network",def:"The OSI layer responsible for node-to-node delivery on the same local network, using MAC addresses, where switches primarily operate."},
+{term:"Layer 3 (Network)",d:3,g:"network",def:"The OSI layer responsible for routing traffic between different networks using IP addresses, where routers primarily operate."},
+{term:"Layer 4 (Transport)",d:3,g:"network",def:"The OSI layer responsible for end-to-end delivery using ports and protocols like TCP and UDP, the layer a Layer 4 firewall filters on using address and port alone, without looking at content."},
 {term:"Layer 4 firewall",d:3,g:"network",def:"A firewall that filters traffic based on transport-layer information, source and destination IP address and port, without inspecting the actual application content inside the traffic."},
+{term:"Layer 5 (Session)",d:3,g:"network",def:"The OSI layer that establishes, manages, and tears down the communication session between two devices, keeping a conversation coordinated across multiple exchanges."},
+{term:"Layer 6 (Presentation)",d:3,g:"network",def:"The OSI layer responsible for translating, encrypting, and formatting data so the application layer above it can use it, such as converting character encoding or applying TLS."},
+{term:"Layer 7 (Application)",d:3,g:"network",def:"The OSI layer closest to the user, where protocols like HTTP and DNS operate, and the layer a Layer 7 firewall inspects to make decisions based on actual application content."},
 {term:"Layer 7 firewall",d:3,g:"network",def:"A firewall that inspects the actual application-layer content of traffic, such as HTTP methods and URLs, enabling far more granular decisions than IP- and port-based filtering alone."},
 {term:"Responsibility matrix",d:3,g:"cloud",def:"A document defining which security responsibilities belong to the cloud provider and which belong to the customer, varying by service model."},
 {term:"Fail over",d:3,g:"resilience",def:"The automatic or manual process of switching to a backup system or component when the primary one fails, maintaining availability."},
@@ -5022,6 +5092,7 @@ const GLOSS = [
 {term:"Proprietary/third-party threat feed",d:4,g:"vuln-mgmt",def:"A paid, vendor-curated source of threat intelligence, vetted and enriched by a commercial provider, distinct from freely available open-source intelligence."},
 {term:"Alert tuning",d:4,g:"ops",def:"Adjusting detection thresholds and rules so a monitoring system generates meaningful alerts without overwhelming analysts with noise."},
 {term:"Log aggregation",d:4,g:"ops",def:"Collecting log data from many different sources, such as firewalls, servers, and applications, into one central location so analysts can search and correlate events without checking each system separately."},
+{term:"Syslog servers",d:4,g:"ops",def:"A centralized server that receives and stores log messages sent from many different devices and systems using the standard syslog protocol, forming the backbone most log aggregation and SIEM pipelines are built on."},
 {term:"Antivirus",d:4,g:"ops",def:"Signature-based software running on an endpoint that scans files against known malware definitions and automatically blocks or quarantines matches."},
 {term:"SCAP (Security Content Automation Protocol)",d:4,g:"ops",def:"A standardized framework for automating vulnerability management, measurement, and policy compliance checking across systems."},
 {term:"Benchmark",d:4,g:"ops",def:"A published, vendor- or industry-recognized secure configuration standard used as the target when hardening a system."},
@@ -5049,7 +5120,7 @@ const GLOSS = [
 {term:"Conflict of interest",d:5,g:"vendor",def:"A situation where a personal or competing interest could improperly influence a vendor selection or business decision."},
 {term:"Rules of engagement",d:5,g:"vendor",def:"A document defining the boundaries, scope, and permitted techniques for a penetration test before it begins."},
 {term:"Known environment (White-box testing)",d:5,g:"vendor",def:"A penetration test conducted with full knowledge of the target's internal systems and architecture provided in advance."},
-{term:"Partially known environment (Gray-box testing)",d:5,g:"vendor",def:"A penetration test conducted with some but not complete knowledge of the target's internal systems."},
+{term:"Partially known environment (Gray-box testing)",d:5,g:"vendor",def:"A penetration test conducted with some but not complete knowledge of the target's internal systems. Also spelled grey-box testing."},
 {term:"Unknown environment (Black-box testing)",d:5,g:"vendor",def:"A penetration test conducted with no advance knowledge of the target's internal systems, simulating a genuine outside attacker."},
 {term:"Passive reconnaissance",d:5,g:"vendor",def:"Gathering information about a target without directly interacting with their systems, such as reviewing public records or social media."},
 {term:"Active reconnaissance",d:5,g:"vendor",def:"Gathering information about a target by directly interacting with their systems, such as port scanning, which carries a higher chance of detection."},
@@ -5084,7 +5155,7 @@ const GLOSS = [
 {term:"Identity proofing",d:4,g:"iam",def:"The process of verifying that a person is who they claim to be before issuing them credentials, typically during onboarding."},
 {term:"Risk threshold",d:5,g:"risk",def:"The defined point at which a risk's severity requires action, marking the boundary between an acceptable and unacceptable level of exposure."},
 {term:"Exposure factor",d:5,g:"risk",def:"The percentage of an asset's value expected to be lost if a specific risk event occurs, used to calculate single loss expectancy."},
-{term:"Key risk indicators",d:5,g:"risk",def:"Measurable metrics tracked over time that provide early warning that a particular risk is increasing before it becomes a full incident."},
+{term:"Key risk indicators",d:5,g:"risk",def:"Measurable metrics tracked over time that provide early warning that a particular risk is increasing before it becomes a full incident. Sometimes just called risk indicators."},
 {term:"Platform diversity",d:3,g:"resilience",def:"Deliberately using different hardware or software platforms across redundant systems, so a single vulnerability or flaw cannot take down every instance at once."},
 {term:"Parallel processing",d:3,g:"resilience",def:"A recovery testing method that runs the backup and production systems simultaneously, comparing their output to validate the backup actually works correctly."},
 {term:"Geographic dispersion",d:3,g:"resilience",def:"Distributing backup sites and infrastructure across physically separate locations, so a single regional disaster cannot take down every site at once."},
@@ -5115,15 +5186,17 @@ const GLOSS = [
 {term:"Fileless virus",d:2,g:"malware",def:"Malware that operates entirely in memory without ever being written to disk as a file, making it much harder for traditional antivirus to detect."},
 {term:"Forgery",d:2,g:"vulns",def:"An attack that tricks a victim's authenticated session into submitting a request the victim never intended, such as cross-site request forgery."},
 {term:"Firmware vulnerability",d:2,g:"vulns",def:"A weakness in the low-level software controlling a hardware device, often overlooked since firmware updates happen far less frequently than OS or application patches."},
-{term:"End-of-life system",d:2,g:"vulns",def:"A system the vendor no longer sells or actively develops, though it may still receive limited support."},
+{term:"End-of-life vulnerability (system)",d:2,g:"vulns",def:"A system whose vendor has permanently stopped issuing any support or security patches at all, meaning any newly discovered flaw will simply never be fixed. Also called an end-of-life system. The harder stop compared to legacy, where some limited support may still exist."},
+{term:"Legacy vulnerability (system)",d:2,g:"vulns",def:"An outdated system still in use, often because replacing it is costly or disruptive, that may still receive occasional vendor patches but lacks modern security features and protocols, making it inherently weaker even while technically supported. Also called a legacy system. Distinct from end-of-life, where support has stopped entirely."},
 {term:"Decommissioning",d:4,g:"ops",def:"Formally retiring a system: disabling its accounts, removing its DNS entries and firewall rules, and physically or logically removing it from the network. A half-retired system that's powered off but left racked, domain-joined, and reachable keeps its credentials and access paths while losing its owner, patching, and monitoring, exactly the gap this process is meant to close."},
-{term:"Legacy system",d:2,g:"vulns",def:"An outdated system still in use, often because replacing it is costly or disruptive, that no longer receives security patches and cannot defend against current threats."},
 {term:"Message-based threat vector",d:2,g:"threats",def:"An attack delivered through email, SMS, or instant messaging, the most common category of social engineering delivery."},
 {term:"Image-based threat vector",d:2,g:"threats",def:"An attack hidden inside an image file, exploiting how browsers or applications parse image formats to execute malicious code."},
 {term:"File-based threat vector",d:2,g:"threats",def:"An attack delivered through a document or compressed file, such as a PDF or Office file containing a malicious macro."},
 {term:"Voice call threat vector",d:2,g:"threats",def:"An attack delivered over a phone call, encompassing vishing as well as automated spam and call-tampering techniques."},
 {term:"Data exfiltration",d:2,g:"threats",def:"The unauthorized transfer of data out of an organization's control, whether by an external attacker or a malicious insider."},
 {term:"SAE (Simultaneous Authentication of Equals)",d:4,g:"network-sec",def:"The key exchange method introduced in WPA3-Personal that replaces the crackable four-way handshake, giving every session a unique key even when everyone shares the same passphrase."},
+{term:"PAKE (Password Authenticated Key Exchange)",d:4,g:"network-sec",def:"A category of protocol that lets two parties who only share a password establish a secure session key without ever transmitting that password, even in encrypted form, and without it being derivable if the exchange is captured. SAE, WPA3's handshake, is the specific PAKE implementation tested by name on this exam."},
+{term:"Pairwise master key (PMK)",d:4,g:"network-sec",def:"The key generated as a result of a successful WPA handshake, such as SAE in WPA3, that both the client and access point then use to derive the actual encryption keys protecting the rest of the session."},
 {term:"AAA framework",d:4,g:"iam",def:"The security framework of Authentication, Authorization, and Accounting: proving who you are, determining what you're allowed to do, and logging what you actually did."},
 {term:"CRL (Certificate revocation list)",d:4,g:"crypto",def:"A list published by a certificate authority naming every certificate it has revoked before its natural expiration, checked by clients to confirm a certificate is still valid."},
 {term:"KMS (Key management system)",d:1,g:"crypto",def:"A centralized system for generating, storing, rotating, and retiring cryptographic keys throughout their lifecycle, so keys aren't managed manually or scattered across individual applications."},
@@ -5167,7 +5240,7 @@ const GLOSS = [
 {term:"Information security",d:1,g:"fundamentals",def:"The broader discipline of protecting information itself, in any form, spoken, printed, or digital, from unauthorized access, disclosure, alteration, or destruction. Information system security is the narrower application of that same goal specifically to the computer systems that store, process, and transmit it."},
 {term:"Information system security",d:1,g:"fundamentals",def:"Protecting the specific hardware, software, and networks that store, process, and transmit information, the technical subset of the broader discipline of information security."},
 {term:"Enterprise systems",d:1,g:"fundamentals",def:"The organization-wide collection of hardware, software, networks, and data an organization depends on to operate, the full scope a security program is built to protect, not just one department's tools."},
-{term:"Security controls",d:1,g:"controls",def:"A safeguard or countermeasure put in place to reduce risk to an asset's confidentiality, integrity, or availability, whether that's a technology, a policy, or a physical barrier. Every specific control type, preventive, detective, technical, managerial, and so on, is a category underneath this umbrella term."},
+{term:"Security controls",d:1,g:"controls",def:"A safeguard or countermeasure put in place to reduce risk to an asset's confidentiality, integrity, or availability, whether that's a technology, a policy, or a physical barrier. Every control is classified two ways: by category, technical, managerial, operational, or physical, describing what kind of control it is, and by type, preventive, detective, deterrent, corrective, compensating, or directive, describing what it functionally does."},
 {term:"Confidentiality",d:1,g:"cia",def:"The security objective of keeping data readable only by those authorized to see it, typically enforced through encryption, access controls, and permissions. It is one of the three pillars of the CIA triad, alongside integrity and availability."},
 {term:"Integrity",d:1,g:"cia",def:"The security objective of keeping data accurate and unaltered, so any unauthorized change is either prevented or detected. Hashing and file integrity monitoring are common integrity controls. It is one of the three pillars of the CIA triad, alongside confidentiality and availability."},
 {term:"Availability",d:1,g:"cia",def:"The security objective of keeping systems and data accessible to authorized users when they need them, protected through redundancy, backups, and resilience planning. It is one of the three pillars of the CIA triad, alongside confidentiality and integrity."},
@@ -5211,7 +5284,7 @@ const GLOSS = [
 {term:"FACL",d:4,g:"acronym-access",def:"File System Access Control List. Permissions attached to a specific file or directory."},
 {term:"FDE (Full Disk Encryption)",d:1,g:"acronym-crypto",def:"Encrypts the entire drive including operating system files. The broadest of the six encryption levels tested, protecting everything on the device with one key."},
 {term:"Partition encryption",d:1,g:"crypto",def:"Encrypts only one logical section of a drive rather than the entire disk, letting an operating system partition stay unencrypted for performance while a data partition is protected."},
-{term:"File encryption",d:1,g:"crypto",def:"Encrypts an individual file, the narrowest of the six encryption levels tested, useful for protecting a single sensitive document without encrypting everything around it."},
+{term:"File encryption",d:1,g:"crypto",def:"Encrypts an individual file, the narrowest of the six encryption levels tested, useful for protecting a single sensitive document without encrypting everything around it. Also called file-level encryption."},
 {term:"Volume encryption",d:1,g:"crypto",def:"Encrypts a defined storage volume, which may span multiple partitions or physical disks, sitting between partition-level and full-disk in scope."},
 {term:"Database encryption",d:1,g:"crypto",def:"Encrypts data held within a database, which can be applied at the whole-database level or narrowed to specific sensitive columns, balancing protection against query performance."},
 {term:"Record-level encryption",d:1,g:"crypto",def:"Encrypts individual records within a database rather than the database as a whole, the most granular of the six encryption levels tested, so different records can carry different keys or access rules."},
@@ -5222,6 +5295,9 @@ const GLOSS = [
 {term:"FTPS (Secured File Transfer Protocol)",d:4,g:"acronym-proto",def:"FTP wrapped in TLS, typically using TCP port 990"},
 {term:"GCM (Galois Counter Mode)",d:1,g:"acronym-crypto",def:"Cipher mode giving both encryption and built-in authentication"},
 {term:"GDPR (General Data Protection Regulation)",d:5,g:"acronym-gov",def:"European privacy regulation defining controller, processor, and subject rights"},
+{term:"CCPA (California Consumer Privacy Act)",d:5,g:"acronym-gov",def:"State privacy law giving California residents rights over their personal data, including the right to know, delete, and opt out of its sale"},
+{term:"FISMA (Federal Information Security Management Act)",d:5,g:"acronym-gov",def:"US federal law requiring government agencies and their contractors to implement a risk-based information security program"},
+{term:"GLBA (Gramm-Leach-Bliley Act)",d:5,g:"acronym-gov",def:"US federal law requiring financial institutions to explain their data-sharing practices and safeguard customers' sensitive financial information"},
 {term:"GPG",d:1,g:"acronym-crypto",def:"Gnu Privacy Guard. Open-source implementation of the OpenPGP standard for signing and encrypting."},
 {term:"GPO (Group Policy Object)",d:4,g:"acronym-ops",def:"Windows mechanism for pushing configuration and hardening settings centrally"},
 {term:"GPS",d:3,g:"acronym-hw",def:"Global Positioning System. Satellite positioning used for geolocation and geofencing controls."},
@@ -5273,7 +5349,13 @@ const GLOSS = [
 {term:"Sideloading",d:4,g:"mobile",def:"Installing an application on a mobile device directly from a file, bypassing the official app store and the vetting process it applies, creating a mobile vulnerability that MDM policy typically aims to block."},
 {term:"Jailbreaking",d:4,g:"mobile",def:"Removing a mobile device's manufacturer-imposed restrictions to gain root-level control, which also strips away the platform's built-in security sandboxing and makes side-loaded and unvetted software far easier to install."},
 {term:"MFA (Multifactor Authentication)",d:4,g:"acronym-auth",def:"Requires proof from two or more different factor categories"},
-{term:"Somewhere you are",d:4,g:"iam",def:"The authentication factor category based on a requester's physical or network location, such as GPS position, IP address, or country, used as a signal to flag or block unusual login attempts."},
+{term:"Authentication",d:4,g:"iam",def:"The process of proving a claimed identity is genuine before granting access, distinct from authorization, which determines what an already-authenticated identity is allowed to do."},
+{term:"Authentication methods",d:4,g:"iam",def:"The specific mechanisms used to prove identity, such as passwords, biometrics, tokens, or certificates, each mapping to one of the authentication factor categories."},
+{term:"Something you know (knowledge factor)",d:4,g:"iam",def:"An authentication factor based on information the person has memorized, such as a password or PIN, the weakest factor on its own since it can be guessed, phished, or shared."},
+{term:"Something you have (possession factor)",d:4,g:"iam",def:"An authentication factor based on a physical or digital item the person possesses, such as a hardware token, smart card, or authenticator app on their phone."},
+{term:"Something you are (inherence factor)",d:4,g:"iam",def:"An authentication factor based on an inherent physical trait, such as a fingerprint, facial geometry, or iris pattern, commonly implemented through biometrics."},
+{term:"Something you do (action factor)",d:4,g:"iam",def:"An authentication factor based on a distinctive pattern of behavior, such as typing rhythm, gesture, or gait, verifying identity through how an action is performed rather than what is presented."},
+{term:"Somewhere you are (location factor)",d:4,g:"iam",def:"The authentication factor category based on a requester's physical or network location, such as GPS position, IP address, or country, used as a signal to flag or block unusual login attempts."},
 {term:"Biometrics",d:4,g:"iam",def:"An MFA implementation authenticating with a unique physical trait, such as a fingerprint, facial geometry, or iris pattern."},
 {term:"MFD",d:3,g:"acronym-hw",def:"Multifunction Device. Networked printer and scanner combination that stores images and needs sanitizing."},
 {term:"ML",d:1,g:"acronym-misc",def:"Machine Learning. A branch of AI that learns patterns from data; used in behavior analytics and anomaly detection."},
@@ -5334,7 +5416,7 @@ const GLOSS = [
 {term:"RDP (Remote Desktop Protocol)",d:4,g:"acronym-proto",def:"Microsoft remote session protocol on TCP 3389, heavily targeted when exposed"},
 {term:"RFID (Radio Frequency Identifier)",d:3,g:"acronym-hw",def:"Contactless credential technology vulnerable to cloning"},
 {term:"ROI",d:5,g:"acronym-risk",def:"Return on Investment. Financial measure comparing gain against cost; used to justify security spending to leadership."},
-{term:"RSA (Rivest, Shamir, & Adleman)",d:1,g:"acronym-crypto",def:"Widely used asymmetric algorithm for encryption and signatures"},
+{term:"RSA (Rivest, Shamir, & Adleman)",d:1,g:"acronym-crypto",def:"Widely used asymmetric algorithm for encryption and signatures, built on a trapdoor function based on the difficulty of factoring the product of two large prime numbers, easy to compute one way, effectively impossible to reverse without the private key"},
 {term:"RTBH",d:3,g:"acronym-net",def:"Remotely Triggered Black Hole. Drops attack traffic by routing the targeted address into a null route."},
 {term:"RTP",d:4,g:"acronym-proto",def:"Real-time Transport Protocol. Carries voice and video streams, with SRTP being its secured version."},
 {term:"S/MIME (Secure/Multipurpose Internet Mail Extensions)",d:4,g:"acronym-mail",def:"Signs and encrypts email using certificates"},
@@ -5349,6 +5431,29 @@ const GLOSS = [
 {term:"SE Linux (Security-enhanced Linux)",d:4,g:"acronym-ops",def:"Kernel module enforcing mandatory access control on Linux"},
 {term:"SFTP (Secured File Transfer Protocol)",d:4,g:"acronym-proto",def:"File transfer tunneled over SSH, using TCP port 22"},
 {term:"Port",d:4,g:"network",def:"A numbered endpoint on a device that identifies which service or application a piece of network traffic is meant for, allowing one IP address to run many services at once. Firewalls commonly filter traffic by matching the destination port number, and a good grasp of the well-known ports (80 for HTTP, 443 for HTTPS, 22 for SSH, and so on) is essential for reading firewall rules and packet captures on the exam."},
+{term:"Port 20/21 (FTP)",d:4,g:"network",def:"File Transfer Protocol. Port 20 carries the actual data, port 21 handles control commands. Transmits in cleartext, so credentials and file contents can be intercepted."},
+{term:"Port 22 (SSH/SFTP/SCP)",d:4,g:"network",def:"Secure Shell. Provides encrypted remote command-line access, and also carries SFTP (secure file transfer) and SCP (secure copy) over the same encrypted channel."},
+{term:"Port 23 (Telnet)",d:4,g:"network",def:"Remote command-line access with no encryption at all, sending credentials and commands in cleartext. Considered insecure and generally replaced by SSH."},
+{term:"Port 25 (SMTP)",d:4,g:"network",def:"Simple Mail Transfer Protocol. Used for sending email between mail servers, unencrypted by default."},
+{term:"Port 53 (DNS)",d:4,g:"network",def:"Domain Name System. Resolves domain names to IP addresses, using UDP for standard lookups and TCP for larger responses like zone transfers."},
+{term:"Port 67/68 (DHCP)",d:4,g:"network",def:"Dynamic Host Configuration Protocol. Port 67 is the server listening for requests, port 68 is the client receiving the offered IP configuration."},
+{term:"Port 69 (TFTP)",d:4,g:"network",def:"Trivial File Transfer Protocol. A simplified, unauthenticated file transfer protocol commonly used to push firmware or configuration files to network devices."},
+{term:"Port 80 (HTTP)",d:4,g:"network",def:"Hypertext Transfer Protocol. Standard unencrypted web traffic, sent in cleartext and readable by anyone able to intercept it."},
+{term:"Port 110 (POP3)",d:4,g:"network",def:"Post Office Protocol v3. Downloads email from a server to a single client, typically removing it from the server afterward, unencrypted by default."},
+{term:"Port 123 (NTP)",d:4,g:"network",def:"Network Time Protocol. Synchronizes clocks across devices, which matters for security since accurate timestamps are essential for correlating logs during an investigation."},
+{term:"Port 143 (IMAP)",d:4,g:"network",def:"Internet Message Access Protocol. Manages email on the server itself rather than downloading and removing it, allowing multiple devices to see the same synced mailbox, unencrypted by default."},
+{term:"Port 161/162 (SNMP)",d:4,g:"network",def:"Simple Network Management Protocol. Port 161 is used to query and manage network devices, port 162 receives unsolicited traps, alerts a device sends on its own."},
+{term:"Port 389 (LDAP)",d:4,g:"network",def:"Lightweight Directory Access Protocol. Queries and authenticates against a directory service, unencrypted by default."},
+{term:"Port 443 (HTTPS)",d:4,g:"network",def:"HTTP encrypted with TLS. The standard for secure web traffic, protecting the confidentiality and integrity of data in transit between browser and server."},
+{term:"Port 445 (SMB)",d:4,g:"network",def:"Server Message Block. Used for Windows file and printer sharing, and a common target for lateral movement once an attacker gains a foothold on a network."},
+{term:"Port 465 (SMTPS)",d:4,g:"network",def:"SMTP encrypted with TLS/SSL, securing outgoing mail submission between a client and server."},
+{term:"Port 514 (Syslog)",d:4,g:"network",def:"The standard protocol port for sending log messages to a centralized syslog server, the backbone most log aggregation and SIEM pipelines are built on."},
+{term:"Port 587 (SMTP submission)",d:4,g:"network",def:"The modern, authenticated port for a mail client to submit outgoing messages to its mail server, typically secured with STARTTLS."},
+{term:"Port 636 (LDAPS)",d:4,g:"network",def:"LDAP encrypted with TLS/SSL, protecting directory queries and authentication traffic that port 389 sends in cleartext."},
+{term:"Port 993 (IMAPS)",d:4,g:"network",def:"IMAP encrypted with TLS/SSL, securing server-side email access and synchronization."},
+{term:"Port 995 (POP3S)",d:4,g:"network",def:"POP3 encrypted with TLS/SSL, securing the download of email from server to client."},
+{term:"Port 1433 (Microsoft SQL Server / MSSQL)",d:4,g:"network",def:"The default port for Microsoft SQL Server database connections, frequently targeted for lateral movement and database attacks when left exposed to the internet."},
+{term:"Port 3389 (RDP)",d:4,g:"network",def:"Remote Desktop Protocol. Provides full graphical remote access to a Windows system, a high-value target for brute-force and ransomware attacks when exposed without additional protection like a VPN or MFA."},
 {term:"Protocol",d:4,g:"network",def:"An agreed-upon set of rules governing how devices communicate, defining the format, timing, and handling of data exchanged between them. Most protocols run over TCP or UDP and are associated with a specific well-known port, such as HTTP over TCP port 80, which is why protocol and port are usually tested together on firewall rule questions."},
 {term:"Telnet",d:4,g:"proto",def:"An unencrypted protocol for remote command-line access, using TCP port 23. Sends all data, including passwords, in plaintext, which is why SSH replaced it."},
 {term:"POP3 (Post Office Protocol)",d:4,g:"acronym-proto",def:"Downloads email from a server to a single device and typically removes it from the server, using TCP port 110, or TCP 995 for the encrypted POP3S."},
@@ -5378,9 +5483,7 @@ const GLOSS = [
 {term:"TGT (Ticket Granting Ticket)",d:4,g:"acronym-auth",def:"Kerberos credential used to request service tickets"},
 {term:"TKIP",d:4,g:"acronym-wifi",def:"Temporal Key Integrity Protocol. Deprecated wireless encryption introduced as a stopgap for WEP."},
 {term:"TLS (Transport Layer Security)",d:1,g:"acronym-crypto",def:"Encrypts data in transit, the successor to SSL"},
-{term:"TOC (Time-of-check)",d:2,g:"acronym-threat",def:"The validation moment in a race condition vulnerability"},
 {term:"TOTP (Time-based One-time Password)",d:4,g:"acronym-auth",def:"One-time code derived from a shared secret and the current time"},
-{term:"TOU (Time-of-use)",d:2,g:"acronym-threat",def:"The action moment in a race condition vulnerability"},
 {term:"TTP (Tactics, Techniques, and Procedures)",d:2,g:"acronym-threat",def:"The behavioral patterns describing how an adversary operates"},
 {term:"TSIG",d:4,g:"acronym-proto",def:"Transaction Signature. Authenticates DNS zone transfers between servers using a shared key."},
 {term:"UAT",d:5,g:"acronym-gov",def:"User Acceptance Testing. Testing stage where end users confirm the system meets requirements before release."},
@@ -5427,6 +5530,10 @@ const GLOSS = [
 {term:"Orchestration",d:4,g:"ops",def:"Automating and coordinating multiple systems or steps to work together toward a larger process, going beyond a single script to tie an entire workflow together."},
 {term:"Elicitation",d:2,g:"social-eng",def:"A social engineering technique for extracting information from a victim through natural-seeming conversation, without the victim realizing they are being questioned."},
 {term:"Workforce multiplier",d:4,g:"ops",def:"A benefit of automation where scripted tasks run continuously without human involvement, effectively letting a small team accomplish the output of a much larger one."},
+{term:"Scripting",d:4,g:"ops",def:"Writing small programs to automate repetitive tasks, the practical mechanism behind most of objective 4.7's automation use cases, from user provisioning to ticket creation."},
+{term:"Automation",d:4,g:"ops",def:"Using scripts, tools, or platforms to carry out tasks without manual human action each time, the umbrella subject of objective 4.7, covering everything from provisioning to security group assignment to incident response playbooks."},
+{term:"Ongoing supportability",d:4,g:"ops",def:"An automation consideration weighing whether the team can realistically keep maintaining an automated system long after the person who built it moves on, since undocumented or overly clever automation becomes a liability rather than a benefit."},
+{term:"Cost",d:4,g:"ops",def:"An automation consideration weighing the licensing, engineering time, and infrastructure an automated solution requires against the manual labor it replaces, sometimes concluding automation isn't worth it for an infrequent task."},
 {term:"Efficiency/time saving",d:4,g:"ops",def:"An automation benefit directly reducing how long a task takes, distinct from a workforce multiplier's broader effect of one team accomplishing more overall."},
 {term:"Standard infrastructure configurations",d:4,g:"ops",def:"An automation benefit where templates ensure every deployment is built identically regardless of who deploys it, avoiding the drift that comes from manual, inconsistent setup."},
 {term:"Scaling in a secure manner",d:4,g:"ops",def:"An automation benefit where capacity grows automatically to meet demand while every new resource is provisioned just as securely as existing ones."},
@@ -5465,18 +5572,22 @@ const GLOSS = [
 {term:"Inability to patch",d:3,g:"architecture",def:"A condition where a system fundamentally cannot receive security updates at all, often because the vendor no longer exists or the hardware cannot support newer software."},
 {term:"Power (architecture consideration)",d:3,g:"architecture",def:"The electrical load and redundancy requirements, such as backup supply and battery capacity, that infrastructure must be designed and provisioned for."},
 {term:"Compute",d:3,g:"architecture",def:"The processing capacity, CPU, GPU, and memory, a system provides, a key factor when selecting hardware for processing-intensive workloads."},
+{term:"Resource optimization",d:3,g:"architecture",def:"Adjusting how compute, storage, and power are allocated so a system runs efficiently, avoiding both wasted capacity and undersized resources that would hurt performance."},
 {term:"Encryption",d:1,g:"crypto",def:"The reversible process of transforming readable data, plaintext, into an unreadable form, ciphertext, so that only someone with the correct key can convert it back."},
 {term:"Decryption",d:1,g:"crypto",def:"The reverse of encryption: converting ciphertext back into its original, readable plaintext using the correct key."},
 {term:"Plaintext",d:1,g:"crypto",def:"The original, readable form of a message or data before it has been encrypted."},
 {term:"Ciphertext",d:1,g:"crypto",def:"The scrambled, unreadable output produced when plaintext is encrypted."},
 {term:"Cipher",d:1,g:"crypto",def:"The algorithm used to perform encryption and decryption."},
 {term:"Block cipher",d:1,g:"crypto",def:"An encryption method that processes data in fixed-size chunks, or blocks, at a time rather than continuously."},
-{term:"Symmetric cryptography",d:1,g:"crypto",def:"Encryption where the same key is used for both encrypting and decrypting data, requiring that key to be shared securely between parties in advance."},
-{term:"Asymmetric cryptography",d:1,g:"crypto",def:"Encryption using a mathematically linked key pair, a public key and a private key, where each performs a different half of the encryption or decryption process; also called public key cryptography."},
+{term:"Symmetric encryption (cryptography)",d:1,g:"crypto",def:"Encryption where the same key is used for both encrypting and decrypting data, requiring that key to be shared securely between parties in advance. Also called symmetric cryptography."},
+{term:"Asymmetric encryption (cryptography)",d:1,g:"crypto",def:"Encryption using a mathematically linked key pair, a public key and a private key, where each performs a different half of the encryption or decryption process. Also called asymmetric cryptography or public key cryptography."},
+{term:"Trapdoor function",d:1,g:"crypto",def:"A mathematical function that's easy to compute in one direction but extremely difficult to reverse without a specific piece of secret information, the private key. This asymmetry is what makes public key cryptography work: anyone can encrypt with the public key, but only the private key holder can efficiently reverse it. RSA is the classic example, built on how easy it is to multiply two large primes together versus how hard it is to factor that product back apart. Not an official SY0-701 term by name, but the underlying principle asymmetric encryption is built on."},
+{term:"Key exchange",d:1,g:"crypto",def:"The process of two parties agreeing on a shared secret key over a network, even one an attacker might be watching, without ever transmitting the key itself in the clear. Diffie-Hellman is the classic example, commonly used to bootstrap a symmetric session key for the rest of a conversation."},
 {term:"Cryptanalysis",d:1,g:"crypto",def:"The study of analyzing and breaking cryptographic systems, working to recover plaintext or the key without authorized access to either."},
 {term:"Cryptographic hash",d:1,g:"crypto",def:"A one-way function that converts input data into a fixed-size digest, used to verify integrity since even a tiny change to the input produces a completely different hash."},
 {term:"Checksum",d:1,g:"crypto",def:"A calculated value derived from a block of data, sent or stored alongside it, used to detect accidental changes or corruption."},
 {term:"Hashing",d:1,g:"crypto",def:"Running data through a one-way mathematical function to produce a fixed-size output unique to that input, used to verify integrity without needing to compare the entire original data. Unlike encryption, hashing cannot be reversed back to the original input."},
+{term:"Hash function",d:1,g:"crypto",def:"The specific one-way mathematical algorithm, such as SHA-256, that takes an input of any size and produces a hash digest, the fixed-size output. Hashing is the process; the hash function is the actual algorithm doing it."},
 {term:"Hash digest",d:1,g:"crypto",def:"The fixed-size output a hash function produces for a given input, sometimes called a hash value. Comparing digests before and after is how hashing detects whether the underlying data changed."},
 {term:"Cyclic redundancy check",d:1,g:"crypto",def:"A specific type of checksum algorithm used to detect accidental changes to raw data, commonly used in networking and storage rather than as a cryptographic integrity control."},
 {term:"Digital envelope",d:1,g:"crypto",def:"A message encrypted with a fast symmetric key, where that symmetric key is itself encrypted with the recipient's public key, combining the speed of symmetric encryption with the key-exchange convenience of asymmetric encryption."},
@@ -5516,7 +5627,11 @@ const GLOSS = [
 {term:"Incident response",d:4,g:"incident",def:"The structured process of identifying, containing, and recovering from a security incident, aimed at minimizing damage and preventing recurrence."},
 {term:"Data breach",d:4,g:"incident",def:"A security incident in which sensitive, protected, or confidential data is accessed, stolen, or disclosed without authorization."},
 {term:"Domain Name System",d:4,g:"network",def:"The distributed system that translates human-readable domain names into the numeric IP addresses computers use to locate each other on a network."},
-{term:"Risk assessment",d:5,g:"risk",def:"The structured process of identifying risks and evaluating the likelihood and impact of each, forming the basis for prioritizing security investment."},
+{term:"Risk assessment",d:5,g:"risk",def:"The structured process of identifying risks and evaluating the likelihood and impact of each, forming the basis for prioritizing security investment. Itself a managerial control: a leadership-driven risk decision rather than a hands-on technical or physical safeguard."},
+{term:"Risk management",d:5,g:"risk",def:"The overall discipline of identifying, assessing, analyzing, tracking, and responding to risk, the umbrella process every specific risk activity, register, appetite, strategy, and reporting, operates underneath."},
+{term:"Risk matrix",d:5,g:"risk",def:"A grid plotting likelihood against impact so risks can be visually ranked and prioritized at a glance, a common way risk assessment findings get presented to leadership. Not an official SY0-701 term by this exact name, but a standard supporting tool for the risk assessment process."},
+{term:"Risk metrics",d:5,g:"risk",def:"The general umbrella for the numeric measures used throughout risk management, such as key risk indicators, SLE, ALE, and ARO, rather than any one specific calculation."},
+{term:"Risk parameters",d:5,g:"risk",def:"The specific inputs and thresholds that define how a risk is measured or bounded, such as an acceptable downtime window or a dollar-loss ceiling, feeding into calculations like exposure factor and risk tolerance."},
 {term:"Separation of duties",d:5,g:"governance",def:"A control principle that splits a sensitive task across multiple people so no single individual can complete it alone, reducing the risk of fraud or unilateral abuse of access."},
 {term:"Business continuity plan",d:5,g:"resilience",def:"A plan defining how an organization will maintain essential functions during and immediately after a disruptive event."},
 {term:"Site survey",d:4,g:"wireless",def:"A physical assessment of a location's existing wireless signal environment before deploying access points, identifying coverage gaps, interference sources, and existing networks."},
@@ -5525,7 +5640,11 @@ const GLOSS = [
 {term:"Data steward",d:5,g:"governance",def:"A role, sometimes used interchangeably with data custodian, responsible for the day-to-day quality, accuracy, and proper handling of a specific data set on behalf of the data owner."},
 {term:"Centralized governance",d:5,g:"governance",def:"A governance structure where security policy decisions are made by a single, central authority for the whole organization, promoting consistency at the cost of local flexibility."},
 {term:"Decentralized governance",d:5,g:"governance",def:"A governance structure where individual business units or regions make their own security policy decisions, allowing local flexibility at the cost of consistency."},
+{term:"Flat organization",d:5,g:"governance",def:"An organizational structure with few or no layers of middle management between staff and leadership, which can speed up decisions but often blurs who's actually accountable for security policy. Not an official SY0-701 term, but a related organizational concept that shapes how centralized or decentralized governance ends up working in practice."},
+{term:"Hierarchical management",d:5,g:"governance",def:"An organizational structure with clear layers of authority, each level reporting up to the one above it, which tends to pair naturally with centralized governance since decisions flow down a defined chain. Not an official SY0-701 term."},
+{term:"Matrix structure",d:5,g:"governance",def:"An organizational structure where staff report to more than one manager at once, such as both a functional lead and a project lead, which can complicate security accountability since responsibility is shared rather than owned by one clear chain. Not an official SY0-701 term."},
 {term:"Risk owner",d:5,g:"risk",def:"The individual formally accountable for managing a specific identified risk, including deciding and implementing its response strategy."},
+{term:"Risk assessor",d:5,g:"risk",def:"The person or team who actually performs a risk assessment, gathering data and evaluating likelihood and impact, distinct from the risk owner, who is accountable for deciding what to do with those findings."},
 {term:"Ad hoc risk assessment",d:5,g:"risk",def:"A risk assessment performed as a one-off, in response to a specific triggering event, rather than on a fixed schedule."},
 {term:"Recurring risk assessment",d:5,g:"risk",def:"A risk assessment conducted repeatedly at fixed, scheduled intervals, such as annually."},
 {term:"Continuous risk assessment",d:5,g:"risk",def:"An ongoing, real-time risk assessment process rather than a periodic snapshot, typically supported by automated monitoring tools."},
@@ -6338,16 +6457,39 @@ function strip(mode,lampPct,lampMode,mid,right,staticBar){
   const hb=$("sHome"); if(hb) hb.style.display=(view==="home")?"none":"";
   const na=document.querySelector(".nav-actions"); if(na) na.style.display=(view==="home")?"none":"";
 }
+let CONFIRM_CB=null;
+function askConfirm(msg,cb){
+  CONFIRM_CB=cb;
+  const el=$("confirmOverlay"), m=$("confirmMsg");
+  if(m) m.textContent=msg;
+  if(el) el.classList.add("on");
+}
+function confirmYes(){
+  const el=$("confirmOverlay"); if(el) el.classList.remove("on");
+  const cb=CONFIRM_CB; CONFIRM_CB=null;
+  if(cb) cb();
+}
+function confirmCancel(){
+  const el=$("confirmOverlay"); if(el) el.classList.remove("on");
+  CONFIRM_CB=null;
+}
 function leaveSession(dest,label){
+  const proceed=()=>{
+    stopTimer(); RENDER_CB=null; sess=null; PB=null; PICK=null;
+    if(!PENDING_JUMP && window.scrollTo) window.scrollTo(0,0);
+    dest();
+  };
   if(view==="exam"&&SX&&!SX.submitted){
-    if(!confirm("Pause this exam and go "+label+"? Progress is saved \u2014 resume any time from Practice Exams.")) return;
-    persistX();
+    askConfirm("Pause this exam and go "+label+"? Progress is saved \u2014 resume any time from Practice Exam.",()=>{ persistX(); proceed(); });
+    return;
   } else if(sess&&sess.mode==="cards"){
-    // flashcards have no timer and nothing at stake, so back/home always work instantly
-  } else if(tickHandle && !confirm("Leave this session? Answers so far are already recorded, but you will not see the end-of-session report.")) return;
-  stopTimer(); RENDER_CB=null; sess=null; PB=null; PICK=null;
-  if(!PENDING_JUMP && window.scrollTo) window.scrollTo(0,0);
-  dest();
+    proceed();
+  } else if(tickHandle){
+    askConfirm("Leave this session? Answers so far are already recorded, but you will not see the end-of-session report.",proceed);
+    return;
+  } else {
+    proceed();
+  }
 }
 function goHome(){ PENDING_JUMP=null; leaveSession(home,"home"); }
 function goBack(){
@@ -6425,7 +6567,7 @@ function home(){
       <button class="fact link" onclick="cardSetup()"><b>${allCards().length}</b> flashcards</button>
       <button class="fact link" onclick="acrSetup()"><b>${allAcr().length}</b> acronyms</button>
       <button class="fact link" onclick="window.scrollTo(0,0);glossRef()"><b>${GLOSS.length}</b> glossary terms</button>
-      <button class="fact link" onclick="examHome()"><b>${EXAM_NAMES.length}</b> full practice exams</button>
+      <button class="fact link" onclick="examHome()"><b>1</b> practice exam, randomized every attempt</button>
       <button class="fact link" onclick="stats()">Weak areas and stats</button>
       <button class="fact link" onclick="jcSetup()"><b>The Drill Down</b></button>
     </div>
@@ -6435,8 +6577,8 @@ function home(){
     <div class="body">
       <h4>Question mix follows the real blueprint</h4>
       <p>Weighted to the official domain percentages: General Security Concepts 12, Threats &amp; Vulnerabilities 22, Security Architecture 18, Security Operations 28, Program Management 20. Weak domains get weighted up automatically.</p>
-      <h4>Practice Exams are the real thing</h4>
-      <p><b>Five fixed exams, 90 items each.</b> 2\u20135 PBQs, weighted to the official domain percentages. Untimed or your own clock. <b>No feedback until you submit</b> \u2014 review maps every miss to its objective.</p>
+      <h4>The practice exam is genuinely different every time</h4>
+      <p><b>One exam, up to 90 items, freshly randomized on every attempt.</b> Each run draws 3 to 7 PBQs at random, then fills the remaining slots up to 90 with multiple choice, weighted to the official domain percentages, so a heavier PBQ draw means fewer multiple choice items that attempt, matching how the extra time PBQs take gets balanced against the 90-minute clock. Untimed or your own clock. <b>No feedback until you submit</b> \u2014 review maps every miss to its objective.</p>
       <h4>SOC Watch and Rapid Response drill under pressure</h4>
       <p>Severity-coded tickets; wrong calls cost network integrity. Rapid Response adds a combo multiplier and three lives. <b>Timer defaults to adaptive</b> (tightens above 85 percent, loosens below 60) or set it manually.</p>
       <h4>Flashcards use spaced repetition</h4>
@@ -6481,8 +6623,8 @@ function home(){
       <p>${PBQ.length} performance-based questions. Drag to order, drag to classify, configure rule sets, analyse logs. Partial credit, same as the real thing.</p></button>
     <button class="tile" id="t-exams" style="--accent:var(--amber)" onclick="examHome()">
       <span class="tag-row"><span class="tag">Full length</span><span class="tile-plus" aria-hidden="true">+</span></span>
-      <h3>Practice Exams</h3>
-      <p>Five fixed 90-question exams, blueprint weighted, PBQs included. Feedback and a restudy plan only after you submit.</p>
+      <h3>Practice Exam</h3>
+      <p>Up to 90 items, blueprint weighted, genuinely different every attempt. Feedback and a restudy plan only after you submit.</p>
     </button>
     <button class="tile" id="t-acr" style="--accent:var(--violet)" onclick="acrSetup()">
       <span class="tag-row"><span class="tag">Range</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Acronym Range</h3>
@@ -6850,6 +6992,18 @@ function jcAddTopicDirect(term){
   if(!v) return;
   if(S.jcTopics.map(t=>t.toLowerCase()).indexOf(v)>=0){ toast("Already in the Drill Down"); return; }
   S.jcTopics.push(v); save(); toast("Added to the Drill Down"); stats();
+}
+function jcAddTopicsBulk(terms,cb){
+  S.jcTopics=S.jcTopics||[];
+  const existing=S.jcTopics.map(t=>t.toLowerCase());
+  let added=0;
+  (terms||[]).forEach(term=>{
+    const v=(term||"").trim().toLowerCase();
+    if(v&&existing.indexOf(v)<0){ S.jcTopics.push(v); existing.push(v); added++; }
+  });
+  save();
+  toast(added?added+" concept"+(added>1?"s":"")+" sent to The Drill Down":"Already all in The Drill Down");
+  if(cb) cb();
 }
 function jcRemoveTopic(i){ S.jcTopics.splice(i,1); save(); jcSetup(); }
 function jcSetup(){
@@ -7312,20 +7466,7 @@ function dgEnd(e){
 
 /* ================= PRACTICE EXAMS ================= */
 const EXAM_QUOTA_PCT={1:10/86,2:19/86,3:16/86,4:24/86,5:17/86};
-const EXAM_NAMES=["A","B","C","D","E"];
-function m32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-function sShuffle(arr,seed){const r=m32(seed),a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));const tmp=a[i];a[i]=a[j];a[j]=tmp;}return a;}
-let EXAMS=null;
-function buildExams(){
-  if(EXAMS) return EXAMS;
-  EXAMS={};
-  const byDom={};
-  [1,2,3,4,5].forEach(d=>byDom[d]=sShuffle(QUESTIONS.filter(q=>q.d===d).map(q=>q.i),4200+d));
-  EXAM_NAMES.forEach((nm,k)=>{
-    EXAMS[nm]={byDom:byDom,k:k};
-  });
-  return EXAMS;
-}
+const EXAM_ID="Practice Exam";
 function mcqQuotaFor(mcqTotal){
   const raw=[1,2,3,4,5].map(d=>mcqTotal*EXAM_QUOTA_PCT[d]);
   const floors=raw.map(Math.floor);
@@ -7335,22 +7476,23 @@ function mcqQuotaFor(mcqTotal){
   for(let i=0;i<remainder;i++) quota[order[i][1]+1]++;
   return quota;
 }
-function pickMcqSet(def,mcqTotal){
+function pickExamMcqSet(mcqTotal){
   const quota=mcqQuotaFor(mcqTotal);
   let mcq=[];
   [1,2,3,4,5].forEach(d=>{
-    const pool=def.byDom[d], need=quota[d], start=Math.floor(def.k*pool.length/EXAM_NAMES.length);
-    for(let j=0;j<need;j++) mcq.push(pool[(start+j)%pool.length]);
+    const pool=shuffle(QUESTIONS.filter(q=>q.d===d).map(q=>q.i));
+    const need=Math.min(quota[d],pool.length);
+    for(let j=0;j<need;j++) mcq.push(pool[j]);
   });
-  return sShuffle(mcq,9000+def.k);
+  return shuffle(mcq);
 }
 function randomPbqSet(){
-  const weights=[[2,1],[3,2],[4,3],[5,4]];
+  const weights=[[3,1],[4,2],[5,3],[6,2],[7,1]];
   const total=weights.reduce((a,[,w])=>a+w,0);
   let r=Math.random()*total;
-  let n=4;
+  let n=5;
   for(const [count,w] of weights){ if(r<w){ n=count; break; } r-=w; }
-  return shuffle(PBQ.map(p=>p.id)).slice(0,n);
+  return shuffle(PBQ.map(p=>p.id)).slice(0,Math.min(n,PBQ.length));
 }
 function qById(i){ return QUESTIONS.find(q=>q.i===i); }
 let SX=null;
@@ -7364,41 +7506,37 @@ function initPbqStateX(id){
 }
 function persistX(){ if(SX&&!SX.submitted){ S.activeExam=SX; save(); } }
 function examHome(){
-  view="setup"; SECTION=examHome; AT_SECTION=true; ENTRY_TILE="t-exams"; strip("practice exams",0,"on","","",true);
+  view="setup"; SECTION=examHome; AT_SECTION=true; ENTRY_TILE="t-exams"; strip("practice exam",0,"on","","",true);
   window.scrollTo(0,0);
   stopTimer(); RENDER_CB=null; PB=null; PICK=null;
-  buildExams();
   const act=S.activeExam;
-  const rows=EXAM_NAMES.map(nm=>{
-    const h=(S.examHist||{})[nm];
-    const resume=act&&act.exam===nm&&!act.submitted;
-    const st=h?`<span class="ct" style="color:${h.best>=85?"var(--cyan)":h.best>=70?"var(--amber)":"var(--red)"}">best ${h.best}% \u00b7 ${h.tries} attempt${h.tries>1?"s":""}</span>`:`<span class="ct dim">not attempted</span>`;
-    return `<li><span><b>Exam ${nm}</b><br><span class="dim" style="font-size:12px">90 items \u00b7 2\u20135 PBQs at random (leaning toward 5), rest multiple choice \u00b7 blueprint weighted</span></span>
-      <span style="display:flex;gap:10px;align-items:center;flex-shrink:0">${st}
-      <button class="btn sm ${resume?"pri":""}" onclick="examSetup('${nm}')">${resume?"Resume":"Start"}</button></span></li>`;
-  }).join("");
+  const h=(S.examHist||{})[EXAM_ID];
+  const resume=act&&!act.submitted;
+  const st=h?`<span class="ct" style="color:${h.best>=85?"var(--cyan)":h.best>=70?"var(--amber)":"var(--red)"}">best ${h.best}% \u00b7 ${h.tries} attempt${h.tries>1?"s":""}</span>`:`<span class="ct dim">not attempted</span>`;
+  const row=`<li><span><b>${EXAM_ID}</b><br><span class="dim" style="font-size:12px">Up to 90 items \u00b7 3\u20137 PBQs drawn fresh each attempt, multiple choice filling the rest \u00b7 blueprint weighted</span></span>
+    <span style="display:flex;gap:10px;align-items:center;flex-shrink:0">${st}
+    <button class="btn sm ${resume?"pri":""}" onclick="examSetup()">${resume?"Resume":"Start"}</button></span></li>`;
   $("app").innerHTML=`
-  <p class="eyebrow">Full length</p><h1>Practice Exams</h1>
-  <p class="lede">Five fixed 90-item exams built to the official domain weights, PBQs first like the real thing. Each attempt draws 2\u20135 PBQs at random, leaning toward 5, with multiple choice filling the rest, matching how CompTIA does not publish a fixed PBQ count. Zero feedback until you submit, then a full review with a restudy plan mapped to Messer sections and Gibson chapters in-app; set your own study material in Settings for exports.</p>
-  <div class="card"><ul class="weaklist">${rows}</ul></div>
-  <p class="dim" style="font-size:12px;margin-top:10px">Scoring: multiple choice items are 1 point each, PBQs are 1 point with partial credit. 85%+ is the readiness bar and exam scores count toward the gate. Gibson chapter numbers follow the Get Certified Get Ahead SY0-701 edition.</p>
+  <p class="eyebrow">Full length</p><h1>Practice Exam</h1>
+  <p class="lede">Genuinely different every attempt: 3 to 7 PBQs drawn fresh, multiple choice filling the rest up to a 90-item cap. Zero feedback until you submit, then a full review. Export the results for an AI refresher, or send whatever you missed straight to The Drill Down for repetition.</p>
+  <div class="card"><ul class="weaklist">${row}</ul></div>
+  <p class="dim" style="font-size:12px;margin-top:10px">Scoring: multiple choice items are 1 point each, PBQs are 1 point with partial credit. 85%+ is the readiness bar and exam scores count toward the gate.</p>
   <div class="row" style="margin-top:14px"><button class="btn ghost sm" onclick="goHome()">Back to home</button></div>`;
 }
-function examSetup(nm){
+function examSetup(){
   AT_SECTION=false;
   const act=S.activeExam;
-  if(act&&act.exam===nm&&!act.submitted){ examResume(); return; }
-  if(act&&!act.submitted&&!confirm("Exam "+act.exam+" is paused mid-attempt. Starting Exam "+nm+" abandons that attempt. Continue?")) return;
-  view="setup"; strip("exam "+nm+" setup",0,"on","","");
+  if(act&&!act.submitted){ examResume(); return; }
+  view="setup"; strip("practice exam setup",0,"on","","");
   $("app").innerHTML=`
-  <p class="eyebrow">Exam ${nm}</p><h1>Set the clock</h1>
+  <p class="eyebrow">${EXAM_ID}</p><h1>Set the clock</h1>
   <p class="lede">The real exam gives 90 minutes. Go untimed while accuracy is the priority, then move to timed runs as the date closes in. Either way you can hide the clock during the test.</p>
   <div class="tiles">
-    <button class="tile" style="--accent:var(--cyan)" onclick="examBegin('${nm}',null,checkModeVal())">
+    <button class="tile" style="--accent:var(--cyan)" onclick="examBegin(null,checkModeVal())">
       <span class="tag">Relaxed</span><h3>No timer</h3><p>Work at your own pace. Elapsed time is still recorded for reference.</p></button>
-    <button class="tile" style="--accent:var(--amber)" onclick="examBegin('${nm}',90,checkModeVal())">
+    <button class="tile" style="--accent:var(--amber)" onclick="examBegin(90,checkModeVal())">
       <span class="tag">Real conditions</span><h3>90 minutes</h3><p>Match the actual exam clock.</p></button>
-    <button class="tile" style="--accent:var(--violet)" onclick="examCustom('${nm}')">
+    <button class="tile" style="--accent:var(--violet)" onclick="examCustom()">
       <span class="tag">Custom</span><h3>Set your own</h3><p>Any number of minutes, 1 to 600.</p></button>
   </div>
   <label class="card" style="display:flex;align-items:center;gap:12px;margin-top:14px;cursor:pointer">
@@ -7409,20 +7547,19 @@ function examSetup(nm){
   <div class="row" style="margin-top:16px"><button class="btn ghost sm" onclick="examHome()">Back</button></div>`;
 }
 function checkModeVal(){ const el=$("ckMode"); return !!(el&&el.checked); }
-function examCustom(nm){
+function examCustom(){
   const v=prompt("Minutes on the clock:","120");
   if(v===null) return;
   const m=parseInt(v,10);
   if(!m||m<1||m>600){ toast("Enter minutes between 1 and 600"); return; }
-  examBegin(nm,m,checkModeVal());
+  examBegin(m,checkModeVal());
 }
-function examBegin(nm,mins,checkMode){
+function examBegin(mins,checkMode){
   AT_SECTION=false;
   if(checkMode) mins=null;
-  const def=buildExams()[nm];
   const pbqSet=randomPbqSet();
-  const mcqSet=pickMcqSet(def,90-pbqSet.length);
-  SX={exam:nm,i:0,answers:{},orders:{},flags:{},pbq:{},submitted:false,startTs:Date.now(),checkMode:!!checkMode,
+  const mcqSet=pickExamMcqSet(90-pbqSet.length);
+  SX={exam:EXAM_ID,i:0,answers:{},orders:{},flags:{},pbq:{},submitted:false,startTs:Date.now(),checkMode:!!checkMode,
       timer:mins?{total:mins*60,remain:mins*60,visible:true,expired:false}:null,
       items:pbqSet.map(id=>({t:"p",id:id})).concat(mcqSet.map(id=>({t:"q",id:id})))};
   mcqSet.forEach(id=>SX.orders[id]=shuffle([0,1,2,3]));
@@ -7473,12 +7610,12 @@ function examRender(){
   if(!SX.submitted) persistX();
   const it=SX.items[SX.i];
   const answered=SX.items.filter(x=>x.t==="q"?SX.answers[x.id]!==undefined:!pbqUntouchedX(x.id)).length;
-  strip("exam "+SX.exam, Math.round(answered/SX.items.length*100), "on",
+  strip("practice exam", Math.round(answered/SX.items.length*100), "on",
     "Item <b>"+(SX.i+1)+"</b> / "+SX.items.length, "Answered <b>"+answered+"</b>");
   const tmr=SX.timer?`<span class="xtimer ${SX.timer.expired?"exp":""}"><span class="mono" id="xclk">${SX.timer.visible?fmtT(SX.timer.remain):""}</span>
     <button class="btn ghost sm" onclick="SX.timer.visible=!SX.timer.visible;persistX();examRender()">${SX.timer.visible?"Hide timer":"Show timer"}</button></span>`:"";
   const head=`<div class="xhead">
-    <span class="mono" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)">Exam ${SX.exam}${SX.checkMode?" \u00b7 Practice mode":""} \u00b7 ${it.t==="p"?"Performance-based":"Multiple choice"} \u00b7 ${SX.i+1} of ${SX.items.length}</span>
+    <span class="mono" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)">${EXAM_ID}${SX.checkMode?" \u00b7 Practice mode":""} \u00b7 ${it.t==="p"?"Performance-based":"Multiple choice"} \u00b7 ${SX.i+1} of ${SX.items.length}</span>
     <span style="display:flex;gap:8px;align-items:center">${tmr}
     <button class="btn ghost sm ${SX.flags[SX.i]?"flon":""}" onclick="SX.flags[${SX.i}]=!SX.flags[${SX.i}];persistX();examRender()">${SX.flags[SX.i]?"\u2691 Flagged":"\u2690 Flag"}</button></span>
   </div>${SX.timer&&SX.timer.expired?`<div class="fb no" style="margin-bottom:12px"><div class="verdict">Time expired</div><p>You can keep answering for the practice value \u2014 the result will note that time ran out.</p></div>`:""}`;
@@ -7498,13 +7635,14 @@ function examRender(){
       const dis=revealed?"disabled":"";
       return `<button class="opt ${cls}" ${dis} onclick="SX.answers['${it.id}']=${oi};persistX();examRender()"><span class="key mono">${pos+1}</span> ${esc(q.c[oi])}${revealed&&oi===q.a?' <span class="ct">correct</span>':""}${revealed&&pick===oi&&oi!==q.a?' <span class="ct">your pick</span>':""}</button>`;
     }).join("")}</div>
-    ${SX.checkMode&&!revealed?`<div class="row" style="margin-top:14px"><button class="btn pri" ${pick===undefined?"disabled":""} onclick="checkAnswer('${it.id}')">Check answer</button></div>`:""}
+    ${SX.checkMode&&!revealed?`<div class="row" style="margin-top:14px"><button class="btn pri" ${pick===undefined?"disabled":""} onclick="checkAnswer(${it.id})">Check answer</button></div>`:""}
     ${revealed?`<div class="fb ${pick===q.a?"ok":"no"}" style="margin-top:14px">
       <div class="verdict">${pick===q.a?"Correct":"Not quite"}</div>
       <p>${esc(q.e)}</p></div>`:""}`;
   } else {
     const p=PBQ.find(x=>x.id===it.id), st=SX.pbq[it.id];
-    PB={p:p,done:false,score:0,seq:st.seq,place:st.place,sel:st.sel,on:st.on};
+    const checked=SX.checkMode&&SX.pbqChecked&&SX.pbqChecked[it.id];
+    PB={p:p,done:!!checked,score:checked?checked.pct:0,seq:st.seq,place:st.place,sel:st.sel,on:st.on};
     let inner="";
     if(p.t==="order") inner=pbqOrder(p);
     if(p.t==="match") inner=pbqMatch(p);
@@ -7512,7 +7650,10 @@ function examRender(){
     if(p.t==="select") inner=pbqSelect(p);
     body=`<h1 style="font-size:19px">${esc(p.title)}</h1><p class="lede">${esc(p.brief)}</p>
     ${p.pre?`<pre class="pbqpre">${esc(p.pre)}</pre>`:""}${inner}
-    ${SX.checkMode?`<p class="dim" style="font-size:12.5px;margin-top:10px">PBQs are scored at submission even in practice mode \u2014 check the review screen afterward for the full breakdown.</p>`:""}`;
+    ${SX.checkMode&&!checked?`<div class="row" style="margin-top:14px"><button class="btn pri" onclick="examCheckPbq(${it.id})">Check answer</button></div>`:""}
+    ${checked?`<div class="fb ${checked.pct===100?"ok":"no"}" style="margin-top:14px">
+      <div class="verdict">${checked.pct}% \u00b7 ${checked.got}/${checked.total} correct</div>
+      ${explainHTML(p.explain)}</div>`:""}`;
   }
   const pal=`<div class="pal">${SX.items.map((x,ix)=>{
     const done=x.t==="q"?SX.answers[x.id]!==undefined:!pbqUntouchedX(x.id);
@@ -7536,11 +7677,26 @@ function recordExamStat(q,ok){
   S.qStat[q.i].s++; if(!ok) S.qStat[q.i].m++;
   if(!ok && S.tag[q.g].m>=2 && S.flagged.indexOf(q.g)<0) S.flagged.push(q.g);
 }
+function examCheckPbq(id){
+  id=+id;
+  const p=PBQ.find(x=>x.id===id), st=SX.pbq[id];
+  const sc=scorePBQ(p,st);
+  if(!SX.pbqChecked) SX.pbqChecked={};
+  SX.pbqChecked[id]=sc;
+  persistX();
+  examRender();
+}
 function examSubmit(){
   const unQ=SX.items.filter(x=>x.t==="q"&&SX.answers[x.id]===undefined).length;
   const unP=SX.items.filter(x=>x.t==="p"&&pbqUntouchedX(x.id)).length;
   const un=unQ+unP;
-  if(un>0&&!confirm(un+" item"+(un===1?"":"s")+" unanswered \u2014 they will score zero. Submit anyway?")) return;
+  if(un>0){
+    askConfirm(un+" item"+(un===1?"":"s")+" unanswered \u2014 they will score zero. Submit anyway?",doExamSubmit);
+    return;
+  }
+  doExamSubmit();
+}
+function doExamSubmit(){
   stopTimer();
   let pts=0; const byDom={}; [1,2,3,4,5].forEach(d=>byDom[d]={s:0,c:0});
   const detail=[];
@@ -7582,14 +7738,16 @@ function examSubmit(){
 }
 function examReview(){
   view="review"; stopTimer(); RENDER_CB=null;
-  const r=SX.result, nm=SX.exam;
-  strip("exam "+nm+" review", r.pct, r.pct>=85?"on":r.pct>=70?"warn":"crit",
+  const r=SX.result;
+  strip("practice exam review", r.pct, r.pct>=85?"on":r.pct>=70?"warn":"crit",
     "Score <b>"+r.pct+"%</b>", "<b>"+r.mins+"</b> min"+(r.expired?" \u00b7 expired":""));
   const missObj={};
+  const missTags=new Set();
   r.detail.forEach(d=>{
-    if(d.t==="q"&&!d.ok){ const q=qById(d.id); missObj[q.o]=(missObj[q.o]||0)+1; }
-    if(d.t==="p"&&d.pct<100){ const p=PBQ.find(z=>z.id===d.id); missObj[p.o]=(missObj[p.o]||0)+(d.total-d.got); }
+    if(d.t==="q"&&!d.ok){ const q=qById(d.id); missObj[q.o]=(missObj[q.o]||0)+1; missTags.add(q.g); }
+    if(d.t==="p"&&d.pct<100){ const p=PBQ.find(z=>z.id===d.id); missObj[p.o]=(missObj[p.o]||0)+(d.total-d.got); missTags.add(p.g); }
   });
+  const missTagsArr=[...missTags].map(t=>t.replace(/-/g," "));
   const plan=Object.keys(missObj).sort((a,b)=>missObj[b]-missObj[a]);
   const domBars=[1,2,3,4,5].map(d=>{
     const b=r.byDom[d], p2=b.s?Math.round(b.c/b.s*100):0;
@@ -7633,12 +7791,13 @@ function examReview(){
   });
   PB=null;
   $("app").innerHTML=`
-  <p class="eyebrow">Exam ${nm} complete${r.expired?" \u00b7 time expired":""}${SX.checkMode?" \u00b7 Practice mode":""}</p>
+  <p class="eyebrow">${EXAM_ID} complete${r.expired?" \u00b7 time expired":""}${SX.checkMode?" \u00b7 Practice mode":""}</p>
   <h1>${r.pct}%</h1>
   <p class="lede">${SX.checkMode?"Practice mode \u2014 you saw answers as you went, so this score reflects a study run, not a blind test. It doesn't count toward exam history or the readiness gate. ":""}${r.pct>=85?"At or above the 85% readiness bar. If every domain held above 75%, this exam counts toward the gate \u2014 you still need one more like it within the last 14 days.":r.pct>=70?"Closing in. The restudy plan below is the fastest path to the 85% bar.":"Below the bar for now. Work the restudy plan top to bottom, then retake."}</p>
   <div class="card">${domBars}</div>
   <h2>Restudy plan \u2014 hit these first</h2>
   <div class="card"><ul class="weaklist">${planHtml}</ul></div>
+  ${missTagsArr.length?`<div class="row" style="margin-top:10px"><button class="btn" onclick='jcAddTopicsBulk(${JSON.stringify(missTagsArr)})'>Send ${missTagsArr.length} missed concept${missTagsArr.length>1?"s":""} to The Drill Down</button></div>`:""}
   <p class="dim" style="font-size:11.5px;margin:8px 0 0">Messer sections are numbered by exam objective in both his videos and course notes PDF. Gibson chapters follow the Get Certified Get Ahead SY0-701 edition.</p>
   <h2 style="margin-top:20px">Every item, reviewed</h2>
   ${items}
@@ -7654,7 +7813,7 @@ function examReview(){
   if(typeof window.scrollTo==="function"){ try{ window.scrollTo(0,0); }catch(e){} }
 }
 function examExport(fmt){
-  const r=SX.result, nm=SX.exam;
+  const r=SX.result, nm=SX.exam, slug=nm.replace(/\s+/g,"-");
   if(!r){ toast("No exam result to export"); return; }
   const date=new Date();
   const missObj={};
@@ -7674,7 +7833,7 @@ function examExport(fmt){
     });
     const out={exam:nm,date:date.toISOString(),scorePct:r.pct,minutes:r.mins,timeExpired:!!r.expired,
       domainBreakdown:r.byDom,restudyObjectives:plan,items:items};
-    dl("exam-"+nm+"-"+date.toISOString().slice(0,10)+".json",JSON.stringify(out,null,2));
+    dl("exam-"+slug+"-"+date.toISOString().slice(0,10)+".json",JSON.stringify(out,null,2));
   } else {
     const L=[];
     L.push("# CompTIA Security+ SY0-701 - Exam "+nm+" Results");
@@ -7710,9 +7869,9 @@ function examExport(fmt){
         L.push("   Score: "+d.got+"/"+d.total+" points");
       }
     });
-    dl("exam-"+nm+"-"+date.toISOString().slice(0,10)+".txt",L.join("\n"));
+    dl("exam-"+slug+"-"+date.toISOString().slice(0,10)+".txt",L.join("\n"));
   }
-  toast("Exam "+nm+" results exported");
+  toast(nm+" results exported");
 }
 function examExportAll(fmt){
   if(!S.examHist||!Object.keys(S.examHist).length){ toast("No practice exams taken yet"); return; }
@@ -7752,7 +7911,7 @@ function examExportAll(fmt){
     L.push("");
     names.forEach(n=>{
       const h=S.examHist[n];
-      L.push("## Exam "+n+" \u2014 "+h.tries+" attempt"+(h.tries>1?"s":"")+", best "+h.best+"%, most recent "+h.last+"%");
+      L.push("## "+n+" \u2014 "+h.tries+" attempt"+(h.tries>1?"s":"")+", best "+h.best+"%, most recent "+h.last+"%");
       if(!hasDetail(n)){
         L.push("(Taken before detailed export existed \u2014 no per-question data available for this exam.)");
         L.push("");
@@ -7844,7 +8003,7 @@ function stats(){
   <h2>Practice exam history</h2><div class="card"><ul class="weaklist">${
     S.examHist&&Object.keys(S.examHist).length
       ? Object.keys(S.examHist).sort().map(n=>{const h=S.examHist[n];
-          return `<li><span>Exam ${esc(n)} <span class="dim" style="font-size:12px">(${h.tries} attempt${h.tries>1?"s":""})</span></span>
+          return `<li><span>${esc(n)} <span class="dim" style="font-size:12px">(${h.tries} attempt${h.tries>1?"s":""})</span></span>
           <span class="ct" style="color:${h.best>=85?"var(--cyan)":h.best>=70?"var(--amber)":"var(--red)"}">best ${h.best}% \u00b7 last ${h.last}%</span></li>`;}).join("")
       : `<li class="dim">No practice exams taken yet.</li>`}</ul>
     <div class="row" style="margin-top:14px">
@@ -7892,10 +8051,13 @@ function saveProfile(){
   const ssEl=$("pss"); if(ssEl) S.studySource=(ssEl.value||"").trim().slice(0,60);
   save(); toast("Saved"); home();
 }
-function wipe(){ if(!confirm("Erase all progress, weak areas, and card scheduling? Flashcards, acronyms, and notes you added are kept.")) return;
-  const cc=S.customCards,ca=S.customAcr,cs=S.cardSeq,jt=S.jcTopics;
-  S={v:2,name:S.name,exam:S.exam,dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:cc,customAcr:ca,cardSeq:cs,recent:[],pbqStat:{},jcTopics:jt};
-  for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0}; save(); toast("Progress reset"); home(); }
+function wipe(){
+  askConfirm("Erase all progress, weak areas, and card scheduling? Flashcards, acronyms, and notes you added are kept.",()=>{
+    const cc=S.customCards,ca=S.customAcr,cs=S.cardSeq,jt=S.jcTopics;
+    S={v:2,name:S.name,exam:S.exam,dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:cc,customAcr:ca,cardSeq:cs,recent:[],pbqStat:{},jcTopics:jt};
+    for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0}; save(); toast("Progress reset"); home();
+  });
+}
 
 /* ================= ADD CONTENT ================= */
 function content(tab){
@@ -8142,11 +8304,12 @@ function restoreIn(){
   if(!raw){ toast("Paste a backup first"); return; }
   let v; try{ v=JSON.parse(raw); }catch(e){ toast("That is not a valid backup file"); return; }
   if(!v||typeof v!=="object"||!v.dom){ toast("That file is missing progress data"); return; }
-  if(!confirm("Replace all progress in this browser with the pasted backup?")) return;
-  S=Object.assign(S,v);
-  for(let d=1;d<=5;d++) if(!S.dom[d]) S.dom[d]={s:0,c:0};
-  S.customCards=S.customCards||[]; S.customAcr=S.customAcr||[]; S.recent=S.recent||[]; S.pbqStat=S.pbqStat||{};
-  save(); toast("Progress restored"); home();
+  askConfirm("Replace all progress in this browser with the pasted backup?",()=>{
+    S=Object.assign(S,v);
+    for(let d=1;d<=5;d++) if(!S.dom[d]) S.dom[d]={s:0,c:0};
+    S.customCards=S.customCards||[]; S.customAcr=S.customAcr||[]; S.recent=S.recent||[]; S.pbqStat=S.pbqStat||{};
+    save(); toast("Progress restored"); home();
+  });
 }
 
 /* ================= keyboard ================= */
