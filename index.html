@@ -127,10 +127,12 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 .opt:hover:not(:disabled){border-color:var(--faint)}
 .opt:disabled{cursor:default}
 .opt .key{font-family:var(--mono);font-size:12px;color:var(--faint);flex:0 0 auto;margin-top:2px;width:14px}
-.opt.correct{border-color:var(--cyan);background:rgba(69,211,192,.09)}
-.opt.correct .key{color:var(--cyan)}
+.opt.correct{border-color:var(--green);background:rgba(62,208,122,.09)}
+.opt.correct .key{color:var(--green)}
 .opt.wrong{border-color:var(--red);background:rgba(224,87,74,.09)}
 .opt.wrong .key{color:var(--red)}
+.opt.picked.wrong{border-color:var(--red);background:rgba(224,87,74,.09)}
+.opt.picked.correct{border-color:var(--green);background:rgba(62,208,122,.12)}
 .opt.faded{opacity:.5}
 
 /* ---- feedback ---- */
@@ -354,9 +356,10 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
     <p id="confirmMsg"></p>
-    <div class="row" style="margin-top:16px;justify-content:flex-end">
+    <div class="row" style="margin-top:16px;justify-content:flex-end;flex-wrap:wrap">
       <button class="btn ghost sm" onclick="confirmCancel()">Cancel</button>
-      <button class="btn pri sm" onclick="confirmYes()">Continue</button>
+      <button class="btn sm" id="confirmBtn2" style="display:none" onclick="confirmSecond()"></button>
+      <button class="btn pri sm" id="confirmBtn1" onclick="confirmYes()">Continue</button>
     </div>
   </div>
 </div>
@@ -427,7 +430,7 @@ w:["Longer passwords help against brute force, but a rainbow table for common lo
 
 {i:111,d:1,o:"1.4",t:"a",g:"cert-lifecycle",
 q:"A web server's certificate was compromised and revoked. Rather than have every client query the CA in real time, the server presents a timestamped, CA-signed revocation status with its certificate. What is this called?",
-c:["CRL, the downloadable list of every certificate a CA has revoked, published on a regular schedule","OCSP stapling","CSR, the request a server submits to a CA to have a certificate issued in the first place","SAN, a certificate extension allowing one certificate to cover multiple hostnames"],a:1,
+c:["CRL","OCSP stapling","CSR","SAN"],a:1,
 e:"OCSP (Online Certificate Status Protocol) stapling has the server attach a recent, CA-signed status response to its own certificate, which removes the per-client lookup and its privacy and latency costs.",
 w:["A CRL is the older, list-based method the question is deliberately moving away from; it requires the client to fetch and check the whole list.","","A CSR is the wrong stage of the lifecycle entirely, since this scenario is about an already-issued, already-revoked certificate.","SAN has nothing to do with revocation status at all."]},
 
@@ -482,7 +485,7 @@ w:["A SYN flood exhausts a server's connection table with half-open TCP handshak
 
 {i:208,d:2,o:"2.4",t:"s",g:"arp-onpath",
 q:"On a flat office LAN, a workstation begins receiving traffic destined for the default gateway. Packet captures show gratuitous replies mapping the gateway's IP to the attacker's MAC address. What is occurring?",
-c:["ARP poisoning enabling an on-path attack","DNS hijacking, redirecting a victim's domain name lookups to a malicious resolver","VLAN hopping, sending traffic across VLAN boundaries via double tagging or switch spoofing","MAC flooding, overwhelming a switch's CAM table until it starts broadcasting all traffic"],a:0,
+c:["ARP poisoning enabling an on-path attack","DNS hijacking","VLAN hopping","MAC flooding"],a:0,
 e:"ARP (Address Resolution Protocol) has no authentication, so forged replies let an attacker bind the gateway's IP to their own MAC and become the on-path relay for the segment.",
 w:["","DNS hijacking would redirect name lookups; the evidence here is layer 2 address mapping, not name resolution.","VLAN hopping moves traffic across VLAN boundaries, but the network described is flat with no VLANs in play.","MAC flooding is a related but distinct attack; the evidence given is specifically forged ARP replies, not a flooded CAM table."]},
 
@@ -500,7 +503,7 @@ w:["Brute force hammers one account with many passwords. That is the opposite sh
 
 {i:211,d:2,o:"2.3",t:"s",g:"race-conditions",
 q:"A gift card application verifies a card's balance, then a fraction of a second later deducts the amount. An attacker submits many simultaneous redemptions and spends the same balance repeatedly. Which vulnerability is being exploited?",
-c:["Buffer overflow, writing data past the boundary of an allocated block of memory","Time-of-check to time-of-use race condition","Integer overflow, where a numeric value exceeds its type's maximum and wraps around unexpectedly","Memory injection, placing malicious code directly into a running process's memory space"],a:1,
+c:["Buffer overflow","Time-of-check to time-of-use race condition","Integer overflow","Memory injection"],a:1,
 e:"A TOC/TOU (time-of-check to time-of-use) race condition exists when the state validated at check time can change before the action executes. Concurrent requests slip into that gap.",
 w:["A buffer overflow writes past an allocated memory boundary; nothing here involves memory boundaries at all.","","Integer overflow is plausible in financial code generally, but the described flaw is a timing gap, not an arithmetic wraparound.","Memory injection places malicious code into a running process, not what the gap between check and use describes."]},
 
@@ -525,7 +528,7 @@ w:["A true air gap allows no connection at all, which breaks the stated requirem
 {i:215,d:2,o:"2.5",t:"s",g:"hardening-mitigation",
 q:"After a breach through an unused management service, leadership asks for the change that most reduces the number of ways an attacker can reach any given server. Which mitigation BEST accomplishes this?",
 c:["Installing endpoint detection and response","Disabling unnecessary ports and services","Increasing password complexity requirements","Enabling verbose logging"],a:1,
-e:"Every listening service is an entry point. Turning off what is not needed shrinks the attack surface directly, which is what the question asks for.",
+e:"Every open service port is an entry point. Turning off what is not needed shrinks the attack surface directly, which is what the question asks for.",
 w:["EDR (Endpoint Detection and Response) improves your ability to see and respond to an attacker. It does not reduce the number of doors.","","Stronger passwords protect accounts, but the unused service may not even require an account, and the question is about reachable paths.","Logging is detective. It records the intrusion rather than removing the route."]},
 
 {i:216,d:2,o:"2.2",t:"b",g:"social-engineering",
@@ -575,7 +578,7 @@ w:["","This is the marketing reading of the name. Servers exist, they are just a
 
 {i:303,d:3,o:"3.2",t:"s",g:"failure-modes",
 q:"A hospital's badge access system must never trap staff inside during a fire, even if the controller loses power. How should the door controls be configured?",
-c:["Fail-closed, prioritizing security","Fail-open, prioritizing safety","Fail-closed with a manual override key","Fail-open with mandatory access control"],a:1,
+c:["Fail-closed","Fail-open","Fail-closed with a manual override key","Fail-open with mandatory access control"],a:1,
 e:"Fail-open means the control releases and allows passage on failure. When human life is at stake, safety outweighs the security loss, which is why egress doors fail open.",
 w:["Fail-closed protects assets by denying passage on failure. Correct for a data center cage, dangerous for a fire exit full of people.","","The manual key is a nice thought, but it still requires someone to be present with it during an emergency. The design requirement is that failure itself is safe.","Mandatory access control is an authorization model, not a failure mode, and it does not address power loss at all."]},
 
@@ -666,7 +669,7 @@ w:["","Scanning finds vulnerabilities but does not define or enforce a configura
 
 {i:402,d:4,o:"4.1",t:"a",g:"wireless-security",
 q:"An enterprise deploys wireless authentication where each user authenticates with their own directory credentials against a central AAA server, with no shared passphrase. Which combination is in use?",
-c:["WPA3-Personal with SAE, which replaced the old four-way handshake with a stronger exchange resistant to offline dictionary attacks","WPA2-Personal with PSK, the pre-shared key model used on most consumer and small-office access points","WPA3-Enterprise with 802.1X and RADIUS","WEP with a shared key, a deprecated standard broken by known cryptographic flaws in its key scheduling"],a:2,
+c:["WPA3-Personal with SAE","WPA2-Personal with PSK","WPA3-Enterprise with 802.1X and RADIUS","WEP"],a:2,
 e:"Enterprise wireless uses 802.1X for port-based authentication and RADIUS as the AAA server, so each user has individual credentials rather than one shared passphrase.",
 w:["SAE (Simultaneous Authentication of Equals) strengthens the Personal tier, but Personal by definition still uses one shared passphrase for every user, which the question rules out.","PSK is the single-passphrase model the question explicitly describes as absent here.","","WEP (Wired Equivalent Privacy) is both obsolete and still shared-key based, so it fails on two counts."]},
 
@@ -792,7 +795,7 @@ w:["","NetFlow exports describe traffic flows. They are continuous statistics ra
 
 {i:423,d:4,o:"4.7",t:"b",g:"automation",
 q:"A company wants new-hire accounts created, group memberships assigned, and a ticket closed automatically when HR marks a hire as complete. Which benefit is the PRIMARY security argument for this?",
-c:["Reduced licensing cost, since fewer administrative hours are billed against the identity management contract","Consistent, repeatable enforcement of least privilege on every account","Faster onboarding, which shortens the time before a new employee becomes productive","Elimination of the need for periodic access reviews, since provisioning is already automated"],a:1,
+c:["Reduced licensing cost","Consistent, repeatable enforcement of least privilege on every account","Faster onboarding","Elimination of the need for periodic access reviews"],a:1,
 e:"Automation removes human variability, so every account is provisioned to the same standard every time. Consistency is the security value, and it also produces a clean audit trail.",
 w:["Cost reduction may be real but is a business argument, not a security one.","","Speed is the business benefit. The question asks specifically for the security argument, which is a common CompTIA qualifier.","Automation never eliminates access reviews. Attestation remains necessary because roles and needs change over time even when provisioning was correct on day one."]},
 
@@ -1083,7 +1086,7 @@ e:"A bug bounty formalizes responsible disclosure by paying external researchers
 w:["A penetration test is a contracted engagement with a chosen firm, not an open invitation.","","A regulatory examination is conducted by a government authority.","A red team is an internal or hired adversarial team, not the public."]},
 {i:727,d:4,o:"4.3",t:"s",g:"vuln-prioritization",
 q:"Two servers report the same CVE with a 9.8 base score. One is internet-facing and holds regulated data; the other is isolated in a lab with no sensitive data. The team patches the internet-facing server first. Which analysis concept justifies this?",
-c:["False positive confirmation, the process of verifying a reported finding is genuinely exploitable before acting on it","Package monitoring, which tracks third-party library versions for known vulnerable dependencies","Static analysis, which examines source code for flaws without executing it","Environmental variables and organizational impact"],a:3,
+c:["False positive confirmation","Package monitoring","Static analysis","Environmental variables and organizational impact"],a:3,
 e:"Base CVSS scores ignore context. Environmental factors, exposure, and the business impact of the specific asset are what turn identical scores into different priorities.",
 w:["Neither finding here is being disputed as false; both are confirmed instances of the same real CVE.","Package monitoring is about discovering vulnerable dependencies in the first place, not about deciding which already-known finding to patch first.","Static analysis happens before deployment, during code review, and has no bearing on a live patch-ordering decision.",""]},
 {i:728,d:4,o:"4.4",t:"b",g:"quarantine",
@@ -1126,7 +1129,7 @@ w:["Development is building the program content itself.","","Execution is delive
 const Q5 = [
 {i:801,d:1,o:"1.2",t:"b",g:"authenticating-systems",
 q:"A network requires every device to present a valid machine certificate before its switch port will pass traffic, regardless of which user is logged in. Which concept does this demonstrate?",
-c:["User provisioning, the process of creating and assigning accounts for new employees","Authenticating systems with 802.1X device certificates","Federation, extending a user's identity to be trusted across separate organizations","Password vaulting, securely storing and checking out privileged credentials on demand"],a:1,
+c:["User provisioning","Authenticating systems with 802.1X device certificates","Federation","Password vaulting"],a:1,
 e:"Authenticating systems, not just people, means the device itself proves identity, typically with a certificate presented through 802.1X before the port opens.",
 w:["Provisioning is about creating user accounts; no user identity is what's being checked at this port gate.","","Federation extends user identity across organizational boundaries, not device identity within one network.","Vaulting stores privileged human credentials for checkout, unrelated to a device certificate at a switch port."]},
 {i:802,d:1,o:"1.2",t:"m",g:"physical-sensors",
@@ -1138,7 +1141,7 @@ w:["Infrared depends on detecting heat signatures, degraded by obstructions and 
 q:"A logistics consortium wants shipment records that every member can read and append to, where each new record cryptographically chains to the previous one and no single member can quietly alter history. Which technology fits?",
 c:["An open public ledger (blockchain)","A relational database with nightly backups","Full-disk encryption","A SIEM with write-once storage"],a:0,
 e:"A blockchain is a distributed ledger where each block hashes the previous block, making history tamper-evident and removing the need to trust any single member's copy.",
-w:["","A conventional database has an administrator who can alter records, exactly what the consortium wants to prevent.","FDE protects a disk at rest; it does nothing for shared multi-party integrity.","A SIEM centralizes logs under one owner's control, the opposite of the trust model described."]},
+w:["","A conventional database has an administrator who can alter records, exactly what the consortium wants to prevent.","FDE protects a disk at rest; it does nothing for shared multi-party integrity.","A SIEM (Security Information and Event Management) centralizes logs under one owner's control, the opposite of the trust model described."]},
 {i:804,d:1,o:"1.4",t:"s",g:"encryption-levels",
 q:"A database stores customer profiles. Regulations require encrypting only the payment card field in each row, leaving other fields searchable in plaintext. Which encryption level matches this requirement?",
 c:["Full-disk encryption","Volume encryption","Transparent database encryption of the entire database","Record or field-level encryption"],a:3,
@@ -1156,7 +1159,7 @@ e:"Public defacement to promote a cause, with no monetization, is the signature 
 w:["","Organized crime monetizes access; a free manifesto earns nothing.","An unskilled attacker lacks a coherent cause; the message is the point here.","Nation-states avoid publicity; announcement defeats their purpose."]},
 {i:807,d:2,o:"2.2",t:"b",g:"removable-media",
 q:"Branded USB drives labeled 'Payroll Adjustments Q3' are scattered in a company parking lot. Several employees plug them in, executing hidden malware. Which threat vector was used?",
-c:["Watering hole, compromising a legitimate website the targets are already known to visit","Vishing, social engineering conducted over a voice phone call","Removable device baiting","Typosquatting, registering look-alike domains to catch mistyped URLs"],a:2,
+c:["Watering hole","Vishing","Removable device baiting","Typosquatting"],a:2,
 e:"Baiting exploits curiosity by planting infected removable media where victims will find it; the tempting label does the social engineering.",
 w:["A watering hole compromises a website the targets already visit, not a physical device.","Vishing happens over a phone call, not through a planted drive.","","Typosquatting relies on mistyped web addresses, unrelated to physical media."]},
 {i:808,d:2,o:"2.2",t:"m",g:"bluetooth-wireless",
@@ -1186,7 +1189,7 @@ e:"Resource reuse occurs when a provider reallocates storage or memory between t
 w:["VM escape is code breaking out of a guest into the host; no code broke isolation here.","","No update was involved.","No credential was exposed; the leak came through reprovisioned blocks."]},
 {i:813,d:2,o:"2.4",t:"s",g:"account-indicators",
 q:"A review shows one user account authenticated to the VPN from two different continents during overlapping time windows for three straight days. Which indicator of compromise does this MOST directly represent?",
-c:["Resource consumption, unusually heavy CPU, memory, or bandwidth usage on a host","Blocked content, a spike in traffic denied by a filtering or content-inspection device","Missing logs, gaps in the record where expected events were never captured","Concurrent session usage from impossible locations"],a:3,
+c:["Resource consumption","Blocked content","Missing logs","Concurrent session usage from impossible locations"],a:3,
 e:"Simultaneous active sessions from locations no traveler could span indicates the credentials are being used by more than one party, a classic account compromise indicator.",
 w:["No unusual resource usage is described anywhere in this scenario.","Nothing here was filtered or blocked by any device.","The logs exist and are complete; they are in fact what revealed the issue in the first place.",""]},
 {i:814,d:3,o:"3.1",t:"b",g:"microservices",
@@ -1243,7 +1246,7 @@ w:["Dynamic analysis tests the running application's behavior.","Fuzzing throws 
 q:"A financial firm subscribes to a service that monitors hidden criminal marketplaces for mentions of the firm's name, employee credentials, and customer card data. Which intelligence source is this?",
 c:["OSINT","Dark web monitoring","Vulnerability database","Internal SIEM correlation"],a:1,
 e:"Dark web monitoring watches concealed forums and markets where stolen data and access are traded, providing early warning that the organization's assets are circulating.",
-w:["OSINT covers openly accessible sources; these marketplaces are deliberately hidden.","","A vulnerability database catalogs software flaws, not stolen data listings.","SIEM correlation analyzes the firm's own internal telemetry."]},
+w:["OSINT covers openly accessible sources; these marketplaces are deliberately hidden.","","A vulnerability database catalogs software flaws, not stolen data listings.","SIEM (Security Information and Event Management) correlation analyzes the firm's own internal telemetry."]},
 {i:825,d:4,o:"4.3",t:"b",g:"remediation-validation",
 q:"After patching a critical vulnerability across 200 servers, what should the security team do NEXT to confirm the remediation actually worked?",
 c:["Rescan the affected systems","Close the finding immediately","Remove the servers from future scan scopes","Archive the original scan report"],a:0,
@@ -1291,7 +1294,7 @@ e:"Questionnaires are the routine vendor monitoring instrument, collecting self-
 w:["","Right-to-audit reserves the ability to inspect directly; the scenario is self-reporting.","Rules of engagement govern security testing.","A SOW defines deliverables for an engagement."]},
 {i:834,d:5,o:"5.6",t:"s",g:"insider-threat-awareness",
 q:"During training, staff learn that a colleague who suddenly works odd hours alone, photographs screens, and asks for access far beyond their role may warrant a confidential report. Which awareness topic is being taught?",
-c:["Password hygiene, choosing and protecting strong, unique credentials for each account","Removable media handling, the safe use and control of USB drives and other portable storage","Recognizing insider threat indicators","Hybrid work ergonomics, setting up a safe and comfortable home office workspace"],a:2,
+c:["Password hygiene","Removable media handling","Recognizing insider threat indicators","Hybrid work ergonomics"],a:2,
 e:"Insider threat awareness trains employees to notice and report behavioral warning signs such as unusual access requests and covert data capture.",
 w:["Password practice is entirely unrelated to observing a colleague's suspicious behavior.","Removable media is a narrower topic about one specific exfiltration channel, not the broad behavioral pattern described here.","","Ergonomics is workplace safety training, unrelated to security or insider threat behavior."]}
 ];
@@ -1299,7 +1302,7 @@ w:["Password practice is entirely unrelated to observing a colleague's suspiciou
 const Q6 = [
 {i:901,d:1,o:"1.2",t:"b",g:"physical-security",
 q:"A data center entrance uses two interlocked doors: the outer door must close and the occupant must authenticate before the inner door releases, and only one person fits between them. Which control is this?",
-c:["Bollard, a short sturdy post installed to stop vehicles from ramming a building or entrance","Access control vestibule","Faraday cage, a shielded enclosure that blocks electromagnetic signals from entering or leaving","Air gap, physically isolating a network from any other network with no connection at all"],a:1,
+c:["Bollard","Access control vestibule","Faraday cage","Air gap"],a:1,
 e:"An access control vestibule, historically a mantrap, defeats tailgating by trapping a single person between interlocked doors until identity is verified.",
 w:["Bollards stop vehicles, not pedestrians trying to tailgate through a doorway.","","A Faraday cage is about blocking signals, not controlling physical entry.","An air gap is network isolation and has nothing to do with a physical doorway."]},
 {i:902,d:1,o:"1.2",t:"b",g:"zero-trust",
@@ -1330,7 +1333,7 @@ w:["That describes agent-based, reversed: agentless is the approach that needs n
 {i:907,d:2,o:"2.2",t:"b",g:"open-ports",
 q:"A scan of a file server reveals listening services for FTP, Telnet, and an old remote administration tool, none of which the business uses. What do these findings represent?",
 c:["Hardened baseline","Unnecessary open ports enlarging the attack surface","Evidence of an active breach","Normal operating system behavior requiring no action"],a:1,
-e:"Every listening service is attack surface. Unused services, especially legacy cleartext ones, add risk with zero benefit and should be disabled or blocked.",
+e:"Every open service port is attack surface. Unused services, especially legacy cleartext ones, add risk with zero benefit and should be disabled or blocked.",
 w:["A hardened baseline would have these disabled.","","Open ports show exposure, not proof of compromise.","Modern baselines do not require legacy cleartext services."]},
 {i:908,d:2,o:"2.5",t:"s",g:"unsupported-systems",
 q:"A hospital wing depends on an imaging workstation running an operating system that stopped receiving security updates years ago, and the medical device vendor forbids OS changes. Which mitigation BEST reduces the risk while keeping the device operational?",
@@ -1349,12 +1352,12 @@ e:"Domain hijacking seizes control of the registration itself, redirecting every
 w:["","Amplification abuses DNS to flood a victim with traffic, a availability attack.","ARP poisoning misdirects traffic on a local LAN segment only.","XSS redirects within a browser session, not the domain's global records."]},
 {i:911,d:2,o:"2.4",t:"s",g:"wireless-attacks",
 q:"Conference attendees keep dropping off the venue Wi-Fi every few seconds. A capture shows floods of management frames ordering clients to disconnect, sourced from a spoofed access point address. Which attack is underway?",
-c:["Evil twin, a rogue access point broadcasting the same network name to lure victims into connecting","Bluesnarfing, unauthorized theft of data over an active Bluetooth connection","Deauthentication attack","RFID cloning, duplicating the credentials stored on a proximity access badge"],a:2,
+c:["Evil twin","Bluesnarfing","Deauthentication attack","RFID cloning"],a:2,
 e:"A deauthentication attack forges 802.11 management frames that command clients to disconnect, and is often the setup for capturing reconnection handshakes or pushing victims to a rogue AP.",
 w:["An evil twin would keep victims connected to a fake network, not repeatedly kick them off, the opposite of what's described here.","Bluesnarfing targets Bluetooth, an entirely different radio protocol from the Wi-Fi management frames described.","","RFID cloning copies physical badges, unrelated to Wi-Fi management frames."]},
 {i:912,d:2,o:"2.4",t:"s",g:"log-indicators",
 q:"A server that normally uploads its logs at 02:00 suddenly pushes large log archives at random mid-day hours, shortly after which several log files are found truncated. Which indicator category do these events represent?",
-c:["Resource inaccessibility, users or services unable to reach a system or file they normally can","Blocked content, traffic denied by a filtering device that normally would have passed","Impossible travel, a single account authenticating from geographically distant locations too quickly","Out-of-cycle logging and missing logs"],a:3,
+c:["Resource inaccessibility","Blocked content","Impossible travel","Out-of-cycle logging and missing logs"],a:3,
 e:"Logging outside its established schedule paired with truncated files suggests an intruder manipulating and covering tracks, both named indicators of malicious activity.",
 w:["No resource became unavailable to users in this scenario.","Nothing described here was filtered or blocked.","No authentication or geographic data is involved in this scenario at all.",""]},
 {i:913,d:3,o:"3.2",t:"m",g:"security-zones",
@@ -1364,7 +1367,7 @@ e:"Security zones group systems by trust and sensitivity, forcing all traffic be
 w:["Platform diversity mixes vendors to avoid a shared flaw.","","Port security limits MAC addresses on individual switch ports.","COOP is continuity planning, not network layout."]},
 {i:914,d:3,o:"3.2",t:"b",g:"device-attributes",
 q:"A monitoring appliance receives a mirrored copy of traffic from a switch SPAN port and can alert on threats but can never block them. Which device attribute pair describes it?",
-c:["Passive and out-of-band (tap/monitor)","Active and inline, sitting directly in the traffic path with the ability to intervene","Fail-closed and inline, blocking all traffic the moment the device itself fails","Active and fail-open, passing traffic unblocked the moment the device fails"],a:0,
+c:["Passive and out-of-band (tap/monitor)","Active and inline","Fail-closed and inline","Active and fail-open"],a:0,
 e:"A device fed by mirrored traffic sits out-of-band and is passive: it observes a copy and cannot interrupt the original flow, which is the IDS posture as opposed to an inline IPS.",
 w:["","Active inline devices sit directly in the traffic path and have the power to block, unlike a device fed only a mirrored copy.","Fail-closed describes inline failure behavior specifically; a mirror-fed device has no traffic path to fail closed on.","Fail-open likewise applies only to devices placed inline, not to a passive monitor watching a copy of traffic."]},
 {i:915,d:3,o:"3.2",t:"m",g:"firewall-types",
@@ -1389,7 +1392,7 @@ e:"Geographic dispersion separates redundant infrastructure far enough that a si
 w:["","Vertical scaling adds resources to one system.","Warm site testing validates a recovery facility; the question is about placement distance.","Capacity planning sizes resources for demand."]},
 {i:919,d:4,o:"4.2",t:"b",g:"asset-inventory",
 q:"A security team cannot say how many servers exist, what software they run, or who owns them. Which foundational process must come FIRST before vulnerability management can function?",
-c:["Penetration testing, hiring a team to actively attempt exploitation against the environment","Alert tuning, adjusting detection thresholds so the SOC is not overwhelmed by noise","Asset inventory and enumeration","Digital forensics, the after-the-fact investigation of a confirmed incident"],a:2,
+c:["Penetration testing","Alert tuning","Asset inventory and enumeration","Digital forensics"],a:2,
 e:"You cannot scan, patch, or assign risk to assets you do not know exist. Inventory and enumeration are the prerequisite for every downstream security process.",
 w:["Testing requires a defined scope; you cannot meaningfully target an attack against an estate you cannot enumerate.","Tuning alerts assumes you already know which assets and log sources should be generating them in the first place.","","Forensics investigates a specific incident after it occurs and has no bearing on establishing baseline visibility."]},
 {i:920,d:4,o:"4.2",t:"b",g:"asset-ownership",
@@ -1409,18 +1412,18 @@ e:"Scanners enumerate possible flaws; penetration testers attempt actual exploit
 w:["Testing requires substantially more skill than running an automated scanner, the reverse of this claim.","Manual, skilled testing consistently costs more than automated scanning, not less.","Scans typically run continuously or on frequent automated schedules, not just annually.",""]},
 {i:923,d:4,o:"4.3",t:"b",g:"vuln-prioritization",
 q:"A vulnerability affecting industrial pump controllers is rated moderate generally, but a water utility treats it as critical because exploitation could halt water treatment for a city. Which prioritization factor raised the severity?",
-c:["CVSS base score, the standardized numeric rating assigned to the vulnerability regardless of who is running the affected system","Organizational and industry impact","Patch availability, whether a vendor fix currently exists for the affected controller firmware","Scan frequency, how often the utility's vulnerability scanner checks these devices"],a:1,
+c:["CVSS base score","Organizational and industry impact","Patch availability","Scan frequency"],a:1,
 e:"The same flaw carries different consequences per organization. Industry and mission impact, here public water service, legitimately override a generic severity rating.",
 w:["The base score is exactly what stayed moderate; it is context-blind by design and does not account for who is running the system.","","Patch availability affects how quickly remediation can happen, not how severe the consequence would be if exploited today.","How often an organization scans for the flaw has no bearing on what would happen if it were actually exploited."]},
 {i:924,d:4,o:"4.4",t:"b",g:"log-archiving",
 q:"Regulations require a firm to retain security logs for five years, while the SIEM only keeps ninety days online for performance. Which practice satisfies the requirement?",
 c:["Archiving logs to long-term storage","Deleting logs after ninety days","Raising alert thresholds","Disabling verbose logging"],a:0,
-e:"Archiving moves older logs to durable long-term storage, meeting retention mandates while keeping the SIEM's active window fast.",
+e:"Archiving moves older logs to durable long-term storage, meeting retention mandates while keeping the SIEM's (Security Information and Event Management) active window fast.",
 w:["","Deletion at ninety days directly violates the five-year mandate.","Alert thresholds have nothing to do with retention.","Reducing logging shrinks the evidence collected, worsening compliance."]},
 {i:925,d:4,o:"4.5",t:"m",g:"edr-vs-av",
 q:"Which capability distinguishes endpoint detection and response (EDR) from traditional signature-based antivirus?",
 c:["EDR only works on servers, not user workstations or laptops","Antivirus can remove malware while EDR is limited to detection with no response capability","EDR continuously records behavior, enabling detection of threats with no known signature","EDR requires no software running on the endpoint itself, unlike antivirus"],a:2,
-e:"EDR watches process behavior, connections, and changes over time, letting analysts detect novel attacks, trace their path, and respond remotely, where signature AV only matches known malware patterns.",
+e:"EDR (Endpoint Detection and Response) watches process behavior, connections, and changes over time, letting analysts detect novel attacks, trace their path, and respond remotely, where signature AV only matches known malware patterns.",
 w:["EDR deploys across workstations and servers alike; nothing limits it to servers only.","EDR's name is literally Detection and Response, encompassing removal, isolation, and remediation actions well beyond what its name suggests here.","","EDR runs as an agent on the endpoint just as antivirus does; both require local software."]},
 {i:926,d:4,o:"4.5",t:"b",g:"web-filtering",
 q:"A web filter blocks a newly registered domain not because of its content, but because the domain is two hours old and has already been reported in early phishing telemetry. Which filtering approach is this?",
@@ -1454,7 +1457,7 @@ e:"An independent assessment is performed by an unaffiliated external party, pro
 w:["","Self-assessment is the firm grading itself.","Internal audit, while separated by reporting lines, is still inside the organization.","Another department is even less independent."]},
 {i:932,d:5,o:"5.4",t:"s",g:"compliance-automation",
 q:"A company replaces quarterly manual compliance spreadsheets with a system that continuously pulls control evidence from its tools and updates a live dashboard, flagging failures within minutes. Which practice is this?",
-c:["Annual attestation, a once-a-year formal declaration that policies have been read and accepted","Manual examination, a human reviewer working through controls one at a time on a fixed schedule","Gap analysis, a point-in-time comparison between current state and a target framework","Automated compliance monitoring"],a:3,
+c:["Annual attestation","Manual examination","Gap analysis","Automated compliance monitoring"],a:3,
 e:"Compliance automation collects evidence and evaluates control status continuously, replacing point-in-time manual checks with real-time visibility and faster failure detection.",
 w:["Attestation is a periodic, manual, formal declaration, exactly the process being augmented by automation here.","Manual examination is precisely the labor-intensive process this new system is replacing.","Gap analysis is a one-time or periodic comparison exercise, not a continuous monitoring practice.",""]},
 {i:933,d:5,o:"5.4",t:"b",g:"privacy-data",
@@ -1517,14 +1520,14 @@ e:"Decommissioning is a named mitigation because a half-retired system keeps its
 w:["Support contract terms are a procurement matter, not the security risk being illustrated.","","Power cost is an operational and budgeting concern, not a security one, and the servers are described as powered off anyway.","Licensing waste is a financial issue for the finance team, not the exposure being described here."]},
 {i:1009,d:2,o:"2.5",t:"m",g:"configuration-enforcement",
 q:"Servers are built from a hardened image, but over months administrators make undocumented changes and the fleet drifts apart. Which mitigation technique specifically addresses this?",
-c:["Configuration enforcement","Encryption, protecting data confidentiality at rest and in transit","Monitoring, observing systems and logging events for later review","Segmentation, dividing a network into isolated zones to limit reachability"],a:0,
+c:["Configuration enforcement","Encryption","Monitoring","Segmentation"],a:0,
 e:"Configuration enforcement continuously checks systems against the approved baseline and automatically corrects deviations, so drift is remediated rather than merely observed.",
 w:["","Encryption protects data confidentiality and does nothing about configuration drift on a host.","Monitoring would detect the drift and generate an alert, but does not by itself correct anything.","Segmentation limits network reachability between zones; it has no bearing on the configuration state of the hosts within a zone."]},
 
 /* ---- 4.7 automation and orchestration (was thin: 1) ---- */
 {i:1010,d:4,o:"4.7",t:"b",g:"automation-use-cases",
 q:"A security team writes automation that automatically revokes a user's access across every connected system the moment HR marks them as terminated. Which automation use case is this?",
-c:["Guard rails, automated limits that prevent unsafe configurations from ever being deployed in the first place","User provisioning and de-provisioning","Ticket creation, opening a record automatically so a human can track and act on an event","Continuous integration, automatically building and testing code with every commit"],a:1,
+c:["Guard rails","User provisioning and de-provisioning","Ticket creation","Continuous integration"],a:1,
 e:"Provisioning and de-provisioning user accounts is a named automation use case, and automating termination closes the window in which a departed employee retains live access.",
 w:["Guard rails prevent unsafe changes before deployment; they don't govern who has active access to a live system.","","Ticket creation opens a record for a human to act on later; it doesn't itself change access.","Continuous integration automates building and testing code, unrelated to user account lifecycle."]},
 {i:1011,d:4,o:"4.7",t:"s",g:"automation-guardrails",
@@ -1534,7 +1537,7 @@ e:"Guard rails are automated policy boundaries built into the deployment pipelin
 w:["Escalation automation routes an issue to the right responder after it occurs.","Workforce multiplier is a benefit of automation, not a specific control mechanism.","","Resource provisioning automation creates infrastructure; the guard rail is what constrains it."]},
 {i:1012,d:4,o:"4.7",t:"m",g:"automation-considerations",
 q:"A SOC automates nearly all of its containment actions through a single orchestration platform maintained by one engineer who is leaving. Which automation consideration does this MOST directly illustrate?",
-c:["Efficiency and time saving, the reduction in manual analyst effort that automation typically provides","Single point of failure and ongoing supportability","Employee retention, keeping skilled staff from leaving in the first place","Reaction time, how quickly the SOC can respond once a threat is identified"],a:1,
+c:["Efficiency and time saving","Single point of failure and ongoing supportability","Employee retention","Reaction time"],a:1,
 e:"Automation concentrates capability, so the platform itself becomes a single point of failure, and unmaintainable scripts become technical debt the team cannot support.",
 w:["Efficiency is a benefit automation typically provides; it isn't the risk this scenario is describing.","","Retention is listed as a benefit automation can indirectly support, not the concern being illustrated here.","Reaction time is likewise a benefit of automation, and it would only degrade after the platform actually failed."]},
 {i:1013,d:4,o:"4.7",t:"b",g:"automation-benefits",
@@ -1620,7 +1623,7 @@ e:"Diffie-Hellman lets both parties compute the same secret from exchanged publi
 w:["Encrypting a key with itself is circular; the recipient cannot decrypt it.","An emailed attachment transmits the secret through the monitored channel, protected only by a password that must also travel somehow.","","A shared drive still transmits and stores the secret where an observer could reach it."]},
 {i:1107,d:2,o:"2.3",t:"s",g:"race-conditions",
 q:"An installer checks that a target file is safe, then a moment later writes to it with elevated privileges. An attacker swaps the file for a link to a system file in the gap between the check and the write. Which vulnerability is exploited?",
-c:["Buffer overflow, writing past the end of an allocated block of memory","Time-of-check to time-of-use race condition","Memory injection, inserting malicious code directly into a running process's memory space","Cross-site scripting, running attacker-supplied script in a victim's browser session"],a:1,
+c:["Buffer overflow","Time-of-check to time-of-use race condition","Memory injection","Cross-site scripting"],a:1,
 e:"The attack succeeds because the resource changed between validation (time-of-check) and action (time-of-use), the defining TOC/TOU race condition.",
 w:["No memory boundary is overrun here; the file simply changed identity between two steps.","","Memory injection inserts code into a process's memory space, a different mechanism from swapping a file reference.","XSS runs script in a victim's browser and has nothing to do with a swapped file on disk."]},
 {i:1108,d:2,o:"2.4",t:"s",g:"crypto-attacks",
@@ -1818,7 +1821,7 @@ e:"SDN centralizes the control plane in a controller that programs all forwardin
 w:["","Air gaps isolate; they do not centralize control.","Thick clients describe where application processing occurs.","Peer-to-peer removes central control, the opposite direction."]},
 {i:1210,d:3,o:"3.1",t:"s",g:"iac",
 q:"A production outage is traced to an engineer's manual console change that no one documented. The team wants any manual drift automatically detected and reverted to the approved definition. Which practice provides this?",
-c:["Serverless computing, running code without provisioning or managing underlying servers directly","Manual change logs kept by administrators after each configuration change","Infrastructure as code with enforced state","Vertical scaling, adding more CPU or memory capacity to an existing single server"],a:2,
+c:["Serverless computing","Manual change logs","Infrastructure as code with enforced state","Vertical scaling"],a:2,
 e:"With IaC, the version-controlled definition is the source of truth; tooling continuously compares reality against it and reverts undocumented drift, making the console change visible and reversible.",
 w:["Serverless changes the compute model entirely; it says nothing about how configuration drift is governed.","Manual logs depend entirely on the person remembering to write them, which is exactly what failed in this scenario.","","Scaling adds capacity to handle load; it has nothing to do with detecting or reverting configuration drift."]},
 {i:1211,d:3,o:"3.3",t:"b",g:"data-states",
@@ -1858,7 +1861,7 @@ e:"Automated ticket creation guarantees every alert becomes a tracked, assigned 
 w:["","Guard rails block unsafe configurations; nothing is blocked here.","Provisioning manages accounts, not incidents.","CI automates software build and test."]},
 {i:1218,d:4,o:"4.7",t:"b",g:"automation-benefits",
 q:"A development pipeline automatically runs security tests on every single code commit, failing the build when a vulnerability appears. Which practice does this describe?",
-c:["Penetration testing, having a skilled team actively attempt exploitation against a running system","Continuous integration with automated security testing","Annual code audit, a scheduled once-a-year deep review of the full codebase","Manual peer review, a colleague reading and approving another developer's code changes"],a:1,
+c:["Penetration testing","Continuous integration with automated security testing","Annual code audit","Manual peer review"],a:1,
 e:"Continuous integration merges and tests code constantly, so security defects surface within minutes of introduction, when they are cheapest to fix, instead of at release time.",
 w:["Penetration testing attacks a running system, typically on a periodic schedule, not on every commit.","","Annual audits find a year's accumulated flaws all at once, the direct opposite of the per-commit cadence described here.","Peer review is human and valuable, but it is not the automated, tool-driven gate this scenario describes."]},
 {i:1219,d:4,o:"4.7",t:"m",g:"automation-considerations",
@@ -1874,7 +1877,7 @@ w:["Single point of failure is a risk consideration, not a benefit.","Supportabi
 {i:1221,d:4,o:"4.4",t:"s",g:"siem",
 q:"A failed VPN login, an antivirus alert on the same user's laptop, and an unusual file share access appear in three separate systems within five minutes. Only one platform pieced them together into a single incident. Which capability did that?",
 c:["SIEM correlation across aggregated log sources","Antivirus signature matching against a database of known malware patterns on the local endpoint","NetFlow sampling of traffic conversations passing through routers and switches","Vulnerability scanning of hosts to identify unpatched software weaknesses"],a:0,
-e:"A SIEM's core value is correlation: aggregating logs from many sources and connecting individually minor events into one coherent attack narrative worth investigating.",
+e:"A SIEM's (Security Information and Event Management) core value is correlation: aggregating logs from many sources and connecting individually minor events into one coherent attack narrative worth investigating.",
 w:["","Antivirus sees only its own endpoint's detections and has no visibility into VPN logins or file share activity elsewhere.","NetFlow records traffic conversations without any cross-system correlation or context about what generated them.","Scanners assess weaknesses that exist, not live events unfolding across multiple systems in real time."]},
 {i:1222,d:4,o:"4.5",t:"s",g:"web-filtering",
 q:"Remote employees work from home and coffee shops, never touching the corporate network, yet their web traffic must still be filtered by company policy. Which web filter deployment fits?",
@@ -1883,7 +1886,7 @@ e:"An agent on the endpoint enforces filtering wherever the device goes, indepen
 w:["Traffic from a coffee shop never reaches the office proxy.","","The office perimeter never sees remote traffic.","Remote devices use whatever resolver their network provides unless an agent redirects them."]},
 {i:1223,d:4,o:"4.1",t:"m",g:"wireless-security",
 q:"Which WPA3 improvement specifically addresses the weakness that let attackers capture a WPA2 handshake and crack the password offline?",
-c:["Longer SSID names, which increase the character length of the visible network name","Hidden network broadcast, which suppresses the SSID from appearing in scan results","Simultaneous Authentication of Equals replacing the PSK handshake","MAC address randomization, which rotates a client device's hardware address to limit tracking"],a:2,
+c:["Longer SSID names","Hidden network broadcast","Simultaneous Authentication of Equals replacing the PSK handshake","MAC address randomization"],a:2,
 e:"SAE replaces WPA2's crackable four-way handshake with an exchange resistant to offline dictionary attacks: captured traffic no longer lets attackers grind passwords at leisure.",
 w:["SSID length is purely cosmetic and has no bearing on the handshake or how it's cracked.","Hiding an SSID is a weak form of obscurity that does nothing to protect the handshake exchange itself.","","MAC randomization is a client-side privacy feature that limits device tracking; it has no relationship to handshake security."]},
 {i:1224,d:4,o:"4.1",t:"b",g:"wireless-security",
@@ -1908,7 +1911,7 @@ e:"A risk threshold is the defined trigger point at which a monitored risk deman
 w:["Exposure factor is the fraction of asset value one incident destroys.","ARO estimates event frequency per year.","","Impact rates severity, not the action trigger."]},
 {i:1228,d:5,o:"5.2",t:"s",g:"risk-strategies",
 q:"A legacy system cannot support a required security control. Leadership formally documents acceptance of the risk for twelve months while a replacement is procured, with compensating monitoring in the interim. Which strategy and mechanism does this describe?",
-c:["Avoidance via decommissioning the legacy system before the replacement is ready","Transfer via insurance, shifting the financial consequence to a third-party underwriter","Mitigation via patching, applying a technical fix that closes the control gap directly","Acceptance via a documented, time-bound exception"],a:3,
+c:["Avoidance","Transfer","Mitigation","Acceptance"],a:3,
 e:"The organization is accepting the risk knowingly, through a formal exception: documented, time-limited, with compensations, rather than pretending the gap does not exist.",
 w:["The system continues operating throughout, so nothing was actually avoided here.","No insurance or third party is described as assuming any financial burden in this scenario.","The control gap itself remains open the whole time; monitoring compensates for it but doesn't close it through a technical fix.",""]},
 {i:1229,d:5,o:"5.3",t:"b",g:"agreements",
@@ -1971,7 +1974,7 @@ e:"BEC abuses control of, or convincing imitation of, a genuine business email a
 w:["No phone call is involved.","Brand impersonation mimics a company's public identity toward outsiders; this weaponizes an internal account.","","A watering hole poisons a website victims visit."]},
 {i:1304,d:2,o:"2.4",t:"s",g:"wireless-attacks",
 q:"Attackers repeatedly knock conference attendees off the venue Wi-Fi with forged disconnect frames while broadcasting a stronger network with the identical name, which victims' devices then auto-join. Which attack pairing is this?",
-c:["Bluesnarfing feeding RFID cloning, two attacks against entirely different radio technologies","Amplification feeding reflection, techniques used in volumetric denial-of-service attacks","Domain hijacking feeding pharming, both operating at the DNS and domain layer","A deauthentication attack herding victims onto an evil twin"],a:3,
+c:["Bluesnarfing and RFID cloning","Amplification and reflection","Domain hijacking and pharming","A deauthentication attack herding victims onto an evil twin"],a:3,
 e:"The deauth flood forcibly disconnects clients, and the evil twin with the same SSID and stronger signal captures them on reconnect, a classic two-stage wireless attack.",
 w:["Neither Bluetooth nor physical badges are involved in this Wi-Fi scenario.","Amplification and reflection are DDoS techniques operating on spoofed traffic volume, not disconnect frames or rogue access points.","Those attacks operate on DNS resolution and domain names, not 802.11 wireless frames.",""]},
 {i:1305,d:2,o:"2.4",t:"b",g:"resource-indicators",
@@ -2011,7 +2014,7 @@ e:"Stored data gets disk and file encryption, moving data gets transport encrypt
 w:["This swaps rest and transit protections.","","Those tools serve monitoring, integrity, and availability, not the three states as matched.","No single control covers all three states, which is why the states are distinguished."]},
 {i:1312,d:3,o:"3.4",t:"b",g:"backups",
 q:"A backup design keeps one copy onsite for fast restores and a second copy offsite for disaster survival, refreshed on a defined schedule. Which two backup considerations does this design address?",
-c:["Journaling and snapshots, point-in-time techniques for capturing incremental state changes","Encryption and compression, protecting confidentiality and reducing storage footprint of the copies","Replication and RAID, techniques focused on live availability rather than backup placement","Onsite/offsite placement and backup frequency"],a:3,
+c:["Journaling and snapshots","Encryption and compression","Replication and RAID","Onsite/offsite placement and backup frequency"],a:3,
 e:"Where copies live (onsite for speed, offsite for disaster) and how often they refresh (the schedule) are the two named considerations this design decides.",
 w:["Journaling and snapshots are point-in-time capture techniques, not decisions about where copies are stored.","Neither encryption nor compression is what's being described in this particular design scenario.","Replication and RAID address live availability of running systems, not the placement and cadence of backup copies.",""]},
 {i:1313,d:3,o:"3.4",t:"b",g:"platform-diversity",
@@ -2031,14 +2034,14 @@ e:"Fail-open chooses availability over inspection: a dead IPS passes traffic thr
 w:["A failed device inspects nothing at all; fail-open specifically means it passes traffic unblocked instead of catching attacks.","","Halting all traffic on failure is the definition of fail-closed, the opposite configuration from what's described here.","Redundancy is still exactly how an organization avoids ever having to face this tradeoff in the first place."]},
 {i:1316,d:4,o:"4.5",t:"s",g:"host-firewall",
 q:"Policy requires that on each laptop, only the approved mail client may reach port 443 on the mail server, while the browser and all other applications on the same laptop must be blocked from that destination. Which control can enforce this per-application distinction?",
-c:["Network perimeter firewall, positioned at the edge of the corporate network where it inspects traffic crossing between zones","Screened subnet, a network segment isolated between two firewalls to expose specific services safely","Host-based firewall with per-application rules","DNS filtering, which blocks or allows domain name resolution requests device-wide"],a:2,
+c:["Network perimeter firewall","Screened subnet","Host-based firewall with per-application rules","DNS filtering"],a:2,
 e:"Only a control on the endpoint can see which local application generated a connection; a host-based firewall filters by program, something network devices, which see only addresses and ports, cannot distinguish.",
 w:["A perimeter firewall sees identical packets on the wire regardless of which local application generated them.","A screened subnet is a network zone design concept, unrelated to distinguishing between applications on a single laptop.","","DNS filtering gates name resolution for the whole device; it can't tell which specific application initiated a given lookup."]},
 {i:1317,d:4,o:"4.5",t:"m",g:"ids-ips",
 q:"Which statement correctly contrasts a host-based IPS with a host-based IDS?",
 c:["A HIPS blocks; a HIDS only alerts","A HIDS blocks while a HIPS only observes traffic and generates alerts without ever intervening","Both are network appliances installed at the perimeter, not software running on the host itself","Neither can detect anything meaningful without a SIEM aggregating and correlating their output"],a:0,
 e:"The IDS/IPS distinction holds at the host level: detection alerts, prevention intervenes, and the choice trades response speed against the risk of blocking legitimate activity.",
-w:["","This reverses the two entirely: prevention systems block, detection systems only observe and alert.","The host-based variants of both run as software directly on the endpoint, not as network appliances.","Both function standalone and can detect and act independently; a SIEM adds cross-source correlation on top, not basic detection capability."]},
+w:["","This reverses the two entirely: prevention systems block, detection systems only observe and alert.","The host-based variants of both run as software directly on the endpoint, not as network appliances.","Both function standalone and can detect and act independently; a SIEM (Security Information and Event Management) adds cross-source correlation on top, not basic detection capability."]},
 {i:1318,d:4,o:"4.8",t:"s",g:"forensics",
 q:"Defense counsel challenges digital evidence by demanding proof of every person who possessed the drive, when, and for what purpose, from seizure to courtroom. Which forensic practice answers this challenge?",
 c:["Legal hold notification","Chain of custody documentation","Sandbox detonation","Root cause analysis"],a:1,
@@ -2072,15 +2075,15 @@ w:["Packet captures record traffic.","A risk register tracks organizational risk
 {i:1324,d:4,o:"4.5",t:"s",g:"edr",
 q:"Ransomware begins encrypting a laptop at 2 AM. The endpoint security platform kills the process, isolates the machine from the network, and preserves the process telemetry timeline for investigators, all automatically. Which tool class did this?",
 c:["Signature antivirus alone","Endpoint detection and response","NetFlow collector","Vulnerability scanner"],a:1,
-e:"EDR combines behavioral detection with automated response, kill, isolate, and preserve, plus the recorded timeline that lets analysts reconstruct the attack afterward.",
+e:"EDR (Endpoint Detection and Response) combines behavioral detection with automated response, kill, isolate, and preserve, plus the recorded timeline that lets analysts reconstruct the attack afterward.",
 w:["Signature AV without the behavioral and response layer stops at detection of known patterns.","","NetFlow observes network conversations from afar.","Scanners assess weaknesses on a schedule; they do not respond to live attacks."]},
 {i:1325,d:5,o:"5.5",t:"b",g:"pentest-types",
-q:"A penetration testing firm is given nothing: no network diagrams, no credentials, no insider knowledge. They must discover everything as a true external attacker would. Which SY0-701 term describes this test?",
+q:"A penetration testing firm is given nothing: no network diagrams, no credentials, no insider knowledge. They must discover everything as a true external attacker would. Which environment knowledge level describes this test?",
 c:["Unknown environment","Known environment","Partially known environment","Defensive"],a:0,
 e:"An unknown environment test (formerly black box) provides zero internal information, modeling a genuine outside attacker at the cost of time spent discovering what insiders already know.",
 w:["","Known environment gives full documentation and access.","Partially known provides limited insider information.","Defensive describes the blue team role, not information level."]},
 {i:1326,d:5,o:"5.5",t:"b",g:"pentest-types",
-q:"Testers receive network ranges and an architecture overview but no credentials or source code, blending insider context with outsider discovery. Which SY0-701 term describes this?",
+q:"Testers receive network ranges and an architecture overview but no credentials or source code, blending insider context with outsider discovery. Which environment knowledge level describes this?",
 c:["Unknown environment","Partially known environment","Physical penetration test","Passive reconnaissance"],a:1,
 e:"A partially known environment test (formerly gray box) gives limited internal information, balancing realism against efficiency.",
 w:["Unknown provides nothing at all.","","Physical testing targets facilities and entry controls.","Passive reconnaissance is an information-gathering technique within a test."]},
@@ -2121,7 +2124,7 @@ e:"Privacy and retention obligations vary and sometimes directly conflict across
 w:["","Encryption strength has no bearing on resolving two contradictory legal mandates from different countries.","No malicious or negligent insider is described anywhere in this scenario.","Training cannot reconcile two governments' genuinely conflicting legal requirements."]},
 {i:1334,d:5,o:"5.4",t:"b",g:"privacy-data",
 q:"Before a company can honor deletion requests or answer a regulator's questions, it must first know every system holding personal data, what categories, and why. Which practice provides this foundation?",
-c:["Right to be forgotten, the individual's legal ability to request erasure of their personal data","Data inventory and retention documentation","Sanctions, the penalties a regulator can impose for confirmed non-compliance","Attestation, a formal signed declaration that policies have been read and followed"],a:1,
+c:["Right to be forgotten","Data inventory and retention documentation","Sanctions","Attestation"],a:1,
 e:"A data inventory maps where personal data lives and why it is kept; without it, erasure requests and regulator inquiries cannot be answered completely or provably.",
 w:["The right to be forgotten is the very request that a data inventory enables the company to actually fulfill.","","Sanctions are the penalty imposed for failing to comply, not the foundation that enables compliance in the first place.","Attestation asserts that compliance exists, but the inventory is what actually demonstrates and enables it."]},
 {i:1335,d:5,o:"5.2",t:"b",g:"risk-appetite",
@@ -2216,7 +2219,7 @@ w:["","Port security controls which devices connect to switch ports.","NetFlow o
 q:"A Windows administrator enforces password rules, disables USB storage, and locks screen timeout settings on every domain-joined computer from one central console, and machines reapply the settings automatically. Which mechanism is this?",
 c:["SELinux policy","Host-based firewall","Group Policy","EDR platform"],a:2,
 e:"Group Policy pushes and continuously reapplies OS security settings across all domain-joined Windows systems from central objects, making per-machine drift self-correcting.",
-w:["SELinux enforces mandatory access control on Linux, not Windows domains.","A host firewall filters that machine's traffic only.","","EDR detects and responds to threats rather than distributing settings."]},
+w:["SELinux enforces mandatory access control on Linux, not Windows domains.","A host firewall filters that machine's traffic only.","","EDR (Endpoint Detection and Response) detects and responds to threats rather than distributing settings."]},
 {i:1417,d:4,o:"4.3",t:"b",g:"threat-feeds",
 q:"A security team subscribes to a service that monitors criminal marketplaces and hidden forums, alerting when the company's stolen credentials or data appear for sale. Which threat intelligence source is being monitored?",
 c:["OSINT blogs","Information-sharing organization","Proprietary vendor telemetry","The dark web"],a:3,
@@ -2249,12 +2252,12 @@ e:"A conflict of interest exists when a decision maker's personal stake could bi
 w:["Right-to-audit is a contract clause for inspecting vendors.","","Supply chain analysis examines the vendor's own dependencies.","Rules of engagement scope a penetration test."]},
 {i:1423,d:5,o:"5.3",t:"b",g:"vendor-monitoring",
 q:"A year after signing, a company still reviews its cloud vendor quarterly: SLA performance, incident reports, and an annual security questionnaire the vendor must complete. Which third-party risk practice is this?",
-c:["Vendor selection, the initial process of comparing and choosing among candidate providers","Due diligence conducted before the contract was ever signed","Ongoing vendor monitoring using questionnaires","Statement of work negotiation, defining the specific deliverables and terms of an engagement"],a:2,
+c:["Vendor selection","Due diligence","Ongoing vendor monitoring using questionnaires","Statement of work negotiation"],a:2,
 e:"Vendor risk does not end at signature: ongoing monitoring, performance reviews, incident tracking, and recurring questionnaires, verifies the vendor still deserves the trust placed in them.",
 w:["Selection is the pre-contract decision process, already concluded a year earlier in this scenario.","Due diligence specifically refers to the pre-contract investigation, not activity happening a year into the relationship.","","A statement of work defines deliverables and terms up front; it doesn't describe this recurring oversight activity."]},
 {i:1424,d:5,o:"5.4",t:"b",g:"compliance-monitoring",
 q:"Every employee must electronically sign each year confirming they have read and accepted the updated security policies, and the signatures are retained as compliance evidence. Which compliance monitoring element is this?",
-c:["External examination, a review conducted by a regulator or independent outside party","Sanction, a penalty imposed for a confirmed failure to comply with a requirement","Automation, technology-driven collection and evaluation of compliance evidence","Attestation and acknowledgement"],a:3,
+c:["External examination","Sanction","Automation","Attestation and acknowledgement"],a:3,
 e:"Attestation and acknowledgement captures each person's formal confirmation of policy awareness, producing the evidence trail that regulators and auditors ask for first.",
 w:["An examination is conducted by a regulator or outside party, not by employees confirming their own policy awareness.","A sanction is a penalty applied after non-compliance is found, not the confirmation activity itself.","Automation might deliver the workflow behind the scenes, but the specific named element being tested here is the acknowledgement itself.",""]}
 ];
@@ -2688,7 +2691,7 @@ w:["","Segmentation divides the network itself into isolated zones; it doesn't d
 {i:1582,d:2,o:"2.5",t:"s",g:"hardening-mitigation",
 q:"An organization requires every new workstation to have anti-malware software installed and actively running before it's allowed to connect to the corporate network. Which hardening technique is this?",
 c:["Installation of endpoint protection","Host-based firewall","Configuration enforcement","Application allow list"],a:0,
-e:"Installation of endpoint protection means deploying anti-malware or EDR software directly onto a device, which is exactly what's being required here before the workstation is allowed onto the network.",
+e:"Installation of endpoint protection means deploying anti-malware or EDR (Endpoint Detection and Response) software directly onto a device, which is exactly what's being required here before the workstation is allowed onto the network.",
 w:["","A host-based firewall filters network traffic to and from a single device; anti-malware software is a different category of endpoint protection than a firewall.","Configuration enforcement verifies a device stays compliant with defined settings over time; requiring anti-malware at initial connection is specifically the endpoint protection installation step, not ongoing compliance checking.","An application allow list restricts which programs can run on a device; it's a different hardening technique than installing anti-malware software."]},
 {i:1583,d:2,o:"2.5",t:"s",g:"hardening-mitigation",
 q:"During device setup, a technician immediately changes every network appliance's factory-set administrator username and password before it's placed into production. Which hardening technique is this?",
@@ -2816,10 +2819,10 @@ c:["Tunneling","Remote access","SD-WAN","VPN concentrator"],a:0,
 e:"Tunneling is the mechanism of encapsulating traffic inside a secure protocol, such as IPSec, so it can travel across an untrusted network like the public internet while appearing as a single protected link.",
 w:["","Remote access describes an individual user connecting in from outside the network, a broader use case; this scenario is a persistent site-to-site link, and the mechanism being tested is specifically tunneling.","SD-WAN manages and optimizes traffic across multiple WAN links based on policy and performance, a different concept than the encapsulation mechanism itself.","A VPN concentrator is a hardware device that terminates many VPN tunnels; the scenario is asking about the mechanism connecting the two sites, which is tunneling, not the specific device type."]},
 {i:1608,d:3,o:"3.2",t:"s",g:"failure-modes",
-q:"A firewall is configured so that if it crashes or loses power, all network traffic immediately stops passing through it rather than flowing uninspected. Which failure mode is this, and what does it prioritize?",
-c:["Fail-closed, prioritizing security over availability","Fail-open, prioritizing availability over security","Fail-closed, prioritizing availability over security","Active failover to a backup appliance"],a:0,
+q:"A firewall is configured so that if it crashes or loses power, all network traffic immediately stops passing through it rather than flowing uninspected. Which failure mode is this?",
+c:["Fail-closed","Fail-open","Fail-open with a battery backup","Active failover to a backup appliance"],a:0,
 e:"Fail-closed means the device blocks all traffic when it fails, prioritizing security by ensuring nothing passes uninspected, even at the cost of taking the network down until the device is restored.",
-w:["","Fail-open is the opposite behavior, letting traffic flow uninspected during a failure to preserve availability; this scenario explicitly states traffic stops, which is fail-closed.","Fail-closed does block traffic, but it does so specifically to prioritize security over keeping the network available, not the reverse.","This scenario describes traffic simply stopping, not a described handoff to a redundant backup appliance."]},
+w:["","Fail-open is the opposite behavior, letting traffic flow uninspected during a failure to preserve availability; this scenario explicitly states traffic stops, which is fail-closed.","A battery backup keeps a device running through a power loss; it does not change what happens once the device has actually failed or crashed.","This scenario describes traffic simply stopping, not a described handoff to a redundant backup appliance."]},
 {i:1609,d:3,o:"3.2",t:"s",g:"port-security",
 q:"A company requires every device plugged into a wired switch port to authenticate before the port will pass any traffic, using a certificate-based method negotiated between the device and a central authentication server. Which two technologies work together to enforce this?",
 c:["802.1X and EAP","VPN and IPSec","NGFW and UTM","Jump server and proxy server"],a:0,
@@ -3038,13 +3041,13 @@ w:["","Rescanning is running an automated scan again on a specific system to con
 {i:1652,d:4,o:"4.4",t:"s",g:"monitoring-activities",
 q:"A SIEM pulls log data from firewalls, servers, endpoints, and applications across the entire environment into one central location so analysts can search and correlate events without logging into each individual system separately. Which monitoring activity does this represent?",
 c:["Log aggregation","Log archiving","Alert tuning","Reporting"],a:0,
-e:"Log aggregation is collecting log data from many different sources into one central location, exactly the function a SIEM performs by pulling logs from firewalls, servers, endpoints, and applications together.",
+e:"Log aggregation is collecting log data from many different sources into one central location, exactly the function a SIEM (Security Information and Event Management) performs by pulling logs from firewalls, servers, endpoints, and applications together.",
 w:["","Log archiving is moving older logs to long-term storage for retention, a different activity than initially pulling logs together from many live sources.","Alert tuning adjusts detection rules to reduce false positives or negatives, not the initial collection of log data into one place.","Reporting communicates findings to stakeholders after analysis, not the underlying collection of logs from multiple sources."]},
 {i:1653,d:4,o:"4.4",t:"s",g:"monitoring-tools",
 q:"Every endpoint in the organization runs software that scans files against known malware signatures and blocks or quarantines anything that matches, running continuously in the background with minimal analyst involvement. Which monitoring tool is this?",
 c:["Antivirus","SIEM","DLP","EDR"],a:0,
 e:"Antivirus is signature-based software that scans files against known malware definitions and automatically blocks or quarantines matches, exactly the low-touch, signature-matching behavior described.",
-w:["","A SIEM aggregates and correlates log data from many sources for analyst review, a different function than an endpoint directly scanning files against malware signatures.","DLP monitors and blocks data leaving the organization based on content policy, not files being scanned against malware signatures.","EDR provides deeper behavioral monitoring and response capability beyond simple signature matching, which is the more basic, foundational capability antivirus specifically represents here."]},
+w:["","A SIEM (Security Information and Event Management) aggregates and correlates log data from many sources for analyst review, a different function than an endpoint directly scanning files against malware signatures.","DLP (Data Loss Prevention) monitors and blocks data leaving the organization based on content policy, not files being scanned against malware signatures.","EDR (Endpoint Detection and Response) provides deeper behavioral monitoring and response capability beyond simple signature matching, which is the more basic, foundational capability antivirus specifically represents here."]},
 {i:1654,d:4,o:"4.6",t:"s",g:"access-control-models",
 q:"On a shared drive, each individual file's owner personally decides who else gets read or write access to it, granting and revoking permissions at their own discretion with no central policy dictating the rules. Which access control model is this?",
 c:["Discretionary access control","Mandatory access control","Role-based access control","Rule-based access control"],a:0,
@@ -3189,17 +3192,17 @@ w:["","Reputation-based filtering scores sites based on broader trust signals ra
 q:"A Linux server enforces mandatory access control policies at the kernel level, confining every process to a strict, predefined set of permitted actions regardless of the file permissions a user might otherwise have. Which OS security feature is this?",
 c:["SELinux","Group Policy","Host-based firewall","EDR"],a:0,
 e:"SELinux enforces mandatory access control at the kernel level on Linux systems, confining processes to strict predefined policies that override standard file permissions, exactly as described.",
-w:["","Group Policy is a Windows-specific centralized configuration management tool, not a Linux kernel-level mandatory access control system.","A host-based firewall filters network traffic to and from a device, not process-level mandatory access control enforced at the kernel.","EDR provides behavioral monitoring and response on an endpoint, a different function than kernel-level mandatory access control enforcement."]},
+w:["","Group Policy is a Windows-specific centralized configuration management tool, not a Linux kernel-level mandatory access control system.","A host-based firewall filters network traffic to and from a device, not process-level mandatory access control enforced at the kernel.","EDR (Endpoint Detection and Response) provides behavioral monitoring and response on an endpoint, a different function than kernel-level mandatory access control enforcement."]},
 {i:1683,d:4,o:"4.5",t:"s",g:"file-integrity",
 q:"A security tool calculates and stores a cryptographic hash of every critical system file, then periodically recalculates those hashes and alerts if any file's hash no longer matches, indicating the file was altered. Which security tool is this?",
 c:["File integrity monitoring","DLP","EDR","SIEM"],a:0,
 e:"File integrity monitoring calculates baseline hashes of critical files and alerts when a recalculated hash no longer matches, exactly the mismatch-detection mechanism described.",
-w:["","DLP monitors and blocks sensitive data leaving the organization, unrelated to detecting whether a specific file's content has changed.","EDR provides broader behavioral monitoring and response on an endpoint, a different mechanism than the specific hash-comparison technique described here.","A SIEM aggregates and correlates log data from many sources, not the specific hash-based file-change detection mechanism described."]},
+w:["","DLP (Data Loss Prevention) monitors and blocks sensitive data leaving the organization, unrelated to detecting whether a specific file's content has changed.","EDR (Endpoint Detection and Response) provides broader behavioral monitoring and response on an endpoint, a different mechanism than the specific hash-comparison technique described here.","A SIEM (Security Information and Event Management) aggregates and correlates log data from many sources, not the specific hash-based file-change detection mechanism described."]},
 {i:1684,d:4,o:"4.5",t:"s",g:"xdr",
 q:"A security platform correlates data not just from endpoints, but also from network traffic, email, and cloud logs together, aiming to detect an attack that touches multiple layers at once rather than analyzing each source in isolation. Which capability is this?",
 c:["XDR","EDR","DLP","NAC"],a:0,
-e:"XDR extends detection and response beyond just the endpoint, correlating data across endpoints, network, email, and cloud together, exactly the multi-layer correlation described.",
-w:["","EDR focuses specifically on endpoint behavior and response, a narrower scope than the cross-layer correlation across network, email, and cloud described here.","DLP monitors and blocks sensitive data leaving the organization, a different and narrower function than broad multi-layer threat correlation.","NAC controls whether a device is allowed onto the network at all, unrelated to correlating detection data across multiple security layers."]},
+e:"XDR (Extended Detection and Response) extends detection and response beyond just the endpoint, correlating data across endpoints, network, email, and cloud together, exactly the multi-layer correlation described.",
+w:["","EDR (Endpoint Detection and Response) focuses specifically on endpoint behavior and response, a narrower scope than the cross-layer correlation across network, email, and cloud described here.","DLP (Data Loss Prevention) monitors and blocks sensitive data leaving the organization, a different and narrower function than broad multi-layer threat correlation.","NAC (Network Access Control) controls whether a device is allowed onto the network at all, unrelated to correlating detection data across multiple security layers."]},
 {i:1685,d:4,o:"4.5",t:"s",g:"user-behavior-analytics",
 q:"A security platform builds a behavioral profile of what's normal for each individual user, such as typical login times, typical file access patterns, and typical data volumes downloaded, then flags an alert when a user suddenly downloads ten times their usual amount of data. Which capability is this?",
 c:["User behavior analytics","File integrity monitoring","DLP","NAC"],a:0,
@@ -3928,7 +3931,7 @@ e:"Adding RAM is a performance upgrade with no security benefit. Disabling unuse
 w:["Disabling unused services directly reduces attack surface, a core hardening step.","Removing default credentials closes one of the most commonly exploited weaknesses.","Patching closes known vulnerabilities, a core hardening step.",""]},
 {i:2011,d:3,o:"3.1",t:"n",g:"cloud-models-not",
 q:"A cloud architecture diagram labels several deployment approaches under evaluation. Which labeled item is NOT a recognized cloud service model?",
-c:["Infrastructure as a Service, providing virtualized compute and storage","Platform as a Service, providing a managed runtime for application code","Software as a Service, providing a complete ready-to-use application","Network as a Service, a term for a company's on-premises router configuration"],a:3,
+c:["Infrastructure as a Service (IaaS)","Platform as a Service (PaaS)","Software as a Service (SaaS)","Network as a Service (NaaS)"],a:3,
 e:"The three recognized service models tested on the exam are IaaS, PaaS, and SaaS. The fourth option describes ordinary on-premises networking, not a cloud service model at all.",
 w:["IaaS is one of the three core, named cloud service models.","PaaS is one of the three core, named cloud service models.","SaaS is one of the three core, named cloud service models.",""]},
 {i:2012,d:3,o:"3.2",t:"n",g:"network-devices-not",
@@ -3938,7 +3941,7 @@ e:"A managed switch's core job is basic connectivity and traffic switching; VLAN
 w:["An IPS is a dedicated security device that actively blocks threats.","A WAF is a dedicated security device protecting web applications specifically.","A jump server exists purely to concentrate and audit privileged access, a security function.",""]},
 {i:2013,d:3,o:"3.4",t:"n",g:"ha-concepts-not",
 q:"A disaster recovery plan lists several concepts the team must track. Which of the following is NOT a resilience or continuity concept covered in this domain?",
-c:["Recovery time objective, how long recovery is allowed to take","Recovery point objective, how much data loss is tolerable","Mean time between failures, the average time a system runs before failing","Common vulnerabilities and exposures, a public catalog of known vulnerabilities"],a:3,
+c:["Recovery time objective","Recovery point objective","Mean time between failures","Common vulnerabilities and exposures"],a:3,
 e:"CVE is a vulnerability management and identification concept, unrelated to resilience or disaster recovery planning. RTO, RPO, and MTBF are all named continuity and reliability metrics.",
 w:["RTO is a core, named continuity metric.","RPO is a core, named continuity metric.","MTBF is a core, named reliability metric.",""]},
 {i:2014,d:3,o:"3.1",t:"n",g:"virtualization-not",
@@ -3948,7 +3951,7 @@ e:"Virtual machines still run full operating systems and applications that requi
 w:["Running multiple isolated OS instances on one host is virtualization's core capability.","Snapshotting and rollback are a widely used virtualization benefit.","","Better hardware utilization is one of virtualization's primary business justifications."]},
 {i:2015,d:3,o:"3.4",t:"n",g:"backup-types-not",
 q:"A backup policy document lists strategies the team may choose between. Which listed item is NOT a recognized backup type?",
-c:["Full backup, copying all selected data every time","Incremental backup, copying only data changed since the last backup of any type","Differential backup, copying all data changed since the last full backup","Synchronous backup, a term describing real-time mirrored replication as a backup type"],a:3,
+c:["Full backup","Incremental backup","Differential backup","Synchronous backup"],a:3,
 e:"Synchronous replication mirrors data in real time but is a form of replication, not a backup type, and does not provide the historical recovery points a real backup strategy needs. Full, incremental, and differential are the three recognized backup types.",
 w:["Full backup is one of the three core, named backup types.","Incremental backup is one of the three core, named backup types.","Differential backup is one of the three core, named backup types.",""]},
 {i:2016,d:4,o:"4.1",t:"n",g:"hardening-controls-not",
@@ -3964,7 +3967,7 @@ w:["Scanning is the discovery stage of vulnerability management.","Prioritizatio
 {i:2018,d:4,o:"4.5",t:"n",g:"edr-capabilities-not",
 q:"A vendor lists capabilities of its endpoint detection and response platform. Which listed capability is NOT something EDR is designed to do?",
 c:["Continuously monitor endpoint behavior for signs of compromise","Allow analysts to isolate a compromised host remotely","Investigate the timeline and scope of an attack on the endpoint","Physically replace a failed hard drive in the affected machine"],a:3,
-e:"Physical hardware replacement is a facilities and IT operations task, not a software security capability. Continuous monitoring, remote isolation, and investigation are all core EDR functions.",
+e:"Physical hardware replacement is a facilities and IT operations task, not a software security capability. Continuous monitoring, remote isolation, and investigation are all core EDR (Endpoint Detection and Response) functions.",
 w:["Continuous behavioral monitoring is EDR's foundational capability.","Remote isolation is a standard EDR response action.","Timeline investigation is a standard EDR capability used during incident response.",""]},
 {i:2019,d:4,o:"4.8",t:"n",g:"forensics-steps-not",
 q:"An incident responder documents steps taken while investigating a compromised workstation. Which step is NOT a forensic best practice?",
@@ -3974,8 +3977,8 @@ w:["Chain of custody is essential to preserving evidence integrity and admissibi
 {i:2020,d:4,o:"4.4",t:"n",g:"siem-functions-not",
 q:"A SOC evaluates what its SIEM platform contributes to daily operations. Which listed function is NOT something a SIEM does?",
 c:["Aggregating log data from many different sources into one place","Correlating separate events into a single recognizable incident","Generating alerts when defined suspicious patterns are detected","Physically cabling new switches into the data center rack"],a:3,
-e:"Physical cabling is a hands-on infrastructure task unrelated to a SIEM's software function. Aggregation, correlation, and alerting are the three core things a SIEM is built to do.",
-w:["Log aggregation is a SIEM's foundational function.","Correlation across event sources is what gives a SIEM its analytical value.","Alerting on detected patterns is a core SIEM function.",""]},
+e:"Physical cabling is a hands-on infrastructure task unrelated to a SIEM's (Security Information and Event Management) software function. Aggregation, correlation, and alerting are the three core things a SIEM is built to do.",
+w:["Log aggregation is a SIEM's (Security Information and Event Management) foundational function.","Correlation across event sources is what gives a SIEM its analytical value.","Alerting on detected patterns is a core SIEM function.",""]},
 {i:2021,d:4,o:"4.2",t:"n",g:"asset-mgmt-not",
 q:"An asset management program includes several ongoing tasks. Which task is NOT part of asset management?",
 c:["Maintaining an inventory of all hardware and software in the environment","Tracking ownership and classification of each asset","Formally decommissioning and removing retired systems from the network","Designing the visual branding for the company's public website"],a:3,
@@ -3988,7 +3991,7 @@ e:"A printed handbook is a policy document, not a data source that records syste
 w:["Firewall logs are a primary network-layer investigation source.","Authentication logs are essential for tracing account activity.","DNS logs help reveal command-and-control or exfiltration activity.",""]},
 {i:2023,d:4,o:"4.6",t:"n",g:"iam-concepts-not",
 q:"An identity and access management review covers several concepts. Which listed item is NOT an IAM concept?",
-c:["Role-based access control, assigning permissions based on job function","Just-in-time access, granting elevated privileges only for a limited time window","Federation, extending a user's identity across separate organizations","Load balancing, distributing network traffic across multiple servers"],a:3,
+c:["Role-based access control","Just-in-time access","Federation","Load balancing"],a:3,
 e:"Load balancing is a network availability concept unrelated to identity or access. Role-based access, just-in-time access, and federation are all core, named IAM concepts.",
 w:["RBAC is a foundational, named IAM access model.","Just-in-time access is a named privileged access management concept.","Federation is a core IAM concept for cross-organization identity trust.",""]},
 {i:2024,d:4,o:"4.7",t:"n",g:"automation-benefits-not",
@@ -3998,17 +4001,17 @@ e:"Automation supports and speeds up human decision-making but does not eliminat
 w:["Faster response time is a well-documented automation benefit.","Consistency of response is a well-documented automation benefit.","","Freeing analysts for higher-value work is a well-documented automation benefit."]},
 {i:2025,d:5,o:"5.2",t:"n",g:"risk-strategies-not",
 q:"A risk register documents how the organization plans to handle several identified risks. Which listed response is NOT one of the four recognized risk response strategies?",
-c:["Mitigate, applying controls to reduce likelihood or impact","Transfer, shifting the financial consequence to a third party such as an insurer","Accept, a documented decision to tolerate the risk as-is","Escalate, immediately notifying the media of the risk's existence"],a:3,
+c:["Mitigate","Transfer","Accept","Escalate"],a:3,
 e:"Notifying the media is not a recognized risk response strategy and would typically be counterproductive. Mitigate, transfer, accept, and avoid are the four recognized risk response strategies.",
 w:["Mitigate is one of the four recognized risk response strategies.","Transfer is one of the four recognized risk response strategies.","Accept is one of the four recognized risk response strategies.",""]},
 {i:2026,d:5,o:"5.1",t:"n",g:"governance-docs-not",
 q:"A governance framework includes several types of documents. Which listed document type is NOT one of the standard governance document categories?",
-c:["Policy, a high-level mandatory statement of management intent","Standard, a mandatory, specific requirement supporting a policy","Procedure, the detailed step-by-step instructions for a task","Guideline, a legally binding contract between two companies"],a:3,
-e:"A guideline is a recommended best practice, not mandatory and not a legal contract; describing it as a binding contract misdefines the term. Policy, standard, and procedure are correctly defined governance document types.",
-w:["Policy is correctly defined as a high-level mandatory statement.","Standard is correctly defined as a mandatory supporting requirement.","Procedure is correctly defined as detailed step-by-step instructions.",""]},
+c:["Policy","Standard","Procedure","Playbook"],a:3,
+e:"A playbook is a tactical incident-response document, useful but not one of the four standard governance hierarchy categories. Policy, standard, procedure, and guideline are the correctly recognized governance document types.",
+w:["Policy is one of the four recognized governance document categories.","Standard is one of the four recognized governance document categories.","Procedure is one of the four recognized governance document categories.",""]},
 {i:2027,d:5,o:"5.5",t:"n",g:"audit-types-not",
 q:"A compliance calendar lists several types of assessments the organization undergoes each year. Which listed item is NOT a recognized audit or assessment type?",
-c:["Internal audit, performed by the organization's own staff","External audit, performed by an independent third party","Regulatory examination, performed by a government body with legal authority","Marketing survey, gathering customer opinions about a new product feature"],a:3,
+c:["Internal audit","External audit","Regulatory examination","Marketing survey"],a:3,
 e:"A marketing survey has nothing to do with compliance or control assessment. Internal audit, external audit, and regulatory examination are all recognized assessment types covered under this domain.",
 w:["Internal audit is a recognized, named assessment type.","External audit is a recognized, named assessment type.","Regulatory examination is a recognized, named assessment type.",""]},
 {i:2028,d:5,o:"5.3",t:"n",g:"vendor-risk-not",
@@ -4023,9 +4026,9 @@ e:"Brand guidelines are a marketing and design topic, unrelated to security beha
 w:["Phishing recognition is a core, named awareness training topic.","Password hygiene and MFA usage is a core, named awareness training topic.","Incident reporting is a core, named awareness training topic.",""]},
 {i:2030,d:5,o:"5.4",t:"n",g:"privacy-roles-not",
 q:"A data protection team reviews the roles involved in handling personal data. Which listed role or term is NOT a recognized data privacy role or concept?",
-c:["Data controller, the party that decides why and how data is processed","Data processor, the party that processes data on the controller's behalf","Data subject, the individual whose personal data is being processed","Data broker license, a term describing an internal IT support ticket category"],a:3,
-e:"That definition is fabricated; a data broker actually refers to a company that collects and sells personal data, and it is unrelated to internal IT ticketing. Controller, processor, and data subject are the three foundational, correctly defined privacy roles.",
-w:["Controller is a correctly defined, foundational privacy role.","Processor is a correctly defined, foundational privacy role.","Data subject is a correctly defined, foundational privacy role.",""]},
+c:["Data controller","Data processor","Data subject","Data broker"],a:3,
+e:"A data broker is a real business that collects and sells personal data, a legitimate industry term, but it's not one of the three foundational privacy roles tested here. Controller, processor, and data subject are the three roles.",
+w:["Controller is a correctly recognized, foundational privacy role.","Processor is a correctly recognized, foundational privacy role.","Data subject is a correctly recognized, foundational privacy role.",""]},
 ];
 
 const CARDS = [
@@ -5063,6 +5066,7 @@ const GLOSS = [
 {term:"Brand impersonation",d:2,g:"threats",def:"Falsely representing a well-known, trusted brand to deceive victims into trusting a malicious email, website, or message."},
 {term:"Removable device",d:2,g:"threats",def:"A threat vector referring to portable storage media, such as USB drives, that can carry malware onto a network or be used to exfiltrate data."},
 {term:"Default credentials",d:2,g:"threats",def:"Factory-set usernames and passwords that ship with a device or application, which become a serious threat vector if never changed."},
+{term:"Open service ports",d:2,g:"threats",def:"A threat vector where a service is left listening on a network port it doesn't actually need to be reachable on, such as an old FTP or Telnet service nobody uses. Every open port is a potential entry point, which is why disabling unnecessary ports and services is a standard hardening step."},
 {term:"MSP (Managed service provider)",d:2,g:"threats",def:"A third-party company that manages IT infrastructure or services on a client's behalf, representing a supply-chain threat vector if the provider itself is compromised."},
 {term:"UTM (Unified Threat Management)",d:3,g:"network",def:"An all-in-one security appliance combining functions like firewall, IDS/IPS, content filtering, and antivirus into a single device. Running every function through one box can introduce latency, since all that inspection happens on a single piece of hardware rather than being distributed across specialized devices."},
 {term:"VPN concentrator",d:3,g:"network",def:"A device dedicated to establishing, managing, and terminating a large number of simultaneous VPN connections, often integrated into a firewall."},
@@ -5126,6 +5130,11 @@ const GLOSS = [
 {term:"Active reconnaissance",d:5,g:"vendor",def:"Gathering information about a target by directly interacting with their systems, such as port scanning, which carries a higher chance of detection."},
 {term:"Data owner",d:5,g:"governance",def:"The individual, often a senior officer, formally accountable for a specific category of data, distinct from the controller and processor who handle its actual processing."},
 {term:"Data custodian",d:5,g:"governance",def:"The role responsible for the day-to-day technical management and protection of data, carrying out the policies set by the data owner."},
+{term:"Policy",d:5,g:"governance",def:"A high-level, mandatory statement of management intent, the top of the governance document hierarchy. Everything else, standards, procedures, and guidelines, exists to support and implement what a policy establishes."},
+{term:"Standard",d:5,g:"governance",def:"A mandatory, specific requirement that supports a policy, such as requiring AES-256 for full-disk encryption. Narrower and more technical than the policy above it, but still mandatory, unlike a guideline."},
+{term:"Procedure",d:5,g:"governance",def:"The detailed, step-by-step instructions for actually carrying out a task in a way that satisfies a standard, such as the exact steps for provisioning a new laptop."},
+{term:"Guideline",d:5,g:"governance",def:"A recommended best practice, not mandatory, sitting at the bottom of the governance hierarchy. Gives flexibility on how to approach something a policy or standard doesn't rigidly define."},
+{term:"Telemetry",d:2,g:"mitigation",def:"Data automatically collected from systems and sent elsewhere for monitoring and analysis, such as performance metrics, logs, or security events streamed to a central platform in near real time."},
 {term:"AUP (Acceptable use policy)",d:5,g:"governance",def:"A policy defining what employees are and are not permitted to do with an organization's technology and network resources."},
 {term:"Adaptive authentication",d:4,g:"iam",def:"An authentication approach that adjusts its requirements dynamically based on contextual risk signals, such as requiring extra verification for an unusual login location."},
 {term:"Group Policy",d:4,g:"ops",def:"A Windows feature that centrally enforces configuration and security settings across many computers and users in a domain."},
@@ -6101,7 +6110,7 @@ const PBQ = [
  title:"Recognize the Password Attack in Progress",
  brief:"A SOC analyst is watching authentication logs unfold in real time. Arrange the log events in the order they actually occurred, then use the pattern to identify the attack.",
  items:["A single account, jsmith, fails login 40 times in 60 seconds from one IP","The same IP then succeeds on the jsmith account on attempt 41","Ten minutes later, that same account is used to access payroll records it has never touched before","The security team correlates the failed attempts, the success, and the unusual access into one incident"],
- explain:"This is a brute force attack: the same account is hammered with many password guesses from one source until one succeeds, distinct from password spraying, which tries one password across many different accounts instead. The account's sudden access to payroll data it never touches is the giveaway that the account is now compromised, not just tested. Correlating the failed attempts, the eventual success, and the anomalous follow-on access into a single incident is exactly what a SIEM is built to do."},
+ explain:"This is a brute force attack: the same account is hammered with many password guesses from one source until one succeeds, distinct from password spraying, which tries one password across many different accounts instead. The account's sudden access to payroll data it never touches is the giveaway that the account is now compromised, not just tested. Correlating the failed attempts, the eventual success, and the anomalous follow-on access into a single incident is exactly what a SIEM (Security Information and Event Management) is built to do."},
 
 {id:25,t:"match",d:2,o:"2.4",g:"network-attack-recognition",
  title:"Match the Network Attack to Its Signature",
@@ -6457,21 +6466,36 @@ function strip(mode,lampPct,lampMode,mid,right,staticBar){
   const hb=$("sHome"); if(hb) hb.style.display=(view==="home")?"none":"";
   const na=document.querySelector(".nav-actions"); if(na) na.style.display=(view==="home")?"none":"";
 }
-let CONFIRM_CB=null;
+let CONFIRM_CB=null, CONFIRM_CB2=null;
 function askConfirm(msg,cb){
-  CONFIRM_CB=cb;
-  const el=$("confirmOverlay"), m=$("confirmMsg");
+  CONFIRM_CB=cb; CONFIRM_CB2=null;
+  const el=$("confirmOverlay"), m=$("confirmMsg"), b1=$("confirmBtn1"), b2=$("confirmBtn2");
   if(m) m.textContent=msg;
+  if(b1) b1.textContent="Continue";
+  if(b2) b2.style.display="none";
+  if(el) el.classList.add("on");
+}
+function askConfirmChoice(msg,label1,cb1,label2,cb2){
+  CONFIRM_CB=cb1; CONFIRM_CB2=cb2;
+  const el=$("confirmOverlay"), m=$("confirmMsg"), b1=$("confirmBtn1"), b2=$("confirmBtn2");
+  if(m) m.textContent=msg;
+  if(b1) b1.textContent=label1;
+  if(b2){ b2.textContent=label2; b2.style.display=""; }
   if(el) el.classList.add("on");
 }
 function confirmYes(){
   const el=$("confirmOverlay"); if(el) el.classList.remove("on");
-  const cb=CONFIRM_CB; CONFIRM_CB=null;
+  const cb=CONFIRM_CB; CONFIRM_CB=null; CONFIRM_CB2=null;
+  if(cb) cb();
+}
+function confirmSecond(){
+  const el=$("confirmOverlay"); if(el) el.classList.remove("on");
+  const cb=CONFIRM_CB2; CONFIRM_CB=null; CONFIRM_CB2=null;
   if(cb) cb();
 }
 function confirmCancel(){
   const el=$("confirmOverlay"); if(el) el.classList.remove("on");
-  CONFIRM_CB=null;
+  CONFIRM_CB=null; CONFIRM_CB2=null;
 }
 function leaveSession(dest,label){
   const proceed=()=>{
@@ -6565,11 +6589,11 @@ function home(){
       <button class="fact link" onclick="window.scrollTo(0,0);shiftSetup()"><b>${QUESTIONS.length}</b> questions</button>
       <button class="fact link" onclick="pbqSetup()"><b>${PBQ.length}</b> PBQs</button>
       <button class="fact link" onclick="cardSetup()"><b>${allCards().length}</b> flashcards</button>
+      <button class="fact link" onclick="jcSetup()" style="color:#fff">The Drill Down</button>
+      <button class="fact link" onclick="examHome()" style="color:var(--amber);font-weight:700">Practice Exam</button>
       <button class="fact link" onclick="acrSetup()"><b>${allAcr().length}</b> acronyms</button>
       <button class="fact link" onclick="window.scrollTo(0,0);glossRef()"><b>${GLOSS.length}</b> glossary terms</button>
-      <button class="fact link" onclick="examHome()"><b>1</b> practice exam, randomized every attempt</button>
       <button class="fact link" onclick="stats()">Weak areas and stats</button>
-      <button class="fact link" onclick="jcSetup()"><b>The Drill Down</b></button>
     </div>
   </div>
   <details class="hiw" id="hiw">
@@ -6578,7 +6602,7 @@ function home(){
       <h4>Question mix follows the real blueprint</h4>
       <p>Weighted to the official domain percentages: General Security Concepts 12, Threats &amp; Vulnerabilities 22, Security Architecture 18, Security Operations 28, Program Management 20. Weak domains get weighted up automatically.</p>
       <h4>The practice exam is genuinely different every time</h4>
-      <p><b>One exam, up to 90 items, freshly randomized on every attempt.</b> Each run draws 3 to 7 PBQs at random, then fills the remaining slots up to 90 with multiple choice, weighted to the official domain percentages, so a heavier PBQ draw means fewer multiple choice items that attempt, matching how the extra time PBQs take gets balanced against the 90-minute clock. Untimed or your own clock. <b>No feedback until you submit</b> \u2014 review maps every miss to its objective.</p>
+      <p><b>One exam, up to 90 items, freshly randomized on every attempt.</b> Each run draws 3 to 5 PBQs at random, then fills the remaining slots up to 90 with multiple choice, weighted to the official domain percentages, so a heavier PBQ draw means fewer multiple choice items that attempt, matching how the extra time PBQs take gets balanced against the 90-minute clock. Untimed or your own clock. <b>No feedback until you submit</b> \u2014 review maps every miss to its objective.</p>
       <h4>SOC Watch and Rapid Response drill under pressure</h4>
       <p>Severity-coded tickets; wrong calls cost network integrity. Rapid Response adds a combo multiplier and three lives. <b>Timer defaults to adaptive</b> (tightens above 85 percent, loosens below 60) or set it manually.</p>
       <h4>Flashcards use spaced repetition</h4>
@@ -6615,12 +6639,15 @@ function home(){
     <button class="tile" id="t-soc" style="--accent:var(--amber)" onclick="window.scrollTo(0,0);shiftSetup()">
       <span class="tag-row"><span class="tag">Mode 01</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>SOC Watch</h3>
       <p>Alerts hit your queue as severity-coded tickets. Triage each one. Wrong calls cost network integrity.</p></button>
-    <button class="tile" id="t-cards" style="--accent:var(--cyan)" onclick="cardSetup()">
-      <span class="tag-row"><span class="tag">Recall</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Flashcards</h3>
-      <p>Free-recall with spaced repetition. ${dueCount()} of ${allCards().length} cards due now.</p></button>
     <button class="tile" id="t-pbq" style="--accent:var(--blue)" onclick="pbqSetup()">
       <span class="tag-row"><span class="tag">Mode 03</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>PBQ Lab</h3>
       <p>${PBQ.length} performance-based questions. Drag to order, drag to classify, configure rule sets, analyse logs. Partial credit, same as the real thing.</p></button>
+    <button class="tile" id="t-cards" style="--accent:var(--cyan)" onclick="cardSetup()">
+      <span class="tag-row"><span class="tag">Recall</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Flashcards</h3>
+      <p>Free-recall with spaced repetition. ${dueCount()} of ${allCards().length} cards due now.</p></button>
+    <button class="tile" id="t-josh" style="--accent:var(--red)" onclick="jcSetup()">
+      <span class="tag-row"><span class="tag">Focused drilling</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>The Drill Down</h3>
+      <p>High-repetition drilling on whatever you keep missing. Fed from your tracked weak terms and acronyms.</p></button>
     <button class="tile" id="t-exams" style="--accent:var(--amber)" onclick="examHome()">
       <span class="tag-row"><span class="tag">Full length</span><span class="tile-plus" aria-hidden="true">+</span></span>
       <h3>Practice Exam</h3>
@@ -6635,9 +6662,6 @@ function home(){
     <button class="tile" id="t-weak" style="--accent:var(--faint)" onclick="stats()">
       <span class="tag-row"><span class="tag">Tracking</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Weak areas &amp; stats</h3>
       <p>Domain accuracy, repeated misses, PBQ history, and readiness gate status.</p></button>
-    <button class="tile" id="t-josh" style="--accent:var(--red)" onclick="jcSetup()">
-      <span class="tag-row"><span class="tag">Focused drilling</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>The Drill Down</h3>
-      <p>High-repetition drilling on whatever you keep missing. Fed from your tracked weak terms and acronyms.</p></button>
   </div>
   <div class="row" style="margin-top:14px">
     <button class="btn ghost sm" onclick="content('cards')">Add new content</button>
@@ -7487,14 +7511,19 @@ function pickExamMcqSet(mcqTotal){
   return shuffle(mcq);
 }
 function randomPbqSet(){
-  const weights=[[3,1],[4,2],[5,3],[6,2],[7,1]];
+  const weights=[[3,2],[4,3],[5,2]];
   const total=weights.reduce((a,[,w])=>a+w,0);
   let r=Math.random()*total;
-  let n=5;
+  let n=4;
   for(const [count,w] of weights){ if(r<w){ n=count; break; } r-=w; }
   return shuffle(PBQ.map(p=>p.id)).slice(0,Math.min(n,PBQ.length));
 }
 function qById(i){ return QUESTIONS.find(q=>q.i===i); }
+function expandIfAcronym(text){
+  const clean=(text||"").trim();
+  const hit=ACR.find(a=>a.a.toLowerCase()===clean.toLowerCase());
+  return hit?`${clean} (${hit.d})`:clean;
+}
 let SX=null;
 function initPbqStateX(id){
   const p=PBQ.find(x=>x.id===id), st={};
@@ -7513,15 +7542,33 @@ function examHome(){
   const h=(S.examHist||{})[EXAM_ID];
   const resume=act&&!act.submitted;
   const st=h?`<span class="ct" style="color:${h.best>=85?"var(--cyan)":h.best>=70?"var(--amber)":"var(--red)"}">best ${h.best}% \u00b7 ${h.tries} attempt${h.tries>1?"s":""}</span>`:`<span class="ct dim">not attempted</span>`;
-  const row=`<li><span><b>${EXAM_ID}</b><br><span class="dim" style="font-size:12px">Up to 90 items \u00b7 3\u20137 PBQs drawn fresh each attempt, multiple choice filling the rest \u00b7 blueprint weighted</span></span>
+  const row=`<li><span><b>${EXAM_ID}</b><br><span class="dim" style="font-size:12px">Up to 90 items \u00b7 3\u20135 PBQs drawn fresh each attempt, multiple choice filling the rest \u00b7 blueprint weighted</span></span>
     <span style="display:flex;gap:10px;align-items:center;flex-shrink:0">${st}
+    ${resume?`<button class="btn ghost sm" style="color:var(--red);border-color:var(--red)" onclick="examQuit()">Quit</button>`:""}
     <button class="btn sm ${resume?"pri":""}" onclick="examSetup()">${resume?"Resume":"Start"}</button></span></li>`;
   $("app").innerHTML=`
-  <p class="eyebrow">Full length</p><h1>Practice Exam</h1>
-  <p class="lede">Genuinely different every attempt: 3 to 7 PBQs drawn fresh, multiple choice filling the rest up to a 90-item cap. Zero feedback until you submit, then a full review. Export the results for an AI refresher, or send whatever you missed straight to The Drill Down for repetition.</p>
+  <p class="eyebrow">Full length</p><h1>Practice Exam <span class="dim" style="font-size:0.75em;font-weight:400">(Randomized)</span></h1>
+  <p class="lede">Each attempt is generated independently and will not repeat the same set of items twice. Every exam contains between 3 and 5 performance-based questions, selected at random, with the remaining positions filled by multiple-choice items up to a 90-item total, distributed according to the official domain weighting. No feedback is provided until the exam is submitted. After submission, results can be exported for review with an AI assistant, or missed items can be sent directly to The Drill Down for targeted repetition.</p>
   <div class="card"><ul class="weaklist">${row}</ul></div>
   <p class="dim" style="font-size:12px;margin-top:10px">Scoring: multiple choice items are 1 point each, PBQs are 1 point with partial credit. 85%+ is the readiness bar and exam scores count toward the gate.</p>
   <div class="row" style="margin-top:14px"><button class="btn ghost sm" onclick="goHome()">Back to home</button></div>`;
+}
+function examQuit(){
+  const unQ=SX.items.filter(x=>x.t==="q"&&SX.answers[x.id]===undefined).length;
+  const unP=SX.items.filter(x=>x.t==="p"&&pbqUntouchedX(x.id)).length;
+  const un=unQ+unP;
+  const msg=(un>0?un+" item"+(un===1?"":"s")+" still unanswered. ":"Everything is answered. ")+
+    "Save it as a submitted attempt, scoring anything unanswered as wrong, or discard it completely with nothing recorded.";
+  askConfirmChoice(msg,"Save & score it",doExamQuitSave,"Discard, don't save",doExamQuitDiscard);
+}
+function doExamQuitSave(){
+  toast("Exam saved and scored");
+  doExamSubmit();
+}
+function doExamQuitDiscard(){
+  S.activeExam=null; SX=null; save();
+  toast("Exam discarded");
+  examHome();
 }
 function examSetup(){
   AT_SECTION=false;
@@ -7633,12 +7680,19 @@ function examRender(){
         else if(pick===oi) cls+=" wrong";
       }
       const dis=revealed?"disabled":"";
-      return `<button class="opt ${cls}" ${dis} onclick="SX.answers['${it.id}']=${oi};persistX();examRender()"><span class="key mono">${pos+1}</span> ${esc(q.c[oi])}${revealed&&oi===q.a?' <span class="ct">correct</span>':""}${revealed&&pick===oi&&oi!==q.a?' <span class="ct">your pick</span>':""}</button>`;
+      return `<button class="opt ${cls}" ${dis} onclick="SX.answers['${it.id}']=${oi};persistX();examRender()"><span class="key mono">${pos+1}</span> ${esc(q.c[oi])}${revealed&&oi===q.a?' <span class="ct">(correct)</span>':""}${revealed&&pick===oi&&oi!==q.a?' <span class="ct">(your pick)</span>':""}</button>`;
     }).join("")}</div>
-    ${SX.checkMode&&!revealed?`<div class="row" style="margin-top:14px"><button class="btn pri" ${pick===undefined?"disabled":""} onclick="checkAnswer(${it.id})">Check answer</button></div>`:""}
-    ${revealed?`<div class="fb ${pick===q.a?"ok":"no"}" style="margin-top:14px">
-      <div class="verdict">${pick===q.a?"Correct":"Not quite"}</div>
-      <p>${esc(q.e)}</p></div>`:""}`;
+    ${SX.checkMode&&!revealed?`<div class="row" style="margin-top:14px"><button class="btn pri sm" ${pick===undefined?"disabled":""} onclick="checkAnswer(${it.id})">Check answer</button></div>`:""}
+    ${revealed?`<div class="card" style="margin-top:14px">
+      ${ord.map((oi,pos)=>{
+        const isCorrect=oi===q.a;
+        const isPick=oi===pick&&!isCorrect;
+        const text=isCorrect?q.e:(q.w[oi]||"");
+        return `<div style="padding:9px 0;border-bottom:1px solid var(--line)">
+          <b><span class="mono">${pos+1}.</span> ${esc(expandIfAcronym(q.c[oi]))}${isCorrect?' <span class="ct" style="color:var(--green)">(correct)</span>':""}${isPick?' <span class="ct" style="color:var(--red)">(your pick)</span>':""}</b>
+          <p class="dim" style="font-size:13px;margin:4px 0 0">${esc(text)}</p></div>`;
+      }).join("")}
+    </div>`:""}`;
   } else {
     const p=PBQ.find(x=>x.id===it.id), st=SX.pbq[it.id];
     const checked=SX.checkMode&&SX.pbqChecked&&SX.pbqChecked[it.id];
@@ -7650,20 +7704,20 @@ function examRender(){
     if(p.t==="select") inner=pbqSelect(p);
     body=`<h1 style="font-size:19px">${esc(p.title)}</h1><p class="lede">${esc(p.brief)}</p>
     ${p.pre?`<pre class="pbqpre">${esc(p.pre)}</pre>`:""}${inner}
-    ${SX.checkMode&&!checked?`<div class="row" style="margin-top:14px"><button class="btn pri" onclick="examCheckPbq(${it.id})">Check answer</button></div>`:""}
+    ${SX.checkMode&&!checked?`<div class="row" style="margin-top:14px"><button class="btn pri sm" onclick="examCheckPbq(${it.id})">Check answer</button></div>`:""}
     ${checked?`<div class="fb ${checked.pct===100?"ok":"no"}" style="margin-top:14px">
       <div class="verdict">${checked.pct}% \u00b7 ${checked.got}/${checked.total} correct</div>
       ${explainHTML(p.explain)}</div>`:""}`;
   }
   const pal=`<div class="pal">${SX.items.map((x,ix)=>{
     const done=x.t==="q"?SX.answers[x.id]!==undefined:!pbqUntouchedX(x.id);
-    return `<button class="${ix===SX.i?"cur":""} ${SX.flags[ix]?"flg":""} ${done?"done":""}" onclick="SX.i=${ix};examRender()">${ix+1}</button>`;
+    return `<button class="${ix===SX.i?"cur":""} ${SX.flags[ix]?"flg":""} ${done?"done":""}" onclick="SX.i=${ix};examRender();window.scrollTo(0,0)">${ix+1}</button>`;
   }).join("")}</div>`;
   $("app").innerHTML=head+body+`
   <div class="row" style="margin-top:18px">
-    <button class="btn" ${SX.i===0?"disabled":""} onclick="SX.i--;examRender()">Prev</button>
-    <button class="btn ${SX.i<SX.items.length-1?"pri":""}" ${SX.i===SX.items.length-1?"disabled":""} onclick="SX.i++;examRender()">Next</button>
-    <button class="btn ${SX.i===SX.items.length-1?"pri":"ghost"}" onclick="examSubmit()">Submit exam</button>
+    <button class="btn sm" ${SX.i===0?"disabled":""} onclick="SX.i--;examRender();window.scrollTo(0,0)">Prev</button>
+    <button class="btn sm ${SX.i<SX.items.length-1?"pri":""}" ${SX.i===SX.items.length-1?"disabled":""} onclick="SX.i++;examRender();window.scrollTo(0,0)">Next</button>
+    <button class="btn sm ${SX.i===SX.items.length-1?"pri":"ghost"}" onclick="examSubmit()">Submit exam</button>
   </div>
   <h2 style="margin-top:22px">Question map</h2>${pal}
   <p class="dim" style="font-size:11.5px;margin-top:8px">Keys: 1-4 answer \u00b7 arrows move \u00b7 F flag \u00b7 Esc pause and go home</p>`;
@@ -7762,14 +7816,14 @@ function examReview(){
     if(d.t==="q"){
       const q=qById(d.id), ord=SX.orders[d.id]||[0,1,2,3];
       items+=`<div class="card rvq ${d.ok?"":"rvmiss"}">
-        <div class="mono" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:${d.ok?"var(--cyan)":"var(--red)"}">Item ${ix+1} \u00b7 ${d.ok?"Correct":(d.pick===undefined?"Unanswered":"Missed")} \u00b7 D${q.d} \u00b7 obj ${q.o}</div>
+        <div class="mono" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:${d.ok?"var(--green)":"var(--red)"}">Item ${ix+1} \u00b7 ${d.ok?"Correct":(d.pick===undefined?"Unanswered":"Missed")} \u00b7 D${q.d} \u00b7 obj ${q.o}</div>
         <p style="margin:8px 0 10px;font-weight:600">${esc(q.q)}</p>
         ${ord.map(oi=>{
           const cls=oi===q.a?"correct":(d.pick===oi?"wrong":"");
-          return `<div class="opt rv ${cls}">${esc(q.c[oi])}${oi===q.a?' <span class="ct">correct</span>':""}${d.pick===oi&&oi!==q.a?' <span class="ct">your pick</span>':""}</div>`;
+          return `<div class="opt rv ${cls}">${esc(expandIfAcronym(q.c[oi]))}${oi===q.a?' <span class="ct" style="color:var(--green)">(correct)</span>':""}${d.pick===oi&&oi!==q.a?' <span class="ct" style="color:var(--red)">(your pick)</span>':""}</div>`;
         }).join("")}
         <p class="dim" style="font-size:13.5px;margin:10px 0 0">${esc(q.e)}</p>
-        ${d.ok?"":q.w.map((t,wi)=>t&&wi!==q.a?`<p class="dim" style="font-size:12.5px;margin:6px 0 0">\u2022 <b>${esc(q.c[wi])}:</b> ${esc(t)}</p>`:"").join("")+`
+        ${d.ok?"":q.w.map((t,wi)=>t&&wi!==q.a?`<p class="dim" style="font-size:12.5px;margin:6px 0 0">\u2022 <b>${esc(expandIfAcronym(q.c[wi]))}:</b> ${esc(t)}</p>`:"").join("")+`
         <p style="font-size:12.5px;margin:10px 0 0;color:var(--amber)">Restudy: ${esc(studyLine(q.o))}</p>`}
       </div>`;
     } else {
