@@ -7972,19 +7972,22 @@ function domWeight(d){
   if(st.s>=5){ const a=st.c/st.s; w*= 1+(1-a)*1.4; }
   return w/(DCOUNT[d]||1);              // per-question, so bank size cannot skew the blueprint
 }
-function noteRecent(id){ S.recent=(S.recent||[]).filter(x=>x!==id); S.recent.push(id); if(S.recent.length>45) S.recent.shift(); }
+function noteRecent(id){ S.recent=(S.recent||[]).filter(x=>x!==id); S.recent.push(id); if(S.recent.length>300) S.recent.shift(); }
 function pick(pool,used){
   let cand=pool.filter(q=>!used.has(q.i));
   if(!cand.length) return null;
-  // prefer items not seen in the last 45 draws, so shifts do not replay the same set
-  const fresh=cand.filter(q=>(S.recent||[]).indexOf(q.i)<0);
+  // freshness window scales with the active pool size: 60% of it, floor 30, so small
+  // domain-filtered pools get proportionally meaningful protection instead of a flat cap
+  const win=Math.max(30,Math.floor(cand.length*0.6));
+  const recentSlice=(S.recent||[]).slice(-win);
+  const fresh=cand.filter(q=>recentSlice.indexOf(q.i)<0);
   if(fresh.length>=6) cand=fresh;
   // occasional targeted resurfacing of a past miss, but much lighter than before
   const missed=cand.filter(q=>(S.qStat[q.i]&&S.qStat[q.i].m>0));
   if(missed.length&&Math.random()<.18){ const m=missed[Math.floor(Math.random()*missed.length)]; noteRecent(m.i); return m; }
   const ws=cand.map(q=>{
     let w=domWeight(q.d);
-    const pos=(S.recent||[]).indexOf(q.i);
+    const pos=recentSlice.indexOf(q.i);
     if(pos>=0) w*=0.12+0.02*pos;              // heavy penalty, easing as it ages out
     w*=0.75+Math.random()*0.5;                 // jitter so ordering is never deterministic
     return w;
