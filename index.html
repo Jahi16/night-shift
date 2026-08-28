@@ -276,12 +276,12 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
   border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:12px;padding:20px 22px;margin:4px 0 18px}
 @media(max-width:620px){.hero{margin:4px 0 12px;padding:16px 18px}}
 .hero .greet{margin:0 0 2px;font-size:13px;letter-spacing:.04em;color:var(--dim);font-family:var(--mono);text-transform:uppercase}
-.rotate-hint{display:none;position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;
+.rotate-hint{display:none;margin-left:auto;flex:0 0 auto;width:30px;height:30px;border-radius:50%;
   background:var(--raise);border:1px solid var(--line);align-items:center;justify-content:center;cursor:pointer;
   color:var(--amber);animation:rotateHintPulse 2.4s ease-in-out infinite}
-.rotate-hint svg{width:18px;height:18px}
+.rotate-hint svg{width:15px;height:15px}
 @keyframes rotateHintPulse{0%,100%{opacity:.7}50%{opacity:1}}
-@media(max-width:620px) and (orientation:portrait){.rotate-hint{display:flex}}
+@media(max-width:620px) and (orientation:portrait){.rotate-hint.home-only{display:flex}}
 .hero h1{margin:0 0 8px;font-size:29px;line-height:1.15}
 .hero .sub{color:var(--txt);font-size:15.5px;line-height:1.62;margin:0 0 16px;max-width:none}
 .hero .sub b{color:var(--amber)}
@@ -370,6 +370,11 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
     <span class="lamps" id="sLamps"></span>
     <span class="readout" id="sMid"></span>
     <span class="readout" id="sRight"></span>
+    <button class="rotate-hint home-only" id="rotateHint" onclick="toast('Landscape gives tables and diagrams more room to breathe')" aria-label="Rotate to landscape for a wider view" title="Rotate to landscape for a wider view">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h1.5C23.44 4.84 18.29 0 12 0l-.66.03 3.81 3.81 1.33-1.32zM10.23 1.75c-.32-.32-.86-.32-1.19 0L1.75 9.04c-.32.32-.32.86 0 1.19l7.29 7.29c.32.32.86.32 1.19 0l7.29-7.29c.32-.32.32-.86 0-1.19l-7.29-7.29zm.58 14.02L4.94 9.9l5.88-5.88 5.88 5.88-5.88 5.88zM7.52 21.48C4.25 19.93 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32z"/>
+      </svg>
+    </button>
     <div class="nav-actions">
       <div class="nav-left">
         <button class="hbtn home" id="sHome" onclick="goHome()">Home</button>
@@ -3777,7 +3782,7 @@ e:"Least privilege is granting only the minimum access necessary to perform a jo
 w:["","Segmentation divides the network into isolated zones, not the scope of a single account's database permissions.","Configuration enforcement continuously verifies systems stay compliant with a baseline setting, not the initial decision of how much access to grant.","Isolation separates an entire system from the rest of the environment, a broader measure than scoping one account's specific table-level permissions."]},
 {i:1794,d:2,o:"2.5",t:"s",g:"hardening-mitigation",
 q:"A server's baseline image is configured so that the built-in guest account is disabled entirely and the default administrator account is renamed before the server is ever deployed into production. Which hardening technique combination is this?",
-c:["Default password changes and removal of unnecessary software","Installation of endpoint protection","Disabling unnecessary ports and services","Configuration enforcement"],a:0,
+c:["Disabling default accounts and renaming built-in credentials","Installation of endpoint protection","Disabling unnecessary ports and services","Configuration enforcement"],a:0,
 e:"Disabling the guest account and renaming the default admin account are both forms of addressing default account weaknesses before deployment, closing off commonly targeted default credentials before the server ever goes live.",
 w:["","Installation of endpoint protection means deploying anti-malware software, a different hardening step than disabling default accounts.","Disabling unnecessary ports and services closes network listeners, a related but distinct hardening step from disabling a default account.","Configuration enforcement is the ongoing verification that a device stays compliant with a baseline over time, not the one-time act of disabling default accounts before deployment."]},
 {i:1795,d:2,o:"2.4",t:"s",g:"wireless-attacks",
@@ -4072,7 +4077,7 @@ const CARDS = [
 {d:1,o:"1.2",g:"zero-trust",f:"What is an Implicit Trust Zone in Zero Trust?",b:"The area a subject reaches after passing the Policy Enforcement Point. Access there is granted only for the approved session."},
 {d:1,o:"1.2",g:"deception",f:"Honeypot vs honeynet vs honeyfile vs honeytoken.",b:"Honeypot: one decoy system. Honeynet: a whole decoy network. Honeyfile: a decoy file used as a tripwire. Honeytoken: fake data tracked wherever it goes."},
 {d:1,o:"1.2",g:"physical-controls",f:"What is the difference between an access control vestibule and a turnstile?",b:"A vestibule is a two-door airlock preventing tailgating by allowing only one person through at a time. A turnstile controls flow but is easier to defeat."},
-{d:1,o:"1.3",g:"change-management",f:"Name five elements of a formal change request.",b:"Approval by the CAB, ownership, stakeholder identification, impact analysis, test results, backout plan, maintenance window, and standard operating procedure."},
+{d:1,o:"1.3",g:"change-management",f:"Name eight elements of a formal change request.",b:"Approval by the CAB, ownership, stakeholder identification, impact analysis, test results, backout plan, maintenance window, and standard operating procedure."},
 {d:1,o:"1.3",g:"change-management",f:"What is a backout plan and why is it required?",b:"The documented steps to return a system to its previous working state if the change fails. It is the safety net for every approved change."},
 {d:1,o:"1.4",g:"asymmetric-direction",f:"To send something ONLY the recipient can read, whose key do you encrypt with?",b:"The recipient's PUBLIC key. Only their private key can decrypt it."},
 {d:1,o:"1.4",g:"asymmetric-direction",f:"To prove YOU sent something, whose key do you encrypt (sign) with?",b:"Your own PRIVATE key. Anyone with your public key can verify it, which is what gives non-repudiation."},
@@ -4089,7 +4094,7 @@ const CARDS = [
 {d:2,o:"2.1",g:"threat-actors",f:"Rank these by typical resources: nation-state, organized crime, hacktivist, unskilled attacker.",b:"Nation-state (highest), organized crime, hacktivist, unskilled attacker (lowest)."},
 {d:2,o:"2.1",g:"actor-motivations",f:"What primarily motivates organized crime versus a nation-state?",b:"Organized crime: financial gain. Nation-state: espionage, data exfiltration, war, and philosophical or political objectives."},
 {d:2,o:"2.1",g:"shadow-it",f:"Define shadow IT and why it is dangerous.",b:"Unsanctioned technology adopted by employees to get work done. Intent is productive, but the organization loses visibility, control, and data governance."},
-{d:2,o:"2.1",g:"threat-vectors",f:"Name six common threat vectors.",b:"Message-based (email, SMS, IM), image-based, file-based, voice call, removable device, vulnerable software, unsupported systems, unsecure networks, open ports, default credentials, supply chain."},
+{d:2,o:"2.1",g:"threat-vectors",f:"Name eleven common threat vectors.",b:"Message-based (email, SMS, IM), image-based, file-based, voice call, removable device, vulnerable software, unsupported systems, unsecure networks, open ports, default credentials, supply chain."},
 {d:2,o:"2.2",g:"social-engineering",f:"Phishing, vishing, smishing, whaling: differentiate.",b:"Phishing is email. Vishing is voice. Smishing is SMS. Whaling targets a high-value executive."},
 {d:2,o:"2.2",g:"social-engineering",f:"What is pretexting?",b:"Inventing a believable backstory or scenario that gives the attacker a reason to be making the request."},
 {d:2,o:"2.2",g:"social-engineering",f:"Tailgating vs piggybacking.",b:"Tailgating: entering behind someone without their knowledge or consent. Piggybacking: the authorized person knowingly lets you in."},
@@ -4113,7 +4118,7 @@ const CARDS = [
 {d:2,o:"2.4",g:"application-attacks",f:"XSS vs CSRF in one line each.",b:"XSS injects script that runs in the victim's browser. CSRF tricks the victim's browser into sending an authenticated request the user never intended."},
 {d:2,o:"2.4",g:"application-attacks",f:"What is directory traversal?",b:"Using path sequences such as ../ to read files outside the intended web root."},
 {d:2,o:"2.4",g:"application-attacks",f:"Buffer overflow: what actually goes wrong?",b:"Input larger than the allocated buffer writes past its boundary into adjacent memory, which can overwrite control data and redirect execution."},
-{d:2,o:"2.5",g:"mitigation-techniques",f:"Name eight mitigation techniques from objective 2.5.",b:"Segmentation, access control (ACL and permissions), application allow list, isolation, patching, encryption, monitoring, least privilege, configuration enforcement, decommissioning, and hardening."},
+{d:2,o:"2.5",g:"mitigation-techniques",f:"Name eleven mitigation techniques from objective 2.5.",b:"Segmentation, access control (ACL and permissions), application allow list, isolation, patching, encryption, monitoring, least privilege, configuration enforcement, decommissioning, and hardening."},
 {d:2,o:"2.5",g:"mitigation-techniques",f:"Allow list vs deny list: which is more secure and why?",b:"Allow list. Only explicitly approved items run, so anything unknown is blocked by default. A deny list can only block what you already know about."},
 {d:2,o:"2.5",g:"mitigation-techniques",f:"What is a data diode or unidirectional gateway used for?",b:"Permitting data to flow out of a sensitive network while making inbound traffic physically impossible. Common in OT and ICS environments."},
 
@@ -4143,7 +4148,7 @@ const CARDS = [
 
 // DOMAIN 4
 {d:4,o:"4.1",g:"secure-baselines",f:"Name the three baseline activities.",b:"Establish the baseline, deploy it consistently, and maintain it by detecting and correcting drift."},
-{d:4,o:"4.1",g:"hardening",f:"List five hardening techniques.",b:"Encryption, endpoint protection installation, host-based firewall, HIPS, disabling unused ports and protocols, changing default passwords, and removing unnecessary software."},
+{d:4,o:"4.1",g:"hardening",f:"List seven hardening techniques.",b:"Encryption, endpoint protection installation, host-based firewall, HIPS, disabling unused ports and protocols, changing default passwords, and removing unnecessary software."},
 {d:4,o:"4.1",g:"mobile-deployment",f:"BYOD, COPE, and CYOD.",b:"BYOD: employee-owned, least organizational control. COPE: corporate-owned, personally enabled, full control with permitted personal use. CYOD: employee chooses from an approved corporate-owned list."},
 {d:4,o:"4.1",g:"wireless-security",f:"WPA3 replaced the WPA2 four-way handshake with what?",b:"SAE, Simultaneous Authentication of Equals, which resists offline dictionary attacks against the captured handshake."},
 {d:4,o:"4.1",g:"wireless-security",f:"What is a site survey and heat map used for?",b:"Mapping actual wireless signal coverage and interference so access points are placed for coverage without leaking signal beyond the intended area."},
@@ -4175,19 +4180,19 @@ const CARDS = [
 {d:4,o:"4.6",g:"iam",f:"What is attestation in identity management?",b:"A periodic review in which managers or owners confirm that each user's existing access is still appropriate. It catches privilege creep."},
 {d:4,o:"4.6",g:"iam",f:"What is identity proofing?",b:"Verifying that a person is who they claim to be before an identity is issued, at enrollment time."},
 {d:4,o:"4.7",g:"automation",f:"Name three security benefits of automation and orchestration.",b:"Consistent enforcement of baselines, faster reaction time, and reduced human error. Also scaling, workforce multiplication, and employee retention."},
-{d:4,o:"4.7",g:"automation",f:"Name two risks of automation.",b:"Complexity and single point of failure, plus technical debt and ongoing supportability if the person who built it leaves."},
+{d:4,o:"4.7",g:"automation",f:"Name four risks of automation.",b:"Complexity and single point of failure, plus technical debt and ongoing supportability if the person who built it leaves."},
 {d:4,o:"4.8",g:"incident-response-phases",f:"List the incident response phases in order.",b:"Preparation, Detection, Analysis, Containment, Eradication, Recovery, Lessons Learned."},
 {d:4,o:"4.8",g:"ir-testing",f:"Tabletop vs simulation vs walkthrough.",b:"Tabletop: discussion-based scenario around a table. Simulation: a realistic injected event, such as a mock phishing campaign. Walkthrough: step-by-step review of the documented plan."},
 {d:4,o:"4.8",g:"forensics",f:"What is a legal hold and when is it issued?",b:"A directive suspending routine deletion so potentially relevant evidence is preserved. It is issued as soon as litigation is reasonably anticipated, before imaging."},
 {d:4,o:"4.8",g:"chain-of-custody",f:"What breaks a chain of custody, and why does it matter?",b:"Any undocumented handling, transfer, or storage gap. A break can make otherwise valid evidence inadmissible."},
 {d:4,o:"4.8",g:"forensics",f:"What is order of volatility?",b:"Collect the most perishable evidence first: CPU registers and cache, RAM, network state and running processes, disk, then backups and archives."},
-{d:4,o:"4.9",g:"log-sources",f:"Name six log or data sources from objective 4.9.",b:"Firewall logs, application logs, endpoint logs, OS-specific security logs, IPS and IDS logs, network logs, metadata, vulnerability scans, automated reports, dashboards, and packet captures."},
+{d:4,o:"4.9",g:"log-sources",f:"Name eleven log or data sources from objective 4.9.",b:"Firewall logs, application logs, endpoint logs, OS-specific security logs, IPS and IDS logs, network logs, metadata, vulnerability scans, automated reports, dashboards, and packet captures."},
 
 // DOMAIN 5
 {d:5,o:"5.1",g:"policy-hierarchy",f:"Policy, standard, procedure, guideline: rank and define.",b:"Policy states intent (what and why). Standard sets the mandatory specific requirement. Procedure gives the step-by-step. Guideline is optional recommended practice."},
 {d:5,o:"5.1",g:"governance-structures",f:"Centralized vs decentralized governance tradeoff.",b:"Centralized gives consistency and enterprise visibility but is slower. Decentralized gives speed and local fit but risks inconsistency and blind spots."},
 {d:5,o:"5.1",g:"governance-roles",f:"Data owner, controller, processor, custodian, steward: one line each.",b:"Owner: accountable for the data. Controller: decides purposes and means of processing. Processor: acts on the controller's instructions. Custodian: hands-on technical care. Steward: manages quality and appropriate use."},
-{d:5,o:"5.1",g:"policies",f:"Name six organizational policies from objective 5.1.",b:"Acceptable use (AUP), information security, business continuity, disaster recovery, incident response, software development lifecycle, and change management."},
+{d:5,o:"5.1",g:"policies",f:"Name seven organizational policies from objective 5.1.",b:"Acceptable use (AUP), information security, business continuity, disaster recovery, incident response, software development lifecycle, and change management."},
 {d:5,o:"5.2",g:"risk-assessment-types",f:"Name the four risk assessment frequencies.",b:"Ad hoc (as needed), recurring (on a schedule), one-time (for a specific event), and continuous (ongoing monitoring)."},
 {d:5,o:"5.2",g:"risk-analysis",f:"Qualitative vs quantitative risk analysis.",b:"Qualitative uses descriptive ratings such as high, medium, low. Quantitative uses monetary values and probability, producing SLE, ARO, and ALE."},
 {d:5,o:"5.2",g:"risk-calculation",f:"Write out the SLE, ARO, and ALE formulas.",b:"SLE = Asset Value x Exposure Factor. ALE = SLE x ARO. ARO is occurrences per year, so once in 20 years equals 0.05."},
@@ -4195,7 +4200,7 @@ const CARDS = [
 {d:5,o:"5.2",g:"risk-strategies",f:"Name the four risk management strategies.",b:"Transfer (insurance or contract), Accept (documented, may include exemption or exception), Avoid (stop the activity), Mitigate (apply controls)."},
 {d:5,o:"5.2",g:"risk-register",f:"What lives in a risk register?",b:"Identified risks, key risk indicators, assigned risk owners, and risk thresholds. It is the running record of what the organization is tracking."},
 {d:5,o:"5.2",g:"business-impact",f:"What does a business impact analysis produce?",b:"RTO, RPO, MTTR, and MTBF for critical processes, which then drive continuity and recovery investment."},
-{d:5,o:"5.3",g:"vendor-assessment",f:"Name four vendor assessment methods.",b:"Penetration testing, right-to-audit clause, evidence of internal audits, independent third-party assessments, supply chain analysis, and vendor questionnaires."},
+{d:5,o:"5.3",g:"vendor-assessment",f:"Name six vendor assessment methods.",b:"Penetration testing, right-to-audit clause, evidence of internal audits, independent third-party assessments, supply chain analysis, and vendor questionnaires."},
 {d:5,o:"5.3",g:"agreements",f:"SLA, MOU, MOA, MSA, SOW, NDA, BPA: what is each for?",b:"SLA: measurable service commitments. MOU: non-binding statement of intent. MOA: more formal cooperative agreement. MSA: overarching legal terms. SOW or work order: specific deliverables. NDA: confidentiality. BPA: terms between business partners."},
 {d:5,o:"5.4",g:"compliance",f:"Name five consequences of non-compliance.",b:"Fines, sanctions, reputational damage, loss of license, and contractual impacts."},
 {d:5,o:"5.4",g:"privacy",f:"Local, regional, national, and global privacy scope: give an example of each.",b:"Local and regional: state laws such as CCPA. National: sector laws such as HIPAA. Global: cross-border regimes such as GDPR."},
@@ -4829,6 +4834,7 @@ const GLOSS = [
 {term:"RPO (Recovery point objective)",d:3,g:"resilience",def:"The maximum acceptable amount of data loss, measured in time, that an organization can tolerate between backups."},
 {term:"MTBF (Mean time between failures)",d:3,g:"resilience",def:"The average time a system operates before it fails, used as a reliability metric."},
 {term:"MTTR (Mean time to repair)",d:3,g:"resilience",def:"The average time it takes to restore a failed system to working order."},
+{term:"SRE (Site reliability engineering)",d:3,g:"resilience",def:"A discipline that applies software engineering practices to operations, using measurable reliability targets and automation to keep systems available. It relies on metrics like error budgets and MTTR to decide how much risk a team can take with new changes before reliability suffers."},
 {term:"Hot site",d:3,g:"resilience",def:"A fully equipped, ready-to-use backup facility with current data, allowing near-instant failover during a disaster, at the highest cost."},
 {term:"Warm site",d:3,g:"resilience",def:"A backup facility with hardware in place but data that is not fully current, offering a middle ground between cost and recovery speed."},
 {term:"Cold site",d:3,g:"resilience",def:"A backup facility that is essentially empty space, cheapest to maintain but slowest to bring online during a disaster."},
@@ -4852,6 +4858,7 @@ const GLOSS = [
 {term:"RTOS (Real-time operating system)",d:3,g:"iot",def:"An operating system built to guarantee task completion within a strict, predictable time window, commonly used in industrial and embedded control systems."},
 {term:"SCADA (Supervisory control and data acquisition)",d:3,g:"iot",def:"A system used to monitor and control industrial processes across a large geographic area, common in utilities and manufacturing."},
 {term:"ICS (Industrial control system)",d:3,g:"iot",def:"A general term for the systems that manage and automate industrial processes, of which SCADA is one type."},
+{term:"HMI (Human-machine interface)",d:4,g:"iot",def:"The component of an industrial control system that lets an operator directly interact with and monitor the process, such as a touchscreen panel showing live readings and controls. Its security matters because unauthorized access here can let someone directly manipulate the physical process."},
 {term:"Embedded system",d:3,g:"iot",def:"A computer system built into a larger device to perform a specific function, typically with constrained hardware and a long deployment life."},
 {term:"Data sovereignty",d:3,g:"data",def:"The principle that data is subject to the laws of the country in which it is physically stored, a key concern for cloud data residency."},
 {term:"Hardening",d:4,g:"ops",def:"The process of reducing a system's attack surface by disabling unused services, closing unneeded ports, removing default accounts, and applying patches."},
@@ -5245,7 +5252,7 @@ const GLOSS = [
 {term:"2FA (Two-factor Authentication)",d:4,g:"acronym-auth",def:"Requires exactly two different categories of proof to sign in"},
 {term:"3DES (Triple Data Encryption Standard)",d:1,g:"acronym-crypto",def:"Legacy symmetric cipher that runs DES three times, now deprecated"},
 {term:"AAA (Authentication, Authorization, and Accounting)",d:4,g:"acronym-auth",def:"The framework covering who you are, what you may do, and what you did"},
-{term:"AES (Advanced Encryption Standard)",d:1,g:"acronym-crypto",def:"The current standard symmetric block cipher used almost everywhere"},
+{term:"AES (Advanced Encryption Standard)",d:1,g:"acronym-crypto",def:"The current standard symmetric block cipher, encrypting data in fixed-size 128-bit blocks using the same key for both encryption and decryption. It replaced the older, weaker DES standard and comes in 128, 192, and 256-bit key strengths, with AES-256 being the most common for full-disk encryption, VPNs, and Wi-Fi (WPA2/WPA3). Its speed and strength make it the default choice anywhere large amounts of data need to be encrypted quickly."},
 {term:"AES-256",d:1,g:"acronym-crypto",def:"Advanced Encryption Standards 256-bit. The 256-bit key variant of the standard symmetric cipher, common for full-disk encryption."},
 {term:"AH (Authentication Header)",d:4,g:"acronym-proto",def:"IPSec component providing integrity and authentication but no encryption"},
 {term:"AI",d:1,g:"acronym-misc",def:"Artificial Intelligence. Systems that perform tasks needing human-like reasoning; used in security for detection and by attackers for convincing lures."},
@@ -5343,12 +5350,13 @@ const GLOSS = [
 {term:"HDD",d:3,g:"acronym-hw",def:"Hard Disk Drive. Spinning magnetic storage, which can be degaussed for sanitization."},
 {term:"HIDS (Host-based Intrusion Detection System)",d:4,g:"acronym-ops",def:"Detects and alerts on suspicious activity on a single host"},
 {term:"HIPS (Host-based Intrusion Prevention System)",d:4,g:"acronym-ops",def:"Blocks malicious activity on a single host"},
-{term:"HMAC (Hashed Message Authentication Code)",d:1,g:"acronym-crypto",def:"Combines a hash with a secret key to prove integrity and authenticity"},
+{term:"HMAC (Hashed Message Authentication Code)",d:1,g:"acronym-crypto",def:"Combines a cryptographic hash function with a shared secret key, so that verifying the resulting code proves two things at once: the message wasn't altered in transit, and it genuinely came from someone who holds the shared secret. A plain hash alone only proves data integrity; anyone can compute a hash of anything. HMAC adds authenticity on top, which is why it's used in things like API request signing and TLS record verification, not just simple file integrity checks."},
 {term:"HOTP (HMAC-based One-time Password)",d:4,g:"acronym-auth",def:"One-time code generated from a counter rather than a clock"},
 {term:"HTML",d:1,g:"acronym-misc",def:"Hypertext Markup Language. The markup language of web pages; the injection point for cross-site scripting when input is not sanitized."},
 {term:"HTTP",d:4,g:"acronym-proto",def:"Hypertext Transfer Protocol, unencrypted web traffic on TCP port 80"},
 {term:"HTTPS",d:4,g:"acronym-proto",def:"Hypertext Transfer Protocol Secure, encrypted web traffic on TCP port 443"},
 {term:"HVAC",d:3,g:"acronym-hw",def:"Heating, Ventilation Air Conditioning. Environmental system whose failure threatens availability in a data center."},
+{term:"FaaS (Function as a Service)",d:3,g:"acronym-cloud",def:"The customer supplies only individual functions of code, triggered by events, and the provider handles everything else, including scaling to zero when idle. It's the practical implementation behind serverless computing, and unlike IaaS/PaaS/SaaS, the customer has no persistent server or runtime to manage at all."},
 {term:"IaaS (Infrastructure as a Service)",d:3,g:"acronym-cloud",def:"Provider supplies compute, storage, and network; customer owns OS and up"},
 {term:"IAM (Identity and Access Management)",d:4,g:"acronym-access",def:"The discipline covering provisioning, authentication, and authorization of identities"},
 {term:"ICMP",d:4,g:"acronym-proto",def:"Internet Control Message Protocol. Diagnostic and error-reporting protocol used by ping and traceroute."},
@@ -7926,8 +7934,23 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const pct=(c,s)=>s?Math.round(c/s*100):0;
 const days=d=>Math.ceil((d-new Date())/86400000);
 function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),2100); }
-function dl(name,text){ const b=new Blob([text],{type:"text/plain;charset=utf-8"}); const u=URL.createObjectURL(b);
-  const a=document.createElement("a"); a.href=u; a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(u),3000); }
+function dl(name,text){
+  const b=new Blob([text],{type:"text/plain;charset=utf-8"});
+  try{
+    const f=new File([b],name,{type:b.type});
+    if(navigator.canShare && navigator.canShare({files:[f]})){
+      navigator.share({files:[f],title:name}).catch(()=>{ dlFallback(b,name); });
+      return;
+    }
+  }catch(e){}
+  dlFallback(b,name);
+}
+function dlFallback(b,name){
+  const u=URL.createObjectURL(b);
+  const a=document.createElement("a"); a.href=u; a.download=name; a.style.display="none";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(u),3000);
+}
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 
 /* ================= adaptive pressure ================= */
@@ -8005,6 +8028,7 @@ function strip(mode,lampPct,lampMode,mid,right,staticBar){
   const bb=$("sBack"); if(bb) bb.style.display=(view==="home")?"none":"";
   const hb=$("sHome"); if(hb) hb.style.display=(view==="home")?"none":"";
   const na=document.querySelector(".nav-actions"); if(na) na.style.display=(view==="home")?"none":"";
+  const rh=$("rotateHint"); if(rh) rh.style.setProperty("display",view==="home"?"":"none",view==="home"?"":"important");
 }
 let CONFIRM_CB=null, CONFIRM_CB2=null;
 function askConfirm(msg,cb){
@@ -8122,11 +8146,6 @@ function home(){
   const e=examDate(), dOpen=e?days(e):null;
   $("app").innerHTML=`
   <div class="hero">
-    <button class="rotate-hint" onclick="toast('Landscape gives tables and diagrams more room to breathe')" aria-label="Rotate to landscape for a wider view" title="Rotate to landscape for a wider view">
-      <svg viewBox="0 0 24 24" fill="currentColor">
-        <path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h1.5C23.44 4.84 18.29 0 12 0l-.66.03 3.81 3.81 1.33-1.32zM10.23 1.75c-.32-.32-.86-.32-1.19 0L1.75 9.04c-.32.32-.32.86 0 1.19l7.29 7.29c.32.32.86.32 1.19 0l7.29-7.29c.32-.32.32-.86 0-1.19l-7.29-7.29zm.58 14.02L4.94 9.9l5.88-5.88 5.88 5.88-5.88 5.88zM7.52 21.48C4.25 19.93 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32z"/>
-      </svg>
-    </button>
     ${S.name?`<p class="greet">${timeGreeting()}, ${esc(S.name)}</p>`:""}
     <h1 class="neon" style="font-family:var(--mono);letter-spacing:.03em;text-transform:uppercase">Night Shift</h1>
     <p class="sub">A full <b>CompTIA Security+ SY0-701</b> trainer built around the official exam blueprint: every question, flashcard, and PBQ is mapped to one of the 28 exam objectives, and the mix is weighted to the real domain percentages. It leans harder on whatever you keep getting wrong, and it will tell you when you are actually ready.</p>
@@ -9219,7 +9238,7 @@ function examBegin(mins,checkMode){
   const pbqSet=randomPbqSet();
   const mcqSet=pickExamMcqSet(90-pbqSet.length);
   SX={exam:EXAM_ID,i:0,answers:{},orders:{},flags:{},pbq:{},submitted:false,startTs:Date.now(),checkMode:!!checkMode,
-      timer:mins?{total:mins*60,remain:mins*60,visible:true,expired:false}:null,
+      timer:mins?{total:mins*60,remain:mins*60,visible:true,expired:false,paused:false}:null,
       items:pbqSet.map(id=>({t:"p",id:id})).concat(mcqSet.map(id=>({t:"q",id:id})))};
   mcqSet.forEach(id=>SX.orders[id]=shuffle([0,1,2,3]));
   pbqSet.forEach(id=>SX.pbq[id]=initPbqStateX(id));
@@ -9242,9 +9261,23 @@ function examResume(){
   }
   SX=S.activeExam;
   view="exam"; RENDER_CB=examRender;
-  if(SX.timer&&SX.timer.remain>0&&!SX.timer.expired) startExamClock();
+  if(SX.timer&&SX.timer.remain>0&&!SX.timer.expired&&!SX.timer.paused) startExamClock();
   examRender();
-  toast("Resumed. The clock paused while you were away");
+  toast(SX.timer&&SX.timer.paused?"Resumed. Timer is still paused":"Resumed. The clock paused while you were away");
+}
+function pauseExamClock(){
+  if(!SX||!SX.timer||SX.timer.expired) return;
+  SX.timer.paused=true;
+  stopTimer();
+  persistX();
+  examRender();
+}
+function resumeExamClock(){
+  if(!SX||!SX.timer||SX.timer.expired) return;
+  SX.timer.paused=false;
+  startExamClock();
+  persistX();
+  examRender();
 }
 function startExamClock(){
   stopTimer();
@@ -9282,13 +9315,14 @@ function examRender(){
   const answered=SX.items.filter(x=>x.t==="q"?SX.answers[x.id]!==undefined:!pbqUntouchedX(x.id)).length;
   strip("practice exam", Math.round(answered/SX.items.length*100), "on",
     "Item <b>"+(SX.i+1)+"</b> / "+SX.items.length, "Answered <b>"+answered+"</b>");
-  const tmr=SX.timer?`<span class="xtimer ${SX.timer.expired?"exp":""}"><span class="mono" id="xclk">${SX.timer.visible?fmtT(SX.timer.remain):""}</span>
+  const tmr=SX.timer?`<span class="xtimer ${SX.timer.expired?"exp":""}"><span class="mono" id="xclk">${SX.timer.visible?(SX.timer.paused?"Paused":fmtT(SX.timer.remain)):""}</span>
+    ${!SX.timer.expired?`<button class="btn ghost sm" onclick="${SX.timer.paused?"resumeExamClock()":"pauseExamClock()"}">${SX.timer.paused?"Resume":"Pause"}</button>`:""}
     <button class="btn ghost sm" onclick="SX.timer.visible=!SX.timer.visible;persistX();examRender()">${SX.timer.visible?"Hide timer":"Show timer"}</button></span>`:"";
   const head=`<div class="xhead">
     <span class="mono" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)">${EXAM_ID}${SX.checkMode?" \u00b7 Practice mode":""} \u00b7 ${it.t==="p"?"Performance-based":"Multiple choice"} \u00b7 ${SX.i+1} of ${SX.items.length}</span>
     <span style="display:flex;gap:8px;align-items:center">${tmr}
     <button class="btn ghost sm ${SX.flags[SX.i]?"flon":""}" onclick="SX.flags[${SX.i}]=!SX.flags[${SX.i}];persistX();examRender()">${SX.flags[SX.i]?"\u2691 Flagged":"\u2690 Flag"}</button></span>
-  </div>${SX.timer&&SX.timer.expired?`<div class="fb no" style="margin-bottom:12px"><div class="verdict">Time expired</div><p>You can keep answering for the practice value. The result will note that time ran out.</p></div>`:""}`;
+  </div>${SX.timer&&SX.timer.expired?`<div class="fb no" style="margin-bottom:12px"><div class="verdict">Time expired</div><p>You can keep answering for the practice value. The result will note that time ran out.</p></div>`:""}${SX.timer&&SX.timer.paused&&!SX.timer.expired?`<div class="fb no" style="margin-bottom:12px"><div class="verdict">Timer paused</div><p>The clock is stopped and not counting down. Hit Resume when you're ready to continue.</p></div>`:""}`;
   let body="";
   if(it.t==="q"){
     PB=null;
@@ -9448,8 +9482,8 @@ function examReview(){
           return `<div class="opt rv ${cls}"><span>${esc(expandIfAcronym(q.c[oi]))}${oi===q.a?' <span class="ct" style="color:var(--green)">(correct)</span>':""}${d.pick===oi&&oi!==q.a?' <span class="ct" style="color:var(--red)">(your pick)</span>':""}</span></div>`;
         }).join("")}
         <p class="dim" style="font-size:13.5px;margin:10px 0 0">${esc(q.e)}</p>
-        ${d.ok?"":q.w.map((t,wi)=>t&&wi!==q.a?`<p class="dim" style="font-size:12.5px;margin:6px 0 0">\u2022 <b>${esc(expandIfAcronym(q.c[wi]))}:</b> ${esc(t)}</p>`:"").join("")+`
-        <p style="font-size:12.5px;margin:10px 0 0;color:var(--amber)">Restudy: ${esc(studyLine(q.o))}</p>`}
+        ${q.w.map((t,wi)=>t&&wi!==q.a?`<p class="dim" style="font-size:12.5px;margin:6px 0 0">\u2022 <b>${esc(expandIfAcronym(q.c[wi]))}:</b> ${esc(t)}</p>`:"").join("")}
+        ${d.ok?"":`<p style="font-size:12.5px;margin:10px 0 0;color:var(--amber)">Restudy: ${esc(studyLine(q.o))}</p>`}
       </div>`;
     } else {
       const p=PBQ.find(z=>z.id===d.id), st=SX.pbq[d.id];
@@ -9511,7 +9545,7 @@ function examExport(fmt){
     const items=r.detail.map(d=>{
       if(d.t==="q"){ const q=qById(d.id);
         return {type:"question",domain:q.d,objective:q.o,concept:q.g,question:q.q,
-          correctAnswer:q.c[q.a],yourAnswer:d.pick!==undefined?q.c[d.pick]:null,correct:d.ok};
+          correctAnswer:q.c[q.a],yourAnswer:d.pick!==undefined?q.c[d.pick]:null,correct:d.ok,why:q.e};
       } else { const p=PBQ.find(z=>z.id===d.id);
         if(!p) return {type:"pbq",note:"No longer available",score:d.pct,points:d.got+"/"+d.total};
         return {type:"pbq",domain:p.d,objective:p.o,concept:p.g,title:p.title,score:d.pct,points:d.got+"/"+d.total};
