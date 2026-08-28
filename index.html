@@ -9127,11 +9127,26 @@ function mcqQuotaFor(mcqTotal){
 function pickExamMcqSet(mcqTotal){
   const quota=mcqQuotaFor(mcqTotal);
   let mcq=[];
+  S.examSeen=S.examSeen||{};
   [1,2,3,4,5].forEach(d=>{
-    const pool=shuffle(QUESTIONS.filter(q=>q.d===d).map(q=>q.i));
-    const need=Math.min(quota[d],pool.length);
-    for(let j=0;j<need;j++) mcq.push(pool[j]);
+    const fullPool=QUESTIONS.filter(q=>q.d===d).map(q=>q.i);
+    const seen=new Set(S.examSeen[d]||[]);
+    const fresh=fullPool.filter(id=>!seen.has(id));
+    const need=Math.min(quota[d],fullPool.length);
+    let chosen=shuffle(fresh).slice(0,need);
+    if(chosen.length<need){
+      const chosenSet=new Set(chosen);
+      const recyclable=shuffle(fullPool.filter(id=>seen.has(id)&&!chosenSet.has(id)));
+      chosen=chosen.concat(recyclable.slice(0,need-chosen.length));
+    }
+    mcq=mcq.concat(chosen);
+    const chosenSet2=new Set(chosen);
+    let updatedSeen=(S.examSeen[d]||[]).filter(id=>!chosenSet2.has(id)).concat(chosen);
+    const cap=Math.max(need,Math.floor(fullPool.length*0.7));
+    if(updatedSeen.length>cap) updatedSeen=updatedSeen.slice(updatedSeen.length-cap);
+    S.examSeen[d]=updatedSeen;
   });
+  save();
   return shuffle(mcq);
 }
 function randomPbqSet(){
