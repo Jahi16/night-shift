@@ -5932,15 +5932,16 @@ const PBQ = [
  title:"Log Analysis: Identify the Indicators",
  brief:"Review the authentication log below. Select EVERY line that is an indicator of the attack in progress. Selecting benign lines costs you.",
  pre:"08:14:02  auth  SUCCESS  user=jmoore     src=10.20.4.51    geo=US-VA\n08:14:09  auth  FAILED   user=aandrews   src=203.0.113.77  geo=RU\n08:14:10  auth  FAILED   user=bcastillo  src=203.0.113.77  geo=RU\n08:14:11  auth  FAILED   user=cnguyen    src=203.0.113.77  geo=RU\n08:16:44  auth  SUCCESS  user=jmoore     src=198.51.100.9  geo=RU\n08:17:01  auth  SUCCESS  user=dpatel     src=10.20.4.62    geo=US-VA\n08:19:30  priv  GRANTED  user=jmoore     role=domain_admin src=198.51.100.9\n08:22:15  auth  FAILED   user=dpatel     src=10.20.4.62    geo=US-VA",
- items:["08:14:09 FAILED aandrews from 203.0.113.77",
+ items:["08:14:02 SUCCESS jmoore from 10.20.4.51 (US-VA)",
+        "08:14:09 FAILED aandrews from 203.0.113.77",
         "08:14:10 FAILED bcastillo from 203.0.113.77",
         "08:14:11 FAILED cnguyen from 203.0.113.77",
         "08:16:44 SUCCESS jmoore from 198.51.100.9 (RU)",
         "08:17:01 SUCCESS dpatel from 10.20.4.62 (US-VA)",
         "08:19:30 priv GRANTED jmoore role=domain_admin",
         "08:22:15 FAILED dpatel from 10.20.4.62 (US-VA)"],
- correct:[0,1,2,3,5],
- explain:"Three different usernames failing from one foreign address within seconds is password spraying, wide and shallow. The jmoore success at 08:16 is impossible travel: the same account authenticated from Virginia at 08:14 and from Russia two minutes later. The privilege grant at 08:19 from that same foreign address is the escalation and the most serious line in the log. The dpatel lines are benign. A single failed login from an internal address during business hours is a person mistyping their password, and treating it as an indicator is exactly the false positive that causes alert fatigue."},
+ correct:[1,2,3,4,6],
+ explain:"Three different usernames failing from one foreign address within seconds is password spraying, wide and shallow. The jmoore success at 08:16 is impossible travel: the same account authenticated from Virginia at 08:14:02 and from Russia two minutes later at 08:16:44. That first 08:14:02 login is exactly the normal baseline it appears to be, a legitimate login from an internal address, and it's only significant in hindsight as the other half of the impossible-travel comparison; it isn't an indicator on its own. The privilege grant at 08:19 from that same foreign address is the escalation and the most serious line in the log. The dpatel lines are benign. A single failed login from an internal address during business hours is a person mistyping their password, and treating it as an indicator is exactly the false positive that causes alert fatigue."},
 
 {id:9,t:"match",d:3,o:"3.3",g:"data-protection-methods",
  title:"Match Protection to Data State",
@@ -8364,6 +8365,7 @@ function shiftReport(){
       <div class="bar"><i class="${v>=85?"":v>=75?"warn":"bad"}" style="width:${v}%"></i></div><div class="pc">${v}%</div></div>`;
   }).join("");
   const missList=sess.misses.length?sess.misses.map(q=>`<li><span>${esc(q.g.replace(/-/g," "))} <span class="dim">(obj ${q.o})</span></span><span class="ct">D${q.d}</span></li>`).join(""):`<li class="dim">Nothing missed. Clean shift.</li>`;
+  const missTagsArr=[...new Set(sess.misses.map(q=>q.g))].map(t=>t.replace(/-/g," "));
   strip("shift report",p,p>=85?"on":p>=70?"warn":"crit","Score <b>"+p+"%</b>","<b>"+sess.correct+"/"+sess.i+"</b> resolved");
   if(sess.customPool){
     $("app").innerHTML=`
@@ -8386,6 +8388,7 @@ function shiftReport(){
   <div class="row" style="margin-top:18px">
     <button class="btn pri" onclick="shiftStart(${sess.n})">Run another shift</button>
     ${sess.misses.length?`<button class="btn" onclick="exportMissesToAI()">Export misses for AI refresher &amp; quiz</button>`:""}
+    ${missTagsArr.length?`<button class="btn" onclick='jcAddTopicsBulk(${JSON.stringify(missTagsArr)})'>Send ${missTagsArr.length} missed concept${missTagsArr.length>1?"s":""} to The Drill Down</button>`:""}
     <button class="btn ghost" onclick="home()">Home</button></div>`;
 }
 
@@ -8607,6 +8610,13 @@ function jcAddTopicsBulk(terms,cb){
   if(cb) cb();
 }
 function jcRemoveTopic(i){ S.jcTopics.splice(i,1); save(); jcSetup(); }
+function jcClearTopics(){
+  const n=(S.jcTopics||[]).length;
+  if(!n){ toast("No topics to clear"); return; }
+  askConfirm("Remove all "+n+" weak topic"+(n>1?"s":"")+" from The Drill Down? This doesn't affect your actual stats, just this tracked list.",()=>{
+    S.jcTopics=[]; save(); toast("Weak topics cleared"); jcSetup();
+  });
+}
 function jcSetup(){
   view="setup"; SECTION=jcSetup; AT_SECTION=true; ENTRY_TILE="t-josh"; strip("the drill down",0); stopTimer();
   const {qs,cs}=jcPool();
@@ -8615,7 +8625,10 @@ function jcSetup(){
   <p class="eyebrow">Focused drilling</p><h1>The Drill Down</h1>
   <p class="lede">High-repetition drilling on whatever you keep missing. Add a word or phrase for anything that isn't sticking, and this pulls every matching question and flashcard already in the bank into one focused, repeating pool. No new explanations, just reps. Topics also arrive automatically when you add them from Weak areas &amp; stats.</p>
   <div class="card">
-    <div class="zlab-lg" style="margin-bottom:10px">Your weak topics</div>
+    <div class="zlab-lg" style="margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <span>Your weak topics</span>
+      ${(S.jcTopics||[]).length?`<button class="btn ghost sm" style="color:var(--red);border-color:var(--red)" onclick="jcClearTopics()">Clear all</button>`:""}
+    </div>
     <div class="jcchips">${chips}</div>
     <div class="row" style="margin-top:12px">
       <input id="jcNewTopic" type="text" placeholder="e.g. proxy vs jump server" style="flex:1;min-width:160px" onkeydown="if(event.key==='Enter'){event.preventDefault();jcAddTopic();}">
@@ -9355,7 +9368,7 @@ function examRender(){
         else if(pick===oi) cls+=" wrong";
       }
       const dis=revealed?"disabled":"";
-      return `<button class="opt ${cls}" ${dis} onclick="SX.answers['${it.id}']=${oi};persistX();examRender()"><span class="key mono">${pos+1}</span><span>${esc(q.c[oi])}${revealed&&oi===q.a?' <span class="ct">(correct)</span>':""}${revealed&&pick===oi&&oi!==q.a?' <span class="ct">(your pick)</span>':""}</span></button>`;
+      return `<button class="opt ${cls}" ${dis} onclick="SX.answers['${it.id}']=${oi};persistX();examRender()"><span class="key mono">${String.fromCharCode(65+pos)}</span><span>${esc(q.c[oi])}${revealed&&oi===q.a?' <span class="ct">(correct)</span>':""}${revealed&&pick===oi&&oi!==q.a?' <span class="ct">(your pick)</span>':""}</span></button>`;
     }).join("")}</div>
     ${SX.checkMode&&!revealed?`<div class="row" style="margin-top:14px"><button class="btn pri sm" ${pick===undefined?"disabled":""} onclick="checkAnswer(${it.id})">Check answer</button></div>`:""}
     ${revealed?`<div class="card" style="margin-top:14px">
@@ -9364,7 +9377,7 @@ function examRender(){
         const isPick=oi===pick&&!isCorrect;
         const text=isCorrect?q.e:(q.w[oi]||"");
         return `<div style="padding:9px 0;border-bottom:1px solid var(--line)">
-          <b><span class="mono">${pos+1}.</span> ${esc(expandIfAcronym(q.c[oi]))}${isCorrect?' <span class="ct" style="color:var(--green)">(correct)</span>':""}${isPick?' <span class="ct" style="color:var(--red)">(your pick)</span>':""}</b>
+          <b><span class="mono">${String.fromCharCode(65+pos)}.</span> ${esc(expandIfAcronym(q.c[oi]))}${isCorrect?' <span class="ct" style="color:var(--green)">(correct)</span>':""}${isPick?' <span class="ct" style="color:var(--red)">(your pick)</span>':""}</b>
           <p class="dim" style="font-size:13px;margin:4px 0 0">${esc(text)}</p></div>`;
       }).join("")}
     </div>`:""}`;
