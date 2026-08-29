@@ -7967,12 +7967,12 @@ function mulberry32(seed){
 }
 function shuffleSeeded(a,rng){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 function h2hNewCode(){
-  const n=Math.floor(Math.random()*Math.pow(36,6));
-  return n.toString(36).toUpperCase().padStart(6,"0");
+  const n=Math.floor(Math.random()*1000000);
+  return n.toString().padStart(6,"0");
 }
 function h2hCodeToSeed(code){
-  const clean=(code||"").trim().toUpperCase().replace(/[^0-9A-Z]/g,"");
-  const n=parseInt(clean,36);
+  const clean=(code||"").trim().replace(/[^0-9]/g,"");
+  const n=parseInt(clean,10);
   return isNaN(n)?1:n;
 }
 
@@ -9334,7 +9334,7 @@ function h2hSetup(){
     <h3 style="margin:0 0 8px">Join a match</h3>
     <p class="dim" style="font-size:12.5px;margin:0 0 10px">Enter the code your partner shared with you.</p>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <input type="text" id="h2hCodeInput" placeholder="e.g. 3K7QRZ" style="width:150px;padding:7px 9px;background:var(--panel);border:1px solid var(--line);border-radius:7px;color:var(--txt);font-size:15px;text-transform:uppercase;font-family:var(--mono);letter-spacing:0.08em">
+      <input type="text" inputmode="numeric" id="h2hCodeInput" placeholder="e.g. 384920" style="width:150px;padding:7px 9px;background:var(--panel);border:1px solid var(--line);border-radius:7px;color:var(--txt);font-size:15px;font-family:var(--mono);letter-spacing:0.08em">
       <button class="btn sm" onclick="h2hJoin()">Join</button>
     </div>
   </div>
@@ -9343,7 +9343,7 @@ function h2hSetup(){
 function h2hGenerate(){ h2hConfirm(h2hNewCode(),true); }
 function h2hJoin(){
   const raw=$("h2hCodeInput")?$("h2hCodeInput").value:"";
-  const clean=(raw||"").trim().toUpperCase().replace(/[^0-9A-Z]/g,"");
+  const clean=(raw||"").trim().replace(/[^0-9]/g,"");
   if(!clean){ toast("Enter a match code first"); return; }
   h2hConfirm(clean,false);
 }
