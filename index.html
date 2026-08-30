@@ -276,10 +276,6 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
   border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:12px;padding:20px 22px;margin:4px 0 18px}
 @media(max-width:620px){.hero{margin:4px 0 12px;padding:16px 18px}}
 .hero .greet{margin:0 0 2px;font-size:13px;letter-spacing:.04em;color:var(--dim);font-family:var(--mono);text-transform:uppercase}
-.h2h-toggle{position:relative;width:42px;height:24px;border-radius:12px;background:var(--panel);border:1px solid var(--line);cursor:pointer;flex:0 0 auto;padding:0}
-.h2h-toggle span{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--dim);transition:transform .15s ease,background .15s ease}
-.h2h-toggle.on{background:rgba(240,90,90,.18);border-color:var(--red)}
-.h2h-toggle.on span{transform:translateX(18px);background:var(--red)}
 .rotate-hint{display:none;margin-left:auto;flex:0 0 auto;width:30px;height:30px;border-radius:50%;
   background:var(--raise);border:1px solid var(--line);align-items:center;justify-content:center;cursor:pointer;
   color:var(--amber);animation:rotateHintPulse 2.4s ease-in-out infinite}
@@ -658,7 +654,7 @@ w:["This is the incremental restore procedure, and it is the most common wrong a
 q:"Leadership states the business can tolerate losing at most 15 minutes of transaction data in a disaster. Which metric are they defining?",
 c:["RTO","RPO","MTTR","MTBF"],a:1,
 e:"RPO (Recovery Point Objective) is the maximum acceptable amount of data loss, expressed as time. Fifteen minutes of tolerable loss drives backup or replication frequency.",
-w:["RTO (Recovery Time Objective) is how long you may take to restore service. This pairing is the single most confused pair in Domain 3. RPO looks backward at data, RTO looks forward at downtime.","","MTTR (Mean Time To Repair) is the average time to fix a failed component. It is a measured average, not a target the business sets.","MTBF (Mean Time Between Failures) is a reliability statistic about how often something breaks."]},
+w:["RTO (Recovery Time Objective) is how long you may take to restore service. This pairing is the single most confused pair in Domain 3. RPO looks backward at data, RTO looks forward at downtime.","","MTTR (Mean Time to Recover) is the average time to fix a failed component. It is a measured average, not a target the business sets.","MTBF (Mean Time Between Failures) is a reliability statistic about how often something breaks."]},
 
 {i:311,d:3,o:"3.4",t:"s",g:"site-considerations",
 q:"An insurer needs a recovery site with hardware and network in place and data replicated nightly, but is willing to spend a day bringing it online to save cost. Which site type BEST fits?",
@@ -1357,10 +1353,10 @@ c:["Allow list","Downtime scheduling","Version control","Dependency mapping"],a:
 e:"Version control preserves the full revision history of configurations and code, attributing every change and enabling immediate rollback to a known-good version.",
 w:["Allow lists control what may execute.","Downtime scheduling manages maintenance windows.","","Dependency mapping identifies what else a change affects."]},
 {i:905,d:2,o:"2.2",t:"b",g:"image-based-vector",
-q:"Posters appear in a building lobby offering free coffee for scanning a QR code, which silently directs phones to a credential-harvesting page. Which threat vector category does this attack use?",
+q:"An employee opens what looks like an ordinary photo attached to an email, and moments later antivirus flags malicious code that executed from within the image's own file structure the instant the image viewer rendered it. Which threat vector category does this attack use?",
 c:["Image-based vector","File-based vector","Voice call vector","Supply chain vector"],a:0,
-e:"QR codes are an image-based vector: the malicious destination hides inside an image the victim cannot read, defeating the usual advice to inspect a link before clicking.",
-w:["","No file is delivered; the image encodes a URL.","No call occurs.","No supplier relationship is exploited."]},
+e:"Image-based threat vectors hide malicious code inside the image file itself, exploiting how an application parses that format, so the code runs the moment the image is rendered, not because a link was clicked or a file was separately executed.",
+w:["","File-based threats deliver malware through file types built to be directly executed or macro-enabled, like a document or installer, not through parsing an image format.","No call occurs.","No supplier relationship is exploited."]},
 {i:906,d:4,o:"4.4",t:"m",g:"scan-methods",
 q:"Which statement correctly contrasts agent-based and agentless vulnerability assessment?",
 c:["Agentless requires software installed on every target before it can produce any results","Agent-based cannot see installed software versions the way a remote scan can","Agent-based reports from inside the host; agentless scans remotely with nothing installed","They produce identical visibility in all cases, so the choice comes down to licensing cost alone"],a:2,
@@ -1622,7 +1618,7 @@ w:["","Tokenization substitutes surrogate values for sensitive data and does not
 {i:1020,d:5,o:"5.2",t:"m",g:"risk-metrics",
 q:"A critical server fails on average every 2,000 hours and takes 4 hours to bring back online. Which pairing correctly names these two measurements?",
 c:["2,000 hours is MTTR and 4 hours is MTBF","2,000 hours is MTBF and 4 hours is MTTR","Both are expressions of RPO","2,000 hours is RTO and 4 hours is MTBF"],a:1,
-e:"MTBF (Mean Time Between Failures) measures how long the system runs before failing, and MTTR (Mean Time To Repair) measures how long restoration takes once it does.",
+e:"MTBF (Mean Time Between Failures) measures how long the system runs before failing, and MTTR (Mean Time to Recover) measures how long restoration takes once it does.",
 w:["This reverses the two terms, which is the most common trap on this topic.","","RPO expresses tolerable data loss, not failure frequency or repair duration.","RTO is the target restoration time set by the business, not an observed failure interval."]}
 ];
 
@@ -1946,7 +1942,7 @@ c:["Exposure factor","Annualized rate","Risk threshold","Impact rating"],a:2,
 e:"A risk threshold is the defined trigger point at which a monitored risk demands action or escalation, converting a metric into a decision rule.",
 w:["Exposure factor is the fraction of asset value one incident destroys.","ARO estimates event frequency per year.","","Impact rates severity, not the action trigger."]},
 {i:1228,d:5,o:"5.2",t:"s",g:"risk-strategies",
-q:"A legacy system cannot support a required security control. Leadership formally documents acceptance of the risk for twelve months while a replacement is procured, with compensating monitoring in the interim. Which strategy and mechanism does this describe?",
+q:"A legacy system cannot support a required security control. Leadership formally decides to take no further corrective action on the risk for twelve months while a replacement is procured, choosing to tolerate it as-is with compensating monitoring in the interim. Which strategy and mechanism does this describe?",
 c:["Avoidance","Transfer","Mitigation","Acceptance"],a:3,
 e:"The organization is accepting the risk knowingly, through a formal exception: documented, time-limited, with compensations, rather than pretending the gap does not exist.",
 w:["The system continues operating throughout, so nothing was actually avoided here.","No insurance or third party is described as assuming any financial burden in this scenario.","The control gap itself remains open the whole time; monitoring compensates for it but doesn't close it through a technical fix.",""]},
@@ -2300,7 +2296,7 @@ w:["An examination is conducted by a regulator or outside party, not by employee
 
 const Q12 = [
 {i:2001,d:1,o:"1.2",t:"n",g:"control-types-not",
-q:"An organization's control catalog lists a firewall, security awareness training, a fence around the data center, and an incident response runbook. Which of these is NOT an example of a technical control?",
+q:"An organization's control catalog lists a firewall, mandatory yearly cybersecurity training for all staff, a fence around the data center, and an incident response runbook. Which of these is NOT an example of a technical control?",
 c:["Firewall","Security awareness training","Fence around the data center","Firewall rule change ticket requiring approval before deployment"],a:1,
 e:"Security awareness training is a managerial/operational control carried out by and for people; it is not implemented through technology, which is the defining trait of a technical control.",
 w:["A firewall is textbook technical: it is technology enforcing a security function.","","A fence is physical, not technical, but the question asks which is NOT technical, and training is the better fit since a fence still is not the answer being tested here.","An approval workflow enforced through a ticketing system still counts as technology-mediated control, making it technical in nature."]},
@@ -2665,7 +2661,7 @@ c:["Privilege escalation","Buffer overflow","Directory traversal","Replay"],a:0,
 e:"Privilege escalation is the act of gaining a higher level of access than originally granted, exactly what happens when a standard user account exploits a flaw to obtain administrator rights.",
 w:["","A buffer overflow is a specific technique that can sometimes be used to achieve privilege escalation, but the vulnerability being tested here is the outcome, unauthorized elevated access, not the underlying mechanism.","Directory traversal manipulates file paths to reach files outside an intended directory; it doesn't itself grant elevated account permissions.","Replay involves resubmitting a previously captured legitimate transaction or session; it doesn't describe exploiting a flaw to gain higher privileges."]},
 {i:1570,d:2,o:"2.4",t:"s",g:"application-attacks",
-q:"An attacker intercepts a legitimate API request that transfers funds between accounts, then resubmits that exact same captured request later, causing the transfer to execute a second time without the user's knowledge. Which application attack is this, distinct from replaying stolen login credentials?",
+q:"An attacker intercepts a legitimate API request that transfers funds between accounts, then resubmits that exact same captured request later, causing the transfer to execute a second time without the user's knowledge. Which application attack is this, as distinguished from an attacker capturing and reusing someone's login credentials rather than a transaction request itself?",
 c:["Replay","Credential replay","Privilege escalation","Forgery"],a:0,
 e:"Replay, in the application-attack sense, is resubmitting a previously captured legitimate transaction or request to make it execute again, which is a different layer than credential replay, which specifically reuses captured authentication material to log in as someone else.",
 w:["","Credential replay specifically means reusing captured login credentials or authentication tokens to gain access; this scenario replays an already-authenticated transaction itself, not a login attempt, which is the application-layer replay concept being tested.","Privilege escalation involves gaining a higher level of access than originally granted, not resubmitting a captured transaction.","Forgery, such as cross-site request forgery, tricks a victim's browser into submitting a request the victim never intended; this scenario is an attacker directly resubmitting a request they captured, not tricking the victim's browser into acting."]},
@@ -3055,7 +3051,7 @@ c:["Risk tolerance","Exposure factor","CVSS scoring","Vulnerability classificati
 e:"Risk tolerance is the level of risk an organization is willing to accept, expressed here as concrete thresholds for how long different severity levels are allowed to remain unpatched.",
 w:["","Exposure factor is the percentage of an asset's value lost if a risk is realized, a different calculation than an organization's overall willingness to accept risk over time.","CVSS scoring rates the severity of an individual vulnerability itself, not the organization's policy for how long different severities can remain unpatched.","Vulnerability classification groups findings by type, not the organization's tolerance thresholds for remediation timing."]},
 {i:1648,d:4,o:"4.3",t:"s",g:"vuln-remediation",
-q:"A company cannot immediately patch a critical vulnerability in a legacy system without breaking compatibility, so it purchases a cyber insurance policy specifically to offset the potential financial loss if that system is ever compromised in the meantime. Which vulnerability response option is this?",
+q:"A company cannot immediately patch a critical vulnerability in a legacy system without breaking compatibility, so it arranges an agreement with a third-party underwriter who will cover the financial cost if that system is ever compromised in the meantime. Which vulnerability response option is this?",
 c:["Insurance","Segmentation","Compensating control","Exceptions and exemptions"],a:0,
 e:"Insurance is a vulnerability response option that shifts the financial impact of a risk to a third party, used here specifically to offset potential losses while the underlying flaw remains unpatched.",
 w:["","Segmentation would isolate the vulnerable system on its own network zone to limit exposure, a different technical mitigation than transferring financial risk through insurance.","A compensating control substitutes a different safeguard when the primary fix can't be applied, a technical mitigation rather than a financial risk transfer.","Exceptions and exemptions formally document and approve leaving a vulnerability unaddressed for a defined reason, a governance action distinct from purchasing insurance to offset financial loss."]},
@@ -3445,7 +3441,7 @@ c:["Regulatory","Industry","Local/regional","Global"],a:0,
 e:"Regulatory considerations are legally mandated requirements imposed by a governing body, such as federal healthcare data protection law, with real penalties like fines for non-compliance.",
 w:["","Industry considerations are sector-specific norms and best practices, generally not legally mandated with fines the way a regulatory requirement is.","Local/regional considerations concern requirements specific to a particular geographic area, a narrower and different scope than a federal regulatory mandate.","Global considerations concern requirements spanning multiple countries, a broader scope than the specific federal regulatory framework described here."]},
 {i:1726,d:5,o:"5.1",t:"s",g:"external-considerations",
-q:"A payment processing company follows a widely adopted security framework created and maintained by the card payment industry itself, not by any government, because every major card brand requires it as a condition of doing business with them. Which external consideration is shaping this policy?",
+q:"A payment processing company follows a widely adopted security framework created and maintained by the payment card companies collectively, not by any government, because every major card brand requires it as a condition of doing business with them. Which external consideration is shaping this policy?",
 c:["Industry","Regulatory","National","Local/regional"],a:0,
 e:"Industry considerations are sector-specific standards created and enforced by the industry itself rather than a government body, exactly the card-brand-driven framework described here.",
 w:["","Regulatory considerations are legally mandated by a government body; this framework is explicitly industry-created and enforced by private card brands, not a law.","National considerations concern requirements specific to one country's government, not a private industry-wide framework spanning many countries' card brands.","Local/regional considerations concern a specific geographic area's requirements, a different and narrower scope than an industry-wide framework."]},
@@ -3540,7 +3536,7 @@ c:["Non-disclosure agreement (NDA)","Service-level agreement (SLA)","Memorandum 
 e:"A non-disclosure agreement legally obligates a party not to disclose or misuse confidential information shared with them, exactly the protection needed before sharing proprietary plans.",
 w:["","An SLA defines measurable performance commitments like uptime, unrelated to protecting confidential information from disclosure.","An MOU expresses general mutual intent between parties, typically without the specific binding confidentiality obligation an NDA provides.","A business partners agreement defines the terms of an ongoing business partnership, a broader document than the narrow confidentiality protection an NDA specifically provides."]},
 {i:1745,d:5,o:"5.4",t:"s",g:"compliance-reporting",
-q:"A company's security team produces a quarterly compliance status summary for its own executive leadership and board, used purely for internal awareness and decision-making with no obligation to share it outside the organization. Which compliance reporting type is this?",
+q:"A company's security team produces a quarterly compliance status summary meant only for its own executive leadership and board's awareness and decision-making, with no obligation to share it outside the organization. Which compliance reporting type is this?",
 c:["Internal","External","Attestation","Due diligence"],a:0,
 e:"Internal compliance reporting is produced for the organization's own leadership and stakeholders, used for internal awareness rather than being shared with an outside regulator or party.",
 w:["","External compliance reporting is specifically produced for an outside party, like a regulator or auditor; this scenario explicitly states the report stays internal.","Attestation is a formal sign-off confirming compliance, a specific act rather than the general category of report distribution being tested here.","Due diligence is investigating risk before acting, a different concept than the routine periodic reporting described here."]},
@@ -3810,7 +3806,7 @@ c:["Slower startup time and higher resource overhead, in exchange for stronger i
 e:"Virtual machines provide stronger isolation since each has its own separate kernel, but that comes at the cost of slower startup and higher resource overhead compared to containers, which share the host kernel.",
 w:["","Faster startup and weaker isolation describes containers, not the VM choice this scenario is describing.","Lower resource usage with shared kernel risk also describes containers; VMs use more resources specifically because each has its own full kernel, not a shared one.","There is a real, well-known tradeoff between VMs and containers regarding isolation strength versus resource overhead and startup speed."]},
 {i:1799,d:3,o:"3.1",t:"s",g:"cloud-responsibility",
-q:"A company uses a SaaS email platform and is responsible for managing its own user accounts and data classification, but has no responsibility for patching the underlying servers, since the provider handles the entire technology stack beneath the application. Which cloud service model is this?",
+q:"A company uses an email platform that employees access entirely through a web browser, and is responsible for managing its own user accounts and data classification, but has no responsibility for patching the underlying servers, since the provider handles the entire technology stack beneath the application. Which cloud service model is this?",
 c:["Software as a Service (SaaS)","Infrastructure as a Service (IaaS)","Platform as a Service (PaaS)","On-premises"],a:0,
 e:"In SaaS, the provider manages the entire stack including the application itself, leaving the customer responsible only for their own data, accounts, and configuration within it, exactly as described.",
 w:["","In IaaS, the customer manages everything from the guest operating system upward, including patching, the opposite of the no-patching-responsibility described here.","In PaaS, the customer manages their own application code while the provider handles the underlying platform, a middle ground rather than the fully hands-off responsibility described here.","On-premises means the organization owns and maintains everything itself, the opposite of a fully provider-managed SaaS platform."]},
@@ -4291,7 +4287,7 @@ const CARDS = [
 {d:5,o:"5.2",g:"risk-register",f:"What is a risk owner, and why does every register entry need one?",b:"The individual accountable for monitoring and driving treatment of a specific risk. Without a named owner, risks quietly go unmanaged even while sitting visibly on the register."},
 {d:5,o:"5.2",g:"risk-strategies",f:"Exception vs exemption under risk acceptance: what's the distinction?",b:"Both are formal, documented deviations from a required control. An exception is typically time-bound and expected to close. An exemption is a longer-standing carve-out, often for a specific justified reason."},
 {d:5,o:"5.2",g:"risk-metrics",f:"Probability vs likelihood: which is quantitative and which is qualitative?",b:"Probability is a numeric, statistical measure (a percentage or 0-1 value). Likelihood is the qualitative scale (low/medium/high) used when precise numbers aren't available."},
-{d:5,o:"5.2",g:"business-impact",f:"MTTR vs MTBF: which measures reliability and which measures recovery speed?",b:"MTBF (Mean Time Between Failures) measures how long a system runs before failing, reliability. MTTR (Mean Time To Repair) measures how long it takes to fix once it does fail, recovery speed."},
+{d:5,o:"5.2",g:"business-impact",f:"MTTR vs MTBF: which measures reliability and which measures recovery speed?",b:"MTBF (Mean Time Between Failures) measures how long a system runs before failing, reliability. MTTR (Mean Time to Recover) measures how long it takes to fix once it does fail, recovery speed."},
 {d:5,o:"5.3",g:"vendor-selection",f:"What is a conflict of interest in vendor selection, and why does it matter?",b:"When a decision-maker has a personal stake that could bias vendor choice away from the organization's best interest. It's why selection processes require disclosure and recusal."},
 {d:5,o:"5.3",g:"vendor-monitoring",f:"Why doesn't vendor risk management end once the contract is signed?",b:"Ongoing monitoring, SLA performance reviews, incident tracking, and recurring security questionnaires verify the vendor still deserves the trust placed in them long after signature."},
 {d:5,o:"5.3",g:"agreements",f:"MOU vs BPA: which one is typically non-binding?",b:"An MOU (memorandum of understanding) records shared intent and is typically non-binding. A BPA (business partners agreement) is a binding contract structuring ownership, profit split, and governance between partners."},
@@ -4837,7 +4833,7 @@ const GLOSS = [
 {term:"RTO (Recovery time objective)",d:3,g:"resilience",def:"The maximum acceptable amount of time a system can be down before recovery, measuring how long an outage is tolerated."},
 {term:"RPO (Recovery point objective)",d:3,g:"resilience",def:"The maximum acceptable amount of data loss, measured in time, that an organization can tolerate between backups."},
 {term:"MTBF (Mean time between failures)",d:3,g:"resilience",def:"The average time a system operates before it fails, used as a reliability metric."},
-{term:"MTTR (Mean time to repair)",d:3,g:"resilience",def:"The average time it takes to restore a failed system to working order."},
+{term:"MTTR (Mean time to recover)",d:3,g:"resilience",def:"The average time it takes to restore a failed system to working order."},
 {term:"SRE (Site reliability engineering)",d:3,g:"resilience",def:"A discipline that applies software engineering practices to operations, using measurable reliability targets and automation to keep systems available. It relies on metrics like error budgets and MTTR to decide how much risk a team can take with new changes before reliability suffers."},
 {term:"Hot site",d:3,g:"resilience",def:"A fully equipped, ready-to-use backup facility with current data, allowing near-instant failover during a disaster, at the highest cost."},
 {term:"Warm site",d:3,g:"resilience",def:"A backup facility with hardware in place but data that is not fully current, offering a middle ground between cost and recovery speed."},
@@ -4893,6 +4889,7 @@ const GLOSS = [
 {term:"Chain of custody",d:4,g:"forensics",def:"A documented, unbroken record of who has handled a piece of evidence and when, required to preserve its integrity for legal proceedings."},
 {term:"Legal hold",d:4,g:"forensics",def:"A directive to preserve specific data because it may be relevant to pending or anticipated litigation, overriding normal retention or deletion schedules."},
 {term:"E-discovery",d:4,g:"forensics",def:"The process of identifying, collecting, and producing electronically stored information in response to a legal request or investigation."},
+{term:"Reporting (forensics)",d:4,g:"forensics",def:"The culminating step of a digital forensic investigation: compiling the formal findings, timeline, and methodology into a document for stakeholders and potential legal use. This is a distinct concept from vulnerability reporting; here the subject is a completed investigation, not an open vulnerability awaiting remediation."},
 {term:"Forensic image",d:4,g:"forensics",def:"A bit-for-bit copy of a storage device, created so analysis can occur on the copy while the original evidence remains untouched."},
 {term:"Image (Imaging)",d:4,g:"ops",def:"A disk image is a complete snapshot of an entire hard drive's contents, the operating system, settings, and sometimes data, captured so it can be written back onto a machine to bring it to that exact known-good state. Imaging a system means wiping it and applying that snapshot: restoring the OS from a known-good disk image, essentially reinstalling a clean, verified copy of the operating system rather than trying to manually clean an infected one."},
 {term:"Root cause analysis",d:4,g:"incident",def:"A structured investigation into the underlying reason an incident occurred, aimed at preventing recurrence rather than just addressing symptoms."},
@@ -4916,6 +4913,7 @@ const GLOSS = [
 {term:"Responsible disclosure",d:4,g:"vuln-mgmt",def:"The practice of privately reporting a discovered vulnerability to the vendor and giving them time to patch it before making the flaw public."},
 {term:"System/process audit",d:4,g:"vuln-mgmt",def:"An identification method that reviews whether documented security procedures are actually being followed in practice, through interviews and record sampling, rather than scanning or attacking systems directly."},
 {term:"Vulnerability classification",d:4,g:"vuln-mgmt",def:"Grouping vulnerability findings into categories by type, such as injection flaws or misconfigurations, organizing the analysis before deciding on a response strategy for each category."},
+{term:"Vulnerability reporting",d:4,g:"vuln-mgmt",def:"Documenting identified vulnerabilities, along with details like severity, affected systems, and recommended remediation, so they can be tracked, prioritized, and communicated to the people responsible for fixing them. Reporting itself doesn't fix or remediate anything; it's the record-keeping and communication step that makes prioritization and follow-through possible."},
 {term:"Exceptions and exemptions",d:4,g:"vuln-mgmt",def:"A formally documented, management-approved, time-bound departure from standard remediation policy when a vulnerability can't be fixed within the normal window for a legitimate business reason."},
 {term:"Remediate",d:4,g:"vuln-mgmt",def:"To actually fix or resolve a confirmed vulnerability, such as applying a patch, closing a port, or reconfiguring a setting, the action that turns a finding into a closed issue."},
 {term:"Verification",d:4,g:"vuln-mgmt",def:"Manually confirming a remediation actually worked, such as checking configuration and testing the specific exploit path by hand, providing assurance beyond what an automated rescan alone offers."},
@@ -5014,7 +5012,7 @@ const GLOSS = [
 {term:"Offensive team",d:5,g:"vendor",def:"The red team in a penetration test, exclusively responsible for attacking and attempting to breach defenses, with detection and response left to a separate defensive team."},
 {term:"SLA (Service level agreement)",d:5,g:"vendor",def:"A contractual commitment defining the expected performance level a vendor will deliver, often including penalties for falling short."},
 {term:"MOU (Memorandum of understanding)",d:5,g:"vendor",def:"A document expressing mutual intent to work together, generally less formal and less legally binding than a full contract."},
-{term:"BPA (Business partnership agreement)",d:5,g:"vendor",def:"A formal contract defining the terms, responsibilities, and profit or loss sharing between two or more business partners."},
+{term:"BPA (Business Partners Agreement)",d:5,g:"vendor",def:"A formal contract defining the terms, responsibilities, and profit or loss sharing between two or more business partners."},
 {term:"NDA (Non-disclosure agreement)",d:5,g:"vendor",def:"A legal contract obligating parties to keep specified information confidential."},
 {term:"Security awareness training",d:5,g:"awareness",def:"Ongoing education for all employees covering topics like phishing recognition, password hygiene, and incident reporting, aimed at reducing human-factor risk."},
 {term:"Recognizing a phishing attempt",d:5,g:"awareness",def:"Training employees to spot the red flags of a phishing message, such as a spoofed sender address, suspicious links, and urgent or threatening language."},
@@ -5706,6 +5704,7 @@ const GLOSS = [
 {term:"Information security policy",d:5,g:"governance",def:"The central, organization-wide document defining security expectations, responsibilities, and compliance requirements, from which more specific policies and standards derive."},
 {term:"Acceptable use policy (AUP)",d:5,g:"governance",def:"A policy defining what employees are and are not allowed to do with company systems, such as prohibiting illegal content, unauthorized software, or personal side businesses."},
 {term:"Disaster recovery policy",d:5,g:"governance",def:"A policy detailing exactly how IT systems and data will be restored after a disruption, including which backups to use and in what order, narrower in scope than a business continuity policy."},
+{term:"Business continuity policy",d:5,g:"governance",def:"A policy addressing how an organization keeps its essential business functions running during and after a disruption, unrelated to physical security requirements for a location like a server room. Broader in scope than a disaster recovery policy, which focuses specifically on restoring IT systems."},
 {term:"Incident response policy",d:5,g:"governance",def:"The formal document defining the incident response process, who is authorized to declare an incident, and who must be notified, serving as the governing document detailed playbooks are built from."},
 {term:"Access control standard",d:5,g:"governance",def:"A standard specifying mandatory technical requirements for authentication and authorization, such as requiring MFA on every account and quarterly review of administrative access."},
 {term:"Physical security standard",d:5,g:"governance",def:"A standard specifying mandatory physical protections, such as badge-controlled entry, camera coverage, and footage retention requirements, with no exceptions permitted."},
@@ -7579,9 +7578,9 @@ e:"Alert tuning adjusts detection thresholds and rules to reduce noise from low-
 w:["","Decommissioning is the secure retirement process for assets no longer needed, unrelated to adjusting a detection rule's sensitivity.","Sanitization is the secure erasure of data from a device, unrelated to tuning alert thresholds.","Enumeration is the active discovery of what exists on a network, which is a different activity than adjusting an alerting rule's sensitivity."]},
 {i:2266,d:2,o:"2.5",t:"s",g:"patch-cadence-mitigation",
 q:"Jesse's organization establishes a formal policy requiring critical patches to be applied within 72 hours of release and all other patches within 30 days, applied consistently across every system. What mitigation practice does this policy establish?",
-c:["A patch cadence","Data masking","Federation","A honeytoken"],a:0,
+c:["A patch cadence","Configuration enforcement","Continuous monitoring","Vulnerability reporting"],a:0,
 e:"A patch cadence defines a consistent schedule and timeline for applying updates based on severity, exactly matching this policy's 72-hour and 30-day requirements applied consistently across systems.",
-w:["","Data masking obscures sensitive data for use in lower-trust environments, unrelated to scheduling software updates.","Federation allows shared digital identity across organizations, unrelated to a patch scheduling policy.","A honeytoken is a fake piece of data planted to detect unauthorized use, unrelated to a patch scheduling policy."]},
+w:["","Configuration enforcement ensures systems comply with predefined security settings, which is a related operational practice but doesn't itself define a remediation timeline like this policy does.","Continuous monitoring involves ongoing observation of systems for issues, which is a different practice than defining a fixed timeline for applying patches.","Vulnerability reporting documents identified weaknesses for tracking and prioritization, but it doesn't itself establish the timeline requirement this policy defines."]},
 {i:2267,d:3,o:"3.1",t:"s",g:"cloud-deployment-models",
 q:"Kilmer's company shares a single cloud environment with several other organizations in the same regulated industry, all of whom helped define the shared security and compliance requirements for that environment. Which cloud deployment model does this describe?",
 c:["Public cloud","Private cloud","Community cloud","Hybrid cloud"],a:2,
@@ -7939,6 +7938,64 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const pct=(c,s)=>s?Math.round(c/s*100):0;
 const days=d=>Math.ceil((d-new Date())/86400000);
 function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),2100); }
+function reportIssue(type,id){
+  S.contentReports=S.contentReports||[];
+  if(S.contentReports.some(r=>r.type===type&&String(r.id)===String(id))){ toast("Already reported"); return; }
+  S.contentReports.push({type,id,ts:Date.now()});
+  save();
+  toast("Reported. Find it under Weak areas & stats \u2192 Reported issues.");
+  document.querySelectorAll('.rpt-btn[data-type="'+type+'"][data-id="'+CSS.escape(String(id))+'"]').forEach(b=>{
+    b.textContent="\u2691 Reported"; b.disabled=true; b.style.color="var(--dim)"; b.style.borderColor="var(--line)";
+  });
+}
+function reportBtn(type,id){
+  const already=(S.contentReports||[]).some(r=>r.type===type&&String(r.id)===String(id));
+  return `<button class="btn ghost sm rpt-btn" data-type="${esc(type)}" data-id="${esc(String(id))}" style="color:${already?"var(--dim)":"var(--red)"};border-color:${already?"var(--line)":"var(--red)"}" ${already?"disabled":""} onclick="reportIssue(this.dataset.type,this.dataset.id)">${already?"\u2691 Reported":"\u2690 Report issue"}</button>`;
+}
+function reportSnippet(r){
+  if(r.type==="question"){ const q=qById(parseInt(r.id,10)); if(!q) return "Question #"+r.id+" (no longer exists)"; return "Question #"+q.i+" [D"+q.d+" "+q.o+", "+q.g+"]\nQ: "+q.q+"\nChoices: "+q.c.join(" | ")+"\nCorrect: "+q.c[q.a]; }
+  if(r.type==="card"){ const c=cardById(parseInt(r.id,10)); if(!c) return "Flashcard #"+r.id+" (no longer exists)"; return "Flashcard #"+c.id+" [D"+c.d+" "+c.o+", "+c.g+"]\nFront: "+c.f+"\nBack: "+c.b; }
+  if(r.type==="pbq"){ const p=PBQ.find(x=>x.id===parseInt(r.id,10)); if(!p) return "PBQ #"+r.id+" (no longer exists)"; return "PBQ #"+p.id+" ["+p.t+", D"+p.d+" "+p.o+"] \""+p.title+"\""; }
+  if(r.type==="acronym"){ const a=acrU().find(x=>x.a===r.id); if(!a) return "Acronym "+r.id+" (no longer exists)"; return "Acronym "+a.a+" = "+a.d+" ["+a.g+"]\n"+a.u; }
+  if(r.type==="glossary"){ const g=GLOSS.find(x=>x.term===r.id); if(!g) return "Glossary term \""+r.id+"\" (no longer exists)"; return "Glossary: "+g.term+"\n"+g.def; }
+  return r.type+" #"+r.id;
+}
+function reportedIssues(){
+  view="reports"; AT_SECTION=true; SECTION=reportedIssues; ENTRY_TILE="t-weak"; homeStrip(); stopTimer();
+  const list=S.contentReports||[];
+  const rows=list.length?list.slice().reverse().map((r,ix)=>{
+    const realIx=list.length-1-ix;
+    return `<div class="card" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+        <p style="font-size:13px;white-space:pre-wrap;margin:0;flex:1">${esc(reportSnippet(r))}</p>
+        <button class="btn ghost sm" style="color:var(--red);border-color:var(--red);flex:0 0 auto" onclick="removeReport(${realIx})">Remove</button>
+      </div></div>`;
+  }).join(""):`<p class="dim">Nothing reported yet. Look for the "Report issue" button under any question, flashcard, PBQ, acronym, or glossary term.</p>`;
+  $("app").innerHTML=`
+  <p class="eyebrow">Weak areas & stats</p><h1>Reported issues</h1>
+  <p class="lede">Anything you've flagged as wrong, confusing, or broken across the app. Export this list and paste it into a chat with Claude to get it reviewed and fixed.</p>
+  <div class="row" style="margin-bottom:16px">
+    ${list.length?`<button class="btn pri sm" onclick="exportReports()">Export all (${list.length})</button>
+    <button class="btn ghost sm" style="color:var(--red);border-color:var(--red)" onclick="clearAllReports()">Clear all</button>`:""}
+    <button class="btn ghost sm" onclick="stats()">Back to stats</button>
+  </div>
+  ${rows}`;
+}
+function removeReport(ix){ S.contentReports.splice(ix,1); save(); reportedIssues(); }
+function clearAllReports(){
+  const n=(S.contentReports||[]).length;
+  if(!n){ toast("Nothing to clear"); return; }
+  askConfirm("Remove all "+n+" reported issue"+(n>1?"s":"")+"? This can't be undone.",()=>{
+    S.contentReports=[]; save(); toast("Cleared"); reportedIssues();
+  });
+}
+function exportReports(){
+  const list=S.contentReports||[];
+  if(!list.length){ toast("Nothing to export"); return; }
+  const lines=["Night Shift: reported content issues","Exported "+new Date().toISOString().slice(0,10),""];
+  list.forEach((r,i)=>{ lines.push((i+1)+". "+reportSnippet(r)); lines.push(""); });
+  dl("night-shift-reports-"+new Date().toISOString().slice(0,10)+".txt", lines.join("\n"));
+}
 function dl(name,text){
   const b=new Blob([text],{type:"text/plain;charset=utf-8"});
   try{
@@ -8347,7 +8404,7 @@ function renderTicket(done,chosen){
   $("app").innerHTML=`
   <div class="ticket">
     <div class="thead"><span class="sev ${sv}">${sv.toUpperCase()}</span>
-      <span>TKT-${String(1000+q.i)}</span><span>Domain ${q.d}.0</span><span>Obj ${q.o}</span><span>${typeLabel}</span></div>
+      <span>TKT-${String(1000+q.i)}</span><span>Domain ${q.d}.0</span><span>Obj ${q.o}</span><span>${typeLabel}</span>${reportBtn("question",q.i)}</div>
     <div class="tbody"><p class="qtext">${esc(q.q)}</p></div>
     <div class="opts">${opts}</div>
   </div>
@@ -8446,7 +8503,7 @@ function renderDrill(done,chosen){
     <span class="combo">x${sess.mult}</span>
     <span class="dim mono" style="font-size:12px;letter-spacing:.1em;text-transform:uppercase">streak ${sess.streak} &nbsp;/&nbsp; item ${sess.i}</span>
   </div>
-  <div class="ticket"><div class="thead"><span>Domain ${q.d}.0</span><span>Obj ${q.o}</span></div>
+  <div class="ticket"><div class="thead"><span>Domain ${q.d}.0</span><span>Obj ${q.o}</span>${reportBtn("question",q.i)}</div>
     <div class="tbody"><p class="qtext">${esc(q.q)}</p></div><div class="opts">${opts}</div></div>
   ${done?"":`<div class="row" style="margin-top:14px"><button class="btn ghost sm" onclick="drillReport()">Stop</button></div>`}
   <div id="fb"></div>`;
@@ -8550,7 +8607,7 @@ function renderCard(revealed){
       <button onclick="rate(2)">Good<small>normal</small></button>
       <button onclick="rate(3)">Easy<small>long</small></button></div>`
     :`<button class="btn pri" id="rv" style="width:100%" onclick="renderCard(true)">Show answer</button>`}
-  <div class="row" style="margin-top:16px"><button class="btn ghost sm" onclick="cardReport()">End session</button></div>`;
+  <div class="row" style="margin-top:16px"><button class="btn ghost sm" onclick="cardReport()">End session</button>${reportBtn("card",c.id)}</div>`;
   if(!revealed&&$("rv")) $("rv").focus();
 }
 function rate(r){
@@ -8810,6 +8867,7 @@ function glossRender(){
         <span class="mono" style="font-size:10px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-left:auto">D${g.d}.0</span>
       </div>
       <div class="dim" style="font-size:13px;margin-top:5px;line-height:1.5">${esc(g.def)}</div>
+      <div style="margin-top:8px">${reportBtn("glossary",g.term)}</div>
     </div>`).join(""):`<p class="dim" style="padding:16px;margin:0">Nothing matches that search.</p>`}
   </div>`;
 }
@@ -8852,7 +8910,7 @@ function renderAcr(done,chosen){
   }).join("");
   $("app").innerHTML=`
   <div class="ticket">
-    <div class="thead"><span style="color:var(--violet)">${label}</span><span>${A.target.g.toUpperCase()} family</span></div>
+    <div class="thead"><span style="color:var(--violet)">${label}</span><span>${A.target.g.toUpperCase()} family</span>${reportBtn("acronym",A.target.a)}</div>
     <div class="tbody"><p class="qtext" ${k==="exp"?'style="font-family:var(--mono);font-size:30px;letter-spacing:.02em"':''}>${esc(prompt)}</p></div>
     <div class="opts">${opts}</div></div>
   <div id="fb"></div>`;
@@ -8970,6 +9028,7 @@ function pbqRender(){
   <p class="eyebrow">Performance-based question</p>
   <h1 style="font-size:22px">${esc(p.title)}</h1>
   <p class="lede">${esc(p.brief)}</p>
+  <div style="margin-bottom:10px">${reportBtn("pbq",p.id)}</div>
   ${p.pre?`<pre class="pbqpre">${esc(p.pre)}</pre>`:""}
   ${body}
   ${PB.done?`<div class="fb ${PB.score>=90?"ok":"no"}" style="margin-top:16px">
@@ -9259,12 +9318,8 @@ function examHome(){
         <button class="btn sm pri" onclick="examCustom()">Start</button>
       </div>
     </div>
-    ${S.h2hVisible?`<button class="tile" style="--accent:var(--red)" onclick="h2hSetup()">
-      <span class="tag">Fixed \u00b7 shareable code</span><h3>Head 2 Head</h3><p>Exactly 5 PBQs and 85 MCQs, identical for you and a study partner via a shared code.</p></button>`:""}
-  </div>
-  <div class="row" style="margin-top:10px;align-items:center;gap:8px">
-    <button class="h2h-toggle ${S.h2hVisible?"on":""}" onclick="S.h2hVisible=!S.h2hVisible;save();examHome()" aria-label="Toggle Head 2 Head visibility"><span></span></button>
-    <span class="dim" style="font-size:12px">Head 2 Head mode ${S.h2hVisible?"visible":"hidden"}</span>
+    <button class="tile" style="--accent:var(--red)" onclick="h2hSetup()">
+      <span class="tag">Fixed \u00b7 shareable code</span><h3>Head 2 Head</h3><p>Exactly 5 PBQs and 85 MCQs, identical for you and a study partner via a shared code.</p></button>
   </div>`;
   $("app").innerHTML=`
   <p class="eyebrow">Full length</p><h1>Practice Exam <span class="dim" style="font-size:0.75em;font-weight:400">(Randomized)</span></h1>
@@ -9455,7 +9510,8 @@ function examRender(){
   const head=`<div class="xhead">
     <span class="mono" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)">${EXAM_ID}${SX.checkMode?" \u00b7 Practice mode":""} \u00b7 ${it.t==="p"?"Performance-based":"Multiple choice"} \u00b7 ${SX.i+1} of ${SX.items.length}</span>
     <span style="display:flex;gap:8px;align-items:center">${tmr}
-    <button class="btn ghost sm ${SX.flags[SX.i]?"flon":""}" onclick="SX.flags[${SX.i}]=!SX.flags[${SX.i}];persistX();examRender()">${SX.flags[SX.i]?"\u2691 Flagged":"\u2690 Flag"}</button></span>
+    <button class="btn ghost sm ${SX.flags[SX.i]?"flon":""}" onclick="SX.flags[${SX.i}]=!SX.flags[${SX.i}];persistX();examRender()">${SX.flags[SX.i]?"\u2691 Flagged":"\u2690 Flag"}</button>
+    ${reportBtn(it.t==="p"?"pbq":"question",it.id)}</span>
   </div>${SX.timer&&SX.timer.expired?`<div class="fb no" style="margin-bottom:12px"><div class="verdict">Time expired</div><p>You can keep answering for the practice value. The result will note that time ran out.</p></div>`:""}${SX.timer&&SX.timer.paused&&!SX.timer.expired?`<div class="fb no" style="margin-bottom:12px"><div class="verdict">Timer paused</div><p>The clock is stopped and not counting down. Hit Resume when you're ready to continue.</p></div>`:""}`;
   let body="";
   if(it.t==="q"){
@@ -9868,6 +9924,7 @@ function stats(){
       <button class="btn ghost sm" onclick="examExportAll('json')">Export all exam results (JSON)</button>
     </div></div>
   <div class="row" style="margin-top:18px"><button class="btn pri" onclick="coachBrief()">Export coaching brief for AI</button>
+    <button class="btn" onclick="reportedIssues()">Reported issues ${(S.contentReports||[]).length?"("+S.contentReports.length+")":""}</button>
     <button class="btn" onclick="restoreScreen()">Backup / restore</button>
     <button class="btn ghost" onclick="wipe()">Reset all progress</button></div>`;
 }
@@ -10164,7 +10221,7 @@ function restoreIn(){
   askConfirm("Replace all progress in this browser with the pasted backup?",()=>{
     S=Object.assign(S,v);
     for(let d=1;d<=5;d++) if(!S.dom[d]) S.dom[d]={s:0,c:0};
-    S.customCards=S.customCards||[]; S.customAcr=S.customAcr||[]; S.recent=S.recent||[]; S.pbqStat=S.pbqStat||{};
+    S.customCards=S.customCards||[]; S.customAcr=S.customAcr||[]; S.recent=S.recent||[]; S.pbqStat=S.pbqStat||{}; S.contentReports=S.contentReports||[];
     save(); toast("Progress restored"); home();
   });
 }
