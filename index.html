@@ -4844,7 +4844,9 @@ const GLOSS = [
 {term:"Replication",d:3,g:"resilience",def:"Continuously copying data to a second location in near real time, keeping a live, up-to-date duplicate for fast failover. Unlike a backup, replication faithfully mirrors every change, including corruption or ransomware encryption, so it does not provide the historical recovery points a real backup strategy needs."},
 {term:"Snapshot",d:3,g:"resilience",def:"A point-in-time copy of a system's state, commonly used with virtual machines to enable quick rollback."},
 {term:"Containerization",d:3,g:"cloud",def:"Packaging an application with its dependencies into a lightweight, portable unit that runs consistently across different environments."},
+{term:"Shared responsibility model",d:3,g:"cloud",def:"The division of security duties between a cloud provider and its customer, where the split point moves depending on the service model. In IaaS the customer owns everything from the guest OS up; in PaaS the provider also takes the OS and runtime, leaving the customer just their application and data; in SaaS the provider owns nearly the whole stack, leaving the customer responsible mainly for data classification and access management. The provider always owns the physical hardware and facility underneath, regardless of model."},
 {term:"Virtualization",d:3,g:"cloud",def:"Using a hypervisor to run multiple independent guest operating systems on shared physical hardware, each guest believing it has its own dedicated machine."},
+{term:"Hypervisor",d:3,g:"cloud",def:"The software layer that creates and manages virtual machines, allocating each guest OS its own slice of the underlying physical CPU, memory, and storage while keeping guests isolated from each other. A Type 1 (bare-metal) hypervisor runs directly on the hardware, common in data centers; a Type 2 hypervisor runs as an application on top of a host OS, common for desktop virtualization."},
 {term:"Serverless computing",d:3,g:"cloud",def:"A cloud model where the provider manages the underlying servers entirely, and the customer only supplies and pays for the code that runs."},
 {term:"On-premises",d:3,g:"architecture",def:"Infrastructure that an organization owns, houses, and physically maintains itself, in contrast to any cloud model where a provider owns and maintains the underlying hardware."},
 {term:"Centralized architecture",d:3,g:"architecture",def:"A design that concentrates processing and decision-making in one main location that everything else depends on, simplifying control at the cost of a single point of failure."},
@@ -5249,6 +5251,7 @@ const GLOSS = [
 {term:"SPF (Sender Policy Framework)",d:4,g:"email",def:"An email authentication record listing which mail servers are authorized to send email for a domain, helping receivers detect spoofed senders."},
 {term:"DKIM (DomainKeys Identified Mail)",d:4,g:"email",def:"An email authentication method that adds a cryptographic signature to outgoing mail, letting the receiver verify the message was not altered in transit."},
 {term:"DMARC (Domain-based Message Authentication, Reporting, and Conformance)",d:4,g:"email",def:"A policy layer built on top of SPF and DKIM that tells receiving mail servers what to do when a message fails those checks, and reports back to the domain owner."},
+{term:"SEG (Secure Email Gateway)",d:4,g:"email",def:"An appliance or cloud service that filters inbound and outbound email before it reaches the mail server, scanning for spam, phishing, malicious attachments, and data leakage. It's the enforcement point that acts on what SPF, DKIM, and DMARC checks determine about a message."},
 {term:"Client-based vulnerable software",d:4,g:"threats",def:"Software requiring installation on the local device, meaning known vulnerabilities in it must be patched on every individual endpoint."},
 {term:"Agentless vulnerable software",d:4,g:"threats",def:"Software or a service requiring no local installation, meaning a compromise on the server side can affect every user simultaneously."},
 {term:"2FA (Two-factor Authentication)",d:4,g:"acronym-auth",def:"Requires exactly two different categories of proof to sign in"},
@@ -7943,14 +7946,14 @@ function reportIssue(type,id){
   if(S.contentReports.some(r=>r.type===type&&String(r.id)===String(id))){ toast("Already reported"); return; }
   S.contentReports.push({type,id,ts:Date.now()});
   save();
-  toast("Reported. Find it under Weak areas & stats \u2192 Reported issues.");
+  toast("Flagged. Find it under Weak areas & stats \u2192 Flagged items.");
   document.querySelectorAll('.rpt-btn[data-type="'+type+'"][data-id="'+CSS.escape(String(id))+'"]').forEach(b=>{
-    b.textContent="\u2691 Reported"; b.disabled=true; b.style.color="var(--dim)"; b.style.borderColor="var(--line)";
+    b.textContent="\u2691 Flagged"; b.disabled=true; b.style.color="var(--dim)"; b.style.borderColor="var(--line)";
   });
 }
 function reportBtn(type,id){
   const already=(S.contentReports||[]).some(r=>r.type===type&&String(r.id)===String(id));
-  return `<button class="btn ghost sm rpt-btn" data-type="${esc(type)}" data-id="${esc(String(id))}" style="color:${already?"var(--dim)":"var(--red)"};border-color:${already?"var(--line)":"var(--red)"}" ${already?"disabled":""} onclick="reportIssue(this.dataset.type,this.dataset.id)">${already?"\u2691 Reported":"\u2690 Report issue"}</button>`;
+  return `<button class="btn ghost sm rpt-btn" data-type="${esc(type)}" data-id="${esc(String(id))}" style="color:${already?"var(--dim)":"var(--red)"};border-color:${already?"var(--line)":"var(--red)"}" ${already?"disabled":""} onclick="reportIssue(this.dataset.type,this.dataset.id)">${already?"\u2691 Flagged":"\u2690 Flag"}</button>`;
 }
 function reportSnippet(r){
   if(r.type==="question"){ const q=qById(parseInt(r.id,10)); if(!q) return "Question #"+r.id+" (no longer exists)"; return "Question #"+q.i+" [D"+q.d+" "+q.o+", "+q.g+"]\nQ: "+q.q+"\nChoices: "+q.c.join(" | ")+"\nCorrect: "+q.c[q.a]; }
@@ -7970,9 +7973,9 @@ function reportedIssues(){
         <p style="font-size:13px;white-space:pre-wrap;margin:0;flex:1">${esc(reportSnippet(r))}</p>
         <button class="btn ghost sm" style="color:var(--red);border-color:var(--red);flex:0 0 auto" onclick="removeReport(${realIx})">Remove</button>
       </div></div>`;
-  }).join(""):`<p class="dim">Nothing reported yet. Look for the "Report issue" button under any question, flashcard, PBQ, acronym, or glossary term.</p>`;
+  }).join(""):`<p class="dim">Nothing flagged yet. Look for the "Flag" button under any question, flashcard, PBQ, acronym, or glossary term.</p>`;
   $("app").innerHTML=`
-  <p class="eyebrow">Weak areas & stats</p><h1>Reported issues</h1>
+  <p class="eyebrow">Weak areas & stats</p><h1>Flagged items</h1>
   <p class="lede">Anything you've flagged as wrong, confusing, or broken across the app. Export this list and paste it into a chat with Claude to get it reviewed and fixed.</p>
   <div class="row" style="margin-bottom:16px">
     ${list.length?`<button class="btn pri sm" onclick="exportReports()">Export all (${list.length})</button>
@@ -7994,7 +7997,7 @@ function exportReports(){
   if(!list.length){ toast("Nothing to export"); return; }
   const lines=["Night Shift: reported content issues","Exported "+new Date().toISOString().slice(0,10),""];
   list.forEach((r,i)=>{ lines.push((i+1)+". "+reportSnippet(r)); lines.push(""); });
-  dl("night-shift-reports-"+new Date().toISOString().slice(0,10)+".txt", lines.join("\n"));
+  dl("night-shift-flagged-"+new Date().toISOString().slice(0,10)+".txt", lines.join("\n"));
 }
 function dl(name,text){
   const b=new Blob([text],{type:"text/plain;charset=utf-8"});
@@ -8612,6 +8615,8 @@ function renderCard(revealed){
 }
 function rate(r){
   const i=sess.ci, s=srsOf(i), D=86400000;
+  const c=cardById(i);
+  if(c){ S.tag[c.g]=S.tag[c.g]||{s:0,m:0}; S.tag[c.g].s++; if(r===0) S.tag[c.g].m++; }
   if(r===0){ s.ease=Math.max(1.3,s.ease-.2); s.iv=0; s.due=Date.now(); sess.again.push(i); }
   else if(r===1){ s.ease=Math.max(1.3,s.ease-.15); s.iv=Math.max(1,(s.iv||1)*1.2); s.due=Date.now()+s.iv*D; }
   else if(r===2){ s.iv=s.iv?s.iv*s.ease:1; s.due=Date.now()+s.iv*D; }
@@ -8655,6 +8660,7 @@ function jcTopicResolved(topic){
   const kw=topic.toLowerCase().trim();
   const tags=new Set();
   QUESTIONS.forEach(q=>{ if(jcMatch(jcQText(q),[kw])) tags.add(q.g); });
+  allCards().forEach(c=>{ if(jcMatch(c.g,[kw])||jcMatch(c.f,[kw])||jcMatch(c.b,[kw])) tags.add(c.g); });
   let s=0,m=0,stillFlagged=false;
   tags.forEach(g=>{ const t=S.tag[g]; if(t){ s+=t.s; m+=t.m; } if(S.flagged.indexOf(g)>=0) stillFlagged=true; });
   if(stillFlagged) return false;
@@ -9254,18 +9260,24 @@ function randomPbqSet(){
   for(const [count,w] of weights){ if(r<w){ n=count; break; } r-=w; }
   return shuffle(PBQ.map(p=>p.id)).slice(0,Math.min(n,PBQ.length));
 }
+/* TEMPORARY: exclude items already seen on the 2026-08-30 practice exam so tomorrow's
+   Head 2 Head match is fully fresh. Delete this whole block (and the two .filter lines
+   below that reference it) whenever you're done with it. */
+const H2H_TEMP_EXCLUDE_Q=[102,112,303,304,401,411,506,514,712,721,727,801,809,825,832,904,908,909,913,919,930,1001,1008,1104,1117,1207,1228,1229,1314,1324,1333,1403,1408,1416,1418,1541,1546,1548,1563,1566,1573,1577,1581,1599,1609,1610,1615,1624,1632,1642,1645,1654,1667,1670,1685,1707,1708,1717,1721,1739,1748,1756,1783,1799,2004,2058,2074,2091,2092,2108,2112,2148,2167,2178,2181,2182,2208,2210,2232,2238,2241,2266,2272,2304,2308,2321];
+const H2H_TEMP_EXCLUDE_PBQ=[19,16,43,21];
 function pickExamMcqSetSeeded(mcqTotal,rng){
   const quota=mcqQuotaFor(mcqTotal);
   let mcq=[];
   [1,2,3,4,5].forEach(d=>{
-    const fullPool=QUESTIONS.filter(q=>q.d===d).map(q=>q.i);
+    const fullPool=QUESTIONS.filter(q=>q.d===d&&H2H_TEMP_EXCLUDE_Q.indexOf(q.i)<0).map(q=>q.i);
     const need=Math.min(quota[d],fullPool.length);
     mcq=mcq.concat(shuffleSeeded(fullPool,rng).slice(0,need));
   });
   return shuffleSeeded(mcq,rng);
 }
 function pickExamPbqSetSeeded(n,rng){
-  return shuffleSeeded(PBQ.map(p=>p.id),rng).slice(0,Math.min(n,PBQ.length));
+  const pool=PBQ.filter(p=>H2H_TEMP_EXCLUDE_PBQ.indexOf(p.id)<0).map(p=>p.id);
+  return shuffleSeeded(pool,rng).slice(0,Math.min(n,pool.length));
 }
 function qById(i){ return QUESTIONS.find(q=>q.i===i); }
 function expandIfAcronym(text){
@@ -9510,7 +9522,6 @@ function examRender(){
   const head=`<div class="xhead">
     <span class="mono" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)">${EXAM_ID}${SX.checkMode?" \u00b7 Practice mode":""} \u00b7 ${it.t==="p"?"Performance-based":"Multiple choice"} \u00b7 ${SX.i+1} of ${SX.items.length}</span>
     <span style="display:flex;gap:8px;align-items:center">${tmr}
-    <button class="btn ghost sm ${SX.flags[SX.i]?"flon":""}" onclick="SX.flags[${SX.i}]=!SX.flags[${SX.i}];persistX();examRender()">${SX.flags[SX.i]?"\u2691 Flagged":"\u2690 Flag"}</button>
     ${reportBtn(it.t==="p"?"pbq":"question",it.id)}</span>
   </div>${SX.timer&&SX.timer.expired?`<div class="fb no" style="margin-bottom:12px"><div class="verdict">Time expired</div><p>You can keep answering for the practice value. The result will note that time ran out.</p></div>`:""}${SX.timer&&SX.timer.paused&&!SX.timer.expired?`<div class="fb no" style="margin-bottom:12px"><div class="verdict">Timer paused</div><p>The clock is stopped and not counting down. Hit Resume when you're ready to continue.</p></div>`:""}`;
   let body="";
@@ -9560,7 +9571,7 @@ function examRender(){
   }
   const pal=`<div class="pal">${SX.items.map((x,ix)=>{
     const done=x.t==="q"?SX.answers[x.id]!==undefined:!pbqUntouchedX(x.id);
-    return `<button class="${ix===SX.i?"cur":""} ${SX.flags[ix]?"flg":""} ${done?"done":""}" onclick="SX.i=${ix};examRender();window.scrollTo(0,0)">${ix+1}</button>`;
+    return `<button class="${ix===SX.i?"cur":""} ${done?"done":""}" onclick="SX.i=${ix};examRender();window.scrollTo(0,0)">${ix+1}</button>`;
   }).join("")}</div>`;
   $("app").innerHTML=head+body+`
   <div class="row" style="margin-top:18px">
@@ -9898,7 +9909,8 @@ function stats(){
   }).join("");
   const missedCombined=(termRows+acrRows)||`<li class="dim">No misses recorded yet.</li>`;
   const g=gateStatus();
-  const recent=S.sessions.slice(-8).reverse().map(s=>`<li><span>${new Date(s.t).toLocaleDateString()} &nbsp;<span class="dim">${s.mode==="shift"?"SOC Watch":s.mode==="pbq"?"PBQ":"Rapid Response"}, ${s.n} items</span></span><span class="ct" style="color:${s.pct>=85?"var(--cyan)":s.pct>=75?"var(--amber)":"var(--red)"}">${s.pct}%</span></li>`).join("")||`<li class="dim">No sessions yet.</li>`;
+  const modeLabel=m=>m==="shift"?"SOC Watch":m==="pbq"?"PBQ":m==="exam"?"Practice Exam (timed)":m==="exam-practice"?"Practice Exam (untimed)":"Rapid Response";
+  const recent=S.sessions.slice(-8).reverse().map(s=>`<li><span>${new Date(s.t).toLocaleDateString()} &nbsp;<span class="dim">${modeLabel(s.mode)}, ${s.n} items</span></span><span class="ct" style="color:${s.pct>=85?"var(--cyan)":s.pct>=75?"var(--amber)":"var(--red)"}">${s.pct}%</span></li>`).join("")||`<li class="dim">No sessions yet.</li>`;
   $("app").innerHTML=`
   <p class="eyebrow">Tracking</p><h1>Weak areas &amp; stats</h1>
   <div class="card"><h2 style="margin-top:0">Accuracy by domain</h2>${bars}
@@ -9916,15 +9928,19 @@ function stats(){
   <h2>Practice exam history</h2><div class="card"><ul class="weaklist">${
     S.examHist&&Object.keys(S.examHist).length
       ? Object.keys(S.examHist).sort().map(n=>{const h=S.examHist[n];
-          return `<li><span>${esc(n)} <span class="dim" style="font-size:12px">(${h.tries} attempt${h.tries>1?"s":""})</span></span>
-          <span class="ct" style="color:${h.best>=85?"var(--cyan)":h.best>=70?"var(--amber)":"var(--red)"}">best ${h.best}% \u00b7 last ${h.last}%</span></li>`;}).join("")
+          const untimed=(h.attempts||[]).filter(a=>a.checkMode);
+          const untimedLine=untimed.length?`<div class="dim" style="font-size:12px;margin-top:3px">+ ${untimed.length} untimed practice run${untimed.length>1?"s":""} (doesn't count toward the gate), most recent <b style="color:${untimed[untimed.length-1].pct>=85?"var(--cyan)":untimed[untimed.length-1].pct>=70?"var(--amber)":"var(--red)"}">${untimed[untimed.length-1].pct}%</b> on ${new Date(untimed[untimed.length-1].when).toLocaleDateString()}</div>`:"";
+          return `<li style="flex-direction:column;align-items:flex-start"><div style="display:flex;justify-content:space-between;width:100%">
+          <span>${esc(n)} <span class="dim" style="font-size:12px">(${h.tries} timed attempt${h.tries!==1?"s":""})</span></span>
+          <span class="ct" style="color:${h.best>=85?"var(--cyan)":h.best>=70?"var(--amber)":"var(--red)"}">${h.tries?`best ${h.best}% \u00b7 last ${h.last}%`:"no timed attempts yet"}</span></div>
+          ${untimedLine}</li>`;}).join("")
       : `<li class="dim">No practice exams taken yet.</li>`}</ul>
     <div class="row" style="margin-top:14px">
       <button class="btn ghost sm" onclick="examExportAll('md')">Export all exam results (text)</button>
       <button class="btn ghost sm" onclick="examExportAll('json')">Export all exam results (JSON)</button>
     </div></div>
   <div class="row" style="margin-top:18px"><button class="btn pri" onclick="coachBrief()">Export coaching brief for AI</button>
-    <button class="btn" onclick="reportedIssues()">Reported issues ${(S.contentReports||[]).length?"("+S.contentReports.length+")":""}</button>
+    <button class="btn" onclick="reportedIssues()">Flagged items ${(S.contentReports||[]).length?"("+S.contentReports.length+")":""}</button>
     <button class="btn" onclick="restoreScreen()">Backup / restore</button>
     <button class="btn ghost" onclick="wipe()">Reset all progress</button></div>`;
 }
@@ -10235,7 +10251,6 @@ document.addEventListener("keydown",e=>{
     if(e.key>="1"&&e.key<="4"&&it.t==="q"){ const oi=SX.orders[it.id][+e.key-1]; SX.answers[it.id]=oi; persistX(); examRender(); }
     else if(e.key==="ArrowRight"&&SX.i<SX.items.length-1){ SX.i++; persistX(); examRender(); }
     else if(e.key==="ArrowLeft"&&SX.i>0){ SX.i--; persistX(); examRender(); }
-    else if(e.key==="f"||e.key==="F"){ SX.flags[SX.i]=!SX.flags[SX.i]; persistX(); examRender(); }
     else if(e.key==="Escape") goHome();
     return;
   }
