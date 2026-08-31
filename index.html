@@ -13,6 +13,13 @@
   --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
+[data-theme="light"]{
+  --bg:#EEF3F6; --panel:#FFFFFF; --raise:#F5F9FA; --line:#D5E0E5;
+  --txt:#132029; --dim:#54697A; --faint:#9CB0BC;
+  --amber:#8F5808; --red:#B93D30; --cyan:#0A6D62; --violet:#6247C9; --blue:#1F63B8; --green:#166B3A;
+  --stripbg:#E4EBEE; --lampoff:#D5E0E5; --oninv:#FFFFFF;
+}
+[data-theme="light"] .neon{ color:var(--violet); text-shadow:none; animation:none; }
 *{box-sizing:border-box;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
 button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer;border:none;background:none}
@@ -30,8 +37,8 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--amber);out
   .nav-actions{justify-content:flex-start;margin-top:2px}
   .hbtn{padding:5px 12px;min-width:0}
 }
-.stn{color:var(--amber);font-weight:600;white-space:nowrap;letter-spacing:.02em}
-.stn b{color:var(--txt);font-weight:600}
+.stn{color:var(--txt);font-weight:700;white-space:nowrap;letter-spacing:.02em}
+.stn b{color:var(--txt);font-weight:700}
 .lamps{display:flex;gap:2px;flex:1;min-width:110px}
 .lamp{flex:1;height:10px;background:var(--lampoff);border-radius:1px;transition:background .25s}
 .lamp.on{background:var(--cyan)}
@@ -273,10 +280,17 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 .rvq{margin-bottom:12px}
 .rvq.rvmiss{border-color:rgba(224,87,74,.4)}
 .hero{position:relative;background:linear-gradient(160deg,rgba(240,160,60,.10),rgba(69,211,192,.06));
-  border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:12px;padding:20px 22px;margin:4px 0 18px}
+  border:1px solid var(--line);border-left:3px solid var(--violet);border-radius:12px;padding:20px 22px;margin:4px 0 18px}
 @media(max-width:620px){.hero{margin:4px 0 12px;padding:16px 18px}}
-.hero .greet{margin:0 0 2px;font-size:13px;letter-spacing:.04em;color:var(--dim);font-family:var(--mono);text-transform:uppercase}
-.rotate-hint{display:none;margin-left:auto;flex:0 0 auto;width:30px;height:30px;border-radius:50%;
+.hero .greet{margin:0 0 2px;font-size:13px;letter-spacing:.04em;color:var(--dim);font-family:var(--mono);text-transform:uppercase;font-weight:700}
+.theme-toggle{flex:0 0 auto;margin-left:auto;display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--dim);transition:color .15s,border-color .15s,background .15s}
+[data-theme="light"] .theme-toggle{background:#121C26;border-color:#263644;color:#DDE7F1}
+[data-theme="light"] .theme-toggle:hover{color:#FFFFFF;border-color:#3A4E5E}
+[data-theme="dark"] .theme-toggle{background:#FFFFFF;border-color:#D5E0E5;color:#132029}
+[data-theme="dark"] .theme-toggle:hover{color:#000000;border-color:#9CB0BC}
+.theme-toggle svg{width:16px;height:16px}
+.rotate-hint{display:none;flex:0 0 auto;width:30px;height:30px;border-radius:50%;
   background:var(--raise);border:1px solid var(--line);align-items:center;justify-content:center;cursor:pointer;
   color:var(--amber);animation:rotateHintPulse 2.4s ease-in-out infinite}
 .rotate-hint svg{width:15px;height:15px}
@@ -284,9 +298,9 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 @media(max-width:620px) and (orientation:portrait){.rotate-hint.home-only{display:flex}}
 .hero h1{margin:0 0 8px;font-size:29px;line-height:1.15}
 .hero .sub{color:var(--txt);font-size:15.5px;line-height:1.62;margin:0 0 16px;max-width:none}
-.hero .sub b{color:var(--amber)}
+.hero .sub b{color:var(--violet)}
 .hero .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.hero .fact{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--txt);text-transform:uppercase;
+.hero .fact{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--txt);text-transform:uppercase;font-weight:700;
   background:var(--panel);border:1px solid var(--amber);border-radius:8px;padding:7px 12px}
 .hero .fact b{color:var(--amber)}
 .hero .fact.link{cursor:pointer;transition:box-shadow .15s,background .15s,transform .1s;position:relative;padding-right:22px}
@@ -374,6 +388,9 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
       <svg viewBox="0 0 24 24" fill="currentColor">
         <path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h1.5C23.44 4.84 18.29 0 12 0l-.66.03 3.81 3.81 1.33-1.32zM10.23 1.75c-.32-.32-.86-.32-1.19 0L1.75 9.04c-.32.32-.32.86 0 1.19l7.29 7.29c.32.32.86.32 1.19 0l7.29-7.29c.32-.32.32-.86 0-1.19l-7.29-7.29zm.58 14.02L4.94 9.9l5.88-5.88 5.88 5.88-5.88 5.88zM7.52 21.48C4.25 19.93 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32z"/>
       </svg>
+    </button>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Switch between light and dark mode" title="Switch between light and dark mode">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="currentColor"></svg>
     </button>
     <div class="nav-actions">
       <div class="nav-left">
@@ -535,7 +552,7 @@ w:["Brute force hammers one account with many passwords. That is the opposite sh
 
 {i:211,d:2,o:"2.3",t:"s",g:"race-conditions",
 q:"A gift card application verifies a card's balance, then a fraction of a second later deducts the amount. An attacker submits many simultaneous redemptions and spends the same balance repeatedly. Which vulnerability is being exploited?",
-c:["Buffer overflow","Time-of-check to time-of-use race condition","Integer overflow","Memory injection"],a:1,
+c:["Buffer overflow from writing past an allocated memory boundary","Time-of-check to time-of-use race condition","Integer overflow from an arithmetic value exceeding its limit","Memory injection of malicious code into a running process"],a:1,
 e:"A TOC/TOU (time-of-check to time-of-use) race condition exists when the state validated at check time can change before the action executes. Concurrent requests slip into that gap.",
 w:["A buffer overflow writes past an allocated memory boundary; nothing here involves memory boundaries at all.","","Integer overflow is plausible in financial code generally, but the described flaw is a timing gap, not an arithmetic wraparound.","Memory injection places malicious code into a running process, not what the gap between check and use describes."]},
 
@@ -827,7 +844,7 @@ w:["","NetFlow exports describe traffic flows. They are continuous statistics ra
 
 {i:423,d:4,o:"4.7",t:"b",g:"automation",
 q:"A company wants new-hire accounts created, group memberships assigned, and a ticket closed automatically when HR marks a hire as complete. Which benefit is the PRIMARY security argument for this?",
-c:["Reduced licensing cost","Consistent, repeatable enforcement of least privilege on every account","Faster onboarding","Elimination of the need for periodic access reviews"],a:1,
+c:["Lower software licensing costs from centralizing provisioning into one system","Consistent, repeatable enforcement of least privilege on every account","Faster onboarding since new hires get access on their first day","Elimination of the need for periodic access reviews"],a:1,
 e:"Automation removes human variability, so every account is provisioned to the same standard every time. Consistency is the security value, and it also produces a clean audit trail.",
 w:["Cost reduction may be real but is a business argument, not a security one.","","Speed is the business benefit. The question asks specifically for the security argument, which is a common CompTIA qualifier.","Automation never eliminates access reviews. Attestation remains necessary because roles and needs change over time even when provisioning was correct on day one."]},
 
@@ -900,7 +917,7 @@ w:["Active reconnaissance interacts directly with the target, such as port scann
 
 {i:511,d:5,o:"5.6",t:"b",g:"security-awareness",
 q:"After a successful phishing attack, a company wants the change with the greatest effect on how quickly future attacks are detected. Which is BEST?",
-c:["Longer password requirements","Training users to recognize and report suspicious messages","Increasing email attachment size limits","Adding a second antivirus product"],a:1,
+c:["Requiring longer, more complex passwords going forward","Training users to recognize and report suspicious messages","Raising the email attachment size limit for all inboxes","Installing a second antivirus product alongside the first"],a:1,
 e:"Users are the sensors that see phishing first. Training that pairs recognition with a frictionless reporting path turns the workforce into an early-warning system.",
 w:["Password length does not affect detection speed at all, and phishing often captures the password regardless of length.","","Attachment size limits are unrelated to detection.","A second antivirus product adds conflicts and cost without improving human detection of social engineering."]},
 
@@ -1326,7 +1343,7 @@ e:"Questionnaires are the routine vendor monitoring instrument, collecting self-
 w:["","Right-to-audit reserves the ability to inspect directly; the scenario is self-reporting.","Rules of engagement govern security testing.","A SOW defines deliverables for an engagement."]},
 {i:834,d:5,o:"5.6",t:"s",g:"insider-threat-awareness",
 q:"During training, staff learn that a colleague who suddenly works odd hours alone, photographs screens, and asks for access far beyond their role may warrant a confidential report. Which awareness topic is being taught?",
-c:["Password hygiene","Removable media handling","Recognizing insider threat indicators","Hybrid work ergonomics"],a:2,
+c:["Good password hygiene, like using unique passphrases and a manager","Safe handling of removable media and unknown USB drives","Recognizing insider threat indicators","Ergonomics and setup for hybrid or remote work"],a:2,
 e:"Insider threat awareness trains employees to notice and report behavioral warning signs such as unusual access requests and covert data capture.",
 w:["Password practice is entirely unrelated to observing a colleague's suspicious behavior.","Removable media is a narrower topic about one specific exfiltration channel, not the broad behavioral pattern described here.","","Ergonomics is workplace safety training, unrelated to security or insider threat behavior."]}
 ];
@@ -2046,7 +2063,7 @@ e:"Stored data gets disk and file encryption, moving data gets transport encrypt
 w:["This swaps rest and transit protections.","","Those tools serve monitoring, integrity, and availability, not the three states as matched.","No single control covers all three states, which is why the states are distinguished."]},
 {i:1312,d:3,o:"3.4",t:"b",g:"backups",
 q:"A backup design keeps one copy onsite for fast restores and a second copy offsite for disaster survival, refreshed on a defined schedule. Which two backup considerations does this design address?",
-c:["Journaling and snapshots","Encryption and compression","Replication and RAID","Onsite/offsite placement and backup frequency"],a:3,
+c:["Journaling and snapshot scheduling for point-in-time recovery","Encryption at rest and compression to reduce backup storage costs","Replication and RAID for continuous, real-time redundancy","Onsite/offsite placement and backup frequency"],a:3,
 e:"Where copies live (onsite for speed, offsite for disaster) and how often they refresh (the schedule) are the two named considerations this design decides.",
 w:["Journaling and snapshots are point-in-time capture techniques, not decisions about where copies are stored.","Neither encryption nor compression is what's being described in this particular design scenario.","Replication and RAID address live availability of running systems, not the placement and cadence of backup copies.",""]},
 {i:1313,d:3,o:"3.4",t:"b",g:"platform-diversity",
@@ -3757,7 +3774,7 @@ e:"A race condition exploits the timing gap between checking a value and acting 
 w:["","SQL injection manipulates a database query with malicious input; this attack exploits timing between two operations, not query manipulation.","A buffer overflow writes past a fixed-size buffer's boundary to corrupt memory, unrelated to the timing gap between a check and an action.","Privilege escalation gains higher account access; this attack exploits a timing flaw to withdraw funds twice, not to gain elevated permissions."]},
 {i:1789,d:2,o:"2.4",t:"s",g:"application-attacks",
 q:"A file permission system checks whether a user is authorized to open a file, but between that check and the file actually being opened, an attacker swaps the target file for a different, more sensitive one, which then gets opened using the original permission check's approval. Which vulnerability is this?",
-c:["Race condition (time-of-check to time-of-use)","Buffer overflow","Directory traversal","Malicious update"],a:0,
+c:["Race condition (time-of-check to time-of-use)","Buffer overflow from writing past a fixed-size buffer","Directory traversal by manipulating a file path outside its intended folder","Malicious update via a compromised legitimate software update"],a:0,
 e:"This is a race condition specifically of the time-of-check to time-of-use variety, where the resource is swapped in the gap between when it was validated and when it was actually used.",
 w:["","A buffer overflow writes past a fixed-size buffer to corrupt memory, unrelated to swapping a file between a check and its use.","Directory traversal manipulates a file path to escape an intended directory; this scenario is about a file being swapped during a timing window, not a path manipulation.","A malicious update involves a compromised legitimate software update, unrelated to exploiting a timing gap between a permission check and file access."]},
 {i:1790,d:2,o:"2.4",t:"s",g:"malware-types",
@@ -6189,7 +6206,7 @@ const PBQ = [
  title:"Match the Mitigation to the Scenario",
  brief:"Drag each scenario into the mitigation technique it best demonstrates.",
  buckets:["Segmentation","Least privilege","Patching","Monitoring"],
- items:[{x:"Isolating IoT devices on their own VLAN separate from corporate systems",b:0},{x:"A new hire's account is scoped to only the three apps their role needs",b:1},{x:"Applying a vendor's security update within 14 days of release",b:2},{x:"A SIEM alerts analysts to a 3 AM anomalous login",b:3},{x:"A finance server sits on an isolated network segment behind its own firewall",b:0},{x:"An account is stripped of admin rights it no longer needs",b:1},{x:"A critical CVE is closed by installing the patch the vendor released",b:2},{x:"Continuous log review flags unusual data exfiltration volume",b:3}],
+ items:[{x:"Isolating IoT devices on their own VLAN separate from corporate systems",b:0},{x:"A new hire's account is scoped to only the three apps their role needs",b:1},{x:"Applying a vendor's security update within 14 days of release",b:2},{x:"A SIEM alerts analysts to a 3 AM anomalous login",b:3},{x:"A finance server sits behind its own dedicated firewall, cut off from the rest of the corporate LAN",b:0},{x:"An account is stripped of admin rights it no longer needs",b:1},{x:"A critical CVE is closed by bringing the affected software up to its latest version",b:2},{x:"Continuous log review flags unusual data exfiltration volume",b:3}],
  explain:[["Segmentation","Dividing the network into isolated zones so a compromise in one area can't freely reach the others."],["Least privilege","Granting only the minimum access a role actually requires, and removing what's no longer needed."],["Patching","Applying vendor-released updates to close known vulnerabilities before they're exploited."],["Monitoring","Continuous observation of logs and alerts to catch abnormal activity as it happens."],["Common trap","Isolating a device on its own VLAN is segmentation; scoping what an account can do on that device is least privilege. The two get confused because they're often deployed together."]]},
 
 {id:35,t:"match",d:4,o:"4.1",g:"mobile-deployment",
@@ -6229,7 +6246,7 @@ const PBQ = [
  title:"Match the Scenario to the Governing Policy",
  brief:"Drag each scenario into the policy document that actually governs it.",
  buckets:["Acceptable use policy","Business continuity policy","Disaster recovery policy","Incident response policy"],
- items:[{x:"Defines what employees may and may not do with company systems",b:0},{x:"Identifies which business functions must keep running during a pandemic",b:1},{x:"Details exactly which backups to restore, and in what order, after a data center is destroyed",b:2},{x:"Defines who is authorized to declare a security incident and who must be notified",b:3},{x:"Prohibits using work systems for unauthorized personal side businesses",b:0},{x:"Describes how operations continue if the primary office becomes unusable",b:1},{x:"Governs the IT-specific process of restoring systems and data after a disaster",b:2}],
+ items:[{x:"Defines what employees may and may not do with company systems",b:0},{x:"Identifies which business functions must keep running during a pandemic",b:1},{x:"Details exactly which backups to restore, and in what order, after a data center is destroyed",b:2},{x:"Defines who is authorized to formally declare that a security event has occurred and who must be told",b:3},{x:"Prohibits using work systems for unauthorized personal side businesses",b:0},{x:"Describes how operations continue if the primary office becomes unusable",b:1},{x:"Governs the IT-specific process of bringing systems and data back online after the primary site is lost",b:2},{x:"Sets out the phases a security team follows, from detection through containment and lessons learned",b:3}],
  explain:[["Acceptable use policy","Defines employee behavioral rules for company systems."],["Business continuity policy","Focuses on keeping essential business functions running during any disruption, broader than just IT."],["Disaster recovery policy","Narrower and IT-specific: exactly how systems and data get restored."],["Incident response policy","The formal governing document defining the incident response process and authority, which specific playbooks are then built from."],["Common trap","Business continuity and disaster recovery are constantly confused. Continuity is about the business staying operational broadly; recovery is specifically about restoring IT systems and data."]]},
 
 {id:41,t:"select",d:5,o:"5.6",g:"awareness-topic-recognition",
@@ -7207,7 +7224,7 @@ e:"Acquisition is the process of evaluating and obtaining assets, including cons
 w:["Decommissioning is the secure retirement and disposal process for assets no longer needed, which is the opposite end of the lifecycle from acquiring new assets.","",  "Sanitization is the secure erasure of data from a device, unrelated to evaluating and purchasing new hardware.","Monitoring involves observing an asset's ongoing performance or status, which happens after acquisition, not during the evaluation and purchase decision."]},
 {i:2185,d:4,o:"4.2",t:"s",g:"hardware-vs-software-inventory",
 q:"Clarence's asset database separately tracks every physical laptop and server the company owns in one table, while a different table tracks every licensed software title installed across those devices. What asset management practice does maintaining these separate but related records represent?",
-c:["Sanitization","Comprehensive asset inventory","Enumeration only","Decommissioning"],a:1,
+c:["Sanitization, the secure erasure of data from a device","Comprehensive asset inventory","Enumeration, the act of discovering what exists on the network","Decommissioning, the retirement of assets no longer in use"],a:1,
 e:"A comprehensive asset inventory tracks both hardware and software assets, often in related but distinct records, providing full visibility into what physical devices and licensed software an organization owns and uses.",
 w:["Sanitization is the secure erasure of data from devices, unrelated to maintaining ongoing inventory records.","",  "Enumeration alone describes actively discovering what exists on a network, which is related to building an inventory but doesn't describe the ongoing maintained tracking system itself.","Decommissioning is the retirement process for assets no longer in use, unrelated to maintaining active hardware and software inventory records."]},
 {i:2186,d:4,o:"4.2",t:"s",g:"procurement-security-review",
@@ -7690,9 +7707,9 @@ e:"A licensing compliance violation occurs when more instances of software are i
 w:["Data classification concerns labeling data by sensitivity, which is unrelated to counting software license usage against purchased quantities.","","Sanitization concerns securely erasing data from devices, unrelated to license count discrepancies.","Enumeration is the process of discovering what exists, and while it might have revealed this issue, the issue itself is specifically a licensing compliance problem."]},
 {i:2286,d:4,o:"4.2",t:"s",g:"shadow-it-asset-risk",
 q:"Clarence's asset inventory audit uncovers a departmental server that IT never provisioned, purchased, or approved, yet has been running unpatched on the network for over a year. What risk does this unmanaged asset primarily introduce?",
-c:["Reduced licensing costs","An unmonitored, unpatched attack surface outside IT's visibility","Improved network performance","Guaranteed regulatory compliance"],a:1,
+c:["Lower software costs since the department avoided procurement overhead","An unmonitored, unpatched attack surface outside IT's visibility","Better performance for that department's specific workload needs","Faster deployment since it skipped the standard approval process"],a:1,
 e:"An asset that IT never provisioned or approved sits entirely outside normal patching, monitoring, and inventory processes, creating an unmonitored attack surface that can be exploited without anyone noticing.",
-w:["An unapproved server wouldn't reduce licensing costs; if anything, it could represent unaccounted-for or improperly licensed software.","","An unmanaged, unpatched server introduces risk rather than improving network performance.","An unapproved, unpatched asset outside IT's visibility would undermine regulatory compliance rather than guarantee it."]},
+w:["Bypassing procurement doesn't actually save money; an unlicensed, unmanaged asset is a liability, not a cost saving.","","Any performance benefit is incidental and doesn't offset running an unpatched, unmonitored system for over a year.","Skipping approval isn't a benefit to weigh against the risk; it's the reason the asset became invisible to IT in the first place."]},
 {i:2287,d:4,o:"4.2",t:"s",g:"asset-disposal-vendor-cert-recap",
 q:"Kanon's company hires a certified electronics recycler to destroy a batch of decommissioned servers, and the recycler provides documentation confirming exactly which serial numbers were processed and the destruction method used for each. Why is retaining this documentation important?",
 c:["It has no real value once the hardware is gone","It provides an auditable record proving compliant, secure disposal occurred","It allows the company to resell the destroyed hardware later","It replaces the need for a data destruction certification"],a:1,
@@ -8245,10 +8262,10 @@ function home(){
     <h1 class="neon" style="font-family:var(--mono);letter-spacing:.03em;text-transform:uppercase">Night Shift</h1>
     <p class="sub">A full <b>CompTIA Security+ SY0-701</b> trainer built around the official exam blueprint: every question, flashcard, and PBQ is mapped to one of the 28 exam objectives, and the mix is weighted to the real domain percentages. It leans harder on whatever you keep getting wrong, and it will tell you when you are actually ready.</p>
     <div class="facts">
-      <button class="fact link" onclick="window.scrollTo(0,0);shiftSetup()"><b>${QUESTIONS.length}</b> questions</button>
+      <button class="fact link" onclick="window.scrollTo(0,0);shiftSetup()" style="color:var(--cyan);font-weight:700">SOC Watch</button>
       <button class="fact link" onclick="pbqSetup()"><b>${PBQ.length}</b> PBQs</button>
       <button class="fact link" onclick="cardSetup()"><b>${allCards().length}</b> flashcards</button>
-      <button class="fact link" onclick="jcSetup()" style="color:#fff">The Drill Down</button>
+      <button class="fact link" onclick="jcSetup()" style="color:var(--violet);font-weight:700">The Drill Down</button>
       <button class="fact link" onclick="examHome()" style="color:var(--amber);font-weight:700">Practice Exam</button>
       <button class="fact link" onclick="acrSetup()"><b>${allAcr().length}</b> acronyms</button>
       <button class="fact link" onclick="window.scrollTo(0,0);glossRef()"><b>${GLOSS.length}</b> glossary terms</button>
@@ -8340,7 +8357,7 @@ function shiftSetup(){
   const rapid=S.shiftMode==="drill";
   $("app").innerHTML=`
   <p class="eyebrow">Mode 01</p><h1>SOC Watch</h1>
-  <p class="lede">Tickets arrive weighted to the real exam blueprint, or locked to a single domain when you need to drill one down.</p>
+  <p class="lede">Drawing from <b>${QUESTIONS.length}</b> questions, weighted to the real exam domain blueprint so what you see reflects the actual test's balance, not an even split. Tickets arrive that way, or locked to a single domain when you need to drill one down.</p>
   <h2>Mode</h2>
   <div class="seg">
     <button class="${rapid?"":"on"}" onclick="setShiftMode('shift')">Standard shift</button>
@@ -8358,9 +8375,11 @@ function shiftSetup(){
   `:`
   <h2 style="margin-top:20px">Shift length</h2>
   <div class="row">
-    <button class="btn pri" onclick="shiftStart(10)">Short - 10 tickets</button>
-    <button class="btn" onclick="shiftStart(20)">Standard - 20 tickets</button>
-    <button class="btn" onclick="shiftStart(45)">Full - 45 tickets</button>
+    <button class="btn pri" onclick="shiftStart(15)">Short - 15 tickets</button>
+    <button class="btn" onclick="shiftStart(25)">Standard - 25 tickets</button>
+    <button class="btn" onclick="shiftStart(50)">Extended - 50 tickets</button>
+    <button class="btn" onclick="shiftStart(75)">Long - 75 tickets</button>
+    <button class="btn" onclick="shiftStart(100)">Full shift - 100 tickets</button>
   </div>
   <h2 style="margin-top:20px">Timer</h2>
   <div class="seg">
@@ -9647,9 +9666,12 @@ function doExamSubmit(){
   const h=S.examHist[SX.exam]||{tries:0,best:0,last:0,attempts:[]};
   if(!SX.checkMode){ h.tries++; h.last=pct; if(pct>h.best) h.best=pct; h.when=Date.now(); }
   if(!h.attempts) h.attempts=[];
+  const orderSnap={};
+  SX.items.forEach(x=>{ if(x.t==="q"&&SX.orders[x.id]) orderSnap[x.id]=SX.orders[x.id]; });
   h.attempts.push({when:Date.now(),pct:pct,mins:mins,expired:SX.timer?SX.timer.expired:false,checkMode:!!SX.checkMode,
     byDom:(()=>{const bd={};[1,2,3,4,5].forEach(d=>bd[d]={s:byDom[d].s,c:Math.round(byDom[d].c*100)/100});return bd;})(),
-    detail:detail});
+    detail:detail,orders:orderSnap});
+  if(h.attempts.length>10) h.attempts=h.attempts.slice(h.attempts.length-10);
   S.examHist[SX.exam]=h;
   const bd={}; [1,2,3,4,5].forEach(d=>bd[d]={s:byDom[d].s,c:Math.round(byDom[d].c*100)/100});
   S.sessions.push({t:Date.now(),mode:SX.checkMode?"exam-practice":"exam",n:SX.items.length,pct:pct,byDom:bd});
@@ -9658,6 +9680,22 @@ function doExamSubmit(){
   S.activeExam=null;
   save();
   examReview();
+}
+function reviewPastAttempt(name,idx){
+  const h=S.examHist[name];
+  if(!h||!h.attempts||!h.attempts[idx]){ toast("That attempt is no longer available"); return; }
+  const att=h.attempts[idx];
+  SX={exam:name,items:att.detail.map(d=>({t:d.t,id:d.id})),orders:att.orders||{},pbq:{},
+      submitted:true,checkMode:att.checkMode,startTs:att.when-(att.mins*60000),
+      timer:att.expired?{expired:true}:null,
+      result:{pct:att.pct,detail:att.detail,byDom:att.byDom,mins:att.mins,expired:att.expired},
+      historical:true};
+  examReview();
+  const app=$("app");
+  app.innerHTML=`<div class="card" style="margin-bottom:14px;border-color:var(--violet)">
+    <p style="margin:0;font-size:13px"><b style="color:var(--violet)">Reviewing a past attempt</b> from ${new Date(att.when).toLocaleDateString()} at ${new Date(att.when).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}. Read-only, nothing here can be changed.</p>
+    <button class="btn ghost sm" style="margin-top:8px" onclick="stats()">Back to stats</button>
+  </div>`+app.innerHTML;
 }
 function examReview(){
   view="review"; stopTimer(); RENDER_CB=null;
@@ -9937,12 +9975,18 @@ function stats(){
   <h2>Practice exam history</h2><div class="card"><ul class="weaklist">${
     S.examHist&&Object.keys(S.examHist).length
       ? Object.keys(S.examHist).sort().map(n=>{const h=S.examHist[n];
-          const untimed=(h.attempts||[]).filter(a=>a.checkMode);
-          const untimedLine=untimed.length?`<div class="dim" style="font-size:12px;margin-top:3px">+ ${untimed.length} untimed practice run${untimed.length>1?"s":""} (doesn't count toward the gate), most recent <b style="color:${untimed[untimed.length-1].pct>=85?"var(--cyan)":untimed[untimed.length-1].pct>=70?"var(--amber)":"var(--red)"}">${untimed[untimed.length-1].pct}%</b> on ${new Date(untimed[untimed.length-1].when).toLocaleDateString()}</div>`:"";
+          const attempts=(h.attempts||[]).slice().reverse();
+          const attemptRows=attempts.length?`<div style="margin-top:8px;width:100%">${attempts.map((a,revIx)=>{
+            const idx=(h.attempts.length-1)-revIx;
+            const color=a.pct>=85?"var(--cyan)":a.pct>=70?"var(--amber)":"var(--red)";
+            return `<button class="btn ghost sm" style="display:flex;justify-content:space-between;width:100%;margin-top:4px;text-align:left" onclick="reviewPastAttempt('${esc(n).replace(/'/g,"\\'")}',${idx})">
+              <span>${new Date(a.when).toLocaleDateString()} ${a.checkMode?'<span class="dim" style="font-size:11px">untimed</span>':""}</span>
+              <span class="mono" style="color:${color}">${a.pct}%</span></button>`;
+          }).join("")}</div>`:"";
           return `<li style="flex-direction:column;align-items:flex-start"><div style="display:flex;justify-content:space-between;width:100%">
           <span>${esc(n)} <span class="dim" style="font-size:12px">(${h.tries} timed attempt${h.tries!==1?"s":""})</span></span>
           <span class="ct" style="color:${h.best>=85?"var(--cyan)":h.best>=70?"var(--amber)":"var(--red)"}">${h.tries?`best ${h.best}% \u00b7 last ${h.last}%`:"no timed attempts yet"}</span></div>
-          ${untimedLine}</li>`;}).join("")
+          ${attemptRows}</li>`;}).join("")
       : `<li class="dim">No practice exams taken yet.</li>`}</ul>
     <div class="row" style="margin-top:14px">
       <button class="btn ghost sm" onclick="examExportAll('md')">Export all exam results (text)</button>
@@ -10275,5 +10319,17 @@ document.addEventListener("keydown",e=>{
 
 /* ================= boot ================= */
 QUESTIONS.forEach(q=>DCOUNT[q.d]=(DCOUNT[q.d]||0)+1);
-load().then(()=>{ if(!S.exam&&!S.name) profile(true); else home(); });
+const SUN_ICON='<path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-15a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1zm0 18a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zM3 11a1 1 0 0 1 1 1 1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h1zm19 0a1 1 0 0 1 1 1 1 1 0 0 1-1 1h-1a1 1 0 1 1 0-2h1zM5.64 4.22a1 1 0 0 1 1.42 0l.7.7a1 1 0 1 1-1.42 1.42l-.7-.7a1 1 0 0 1 0-1.42zm12.02 12.02a1 1 0 0 1 1.42 0l.7.7a1 1 0 1 1-1.42 1.42l-.7-.7a1 1 0 0 1 0-1.42zM18.36 4.22a1 1 0 0 1 0 1.42l-.7.7a1 1 0 1 1-1.42-1.42l.7-.7a1 1 0 0 1 1.42 0zM6.34 16.24a1 1 0 0 1 0 1.42l-.7.7a1 1 0 1 1-1.42-1.42l.7-.7a1 1 0 0 1 1.42 0z"/>';
+const MOON_ICON='<path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.267c-4.476 0-8.106-3.63-8.106-8.106 0-1.298.304-2.526.845-3.616a.75.75 0 0 0-.895-1.03A10.108 10.108 0 0 0 3 10.75C3 16.437 7.563 21 13.25 21a10.108 10.108 0 0 0 9.19-6.51.75.75 0 0 0-1.03-.894 8.06 8.06 0 0 1-.668.45z"/>';
+function applyTheme(){
+  document.documentElement.setAttribute("data-theme",S.theme==="light"?"light":"dark");
+  const icon=$("themeIcon");
+  if(icon) icon.innerHTML=S.theme==="light"?MOON_ICON:SUN_ICON;
+}
+function toggleTheme(){
+  S.theme=S.theme==="light"?"dark":"light";
+  applyTheme();
+  save();
+}
+load().then(()=>{ applyTheme(); if(!S.exam&&!S.name) profile(true); else home(); });
 </script>
