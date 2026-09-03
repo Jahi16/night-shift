@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Night Shift - SY0-701 Operations Trainer</title>
+<title>Night Shift</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,12 +17,11 @@
   --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 [data-theme="light"]{
-  --bg:#EEF3F6; --panel:#FFFFFF; --raise:#F5F9FA; --line:#D5E0E5;
-  --txt:#132029; --dim:#54697A; --faint:#9CB0BC;
-  --amber:#8F5808; --red:#B93D30; --cyan:#0A6D62; --violet:#6247C9; --blue:#1F63B8; --green:#166B3A;
-  --stripbg:#E4EBEE; --lampoff:#D5E0E5; --oninv:#FFFFFF;
+  --bg:#EFF2F6; --panel:#FFFFFF; --raise:#F5F7F9; --line:#D9E0E8;
+  --txt:#16212D; --dim:#52667A; --faint:#98A8B9;
+  --amber:#AE6407; --red:#A22013; --cyan:#178274; --violet:#2908BC; --blue:#0862B3; --green:#198545;
+  --stripbg:#E2E8EE; --lampoff:#DCE3EA; --oninv:#FFFFFF;
 }
-[data-theme="light"] .neon{ color:var(--violet); text-shadow:none; animation:none; }
 *{box-sizing:border-box;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
 button{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer;border:none;background:none}
@@ -76,6 +75,8 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 .btn:hover{border-color:var(--faint)}
 .btn.pri{background:var(--amber);color:var(--oninv);border-color:var(--amber);font-weight:600}
 .btn.pri:hover{background:#FFB463}
+[data-theme="light"] .btn.pri{background:var(--blue);border-color:var(--blue)}
+[data-theme="light"] .btn.pri:hover{background:#0A72C9}
 .btn.ghost{background:none}
 .btn.sm{padding:6px 11px;font-size:13px}
 .mono{font-family:var(--mono)}
@@ -85,7 +86,7 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 /* ---- mode tiles ---- */
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 4px}
 @media(max-width:620px){.tiles{grid-template-columns:1fr}}
-.tile{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent,var(--amber));
+.tile{background:var(--panel);border:1px solid var(--accent,var(--line));border-left:3px solid var(--accent,var(--amber));
   border-radius:10px;padding:15px 16px;text-align:left;transition:transform .15s,border-color .15s;position:relative}
 .tile:hover{transform:translateY(-2px);border-color:var(--accent,var(--amber))}
 .tile::after{content:none}
@@ -93,7 +94,7 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 .tile-plus{font-size:19px;line-height:1;font-weight:400;color:var(--accent,var(--amber));display:inline-block;animation:tileCornerPulse 2s ease-in-out infinite}
 @keyframes tileCornerPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(1.25)}}
 @media(prefers-reduced-motion:reduce){.tile-plus{animation:none;opacity:.7}}
-.tile h3{margin:0 0 4px;font-size:16px;animation:tileTitlePulse 2.4s ease-in-out infinite}
+.tile h3{margin:0 0 4px;font-size:16px;font-weight:800;animation:tileTitlePulse 2.4s ease-in-out infinite}
 @keyframes tileTitlePulse{0%,100%{text-shadow:0 0 0 transparent}50%{text-shadow:0 0 8px var(--accent,var(--amber))}}
 @media(prefers-reduced-motion:reduce){.tile h3{animation:none}}
 .tile p{margin:0;color:var(--dim);font-size:14px;line-height:1.45}
@@ -128,6 +129,7 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 .ticket{border:1px solid var(--line);border-radius:10px;background:var(--panel);overflow:hidden;margin-bottom:14px}
 .thead{display:flex;align-items:center;gap:10px;padding:9px 14px;background:#0E1721;border-bottom:1px solid var(--line);
   font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);flex-wrap:wrap}
+[data-theme="light"] .thead{background:var(--raise)}
 .sev{padding:2px 7px;border-radius:3px;font-weight:600;color:var(--oninv)}
 .sev.p1{background:var(--red)} .sev.p2{background:var(--amber)} .sev.p3{background:var(--blue)}
 .tbody{padding:16px 16px 4px}
@@ -212,7 +214,9 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 
 /* ---- PBQ ---- */
 .pbqpre{background:#0C141C;border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:8px;
-  padding:14px 16px;font-family:var(--mono);font-size:12.5px;line-height:1.65;overflow-x:auto;white-space:pre;color:var(--dim);margin:0 0 16px}
+  padding:14px 16px;font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--dim);margin:0 0 16px;
+  white-space:pre-wrap;word-break:break-word;overflow-x:hidden;max-height:320px;overflow-y:auto}
+[data-theme="light"] .pbqpre{background:var(--raise);color:var(--txt)}
 .pbqlist{display:flex;flex-direction:column;gap:8px}
 .pbqitem{display:flex;align-items:center;gap:12px;background:var(--raise);border:1px solid var(--line);border-radius:8px;
   padding:12px 14px;touch-action:none;cursor:grab;user-select:none;width:100%;text-align:left}
@@ -371,7 +375,12 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
   color:var(--amber);border:1px solid var(--amber);border-radius:4px;padding:2px 7px;opacity:.85;margin-left:6px;vertical-align:middle}
 .neon{
   color:#fff;
-  text-shadow:0 0 4px #fff, 0 0 11px #fff, 0 0 19px var(--cyan), 0 0 40px var(--cyan), 0 0 80px var(--cyan);
+  text-shadow:0 0 1px #fff, 0 0 2px #fff, 0 0 4px var(--cyan), 0 0 7px var(--cyan);
+  animation:neonFlicker 2.6s ease-in-out infinite;
+}
+[data-theme="light"] .neon{
+  color:var(--txt);
+  text-shadow:none;
   animation:neonFlicker 2.6s ease-in-out infinite;
 }
 @keyframes neonFlicker{
@@ -5248,7 +5257,6 @@ const GLOSS = [
 {term:"ACL (Access control list)",d:3,g:"network",def:"An ordered set of rules on a firewall or router defining which traffic is permitted or denied, based on criteria like source, destination, port, and time. Implicit deny is the unwritten final rule that catches anything none of the explicit entries matched."},
 {term:"Implicit deny",d:3,g:"network",def:"The default rule at the bottom of most firewall or ACL rule sets that blocks any traffic not explicitly matched by an earlier rule. It's what makes an ACL secure by default, denying anything the administrator didn't specifically think to allow."},
 {term:"NAT (Network Address Translation)",d:3,g:"network",def:"A technique that translates private internal IP addresses to a public address for internet-bound traffic, commonly built into routers and firewalls. It also incidentally hides internal addressing structure from the outside, though that's a side effect, not its primary security purpose."},
-{term:"Simple Network Management Protocol trap",d:3,g:"network",def:"An unsolicited alert sent by a monitored device to a management station the moment a defined threshold is crossed, rather than waiting to be polled. It's the push-based counterpart to the usual pull-based SNMP polling a management station would otherwise have to do continuously."},
 {term:"802.1X",d:3,g:"network",def:"The port-based network access control standard that blocks a device from doing anything on the network beyond authenticating until it's been verified. It defines the three-role handshake: a supplicant (the client device) requests access, an authenticator (typically the switch or wireless access point) enforces the block, and an authentication server (typically RADIUS) makes the actual accept/reject decision using EAP as the authentication framework. Without 802.1X, anyone who can physically plug into a switch port or associate with an access point gets network access by default; with it, that port stays effectively closed until authentication succeeds."},
 {term:"Supplicant",d:3,g:"network",def:"In 802.1X authentication, the client device requesting access to the network. The other two roles are the authenticator, typically the switch or access point, and the authentication server, typically RADIUS."},
 {term:"Authenticator",d:3,g:"network",def:"In 802.1X authentication, the device, typically a switch or access point, that stands between the supplicant and the network, enforcing the authentication requirement. It doesn't make the accept or reject decision itself; that comes from the authentication server, typically RADIUS."},
@@ -5704,6 +5712,7 @@ const GLOSS = [
 {term:"Cookie",d:2,g:"vulns",def:"A small piece of data a website stores in a user's browser to maintain state between requests, which can become a security risk if it holds sensitive session information without proper protection. The Secure, HttpOnly, and SameSite attributes are all specific protections designed to reduce exactly that risk."},
 {term:"Cross-site request forgery",d:2,g:"vulns",def:"An attack that tricks an authenticated user's browser into submitting an unwanted request to a site they are logged into, exploiting their existing session without their knowledge. The SameSite cookie attribute is the specific browser-level defense built to stop this exact attack."},
 {term:"Router",d:3,g:"network",def:"A network device that forwards traffic between different networks based on IP address, determining the best path for each packet to reach its destination. It operates at Layer 3, distinct from a switch, which forwards traffic within the same network at Layer 2."},
+{term:"Switch",d:3,g:"network",def:"A network device that forwards traffic between devices on the same local network using MAC addresses, operating at Layer 2. It's also one of the specific hardening targets named in the exam objectives, commonly secured through port security features like 802.1X and by disabling unused ports. Unlike a router, which connects separate networks at Layer 3, a switch operates only within a single network segment."},
 {term:"Networks",d:3,g:"network",def:"A group of interconnected devices, computers, servers, and appliances, that communicate and share resources with each other, forming the pathways security controls are built to monitor and protect. LAN and WAN describe two different scales this same basic concept can operate at."},
 {term:"Bandwidth",d:3,g:"network",def:"The capacity of a communication channel to carry data over a given period of time, commonly measured in bits per second. An amplified DDoS attack works specifically by consuming far more of this capacity than the attacker's own traffic alone would require."},
 {term:"Topology",d:3,g:"network",def:"The physical or logical arrangement of devices and connections in a network, such as a star, bus, or ring layout. It shapes how traffic actually flows and where network appliances like firewalls or jump servers need to be placed to be effective."},
@@ -8988,7 +8997,7 @@ function home(){
   $("app").innerHTML=`
   <div class="hero">
     ${S.name?`<p class="greet">${timeGreeting()}, ${esc(S.name)}</p>`:""}
-    <h1 class="neon" style="font-family:var(--mono);letter-spacing:.03em;text-transform:uppercase">Night Shift</h1>
+    <h1 class="neon" style="font-family:var(--mono);letter-spacing:.03em;word-spacing:-0.2em;text-transform:uppercase">Night Shift</h1>
     <p class="sub">A full <b>CompTIA Security+ SY0-701</b> trainer built around the official exam blueprint: every question, flashcard, and PBQ is mapped to one of the 28 exam objectives, and the mix is weighted to the real domain percentages. It leans harder on whatever you keep getting wrong, and it will tell you when you are actually ready.</p>
     <div class="facts">
       <button class="fact link" onclick="window.scrollTo(0,0);shiftSetup()" style="color:var(--cyan);font-weight:700">SOC Watch</button>
@@ -9601,10 +9610,11 @@ function glossRender(){
   let list=GLOSS.slice();
   if(GREF.d!==0) list=list.filter(g=>g.d===GREF.d);
   if(GREF.q){
-    const q=GREF.q.toLowerCase();
-    list=list.filter(g=>g.term.toLowerCase().includes(q)||g.def.toLowerCase().includes(q));
+    const norm=s=>s.toLowerCase().replace(/[-\s]+/g,' ').trim();
+    const q=norm(GREF.q);
+    list=list.filter(g=>norm(g.term).includes(q)||norm(g.def).includes(q));
     const rank=g=>{
-      const term=g.term.toLowerCase();
+      const term=norm(g.term);
       if(term===q) return 0;
       if(term.startsWith(q)) return 1;
       if(term.includes(q)) return 2;
