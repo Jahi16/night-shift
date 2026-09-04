@@ -6380,7 +6380,41 @@ const PBQ = [
  title:"Select the Governing Policy for Each Scenario",
  brief:"For each scenario, select the policy document that actually governs it.",
  rows:[{label:"Defines which specific business functions must keep running during a regional power outage",opts:["Business continuity policy","Acceptable use policy","Incident response policy","Disaster recovery policy"],a:0},{label:"Details the exact backup restoration order after a data center is destroyed",opts:["Acceptable use policy","Disaster recovery policy","Business continuity policy","Incident response policy"],a:1},{label:"Prohibits employees from installing unapproved software on company laptops",opts:["Incident response policy","Business continuity policy","Acceptable use policy","Disaster recovery policy"],a:2},{label:"Defines who has authority to formally declare a security incident",opts:["Disaster recovery policy","Acceptable use policy","Business continuity policy","Incident response policy"],a:3}],
- explain:"Business continuity policy is broad, keeping the business itself operational through any disruption. Disaster recovery policy is narrower and IT-specific, exactly restoring systems and data. Acceptable use policy governs employee behavior on company systems day to day. Incident response policy defines the formal authority and process for handling a declared security incident. These four are constantly confused because they all sound like general emergency planning, but each governs a distinctly different scope."}
+ explain:"Business continuity policy is broad, keeping the business itself operational through any disruption. Disaster recovery policy is narrower and IT-specific, exactly restoring systems and data. Acceptable use policy governs employee behavior on company systems day to day. Incident response policy defines the formal authority and process for handling a declared security incident. These four are constantly confused because they all sound like general emergency planning, but each governs a distinctly different scope."},
+
+{id:58,t:"select",d:3,o:"3.2",g:"secure-protocol-migration",
+ title:"Which Protocols Belong in the Secure Migration Plan?",
+ brief:"A team is migrating a legacy application stack and wants to eliminate cleartext protocols wherever a secure equivalent already exists. Select EVERY protocol below that should be KEPT as-is because it is already the secure choice.",
+ pre:"CURRENT PROTOCOL INVENTORY\n1. HTTP for the internal admin portal\n2. SSH for server administration\n3. FTP for nightly log file transfers\n4. HTTPS for the customer-facing web app\n5. Telnet for switch configuration\n6. IPSec for the site-to-site VPN tunnel",
+ items:["HTTP for the internal admin portal","SSH for server administration","FTP for nightly log file transfers","HTTPS for the customer-facing web app","Telnet for switch configuration","IPSec for the site-to-site VPN tunnel"],
+ correct:[1,3,5],
+ explain:"SSH, HTTPS, and IPSec are already encrypted, authenticated protocols and need no replacement. HTTP, FTP, and Telnet all transmit in cleartext, including credentials in FTP and Telnet's case, and should be replaced with HTTPS, SFTP or FTPS, and SSH respectively before the migration is considered complete."},
+
+{id:59,t:"harden",d:3,o:"3.1",g:"cloud-storage-hardening",
+ title:"Harden This Cloud Storage Bucket Before Go-Live",
+ brief:"A new cloud storage bucket was provisioned with default settings ahead of a customer data migration. Toggle each setting to its secure state before this bucket goes live.",
+ pre:"CURRENT BUCKET CONFIGURATION (defaults)\nPublic read access: ENABLED\nEncryption at rest: DISABLED\nVersioning: DISABLED\nAccess logging: DISABLED\nMFA delete protection: DISABLED",
+ items:[{label:"Public read access",start:true,correct:false},{label:"Encryption at rest",start:false,correct:true},{label:"Versioning",start:false,correct:true},{label:"Access logging",start:false,correct:true},{label:"MFA delete protection",start:false,correct:true}],
+ explain:[["Public read access","Left open, anyone on the internet could read every object in the bucket. Should be disabled unless the bucket is intentionally hosting public content."],["Encryption at rest","Protects the data if the underlying storage is ever compromised or improperly decommissioned."],["Versioning","Preserves prior object versions, so an accidental overwrite or deletion doesn't permanently destroy data."],["Access logging","Provides the audit trail needed to investigate who accessed or modified objects, and when."],["MFA delete protection","Requires a second factor before a version or the bucket itself can be permanently deleted, guarding against a single compromised credential causing irreversible data loss."]]},
+
+{id:60,t:"match",d:3,o:"3.2",g:"firewall-family-matching",
+ title:"Match the Firewall Type to Its Defining Trait",
+ brief:"Drag each defining trait into the firewall or security technology it best describes.",
+ buckets:["Web application firewall (WAF)","Next-generation firewall (NGFW)","Unified threat management (UTM)","Secure access service edge (SASE)"],
+ items:[{x:"Inspects HTTP/HTTPS traffic specifically for attacks like SQL injection and XSS",b:0},{x:"Adds application awareness and intrusion prevention to traditional firewall filtering",b:1},{x:"Bundles firewall, antivirus, and content filtering into one appliance for simplicity",b:2},{x:"Converges networking and security into one cloud-delivered service for remote users",b:3},{x:"Deployed specifically in front of a web application to filter its inbound requests",b:0},{x:"Combines SWG, CASB, and ZTNA delivered from the cloud rather than a physical appliance",b:3}],
+ explain:[["Web application firewall (WAF)","Purpose-built for HTTP/HTTPS traffic and web application attack signatures, not general network traffic."],["Next-generation firewall (NGFW)","Extends stateful firewall filtering with deep packet inspection and application-layer awareness."],["Unified threat management (UTM)","Prioritizes convenience and cost by combining many security functions into a single box, at some cost to inspection depth."],["Secure access service edge (SASE)","A cloud-delivered convergence of networking and security functions, built for a distributed, remote workforce rather than a single appliance in a data center."],["Common trap","NGFW and UTM both bundle extra capability onto a firewall, but NGFW prioritizes inspection depth for general traffic while UTM prioritizes breadth of bundled features in one box."]]},
+
+{id:61,t:"grid",d:3,o:"3.4",g:"backup-type-selection",
+ title:"Select the Correct Backup Type for Each Scenario",
+ brief:"For each backup scenario described, select the backup type it demonstrates.",
+ rows:[{label:"Every backup captures only the data that changed since the very last FULL backup",opts:["Full","Incremental","Differential"],a:2},{label:"Every backup captures only the data that changed since the last backup of ANY type",opts:["Full","Incremental","Differential"],a:1},{label:"Restore requires the last full backup plus every incremental since, applied in order",opts:["Full","Incremental","Differential"],a:1},{label:"Restore requires only the last full backup plus the single most recent backup of this type",opts:["Full","Incremental","Differential"],a:2}],
+ explain:"A differential backup always references the last full backup, so each one grows larger over time but restore only ever needs the full plus the single latest differential. An incremental backup only captures changes since the immediately preceding backup of any type, keeping each backup small, but restore requires the full backup plus every incremental in sequence since then, since skipping or losing one breaks the chain."},
+
+{id:62,t:"order",d:3,o:"3.4",g:"warm-site-failover-sequence",
+ title:"Order the Warm Site Failover Sequence",
+ brief:"A primary data center goes offline. Order these failover steps as they should actually occur when failing over to a warm site, first at the top.",
+ items:["Declare a disaster and activate the DR plan","Bring warm site hardware online and apply the most recent data sync","Redirect DNS and network traffic to the warm site","Validate application functionality at the warm site","Communicate service restoration to stakeholders"],
+ explain:"Declaring the disaster is what formally triggers the plan and mobilizes the team; nothing else should happen ahead of that decision. Bringing the warm site's already-in-place hardware online and syncing the most current available data comes next, since a warm site's whole premise is pre-positioned equipment that still needs the most recent data applied. Only once the environment is actually ready does traffic get redirected, since cutting over before the site is functional just extends the outage. Validation confirms the redirected traffic is actually being served correctly before anyone downstream is told service is restored, which is always the last step."}
 ];
 
 
@@ -9720,7 +9754,7 @@ function acrReport(){
 }
 
 /* ================= PBQ LAB ================= */
-let PB=null, PICK=null, RENDER_CB=null, LAST_PBQ_ID=null;
+let PB=null, PICK=null, RENDER_CB=null, LAST_PBQ_ID=null, PBQ_FOCUS=null;
 function rerender(){ (RENDER_CB||pbqRender)(); }
 function pbqSetup(){
   view="setup"; SECTION=pbqSetup; AT_SECTION=true; ENTRY_TILE="t-pbq"; strip("pbq lab / setup",0); stopTimer();
@@ -9733,7 +9767,8 @@ function pbqSetup(){
   const rowFor=(p)=>{
     const st=S.pbqStat[p.id];
     const badge=st?`<span class="ct" style="color:${st.best>=90?"var(--cyan)":st.best>=70?"var(--amber)":"var(--red)"}">best ${st.best}%</span>`:`<span class="ct dim">not attempted</span>`;
-    return `<li><span><b>${esc(p.title)}</b><br><span class="dim" style="font-size:12px">Domain ${p.d}.0 &middot; obj ${p.o}</span></span>
+    const hi=p.d===3;
+    return `<li><span><b${hi?' style="color:var(--violet)"':''}>${esc(p.title)}</b><br><span class="dim" style="font-size:12px">Domain ${p.d}.0 &middot; obj ${p.o}</span></span>
       <span style="display:flex;gap:10px;align-items:center">${badge}<button class="btn sm" onclick="pbqStart(${p.id})">Open</button></span></li>`;
   };
   const sections=groups.map(g=>{
@@ -9749,23 +9784,33 @@ function pbqSetup(){
   <div class="row" style="margin-bottom:16px">
     <button class="btn pri" onclick="pbqStart(0)">Random PBQ</button>
     <button class="btn" onclick="pbqStart(-1)">Weakest first</button>
+    <button class="btn" style="border-color:var(--violet);color:var(--violet)" onclick="pbqStart(-2)">Sec Arch focus (${PBQ.filter(p=>p.d===3).length})</button>
   </div>
   ${sections}
   <div class="row" style="margin-top:18px"><button class="btn ghost sm" onclick="home()">Back to home</button></div>`;
 }
-function pbqStart(id){
+function pbqStart(id, keep){
   RENDER_CB=null; AT_SECTION=false; view="pbq";
   let p;
   if(id===0){
+    PBQ_FOCUS=null;
     let pool=PBQ;
     if(PBQ.length>1 && LAST_PBQ_ID!==null) pool=PBQ.filter(x=>x.id!==LAST_PBQ_ID);
     p=pool[Math.floor(Math.random()*pool.length)];
   }
+  else if(id===-2){
+    PBQ_FOCUS=3;
+    let pool=PBQ.filter(x=>x.d===3);
+    if(pool.length>1 && LAST_PBQ_ID!==null) pool=pool.filter(x=>x.id!==LAST_PBQ_ID);
+    if(!pool.length) pool=PBQ.filter(x=>x.d===3);
+    p=pool[Math.floor(Math.random()*pool.length)];
+  }
   else if(id===-1){
+    PBQ_FOCUS=null;
     let scored=PBQ.map(x=>({x:x,s:S.pbqStat[x.id]?S.pbqStat[x.id].best:-1}));
     if(PBQ.length>1 && LAST_PBQ_ID!==null) scored=scored.filter(x=>x.x.id!==LAST_PBQ_ID);
     scored.sort((a,b)=>a.s-b.s); p=scored[0].x;
-  } else p=PBQ.find(x=>x.id===id);
+  } else { if(!keep) PBQ_FOCUS=null; p=PBQ.find(x=>x.id===id); }
   LAST_PBQ_ID=p.id;
   PICK=null;
   PB={p:p,done:false,score:0};
@@ -9807,10 +9852,10 @@ function pbqRender(){
   ${PB.done?`<div class="fb ${PB.score>=90?"ok":"no"}" style="margin-top:16px">
       <div class="verdict">Scored ${PB.score}%</div>${explainHTML(p.explain)}</div>`:""}
   <div class="row" style="margin-top:16px">
-    ${PB.done?`<button class="btn pri" onclick="pbqStart(${p.id})">Retry this one</button>
-               <button class="btn" onclick="pbqStart(0)">Another PBQ</button>`
+    ${PB.done?`<button class="btn pri" onclick="pbqStart(${p.id},true)">Retry this one</button>
+               <button class="btn" onclick="pbqStart(${PBQ_FOCUS===3?-2:0})">${PBQ_FOCUS===3?"Another Sec Arch PBQ":"Another PBQ"}</button>`
              :`<button class="btn pri" onclick="pbqGrade()">Submit</button>
-               <button class="btn ghost" onclick="pbqStart(${p.id})">Reset</button>`}
+               <button class="btn ghost" onclick="pbqStart(${p.id},true)">Reset</button>`}
     <button class="btn ghost" onclick="pbqSetup()">PBQ list</button>
   </div>`;
 }
