@@ -308,18 +308,6 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 .hero h1{margin:0 0 8px;font-size:29px;line-height:1.15}
 .hero .sub{color:var(--txt);font-size:15.5px;line-height:1.62;margin:0 0 16px;max-width:none}
 .hero .sub b{color:var(--violet)}
-.hero .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.hero .fact{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--txt);text-transform:uppercase;font-weight:700;
-  background:var(--panel);border:1px solid var(--amber);border-radius:8px;padding:7px 12px}
-.hero .fact b{color:var(--amber)}
-.hero .fact.link{cursor:pointer;transition:box-shadow .15s,background .15s,transform .1s;position:relative;padding-right:22px}
-.hero .fact.link::after{content:"\2192";position:absolute;right:10px;top:50%;transform:translateY(-50%);
-  font-size:11px;color:var(--amber);opacity:.7;transition:transform .15s,opacity .15s;animation:factArrowPulse 1.8s ease-in-out infinite}
-@keyframes factArrowPulse{0%,100%{opacity:.4}50%{opacity:1}}
-@media(prefers-reduced-motion:reduce){.hero .fact.link::after{animation:none}}
-.hero .fact.link:hover{background:var(--raise);box-shadow:0 0 0 2px var(--amber);transform:translateY(-1px)}
-.hero .fact.link:hover::after{transform:translateY(-50%) translateX(2px);opacity:1}
-.hero .fact.link:active{box-shadow:0 0 0 2px var(--amber);transform:scale(.96)}
 .tile.jump-flash{position:relative;animation:jumpFlash 1.7s ease-out}
 .tile.jump-flash::before{content:"";position:absolute;inset:-6px;border-radius:14px;
   border:2px solid var(--accent,var(--amber));opacity:0;pointer-events:none;animation:jumpPing 1.7s ease-out}
@@ -4431,230 +4419,230 @@ const ACR = [
 {a:"AAA",d:"Authentication, Authorization, and Accounting",g:"auth",u:"The framework covering who you are, what you may do, and what you did"},
 {a:"ACL",d:"Access Control List",g:"access",u:"An ordered list of permit and deny entries applied to traffic or objects"},
 {a:"AES",d:"Advanced Encryption Standard",g:"crypto",u:"The current standard symmetric block cipher used almost everywhere"},
-{a:"AES-256",d:"Advanced Encryption Standards 256-bit",g:"crypto"},
+{a:"AES-256",d:"Advanced Encryption Standards 256-bit",g:"crypto",u:"256-bit key variant of AES, the strongest common symmetric option, often required for full-disk encryption compliance"},
 {a:"AH",d:"Authentication Header",g:"proto",u:"IPSec component providing integrity and authentication but no encryption"},
-{a:"AI",d:"Artificial Intelligence",g:"misc"},
+{a:"AI",d:"Artificial Intelligence",g:"misc",u:"Broad field of computing systems performing tasks that normally require human judgment, increasingly used in both attack tooling and defensive analytics"},
 {a:"AIS",d:"Automated Indicator Sharing",g:"threat",u:"Machine-speed exchange of threat indicators between organizations"},
 {a:"ALE",d:"Annualized Loss Expectancy",g:"risk",u:"Expected yearly financial loss from a risk, equal to SLE times ARO"},
-{a:"AP",d:"Access Point",g:"wifi"},
-{a:"API",d:"Application Programming Interface",g:"misc"},
+{a:"AP",d:"Access Point",g:"wifi",u:"Wireless access point providing the physical entry to a WLAN, a common target for evil-twin and rogue-AP attacks"},
+{a:"API",d:"Application Programming Interface",g:"misc",u:"Interface letting applications exchange data programmatically, a frequent attack surface when authentication or rate limiting is weak"},
 {a:"APT",d:"Advanced Persistent Threat",g:"threat",u:"A well-resourced actor maintaining long-term stealthy access, usually nation-state"},
 {a:"ARO",d:"Annualized Rate of Occurrence",g:"risk",u:"How many times per year a loss event is expected to happen"},
 {a:"ARP",d:"Address Resolution Protocol",g:"proto",u:"Maps IP addresses to MAC addresses, and has no authentication"},
 {a:"ASLR",d:"Address Space Layout Randomization",g:"hw",u:"Randomizes memory locations to make buffer overflow exploitation harder"},
 {a:"ATT&CK",d:"Adversarial Tactics, Techniques, and Common Knowledge",g:"threat",u:"MITRE knowledge base cataloging real-world adversary behavior"},
 {a:"AUP",d:"Acceptable Use Policy",g:"gov",u:"Defines what employees may and may not do with company systems"},
-{a:"AV",d:"Antivirus",g:"ops"},
-{a:"BASH",d:"Bourne Again Shell",g:"misc"},
+{a:"AV",d:"Antivirus",g:"ops",u:"Signature and heuristic-based malware detection running on an endpoint, the baseline layer of endpoint protection"},
+{a:"BASH",d:"Bourne Again Shell",g:"misc",u:"Default command-line shell on most Linux systems, frequently used to write both automation and attack scripts"},
 {a:"BCP",d:"Business Continuity Planning",g:"risk",u:"Keeping the business operating during and after a disruption"},
-{a:"BGP",d:"Border Gateway Protocol",g:"net"},
+{a:"BGP",d:"Border Gateway Protocol",g:"net",u:"Routing protocol exchanging path information between autonomous systems on the internet, vulnerable to route hijacking"},
 {a:"BIA",d:"Business Impact Analysis",g:"risk",u:"Identifies critical processes and produces RTO, RPO, MTTR, and MTBF"},
-{a:"BIOS",d:"Basic Input/Output System",g:"hw"},
+{a:"BIOS",d:"Basic Input/Output System",g:"hw",u:"Legacy firmware that initializes hardware at boot, largely superseded by UEFI but still found on older systems"},
 {a:"BPA",d:"Business Partners Agreement",g:"gov",u:"Contract setting terms between two partnering businesses"},
-{a:"BPDU",d:"Bridge Protocol Data Unit",g:"net"},
+{a:"BPDU",d:"Bridge Protocol Data Unit",g:"net",u:"Switch-to-switch message used by Spanning Tree Protocol, which a BPDU guard is specifically deployed to block from unauthorized ports"},
 {a:"BYOD",d:"Bring Your Own Device",g:"ops",u:"Employees use personally owned devices for work, least organizational control"},
 {a:"CA",d:"Certificate Authority",g:"crypto",u:"Trusted entity that issues and signs digital certificates"},
-{a:"CAPTCHA",d:"Completely Automated Public Turing Test to Tell Computers and Humans Apart",g:"auth"},
-{a:"CAR",d:"Corrective Action Report",g:"gov"},
+{a:"CAPTCHA",d:"Completely Automated Public Turing Test to Tell Computers and Humans Apart",g:"auth",u:"Challenge designed to be easy for a human and hard for a bot, commonly used to block automated credential stuffing"},
+{a:"CAR",d:"Corrective Action Report",g:"gov",u:"Formal record pairing an audit or compliance finding with the remediation the organization committed to"},
 {a:"CASB",d:"Cloud Access Security Broker",g:"cloud",u:"Sits between users and cloud services to enforce policy and visibility"},
-{a:"CBC",d:"Cipher Block Chaining",g:"crypto"},
-{a:"CCMP",d:"Counter Mode/CBC-MAC Protocol",g:"wifi"},
-{a:"CCTV",d:"Closed-circuit Television",g:"ops"},
-{a:"CERT",d:"Computer Emergency Response Team",g:"ops"},
-{a:"CFB",d:"Cipher Feedback",g:"crypto"},
+{a:"CBC",d:"Cipher Block Chaining",g:"crypto",u:"Block cipher mode chaining each block to the one before it, vulnerable to padding oracle attacks if implemented carelessly"},
+{a:"CCMP",d:"Counter Mode/CBC-MAC Protocol",g:"wifi",u:"Encryption protocol WPA2 uses, built on AES, replacing WEP's broken RC4-based encryption"},
+{a:"CCTV",d:"Closed-circuit Television",g:"ops",u:"Camera-based video surveillance, a detective physical security control"},
+{a:"CERT",d:"Computer Emergency Response Team",g:"ops",u:"A team, often government-affiliated, that coordinates incident response and threat awareness across a sector or region"},
+{a:"CFB",d:"Cipher Feedback",g:"crypto",u:"Block cipher mode that turns a block cipher into a stream cipher, less common today than CBC or GCM"},
 {a:"CHAP",d:"Challenge Handshake Authentication Protocol",g:"auth",u:"Authenticates using a challenge and hashed response rather than sending a password"},
 {a:"CIA",d:"Confidentiality, Integrity, Availability",g:"gov",u:"The three core security objectives every control supports"},
-{a:"CIO",d:"Chief Information Officer",g:"gov"},
-{a:"CIRT",d:"Computer Incident Response Team",g:"ops"},
-{a:"CMS",d:"Content Management System",g:"misc"},
+{a:"CIO",d:"Chief Information Officer",g:"gov",u:"Executive responsible for an organization's overall information technology strategy"},
+{a:"CIRT",d:"Computer Incident Response Team",g:"ops",u:"Internal team responsible for detecting and responding to security incidents, functionally similar to a CERT"},
+{a:"CMS",d:"Content Management System",g:"misc",u:"Software platform for creating and managing web content, a frequent target for plugin and template vulnerabilities"},
 {a:"COBO",d:"Corporate-owned, Business-only",g:"ops",u:"Company device with no personal use permitted"},
-{a:"COOP",d:"Continuity of Operation Planning",g:"risk"},
+{a:"COOP",d:"Continuity of Operation Planning",g:"risk",u:"Planning that keeps essential government or organizational functions running through a major disruption"},
 {a:"COPE",d:"Corporate Owned, Personally Enabled",g:"ops",u:"Company-owned device that employees may also use personally"},
-{a:"CP",d:"Contingency Planning",g:"risk"},
+{a:"CP",d:"Contingency Planning",g:"risk",u:"Broad planning discipline for keeping operations running when normal conditions are disrupted"},
 {a:"CRC",d:"Cyclical Redundancy Check",g:"net",u:"Error-detection checksum, not a security control"},
 {a:"CRL",d:"Certificate Revocation List",g:"crypto",u:"Downloadable list of certificates the CA has revoked"},
-{a:"CSO",d:"Chief Security Officer",g:"gov"},
-{a:"CSP",d:"Cloud Service Provider",g:"cloud"},
+{a:"CSO",d:"Chief Security Officer",g:"gov",u:"Executive responsible for an organization's overall physical and information security posture"},
+{a:"CSP",d:"Cloud Service Provider",g:"cloud",u:"Company providing cloud infrastructure or services, such as AWS, Azure, or Google Cloud"},
 {a:"CSR",d:"Certificate Signing Request",g:"crypto",u:"The request submitted to a CA to have a certificate issued"},
 {a:"CSRF",d:"Cross-site Request Forgery",g:"threat",u:"Tricks an authenticated browser into sending a request the user never intended"},
-{a:"CSU",d:"Channel Service Unit",g:"net"},
-{a:"CTM",d:"Counter Mode",g:"crypto"},
-{a:"CTO",d:"Chief Technology Officer",g:"gov"},
+{a:"CSU",d:"Channel Service Unit",g:"net",u:"Device terminating a digital leased line, marking the boundary between customer and carrier equipment"},
+{a:"CTM",d:"Counter Mode",g:"crypto",u:"Block cipher mode that turns a block cipher into a stream cipher by encrypting successive counter values"},
+{a:"CTO",d:"Chief Technology Officer",g:"gov",u:"Executive responsible for an organization's technology direction and engineering strategy"},
 {a:"CVE",d:"Common Vulnerability Enumeration",g:"ops",u:"The unique identifier assigned to a specific published vulnerability"},
 {a:"CVSS",d:"Common Vulnerability Scoring System",g:"ops",u:"Produces the 0.0 to 10.0 severity score for a vulnerability"},
 {a:"CYOD",d:"Choose Your Own Device",g:"ops",u:"Employees pick from an approved list of corporate-owned devices"},
 {a:"DAC",d:"Discretionary Access Control",g:"access",u:"The data owner decides who gets access"},
-{a:"DBA",d:"Database Administrator",g:"gov"},
+{a:"DBA",d:"Database Administrator",g:"gov",u:"Person responsible for administering and securing an organization's databases"},
 {a:"DDoS",d:"Distributed Denial of Service",g:"threat",u:"Overwhelms a target using many distributed sources"},
 {a:"DEP",d:"Data Execution Prevention",g:"hw",u:"Marks memory regions non-executable to block injected code"},
-{a:"DES",d:"Digital Encryption Standard",g:"crypto"},
+{a:"DES",d:"Digital Encryption Standard",g:"crypto",u:"Original 56-bit symmetric cipher, now considered cryptographically broken and long replaced by AES"},
 {a:"DHCP",d:"Dynamic Host Configuration Protocol",g:"proto",u:"Automatically assigns IP addressing to clients, using UDP port 67 for the server and UDP port 68 for the client"},
 {a:"DHE",d:"Diffie-Hellman Ephemeral",g:"crypto",u:"Key exchange generating a fresh key per session for forward secrecy"},
 {a:"DKIM",d:"DomainKeys Identified Mail",g:"mail",u:"Cryptographically signs outbound mail so tampering is detectable"},
-{a:"DLL",d:"Dynamic Link Library",g:"misc"},
+{a:"DLL",d:"Dynamic Link Library",g:"misc",u:"Windows shared-code library, a common vector for DLL injection and DLL hijacking attacks"},
 {a:"DLP",d:"Data Loss Prevention",g:"ops",u:"Inspects content and blocks sensitive data from leaving through unapproved channels"},
 {a:"DMARC",d:"Domain Message Authentication Reporting and Conformance",g:"mail",u:"Sets the policy for what to do when SPF or DKIM fails, and requests reports"},
-{a:"DNAT",d:"Destination Network Address Translation",g:"net"},
+{a:"DNAT",d:"Destination Network Address Translation",g:"net",u:"Rewrites a packet's destination address, commonly used to expose an internal server through a single public IP"},
 {a:"DNS",d:"Domain Name System",g:"proto",u:"Resolves names to IP addresses, using UDP port 53"},
 {a:"DNSSEC",d:"Domain Name System Security Extensions",g:"proto",u:"Adds origin authentication and integrity to DNS responses"},
-{a:"DoS",d:"Denial of Service",g:"threat"},
+{a:"DoS",d:"Denial of Service",g:"threat",u:"Attack that overwhelms a single target system or service to make it unavailable, the single-source counterpart to a DDoS"},
 {a:"DPO",d:"Data Privacy Officer",g:"gov",u:"Role accountable for privacy compliance and data subject rights"},
 {a:"DRP",d:"Disaster Recovery Plan",g:"risk",u:"Documents how technology and operations are restored after a disaster"},
-{a:"DSA",d:"Digital Signature Algorithm",g:"crypto"},
-{a:"DSL",d:"Digital Subscriber Line",g:"net"},
+{a:"DSA",d:"Digital Signature Algorithm",g:"crypto",u:"Algorithm for creating digital signatures, an older alternative to RSA and ECDSA"},
+{a:"DSL",d:"Digital Subscriber Line",g:"net",u:"Broadband technology delivering internet access over existing copper telephone lines"},
 {a:"EAP",d:"Extensible Authentication Protocol",g:"auth",u:"Authentication framework used inside 802.1X for network access"},
 {a:"ECB",d:"Electronic Code Book",g:"crypto",u:"Weak block cipher mode that reveals patterns in the ciphertext"},
 {a:"ECC",d:"Elliptic Curve Cryptography",g:"crypto",u:"Asymmetric crypto giving strong security with small keys, ideal for mobile"},
-{a:"ECDHE",d:"Elliptic Curve Diffie-Hellman Ephemeral",g:"crypto"},
-{a:"ECDSA",d:"Elliptic Curve Digital Signature Algorithm",g:"crypto"},
+{a:"ECDHE",d:"Elliptic Curve Diffie-Hellman Ephemeral",g:"crypto",u:"Elliptic curve key exchange generating a fresh key per session for forward secrecy"},
+{a:"ECDSA",d:"Elliptic Curve Digital Signature Algorithm",g:"crypto",u:"Digital signature algorithm built on elliptic curve math, offering the same assurance as DSA with smaller keys"},
 {a:"EDR",d:"Endpoint Detection and Response",g:"ops",u:"Monitors endpoint behavior to detect, investigate, and contain threats"},
-{a:"EFS",d:"Encrypted File System",g:"crypto"},
-{a:"ERP",d:"Enterprise Resource Planning",g:"misc"},
-{a:"ESN",d:"Electronic Serial Number",g:"hw"},
+{a:"EFS",d:"Encrypted File System",g:"crypto",u:"Windows feature encrypting individual files and folders at the file-system level, distinct from full-disk encryption"},
+{a:"ERP",d:"Enterprise Resource Planning",g:"misc",u:"Integrated software suite managing an organization's core business processes, such as finance, HR, and supply chain"},
+{a:"ESN",d:"Electronic Serial Number",g:"hw",u:"Unique hardware identifier burned into a mobile device, largely superseded by IMEI on modern phones"},
 {a:"ESP",d:"Encapsulated Security Payload",g:"proto",u:"IPSec component providing encryption plus integrity"},
-{a:"EULA",d:"End User License Agreement",g:"gov"},
-{a:"FACL",d:"File System Access Control List",g:"access"},
+{a:"EULA",d:"End User License Agreement",g:"gov",u:"Legal agreement a user accepts before using licensed software, setting the terms of that use"},
+{a:"FACL",d:"File System Access Control List",g:"access",u:"Extended file permission list allowing more granular access rules than standard owner/group/other permissions"},
 {a:"FDE",d:"Full Disk Encryption",g:"crypto",u:"Encrypts the entire drive including operating system files"},
 {a:"FIM",d:"File Integrity Management",g:"ops",u:"Hashes critical files and alerts on unauthorized change"},
-{a:"FPGA",d:"Field Programmable Gate Array",g:"hw"},
+{a:"FPGA",d:"Field Programmable Gate Array",g:"hw",u:"Reconfigurable hardware chip that can be programmed after manufacturing, used where fixed ASICs are too inflexible"},
 {a:"FRR",d:"False Rejection Rate",g:"auth",u:"How often a biometric system wrongly rejects a legitimate user"},
 {a:"FTP",d:"File Transfer Protocol",g:"proto",u:"Unencrypted file transfer using TCP ports 20 (data) and 21 (control)"},
 {a:"FTPS",d:"Secured File Transfer Protocol",g:"proto",u:"FTP wrapped in TLS, typically on TCP port 990"},
 {a:"GCM",d:"Galois Counter Mode",g:"crypto",u:"Cipher mode giving both encryption and built-in authentication"},
 {a:"GDPR",d:"General Data Protection Regulation",g:"gov",u:"European privacy regulation defining controller, processor, and subject rights"},
-{a:"GPG",d:"Gnu Privacy Guard",g:"crypto"},
+{a:"GPG",d:"Gnu Privacy Guard",g:"crypto",u:"Open-source implementation of the OpenPGP standard, used to encrypt and digitally sign files and email"},
 {a:"GPO",d:"Group Policy Object",g:"ops",u:"Windows mechanism for pushing configuration and hardening settings centrally"},
-{a:"GPS",d:"Global Positioning System",g:"hw"},
-{a:"GPU",d:"Graphics Processing Unit",g:"hw"},
-{a:"GRE",d:"Generic Routing Encapsulation",g:"net"},
-{a:"HA",d:"High Availability",g:"risk"},
-{a:"HDD",d:"Hard Disk Drive",g:"hw"},
+{a:"GPS",d:"Global Positioning System",g:"hw",u:"Satellite-based positioning system, spoofable in attacks that feed a receiver false location data"},
+{a:"GPU",d:"Graphics Processing Unit",g:"hw",u:"Processor optimized for parallel computation, valuable for both legitimate machine learning and brute-force password cracking"},
+{a:"GRE",d:"Generic Routing Encapsulation",g:"net",u:"Tunneling protocol encapsulating one protocol's packets inside another, with no encryption of its own"},
+{a:"HA",d:"High Availability",g:"risk",u:"Design goal of keeping a system continuously operational, typically through redundancy and failover"},
+{a:"HDD",d:"Hard Disk Drive",g:"hw",u:"Traditional spinning-platter storage drive, requiring physical destruction or degaussing for secure disposal"},
 {a:"HIDS",d:"Host-based Intrusion Detection System",g:"ops",u:"Detects and alerts on suspicious activity on a single host"},
 {a:"HIPS",d:"Host-based Intrusion Prevention System",g:"ops",u:"Blocks malicious activity on a single host"},
 {a:"HMAC",d:"Hashed Message Authentication Code",g:"crypto",u:"Combines a hash with a secret key to prove integrity and authenticity"},
 {a:"HOTP",d:"HMAC-based One-time Password",g:"auth",u:"One-time code generated from a counter rather than a clock"},
 {a:"HSM",d:"Hardware Security Module",g:"crypto",u:"Dedicated appliance that generates and protects keys at enterprise scale"},
-{a:"HTML",d:"Hypertext Markup Language",g:"misc"},
+{a:"HTML",d:"Hypertext Markup Language",g:"misc",u:"Markup language structuring content on the web, the base layer that XSS payloads are injected into"},
 {a:"HTTP",d:"Hypertext Transfer Protocol",g:"proto",u:"Unencrypted web traffic on TCP port 80"},
 {a:"HTTPS",d:"Hypertext Transfer Protocol Secure",g:"proto",u:"Encrypted web traffic on TCP port 443"},
-{a:"HVAC",d:"Heating, Ventilation Air Conditioning",g:"hw"},
+{a:"HVAC",d:"Heating, Ventilation Air Conditioning",g:"hw",u:"Building climate-control system, whose environmental sensors and thresholds matter for equipment room uptime"},
 {a:"IaaS",d:"Infrastructure as a Service",g:"cloud",u:"Provider supplies compute, storage, and network; customer owns OS and up"},
 {a:"IaC",d:"Infrastructure as Code",g:"cloud",u:"Defines infrastructure in version-controlled files for repeatable deployment"},
 {a:"IAM",d:"Identity and Access Management",g:"access",u:"The discipline covering provisioning, authentication, and authorization of identities"},
-{a:"ICMP",d:"Internet Control Message Protocol",g:"proto"},
+{a:"ICMP",d:"Internet Control Message Protocol",g:"proto",u:"Protocol used for network diagnostics like ping and traceroute, also abused for reconnaissance and covert data tunneling"},
 {a:"ICS",d:"Industrial Control Systems",g:"hw",u:"Systems controlling physical industrial processes, often unpatchable"},
-{a:"IDEA",d:"International Data Encryption Algorithm",g:"crypto"},
-{a:"IDF",d:"Intermediate Distribution Frame",g:"hw"},
+{a:"IDEA",d:"International Data Encryption Algorithm",g:"crypto",u:"Symmetric block cipher once used in early PGP versions, largely superseded by AES today"},
+{a:"IDF",d:"Intermediate Distribution Frame",g:"hw",u:"Secondary wiring closet connecting a building floor's cabling back to the main distribution point"},
 {a:"IdP",d:"Identity Provider",g:"access",u:"The system that authenticates users and issues assertions to service providers"},
 {a:"IDS",d:"Intrusion Detection System",g:"ops",u:"Detects and alerts on malicious traffic but does not block it"},
-{a:"IEEE",d:"Institute of Electrical and Electronics Engineers",g:"gov"},
+{a:"IEEE",d:"Institute of Electrical and Electronics Engineers",g:"gov",u:"Standards body that publishes many of the networking and wireless specifications referenced throughout the exam, such as 802.1X"},
 {a:"IKE",d:"Internet Key Exchange",g:"crypto",u:"Negotiates the security association and keys for IPSec over UDP port 500"},
-{a:"IM",d:"Instant Messaging",g:"misc"},
+{a:"IM",d:"Instant Messaging",g:"misc",u:"Real-time text messaging between users, a message-based threat vector for phishing and malware links"},
 {a:"IMAP",d:"Internet Message Access Protocol",g:"mail",u:"Retrieves email while keeping it synced on the server, on TCP port 143"},
 {a:"IoC",d:"Indicators of Compromise",g:"threat",u:"Observable artifacts suggesting a system has been breached"},
-{a:"IoT",d:"Internet of Things",g:"hw"},
-{a:"IP",d:"Internet Protocol",g:"proto"},
+{a:"IoT",d:"Internet of Things",g:"hw",u:"Broad class of network-connected physical devices, often shipped with weak default security and rarely patched"},
+{a:"IP",d:"Internet Protocol",g:"proto",u:"Address and routing protocol underlying nearly all network communication, the foundation TCP and UDP both run on top of"},
 {a:"IPS",d:"Intrusion Prevention System",g:"ops",u:"Sits inline and actively blocks malicious traffic"},
 {a:"IPSec",d:"Internet Protocol Security",g:"proto",u:"Encrypts and authenticates at the network layer, common for site-to-site VPNs"},
-{a:"IR",d:"Incident Response",g:"ops"},
-{a:"IRC",d:"Internet Relay Chat",g:"misc"},
-{a:"IRP",d:"Incident Response Plan",g:"ops"},
-{a:"ISO",d:"International Standards Organization",g:"gov"},
-{a:"ISP",d:"Internet Service Provider",g:"net"},
-{a:"ISSO",d:"Information Systems Security Officer",g:"gov"},
+{a:"IR",d:"Incident Response",g:"ops",u:"The structured, phased process of detecting, containing, and recovering from a security incident"},
+{a:"IRC",d:"Internet Relay Chat",g:"misc",u:"Older real-time chat protocol historically abused as a command-and-control channel for botnets"},
+{a:"IRP",d:"Incident Response Plan",g:"ops",u:"Documented plan defining roles, procedures, and communication paths to follow during a security incident"},
+{a:"ISO",d:"International Standards Organization",g:"gov",u:"International body that publishes widely referenced standards, including ISO 27001 for information security management"},
+{a:"ISP",d:"Internet Service Provider",g:"net",u:"Company providing an organization's connection to the internet"},
+{a:"ISSO",d:"Information Systems Security Officer",g:"gov",u:"Role accountable for the security posture of one specific information system, narrower in scope than a CISO"},
 {a:"IV",d:"Initialization Vector",g:"crypto",u:"Random value ensuring identical plaintext does not produce identical ciphertext"},
 {a:"KDC",d:"Key Distribution Center",g:"auth",u:"Kerberos component that issues tickets"},
 {a:"KEK",d:"Key Encryption Key",g:"crypto",u:"A key used to encrypt other keys"},
 {a:"L2TP",d:"Layer 2 Tunneling Protocol",g:"proto",u:"Tunneling protocol on UDP port 1701, typically paired with IPSec for encryption"},
-{a:"LAN",d:"Local Area Network",g:"net"},
+{a:"LAN",d:"Local Area Network",g:"net",u:"Network confined to a single physical location, such as an office or building"},
 {a:"LDAP",d:"Lightweight Directory Access Protocol",g:"access",u:"Queries a directory service for accounts, groups, and attributes, on TCP port 389, or TCP 636 for LDAPS"},
-{a:"LEAP",d:"Lightweight Extensible Authentication Protocol",g:"wifi"},
-{a:"MaaS",d:"Monitoring as a Service",g:"cloud"},
+{a:"LEAP",d:"Lightweight Extensible Authentication Protocol",g:"wifi",u:"Cisco-proprietary wireless authentication protocol with known weaknesses, largely replaced by more secure EAP variants"},
+{a:"MaaS",d:"Monitoring as a Service",g:"cloud",u:"Cloud-delivered monitoring service, outsourcing log collection and alerting to a third party"},
 {a:"MAC",d:"Mandatory Access Control / Media Access Control / Message Authentication Code",g:"access",u:"Three unrelated official meanings: an access control model, a network hardware address, and a cryptographic integrity check. Context tells you which."},
-{a:"MAN",d:"Metropolitan Area Network",g:"net"},
-{a:"MBR",d:"Master Boot Record",g:"hw"},
+{a:"MAN",d:"Metropolitan Area Network",g:"net",u:"Network spanning a city or campus, larger than a LAN but smaller than a WAN"},
+{a:"MBR",d:"Master Boot Record",g:"hw",u:"Legacy disk partitioning scheme storing the boot loader, superseded by GPT on modern systems"},
 {a:"MD5",d:"Message Digest 5",g:"crypto",u:"Legacy hash function, broken by practical collision attacks"},
-{a:"MDF",d:"Main Distribution Frame",g:"hw"},
+{a:"MDF",d:"Main Distribution Frame",g:"hw",u:"Primary wiring closet where external and internal building cabling converge"},
 {a:"MDM",d:"Mobile Device Management",g:"ops",u:"Centrally enforces policy, encryption, and remote wipe on mobile devices"},
 {a:"MFA",d:"Multifactor Authentication",g:"auth",u:"Requires proof from two or more different factor categories"},
-{a:"MFD",d:"Multifunction Device",g:"hw"},
-{a:"ML",d:"Machine Learning",g:"misc"},
+{a:"MFD",d:"Multifunction Device",g:"hw",u:"Networked device combining printing, scanning, and copying, often overlooked as a data-handling endpoint"},
+{a:"ML",d:"Machine Learning",g:"misc",u:"Subset of AI where systems improve at a task from data rather than explicit programming, used in both anomaly detection and evasion techniques"},
 {a:"MOA",d:"Memorandum of Agreement",g:"gov",u:"More formal cooperative agreement than an MOU, may be binding"},
 {a:"MOU",d:"Memorandum of Understanding",g:"gov",u:"Records mutual intent, generally not legally binding"},
-{a:"MPLS",d:"Multi-protocol Label Switching",g:"net"},
+{a:"MPLS",d:"Multi-protocol Label Switching",g:"net",u:"Carrier routing technology that labels traffic for fast, predictable paths, often used as a private WAN alternative"},
 {a:"MSA",d:"Master Service Agreement",g:"gov",u:"Sets overarching legal terms so later work orders only define deliverables"},
-{a:"MSCHAP",d:"Microsoft Challenge Handshake Authentication Protocol",g:"auth"},
+{a:"MSCHAP",d:"Microsoft Challenge Handshake Authentication Protocol",g:"auth",u:"Microsoft's challenge-response authentication protocol, with known weaknesses in its older version 1"},
 {a:"MSP",d:"Managed Service Provider",g:"cloud",u:"Third party running IT operations, a common supply chain attack path"},
 {a:"MSSP",d:"Managed Security Service Provider",g:"cloud",u:"Third party running security operations such as a SOC"},
 {a:"MTBF",d:"Mean Time Between Failures",g:"risk",u:"Average time a component runs before it fails, a reliability measure"},
-{a:"MTTF",d:"Mean Time to Failure",g:"risk"},
+{a:"MTTF",d:"Mean Time to Failure",g:"risk",u:"Average time a non-repairable component operates before it fails outright, distinct from MTBF's repairable-system framing"},
 {a:"MTTR",d:"Mean Time to Recover",g:"risk",u:"Average time to repair or restore a failed component"},
-{a:"MTU",d:"Maximum Transmission Unit",g:"net"},
+{a:"MTU",d:"Maximum Transmission Unit",g:"net",u:"Largest packet size a network link will carry without fragmentation"},
 {a:"MX",d:"Mail Exchange",g:"mail",u:"DNS record identifying where a domain's mail should be delivered"},
 {a:"NAC",d:"Network Access Control",g:"ops",u:"Checks device posture before granting network access, quarantines failures"},
-{a:"NAT",d:"Network Address Translation",g:"net"},
+{a:"NAT",d:"Network Address Translation",g:"net",u:"Translates private internal addresses to a public one for internet access, incidentally hiding internal addressing"},
 {a:"NDA",d:"Non-disclosure Agreement",g:"gov",u:"Contractually protects confidential information shared between parties"},
-{a:"NFC",d:"Near Field Communication",g:"hw"},
+{a:"NFC",d:"Near Field Communication",g:"hw",u:"Short-range wireless technology used in contactless payment and access cards, exploitable at very close range"},
 {a:"NGFW",d:"Next-generation Firewall",g:"ops",u:"Firewall with application awareness and deep packet inspection"},
-{a:"NIDS",d:"Network-based Intrusion Detection System",g:"ops"},
-{a:"NIPS",d:"Network-based Intrusion Prevention System",g:"ops"},
+{a:"NIDS",d:"Network-based Intrusion Detection System",g:"ops",u:"Network-based intrusion detection system, monitoring traffic passively rather than on an individual host"},
+{a:"NIPS",d:"Network-based Intrusion Prevention System",g:"ops",u:"Network-based intrusion prevention system, actively blocking malicious traffic inline rather than only alerting"},
 {a:"NIST",d:"National Institute of Standards & Technology",g:"gov",u:"US body publishing widely used security frameworks and standards"},
-{a:"NTFS",d:"New Technology File System",g:"misc"},
-{a:"NTLM",d:"New Technology LAN Manager",g:"auth"},
+{a:"NTFS",d:"New Technology File System",g:"misc",u:"Modern Windows file system supporting permissions and encryption, replacing the older FAT systems"},
+{a:"NTLM",d:"New Technology LAN Manager",g:"auth",u:"Older Windows authentication protocol vulnerable to relay and pass-the-hash attacks, superseded by Kerberos where possible"},
 {a:"NTP",d:"Network Time Protocol",g:"proto",u:"Synchronizes clocks, critical for correlating logs and validating certificates"},
 {a:"OAUTH",d:"Open Authorization",g:"access",u:"Delegated authorization letting an app act on your behalf without your password"},
 {a:"OCSP",d:"Online Certificate Status Protocol",g:"crypto",u:"Real-time query of a single certificate's revocation status"},
-{a:"OID",d:"Object Identifier",g:"misc"},
-{a:"OS",d:"Operating System",g:"misc"},
+{a:"OID",d:"Object Identifier",g:"misc",u:"Globally unique dotted-number identifier used in certificates and SNMP to name objects unambiguously"},
+{a:"OS",d:"Operating System",g:"misc",u:"Software layer managing hardware and running applications, the target of most hardening baselines"},
 {a:"OSINT",d:"Open-source Intelligence",g:"threat",u:"Intelligence gathered from publicly available sources"},
-{a:"OSPF",d:"Open Shortest Path First",g:"net"},
+{a:"OSPF",d:"Open Shortest Path First",g:"net",u:"Interior routing protocol used within a single autonomous system, distinct from BGP's role between systems"},
 {a:"OT",d:"Operational Technology",g:"hw",u:"Technology that monitors and controls physical processes and equipment"},
-{a:"OTA",d:"Over the Air",g:"hw"},
-{a:"OVAL",d:"Open Vulnerability Assessment Language",g:"ops"},
+{a:"OTA",d:"Over the Air",g:"hw",u:"Wireless delivery of software or firmware updates directly to a device"},
+{a:"OVAL",d:"Open Vulnerability Assessment Language",g:"ops",u:"Standardized language for describing system states, used to check machines for known vulnerabilities and misconfigurations"},
 {a:"OWASP",d:"Open Worldwide Application Security Project",g:"gov",u:"Community publishing the widely cited Top 10 web application risks"},
-{a:"P2P",d:"Peer to Peer",g:"net"},
+{a:"P2P",d:"Peer to Peer",g:"net",u:"Direct node-to-node communication bypassing central controls, a blind spot for data loss prevention monitoring"},
 {a:"PaaS",d:"Platform as a Service",g:"cloud",u:"Provider supplies the runtime platform; customer owns applications and data"},
-{a:"PAC",d:"Proxy Auto Configuration",g:"net"},
+{a:"PAC",d:"Proxy Auto Configuration",g:"net",u:"Configuration file telling a browser which proxy to use for a given URL"},
 {a:"PAM",d:"Privileged Access Management / Pluggable Authentication Modules",g:"access",u:"Either the discipline of controlling elevated accounts, or the Linux framework that plugs different authentication methods into one interface."},
 {a:"PAP",d:"Password Authentication Protocol",g:"auth",u:"Legacy protocol that transmits credentials in cleartext"},
-{a:"PAT",d:"Port Address Translation",g:"net"},
+{a:"PAT",d:"Port Address Translation",g:"net",u:"Maps many internal private addresses to one public address using different port numbers, the common form of NAT for home and office networks"},
 {a:"PBKDF2",d:"Password-based Key Derivation Function 2",g:"crypto",u:"Key stretching algorithm that slows password guessing"},
-{a:"PBX",d:"Private Branch Exchange",g:"net"},
+{a:"PBX",d:"Private Branch Exchange",g:"net",u:"On-premises telephone switching system, a target for toll fraud if left with default credentials"},
 {a:"PCAP",d:"Packet Capture",g:"ops",u:"Full recording of network traffic including payload content"},
 {a:"PCI DSS",d:"Payment Card Industry Data Security Standard",g:"gov",u:"Industry standard governing handling of cardholder data"},
-{a:"PDU",d:"Power Distribution Unit",g:"hw"},
-{a:"PEAP",d:"Protected Extensible Authentication Protocol",g:"wifi"},
-{a:"PED",d:"Personal Electronic Device",g:"hw"},
-{a:"PEM",d:"Privacy Enhanced Mail",g:"crypto"},
+{a:"PDU",d:"Power Distribution Unit",g:"hw",u:"Rack-mounted device distributing electrical power to multiple devices, sometimes network-managed and thus itself a target"},
+{a:"PEAP",d:"Protected Extensible Authentication Protocol",g:"wifi",u:"Wireless authentication protocol that wraps EAP inside a protected TLS tunnel"},
+{a:"PED",d:"Personal Electronic Device",g:"hw",u:"Small portable electronics like phones or tablets, a security concern for both data leakage and physical loss"},
+{a:"PEM",d:"Privacy Enhanced Mail",g:"crypto",u:"Base64 text format for storing certificates and keys, one of the most common certificate file formats"},
 {a:"PFS",d:"Perfect Forward Secrecy",g:"crypto",u:"Ensures a compromised long-term key cannot decrypt past sessions"},
-{a:"PGP",d:"Pretty Good Privacy",g:"crypto"},
+{a:"PGP",d:"Pretty Good Privacy",g:"crypto",u:"Encryption software for signing and encrypting email and files, the predecessor to the OpenPGP standard GPG implements"},
 {a:"PHI",d:"Personal Health Information",g:"gov",u:"Health data regulated under laws such as HIPAA"},
 {a:"PII",d:"Personally Identifiable Information",g:"gov",u:"Data that can identify a specific individual"},
-{a:"PIV",d:"Personal Identity Verification",g:"auth"},
-{a:"PKCS",d:"Public Key Cryptography Standards",g:"crypto"},
+{a:"PIV",d:"Personal Identity Verification",g:"auth",u:"US federal government smart card standard for physical and logical access authentication"},
+{a:"PKCS",d:"Public Key Cryptography Standards",g:"crypto",u:"Family of standards defining how cryptographic keys and certificates are formatted and exchanged"},
 {a:"PKI",d:"Public Key Infrastructure",g:"crypto",u:"The whole system of CAs, certificates, and keys that makes asymmetric trust work"},
 {a:"POP",d:"Post Office Protocol",g:"mail",u:"Downloads mail on TCP port 110, or TCP 995 for encrypted POP3S"},
-{a:"PPP",d:"Point-to-Point Protocol",g:"proto"},
+{a:"PPP",d:"Point-to-Point Protocol",g:"proto",u:"Point-to-point data link protocol once common for dial-up, now mostly seen in legacy WAN links"},
 {a:"PPTP",d:"Point-to-Point Tunneling Protocol",g:"proto",u:"Obsolete VPN protocol on TCP port 1723 with broken encryption"},
 {a:"PSK",d:"Pre-shared Key",g:"wifi",u:"A single shared passphrase used by everyone on the network"},
-{a:"PTZ",d:"Pan-tilt-zoom",g:"hw"},
-{a:"PUP",d:"Potentially Unwanted Program",g:"threat"},
+{a:"PTZ",d:"Pan-tilt-zoom",g:"hw",u:"Camera capable of remote pan, tilt, and zoom, common in modern CCTV deployments"},
+{a:"PUP",d:"Potentially Unwanted Program",g:"threat",u:"Software bundled with a legitimate install that a user did not clearly intend to get, less overtly malicious than true malware"},
 {a:"RA",d:"Recovery Agent / Registration Authority",g:"crypto",u:"Either the trusted role that can recover a lost encryption key, or the party that verifies identity on a CA\u2019s behalf before a certificate is issued."},
 {a:"RADIUS",d:"Remote Authentication Dial-in User Service",g:"auth",u:"Centralized AAA server for network access and wireless authentication, on UDP ports 1812/1813"},
 {a:"RAID",d:"Redundant Array of Inexpensive Disks",g:"risk",u:"Provides fault tolerance against drive failure, not a backup"},
-{a:"RAS",d:"Remote Access Server",g:"net"},
+{a:"RAS",d:"Remote Access Server",g:"net",u:"Server providing remote dial-in or VPN access into a private network"},
 {a:"RAT",d:"Remote Access Trojan",g:"threat",u:"Malware giving an attacker interactive remote control of a host"},
 {a:"RBAC",d:"Role-based Access Control / Rule-based Access Control",g:"access",u:"Two distinct models sharing an abbreviation: one grants access by job role, the other applies a single global rule set to everyone."},
-{a:"RC4",d:"Rivest Cipher version 4",g:"crypto"},
+{a:"RC4",d:"Rivest Cipher version 4",g:"crypto",u:"Stream cipher with known weaknesses, formerly used in WEP and early TLS, now deprecated"},
 {a:"RDP",d:"Remote Desktop Protocol",g:"proto",u:"Microsoft remote session protocol on TCP 3389, heavily targeted when exposed"},
 {a:"RFID",d:"Radio Frequency Identifier",g:"hw",u:"Contactless credential technology vulnerable to cloning"},
-{a:"ROI",d:"Return on Investment",g:"risk"},
+{a:"ROI",d:"Return on Investment",g:"risk",u:"Financial metric comparing a security investment's benefit against its cost, used to justify budget"},
 {a:"RPO",d:"Recovery Point Objective",g:"risk",u:"Maximum acceptable amount of data loss, measured in time"},
 {a:"RSA",d:"Rivest, Shamir, & Adleman",g:"crypto",u:"Widely used asymmetric algorithm for encryption and signatures"},
-{a:"RTBH",d:"Remotely Triggered Black Hole",g:"net"},
+{a:"RTBH",d:"Remotely Triggered Black Hole",g:"net",u:"Network technique dropping traffic to a targeted destination at the routing layer, used to blunt a DDoS attack"},
 {a:"RTO",d:"Recovery Time Objective",g:"risk",u:"Maximum acceptable downtime before service must be restored"},
 {a:"RTOS",d:"Real-time Operating System",g:"hw",u:"OS guaranteeing response within strict time bounds, common in ICS"},
-{a:"RTP",d:"Real-time Transport Protocol",g:"proto"},
+{a:"RTP",d:"Real-time Transport Protocol",g:"proto",u:"Protocol delivering real-time audio and video over IP, the transport layer under most VoIP calls"},
 {a:"S/MIME",d:"Secure/Multipurpose Internet Mail Extensions",g:"mail",u:"Signs and encrypts email using certificates"},
 {a:"SaaS",d:"Software as a Service",g:"cloud",u:"Provider owns nearly the whole stack; customer owns data and access"},
 {a:"SAE",d:"Simultaneous Authentication of Equals",g:"wifi",u:"WPA3 handshake resisting offline dictionary attacks"},
@@ -4663,36 +4651,36 @@ const ACR = [
 {a:"SASE",d:"Secure Access Service Edge",g:"cloud",u:"Cloud-delivered convergence of network connectivity and security at the edge"},
 {a:"SCADA",d:"Supervisory Control and Data Acquisition",g:"hw",u:"Systems supervising and controlling industrial processes at scale"},
 {a:"SCAP",d:"Security Content Automation Protocol",g:"ops",u:"Standardized specifications for automating vulnerability and configuration checks"},
-{a:"SCEP",d:"Simple Certificate Enrollment Protocol",g:"crypto"},
+{a:"SCEP",d:"Simple Certificate Enrollment Protocol",g:"crypto",u:"Protocol automating certificate enrollment for devices at scale, commonly used by MDM platforms"},
 {a:"SD-WAN",d:"Software-defined Wide Area Network",g:"net",u:"Software-managed routing across multiple WAN links"},
-{a:"SDK",d:"Software Development Kit",g:"misc"},
-{a:"SDLC",d:"Software Development Lifecycle",g:"gov"},
+{a:"SDK",d:"Software Development Kit",g:"misc",u:"Toolkit of libraries and documentation for building applications on a given platform"},
+{a:"SDLC",d:"Software Development Lifecycle",g:"gov",u:"Structured process for planning, building, testing, and deploying software, where security should be integrated at every stage"},
 {a:"SDN",d:"Software-defined Networking",g:"net",u:"Separates the control plane from the data plane for programmable networks"},
 {a:"SED",d:"Self-encrypting Drives",g:"crypto",u:"Storage device performing encryption in hardware"},
-{a:"SEH",d:"Structured Exception Handler",g:"misc"},
+{a:"SEH",d:"Structured Exception Handler",g:"misc",u:"Windows mechanism for catching runtime errors, historically abused in SEH-overwrite exploitation techniques"},
 {a:"SE Linux",d:"Security-enhanced Linux",g:"ops",u:"Kernel module enforcing mandatory access control on Linux"},
 {a:"SFTP",d:"Secured File Transfer Protocol",g:"proto",u:"File transfer tunneled over SSH on TCP port 22"},
 {a:"SHA",d:"Secure Hashing Algorithm",g:"crypto",u:"Standard family of hash functions used for integrity"},
 {a:"SIEM",d:"Security Information and Event Management",g:"ops",u:"Aggregates and correlates log data from many sources into alerts"},
-{a:"SIM",d:"Subscriber Identity Module",g:"hw"},
+{a:"SIM",d:"Subscriber Identity Module",g:"hw",u:"Card storing a mobile subscriber's identity, the target of SIM-swapping attacks used to hijack SMS-based MFA"},
 {a:"SLA",d:"Service-level Agreement",g:"gov",u:"Defines measurable performance commitments such as uptime"},
 {a:"SLE",d:"Single Loss Expectancy",g:"risk",u:"Expected loss from one occurrence, asset value times exposure factor"},
 {a:"SMB",d:"Server Message Block",g:"proto",u:"File and printer sharing protocol on TCP port 445"},
-{a:"SMS",d:"Short Message Service",g:"threat"},
+{a:"SMS",d:"Short Message Service",g:"threat",u:"Text messaging over a cellular network, a vector for smishing and a weak second factor for MFA"},
 {a:"SMTP",d:"Simple Mail Transfer Protocol",g:"mail",u:"Sends email, traditionally on TCP port 25, or TCP 587 for secure client submission"},
 {a:"SMTPS",d:"Simple Mail Transfer Protocol Secure",g:"mail",u:"Encrypted mail submission on TCP port 465"},
 {a:"SNMP",d:"Simple Network Management Protocol",g:"proto",u:"Manages and monitors network devices on UDP port 161, and pushes traps on thresholds over UDP port 162"},
-{a:"SOAP",d:"Simple Object Access Protocol",g:"proto"},
+{a:"SOAP",d:"Simple Object Access Protocol",g:"proto",u:"XML-based protocol for exchanging structured data between web services, more rigid and verbose than REST"},
 {a:"SOAR",d:"Security Orchestration, Automation, Response",g:"ops",u:"Automates response playbooks across security tools"},
-{a:"SoC",d:"System on Chip",g:"hw"},
-{a:"SOC",d:"Security Operations Center",g:"ops"},
+{a:"SoC",d:"System on Chip",g:"hw",u:"Chip integrating a full computer's core components onto a single package, common in mobile and embedded devices"},
+{a:"SOC",d:"Security Operations Center",g:"ops",u:"Team and facility responsible for continuously monitoring, detecting, and responding to security events"},
 {a:"SOW",d:"Statement of Work",g:"gov",u:"Defines the specific deliverables and scope of an engagement"},
 {a:"SPF",d:"Sender Policy Framework",g:"mail",u:"DNS record listing which servers may send mail for a domain"},
-{a:"SPIM",d:"Spam over Internet Messaging",g:"threat"},
-{a:"SQL",d:"Structured Query Language",g:"misc"},
+{a:"SPIM",d:"Spam over Internet Messaging",g:"threat",u:"Unsolicited spam delivered over instant messaging platforms rather than email"},
+{a:"SQL",d:"Structured Query Language",g:"misc",u:"Language for querying and managing relational databases, the target of SQL injection attacks"},
 {a:"SQLi",d:"SQL Injection",g:"threat",u:"Injecting database commands through unsanitized application input"},
-{a:"SRTP",d:"Secure Real-Time Protocol",g:"proto"},
-{a:"SSD",d:"Solid State Drive",g:"hw"},
+{a:"SRTP",d:"Secure Real-Time Protocol",g:"proto",u:"Secure version of RTP, adding encryption and authentication to real-time voice and video traffic"},
+{a:"SSD",d:"Solid State Drive",g:"hw",u:"Flash-based storage drive, requiring cryptographic erase rather than traditional degaussing for secure disposal"},
 {a:"SSH",d:"Secure Shell",g:"proto",u:"Encrypted remote command-line access on TCP 22"},
 {a:"SSL",d:"Secure Sockets Layer",g:"crypto",u:"Deprecated predecessor to TLS"},
 {a:"SSO",d:"Single Sign-on",g:"access",u:"One authentication event grants access to multiple systems"},
@@ -4700,46 +4688,46 @@ const ACR = [
 {a:"SWG",d:"Secure Web Gateway",g:"ops",u:"Filters and inspects outbound web traffic against policy"},
 {a:"TACACS+",d:"Terminal Access Controller Access Control System",g:"auth",u:"AAA protocol on TCP port 49, separating authentication, authorization, and accounting, common for device administration"},
 {a:"TAXII",d:"Trusted Automated eXchange of Indicator Information",g:"threat",u:"Transport mechanism for sharing STIX threat intelligence"},
-{a:"TCP/IP",d:"Transmission Control Protocol/Internet Protocol",g:"proto"},
+{a:"TCP/IP",d:"Transmission Control Protocol/Internet Protocol",g:"proto",u:"Foundational protocol suite underlying nearly all modern network communication"},
 {a:"TGT",d:"Ticket Granting Ticket",g:"auth",u:"Kerberos credential used to request service tickets"},
-{a:"TKIP",d:"Temporal Key Integrity Protocol",g:"wifi"},
+{a:"TKIP",d:"Temporal Key Integrity Protocol",g:"wifi",u:"Interim wireless encryption protocol used in WPA to patch WEP's flaws without new hardware, later replaced by CCMP"},
 {a:"TLS",d:"Transport Layer Security",g:"crypto",u:"Encrypts data in transit, the successor to SSL"},
 {a:"TOC",d:"Time-of-check",g:"threat",u:"The validation moment in a race condition vulnerability"},
 {a:"TOTP",d:"Time-based One-time Password",g:"auth",u:"One-time code derived from a shared secret and the current time"},
 {a:"TOU",d:"Time-of-use",g:"threat",u:"The action moment in a race condition vulnerability"},
 {a:"TPM",d:"Trusted Platform Module",g:"crypto",u:"Motherboard chip storing keys for full-disk encryption and boot integrity"},
 {a:"TTP",d:"Tactics, Techniques, and Procedures",g:"threat",u:"The behavioral patterns describing how an adversary operates"},
-{a:"TSIG",d:"Transaction Signature",g:"proto"},
-{a:"UAT",d:"User Acceptance Testing",g:"gov"},
-{a:"UAV",d:"Unmanned Aerial Vehicle",g:"hw"},
+{a:"TSIG",d:"Transaction Signature",g:"proto",u:"Cryptographic mechanism authenticating DNS updates and zone transfers between servers"},
+{a:"UAT",d:"User Acceptance Testing",g:"gov",u:"Final testing phase where actual users validate that software meets requirements before go-live"},
+{a:"UAV",d:"Unmanned Aerial Vehicle",g:"hw",u:"Remotely piloted or autonomous drone, raising both physical surveillance and signal-hijacking concerns"},
 {a:"UBA",d:"User Behavior Analytics",g:"ops",u:"Baselines normal user activity and flags deviations"},
 {a:"UDP",d:"User Datagram Protocol",g:"proto",u:"Connectionless transport with no handshake; commonly seen with DNS on port 53"},
 {a:"UEFI",d:"Unified Extensible Firmware Interface",g:"hw",u:"Modern firmware replacing BIOS, supports Secure Boot"},
 {a:"UEM",d:"Unified Endpoint Management",g:"ops",u:"Single console managing mobile, desktop, and IoT endpoints"},
 {a:"UPS",d:"Uninterruptible Power Supply",g:"hw",u:"Battery bridging short power loss until a generator starts"},
-{a:"URI",d:"Uniform Resource Identifier",g:"misc"},
-{a:"URL",d:"Universal Resource Locator",g:"misc"},
-{a:"USB",d:"Universal Serial Bus",g:"hw"},
+{a:"URI",d:"Uniform Resource Identifier",g:"misc",u:"General identifier for a resource, a broader category that a URL is one specific type of"},
+{a:"URL",d:"Universal Resource Locator",g:"misc",u:"Web address specifying a resource's location and how to retrieve it, the format typosquatting attacks manipulate"},
+{a:"USB",d:"Universal Serial Bus",g:"hw",u:"Common physical connection standard for peripherals and storage, a major vector for removable-media attacks"},
 {a:"UTM",d:"Unified Threat Management",g:"ops",u:"All-in-one appliance bundling firewall, antivirus, filtering, and IPS"},
-{a:"UTP",d:"Unshielded Twisted Pair",g:"net"},
-{a:"VBA",d:"Visual Basic",g:"misc"},
+{a:"UTP",d:"Unshielded Twisted Pair",g:"net",u:"Twisted-pair cabling without additional shielding, the common cable type for standard office Ethernet"},
+{a:"VBA",d:"Visual Basic",g:"misc",u:"Scripting language embedded in Microsoft Office documents, heavily abused to deliver macro-based malware"},
 {a:"VDI",d:"Virtual Desktop Infrastructure",g:"cloud",u:"Centrally hosted desktops streamed to thin clients"},
 {a:"VLAN",d:"Virtual Local Area Network",g:"net",u:"Logically segments one physical network into isolated broadcast domains"},
-{a:"VM",d:"Virtual Machine",g:"cloud"},
-{a:"VoIP",d:"Voice over IP",g:"net"},
+{a:"VM",d:"Virtual Machine",g:"cloud",u:"Software-emulated computer running on shared physical hardware, isolated from other VMs by the hypervisor"},
+{a:"VoIP",d:"Voice over IP",g:"net",u:"Voice communication carried over an IP network instead of traditional telephone lines"},
 {a:"VPC",d:"Virtual Private Cloud",g:"cloud",u:"Logically isolated network section within a public cloud"},
 {a:"VPN",d:"Virtual Private Network",g:"net",u:"Encrypted tunnel carrying private traffic across an untrusted network"},
 {a:"WAF",d:"Web Application Firewall",g:"ops",u:"Inspects web request payloads to block SQL injection and cross-site scripting"},
-{a:"WAP",d:"Wireless Access Point",g:"wifi"},
+{a:"WAP",d:"Wireless Access Point",g:"wifi",u:"Older term for a wireless access point, also historically referring to the Wireless Application Protocol for mobile internet"},
 {a:"WEP",d:"Wired Equivalent Privacy",g:"wifi",u:"Broken legacy wireless encryption, must never be used"},
-{a:"WIDS",d:"Wireless Intrusion Detection System",g:"wifi"},
+{a:"WIDS",d:"Wireless Intrusion Detection System",g:"wifi",u:"Wireless intrusion detection system, monitoring the airwaves for rogue APs and attack signatures"},
 {a:"WIPS",d:"Wireless Intrusion Prevention System",g:"wifi",u:"Detects and blocks rogue access points and wireless attacks"},
-{a:"WPA",d:"Wi-Fi Protected Access",g:"wifi"},
+{a:"WPA",d:"Wi-Fi Protected Access",g:"wifi",u:"Wireless security standard family that replaced WEP, initially with the still-flawed TKIP"},
 {a:"WPS",d:"Wi-Fi Protected Setup",g:"wifi",u:"Convenience feature with a brute-forceable PIN, should be disabled"},
 {a:"XDR",d:"Extended Detection and Response",g:"ops",u:"Correlates detection across endpoint, network, email, and cloud"},
-{a:"XML",d:"Extensible Markup Language",g:"misc"},
-{a:"XOR",d:"Exclusive Or",g:"crypto"},
-{a:"XSRF",d:"Cross-site Request Forgery",g:"threat"},
+{a:"XML",d:"Extensible Markup Language",g:"misc",u:"Structured markup language for encoding data, the target of XML external entity (XXE) injection attacks"},
+{a:"XOR",d:"Exclusive Or",g:"crypto",u:"Bitwise operation used as a basic building block in many encryption algorithms and simple obfuscation"},
+{a:"XSRF",d:"Cross-site Request Forgery",g:"threat",u:"Alternate abbreviation for cross-site request forgery, identical to CSRF"},
 {a:"XSS",d:"Cross-site Scripting",g:"threat",u:"Injecting script that executes in another user's browser session"},
 {a:"MFP",d:"Multifunction Printer",g:"hw",u:"Networked print, scan, and copy device that stores images and needs sanitizing at disposal"},
 {a:"MMS",d:"Multimedia Message Service",g:"threat",u:"Multimedia messaging protocol, another mobile delivery channel for social engineering"},
@@ -4869,14 +4857,15 @@ const GLOSS = [
 {term:"Software-defined WAN",d:3,g:"network",def:"A technology that centrally manages and intelligently steers traffic across multiple WAN connections, optimizing cost and performance. This is the same concept as SD-WAN, just spelled out; the two terms refer to the identical technology."},
 {term:"SASE (Secure access service edge)",d:3,g:"network",def:"A cloud-delivered architecture that converges networking and security functions into a single service for a distributed, identity-first workforce. It's frequently paired with SD-WAN, layering firewall, secure web gateway, and CASB functions directly into the network fabric."},
 {term:"NAC (Network access control)",d:3,g:"network",def:"A system that evaluates a device's identity and health before allowing it onto the network, often quarantining non-compliant devices. It can check things like whether antivirus is running and up to date before granting full access."},
+{term:"Posture assessment",d:3,g:"network",def:"Checking a device's security health, such as antivirus status, OS patch level, and disk encryption, before letting it onto the network. NAC is the system that typically performs this check and enforces the result, quarantining or blocking any device that fails."},
 {term:"Agent-based NAC",d:3,g:"network",def:"NAC that requires installing persistent software on each device to continuously report its health and identity, giving deeper visibility at the cost of needing that software deployed everywhere. Not an official NAC-specific sub-bullet, though agent-based and agentless deployment models are each named elsewhere in the objectives."},
 {term:"Agentless NAC",d:3,g:"network",def:"NAC that evaluates a device from the network side, scanning or querying it without installing anything locally, trading some visibility for far easier deployment across devices the organization doesn't fully control."},
 {term:"Load balancer",d:3,g:"availability",def:"A device or service that distributes incoming traffic across multiple servers, improving both performance and availability. Unlike clustering, which makes multiple servers act as one system, a load balancer simply spreads requests across independent servers."},
 {term:"Clustering",d:3,g:"availability",def:"Coupling multiple servers so they operate as a single logical system, often with shared storage, so if one node fails another takes over its work. Unlike a load balancer that just distributes traffic, clustering makes the servers behave as one coordinated unit."},
-{term:"RTO (Recovery time objective)",d:3,g:"resilience",def:"The maximum acceptable amount of time a system can be down before recovery, measuring how long an outage is tolerated. It looks forward at downtime, where RPO looks backward at how much data can be lost, the two are commonly confused but measure opposite things."},
-{term:"RPO (Recovery point objective)",d:3,g:"resilience",def:"The maximum acceptable amount of data loss, measured in time, that an organization can tolerate between backups. It looks backward at data loss, where RTO looks forward at downtime, the two are commonly confused but measure opposite things."},
-{term:"MTBF (Mean time between failures)",d:3,g:"resilience",def:"The average time a system operates before it fails, used as a reliability metric. A higher MTBF means better reliability; it says nothing about how long a repair takes once a failure happens, that's MTTR's job."},
-{term:"MTTR (Mean time to recover)",d:3,g:"resilience",def:"The average time it takes to restore a failed system to working order. A short MTTR reflects a well-prepared response process; it's a measured average, not a target the business sets, unlike RTO."},
+{term:"RTO (Recovery time objective)",d:5,g:"resilience",def:"The maximum acceptable amount of time a system can be down before recovery, measuring how long an outage is tolerated. It looks forward at downtime, where RPO looks backward at how much data can be lost, the two are commonly confused but measure opposite things."},
+{term:"RPO (Recovery point objective)",d:5,g:"resilience",def:"The maximum acceptable amount of data loss, measured in time, that an organization can tolerate between backups. It looks backward at data loss, where RTO looks forward at downtime, the two are commonly confused but measure opposite things."},
+{term:"MTBF (Mean time between failures)",d:5,g:"resilience",def:"The average time a system operates before it fails, used as a reliability metric. A higher MTBF means better reliability; it says nothing about how long a repair takes once a failure happens, that's MTTR's job."},
+{term:"MTTR (Mean time to recover)",d:5,g:"resilience",def:"The average time it takes to restore a failed system to working order. A short MTTR reflects a well-prepared response process; it's a measured average, not a target the business sets, unlike RTO."},
 {term:"SRE (Site reliability engineering)",d:3,g:"resilience",def:"A discipline that applies software engineering practices to operations, using measurable reliability targets and automation to keep systems available. It relies on metrics like error budgets and MTTR to decide how much risk a team can take with new changes before reliability suffers."},
 {term:"Hot site",d:3,g:"resilience",def:"A fully equipped, ready-to-use backup facility with current data, allowing near-instant failover during a disaster, at the highest cost. It sits at the fast-and-expensive end of the hot/warm/cold site spectrum."},
 {term:"Warm site",d:3,g:"resilience",def:"A backup facility with hardware in place but data that is not fully current, offering a middle ground between cost and recovery speed. It sits between a hot site's speed and a cold site's low cost."},
@@ -8722,8 +8711,9 @@ w:["Packet captures record network traffic at the packet level, not historical p
 const QUESTIONS=Q1.concat(Q2).concat(Q3).concat(Q4).concat(Q5).concat(Q6).concat(Q7).concat(Q8).concat(Q9).concat(Q10).concat(Q11).concat(Q12).concat(Q13).concat(Q14).concat(Q15).concat(Q16).concat(Q17).concat(Q18).concat(Q19).concat(Q20);
 ACR.forEach(a=>{ if(!a.u && EXTRA_U[a.a]) a.u=EXTRA_U[a.a]; });
 function allCards(){ CARDS.forEach((cd,i)=>{ if(cd.id===undefined) cd.id=i; }); return CARDS.concat(S.customCards||[]); }
-function cardById(id){ if(id<100000) return CARDS[id]; return (S.customCards||[]).find(x=>x.id===id) || {f:"(removed)",b:"",d:0,o:"",g:"",id:id}; }
+function cardById(id){ if(id<100000) return CARDS[id]; if(id<200000) return (S.customCards||[]).find(x=>x.id===id) || {f:"(removed)",b:"",d:0,o:"",g:"",id:id}; const a=allAcr()[id-200000]; return a?{id:id,d:ACR_DOMAIN[a.a]||0,o:"",g:a.g,f:a.a,b:a.d+(a.u?" \u2014 "+a.u:"")}:{f:"(removed)",b:"",d:0,o:"",g:"",id:id}; }
 function allAcr(){ return ACR.concat(S.customAcr||[]); }
+const ACR_DOMAIN={"2FA":4, "3DES":1, "AAA":4, "ACL":3, "AES":1, "AES-256":1, "AH":4, "AI":1, "AIS":2, "ALE":5, "AP":4, "API":1, "APT":2, "ARO":5, "ARP":2, "ASLR":3, "ATT&CK":2, "AUP":5, "AV":4, "BASH":1, "BCP":5, "BGP":3, "BIA":5, "BIOS":3, "BPA":5, "BPDU":3, "BYOD":4, "CA":1, "CAPTCHA":4, "CAR":5, "CASB":3, "CBC":1, "CCMP":4, "CCTV":4, "CERT":4, "CFB":1, "CHAP":4, "CIA":1, "CIO":5, "CIRT":4, "CMS":1, "COBO":4, "COOP":5, "COPE":4, "CP":5, "CRC":3, "CRL":4, "CSO":5, "CSP":3, "CSR":1, "CSRF":2, "CSU":3, "CTM":1, "CTO":5, "CVE":4, "CVSS":4, "CYOD":3, "DAC":4, "DBA":5, "DDoS":2, "DEP":3, "DES":1, "DHCP":4, "DHE":1, "DKIM":4, "DLL":1, "DLP":4, "DMARC":4, "DNAT":3, "DNS":2, "DNSSEC":4, "DoS":2, "DPO":5, "DRP":5, "DSA":1, "DSL":3, "EAP":4, "ECB":1, "ECC":1, "ECDHE":1, "ECDSA":1, "EDR":4, "EFS":1, "ERP":1, "ESN":3, "ESP":4, "EULA":5, "FACL":4, "FDE":1, "FIM":4, "FPGA":3, "FRR":4, "FTP":4, "FTPS":4, "GCM":1, "GDPR":5, "GPG":1, "GPO":4, "GPS":3, "GPU":3, "GRE":3, "HA":5, "HDD":3, "HIDS":4, "HIPS":4, "HMAC":1, "HOTP":4, "HSM":1, "HTML":1, "HTTP":4, "HTTPS":4, "HVAC":3, "IaaS":3, "IaC":3, "IAM":4, "ICMP":4, "ICS":3, "IDEA":1, "IDF":3, "IdP":4, "IDS":4, "IEEE":5, "IKE":1, "IM":1, "IMAP":4, "IoC":2, "IoT":3, "IP":4, "IPS":4, "IPSec":4, "IR":4, "IRC":1, "IRP":4, "ISO":5, "ISP":3, "ISSO":5, "IV":1, "KDC":4, "KEK":1, "L2TP":4, "LAN":3, "LDAP":4, "LEAP":4, "MaaS":3, "MAC":4, "MAN":3, "MBR":3, "MD5":1, "MDF":3, "MDM":4, "MFA":4, "MFD":3, "ML":1, "MOA":5, "MOU":5, "MPLS":3, "MSA":5, "MSCHAP":4, "MSP":2, "MSSP":3, "MTBF":5, "MTTF":5, "MTTR":5, "MTU":3, "MX":4, "NAC":3, "NAT":3, "NDA":5, "NFC":3, "NGFW":4, "NIDS":4, "NIPS":4, "NIST":5, "NTFS":1, "NTLM":4, "NTP":4, "OAUTH":4, "OCSP":1, "OID":1, "OS":4, "OSINT":4, "OSPF":3, "OT":3, "OTA":3, "OVAL":4, "OWASP":5, "P2P":3, "PaaS":3, "PAC":3, "PAM":4, "PAP":4, "PAT":3, "PBKDF2":1, "PBX":3, "PCAP":4, "PCI DSS":5, "PDU":3, "PEAP":4, "PED":3, "PEM":1, "PFS":1, "PGP":1, "PHI":5, "PII":5, "PIV":4, "PKCS":1, "PKI":1, "POP":4, "PPP":4, "PPTP":4, "PSK":4, "PTZ":3, "PUP":2, "RA":1, "RADIUS":4, "RAID":5, "RAS":3, "RAT":2, "RBAC":4, "RC4":1, "RDP":4, "RFID":2, "ROI":5, "RPO":5, "RSA":1, "RTBH":3, "RTO":5, "RTOS":3, "RTP":4, "S/MIME":4, "SaaS":3, "SAE":4, "SAML":4, "SAN":1, "SASE":3, "SCADA":3, "SCAP":4, "SCEP":1, "SD-WAN":3, "SDK":1, "SDLC":5, "SDN":3, "SED":1, "SEH":1, "SE Linux":4, "SFTP":4, "SHA":1, "SIEM":4, "SIM":3, "SLA":5, "SLE":5, "SMB":4, "SMS":2, "SMTP":4, "SMTPS":4, "SNMP":4, "SOAP":4, "SOAR":4, "SoC":3, "SOC":4, "SOW":5, "SPF":4, "SPIM":2, "SQL":1, "SQLi":2, "SRTP":4, "SSD":3, "SSH":4, "SSL":1, "SSO":4, "STIX":2, "SWG":4, "TACACS+":4, "TAXII":2, "TCP/IP":4, "TGT":4, "TKIP":4, "TLS":1, "TOC":2, "TOTP":4, "TOU":2, "TPM":1, "TTP":2, "TSIG":4, "UAT":5, "UAV":3, "UBA":4, "UDP":4, "UEFI":3, "UEM":4, "UPS":3, "URI":1, "URL":1, "USB":3, "UTM":3, "UTP":3, "VBA":1, "VDI":3, "VLAN":3, "VM":2, "VoIP":3, "VPC":3, "VPN":3, "WAF":4, "WAP":4, "WEP":4, "WIDS":4, "WIPS":4, "WPA":4, "WPS":4, "XDR":4, "XML":1, "XOR":1, "XSRF":2, "XSS":2, "MFP":3, "MMS":2, "P12":1, "POTS":3, "RACE":1, "RAD":5, "RIPEMD":1, "SDLM":5, "SHTTP":4, "USB OTG":3, "VDE":3, "VLSM":3, "VTC":3, "WO":5, "WTLS":4};
 function acrU(){ return allAcr().filter(a=>a.u); }
 const TIGHT=[115,98,84,70,58];
 function examDate(){ return S.exam?new Date(S.exam+"T12:00:00"):null; }
@@ -9037,17 +9027,7 @@ function home(){
   <div class="hero">
     ${S.name?`<p class="greet">${timeGreeting()}, ${esc(S.name)}</p>`:""}
     <h1 class="neon" style="font-family:var(--mono);letter-spacing:.03em;word-spacing:-0.2em;text-transform:uppercase">Night Shift</h1>
-    <p class="sub">A full <b>CompTIA Security+ SY0-701</b> trainer built around the official exam blueprint: every question, flashcard, and PBQ is mapped to one of the 28 exam objectives, and the mix is weighted to the real domain percentages. It leans harder on whatever you keep getting wrong, and it will tell you when you are actually ready.</p>
-    <div class="facts">
-      <button class="fact link" onclick="window.scrollTo(0,0);shiftSetup()" style="color:var(--cyan);font-weight:700">SOC Watch</button>
-      <button class="fact link" onclick="pbqSetup()"><b>${PBQ.length}</b> PBQs</button>
-      <button class="fact link" onclick="cardSetup()"><b>${allCards().length}</b> flashcards</button>
-      <button class="fact link" onclick="jcSetup()" style="color:var(--violet);font-weight:700">The Drill Down</button>
-      <button class="fact link" onclick="examHome()" style="color:var(--amber);font-weight:700">Practice Exam</button>
-      <button class="fact link" onclick="acrSetup()"><b>${allAcr().length}</b> acronyms</button>
-      <button class="fact link" onclick="window.scrollTo(0,0);glossRef()"><b>${GLOSS.length}</b> glossary terms</button>
-      <button class="fact link" onclick="stats()">Weak areas and stats</button>
-    </div>
+    <p class="sub">A full <b>CompTIA Security+ (SY0-701)</b> trainer built around the official exam blueprint. Every question, flashcard, and PBQ (performance-based question) maps to one of the 28 exam objectives, weighted to match the real domain percentages, so your study time mirrors what's actually tested. Whatever concept you keep getting wrong shows up more often until you've actually cleared it. And it separates the exam date from exam readiness, tracking a real readiness gate based on your practice-exam performance, so you know when you're prepared, not just when the calendar says to show up.</p>
   </div>
   <details class="hiw" id="hiw">
     <summary>How this works &nbsp;\u00b7&nbsp; read this first</summary>
@@ -9056,7 +9036,7 @@ function home(){
       <p>Weighted to the official domain percentages: General Security Concepts 12, Threats &amp; Vulnerabilities 22, Security Architecture 18, Security Operations 28, Program Management 20. Weak domains get weighted up automatically.</p>
       <h4>The practice exam is genuinely different every time</h4>
       <p><b>One exam, up to 90 items, freshly randomized on every attempt.</b> Each run draws 3 to 5 PBQs at random, then fills the remaining slots up to 90 with multiple choice, weighted to the official domain percentages, so a heavier PBQ draw means fewer multiple choice items that attempt, matching how the extra time PBQs take gets balanced against the 90-minute clock. Untimed or your own clock. <b>No feedback until you submit</b>. Review maps every miss to its objective.</p>
-      <h4>SOC Watch and Rapid Response drill under pressure</h4>
+      <h4>Question Queue and Rapid Response drill under pressure</h4>
       <p>Severity-coded tickets; wrong calls cost network integrity. Rapid Response adds a combo multiplier and three lives. <b>Timer defaults to adaptive</b> (tightens above 85 percent, loosens below 60) or set it manually.</p>
       <h4>Flashcards use spaced repetition</h4>
       <p>Cards you keep missing come back sooner; cards you know fade out.</p>
@@ -9090,14 +9070,14 @@ function home(){
 
   <div class="tiles">
     <button class="tile" id="t-soc" style="--accent:var(--amber)" onclick="window.scrollTo(0,0);shiftSetup()">
-      <span class="tag-row"><span class="tag">Mode 01</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>SOC Watch</h3>
-      <p>Alerts hit your queue as severity-coded tickets. Triage each one. Wrong calls cost network integrity.</p></button>
+      <span class="tag-row"><span class="tag">Mode 01</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Question Queue</h3>
+      <p>One question at a time, timed, pulling from the full domain-weighted bank. Answer wrong and it costs you — this is where most of your reps happen.</p></button>
     <button class="tile" id="t-pbq" style="--accent:var(--blue)" onclick="pbqSetup()">
       <span class="tag-row"><span class="tag">Mode 03</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>PBQ Lab</h3>
       <p>${PBQ.length} performance-based questions. Drag to order, drag to classify, configure rule sets, analyse logs. Partial credit, same as the real thing.</p></button>
     <button class="tile" id="t-cards" style="--accent:var(--cyan)" onclick="cardSetup()">
       <span class="tag-row"><span class="tag">Recall</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Flashcards</h3>
-      <p>Free-recall with spaced repetition. ${dueCount()} of ${allCards().length} cards due now.</p></button>
+      <p>Free-recall with spaced repetition. ${allCards().length} concept cards plus a dedicated ${allAcr().length}-acronym deck.</p></button>
     <button class="tile" id="t-josh" style="--accent:var(--red)" onclick="jcSetup()">
       <span class="tag-row"><span class="tag">Focused drilling</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>The Drill Down</h3>
       <p>High-repetition drilling on whatever you keep missing. Fed from your tracked weak terms and acronyms.</p></button>
@@ -9107,8 +9087,8 @@ function home(){
       <p>Up to 90 items, blueprint weighted, genuinely different every attempt. Feedback and a restudy plan only after you submit.</p>
     </button>
     <button class="tile" id="t-acr" style="--accent:var(--violet)" onclick="acrSetup()">
-      <span class="tag-row"><span class="tag">Range</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Acronym Range</h3>
-      <p>${acrU().length} drillable acronyms in the all-acronym answer format, plus the full searchable list.</p></button>
+      <span class="tag-row"><span class="tag">Recall</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Acronym Recall</h3>
+      <p>${acrU().length} of 330 official CompTIA acronyms, quizzed multiple-choice until they stick. Choose a length or a specific domain, plus a full searchable list.</p></button>
     <button class="tile" id="t-gloss" style="--accent:var(--violet)" onclick="window.scrollTo(0,0);glossRef()">
       <span class="tag-row"><span class="tag">Reference</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Glossary</h3>
       <p>${GLOSS.length} terms and concepts, searchable by name or definition, filterable by domain.</p></button>
@@ -9125,15 +9105,15 @@ function home(){
   else if(window.scrollTo) window.scrollTo(0,0);
 }
 
-/* ================= SOC WATCH ================= */
+/* ================= QUESTION QUEUE ================= */
 function setShiftDom(d){ S.shiftDom=d; save(); shiftSetup(); }
 function shiftSetup(){
-  view="setup"; SECTION=shiftSetup; AT_SECTION=true; ENTRY_TILE="t-soc"; strip("soc watch / setup",0);
+  view="setup"; SECTION=shiftSetup; AT_SECTION=true; ENTRY_TILE="t-soc"; strip("question queue / setup",0);
   const sd=S.shiftDom||0;
   const pool=sd?QUESTIONS.filter(q=>q.d===sd).length:QUESTIONS.length;
   const rapid=S.shiftMode==="drill";
   $("app").innerHTML=`
-  <p class="eyebrow">Mode 01</p><h1>SOC Watch</h1>
+  <p class="eyebrow">Mode 01</p><h1>Question Queue</h1>
   <p class="lede">Drawing from <b>${QUESTIONS.length}</b> questions, weighted to the real exam domain blueprint so what you see reflects the actual test's balance, not an even split. Tickets arrive that way, or locked to a single domain when you need to drill one down.</p>
   <h2>Mode</h2>
   <div class="seg">
@@ -9201,7 +9181,7 @@ function renderTicket(done,chosen){
   if(!done&&window.scrollTo) window.scrollTo(0,0);
   const q=sess.q, sv=sess.sev;
   const im=sess.integrity>60?"on":(sess.integrity>30?"warn":"crit");
-  strip("soc watch",sess.integrity,im,"Integrity <b>"+sess.integrity+"%</b> &nbsp; "+(sess.customPool?"Rep <b>"+sess.i+"</b>":"Ticket <b>"+sess.i+"/"+sess.n+"</b>"),sess.customPool?"":"<b id='clk'>--</b>s");
+  strip("question queue",sess.integrity,im,"Integrity <b>"+sess.integrity+"%</b> &nbsp; "+(sess.customPool?"Rep <b>"+sess.i+"</b>":"Ticket <b>"+sess.i+"/"+sess.n+"</b>"),sess.customPool?"":"<b id='clk'>--</b>s");
   const opts=sess.order.map((oi,pos)=>{
     let cls="opt";
     if(done){ if(oi===q.a) cls+=" correct"; else if(oi===chosen) cls+=" wrong"; else cls+=" faded"; }
@@ -9364,6 +9344,8 @@ function stopTimer(){ if(tickHandle){ clearInterval(tickHandle); tickHandle=null
 /* ================= FLASHCARDS ================= */
 function srsOf(i){ return S.srs[i]||{ease:2.3,iv:0,due:0,reps:0}; }
 function dueCount(){ const now=Date.now(); return allCards().filter(c=>srsOf(c.id).due<=now).length; }
+let CARD_LEN=25;
+function cardSetLen(n){ CARD_LEN=n; cardSetup(); }
 function cardSetup(){
   SECTION=cardSetup; AT_SECTION=true; ENTRY_TILE="t-cards";
   view="setup"; strip("flashcards / setup",0); stopTimer();
@@ -9372,23 +9354,35 @@ function cardSetup(){
   $("app").innerHTML=`
   <p class="eyebrow">Recall</p><h1>Flashcards</h1>
   <p class="lede">Read the front, answer out loud in your own words, then reveal. Rate yourself honestly. Anything you rate Again comes straight back.</p>
-  <h2>Pick a deck</h2>
+  <p class="eyebrow" style="margin-top:16px">Length</p>
   <div class="row">
-    <button class="btn pri" onclick="cardStart(0,true)">Due now (${dueCount()})</button>
-    <button class="btn" onclick="cardStart(0,false)">All ${all.length} cards</button>
+    ${[15,25,45,90].map(n=>`<button class="btn ${CARD_LEN===n?"pri":""}" onclick="cardSetLen(${n})">${n} items</button>`).join("")}
+  </div>
+  <h2 style="margin-top:16px">Pick a deck</h2>
+  <div class="row">
+    <button class="btn pri" onclick="cardStart(0,false,CARD_LEN)">All ${all.length} cards</button>
+    <button class="btn" onclick="cardStartAcr(CARD_LEN)">Acronyms only (${allAcr().length})</button>
   </div>
   <div class="row" style="margin-top:10px">
-    ${[1,2,3,4,5].map(d=>`<button class="btn sm" onclick="cardStart(${d},false)">Domain ${d}.0 <span class="dim">(${per[d]||0} due)</span></button>`).join("")}
+    ${[1,2,3,4,5].map(d=>`<button class="btn sm" onclick="cardStart(${d},false,CARD_LEN)">Domain ${d}.0 <span class="dim">(${per[d]||0} due)</span></button>`).join("")}
   </div>
-  <div class="row" style="margin-top:20px"><button class="btn ghost sm" onclick="home()">Back to home</button>
-    <button class="btn ghost sm" onclick="content('cards')">Add new flashcards</button></div>`;
+  <div class="row" style="margin-top:20px"><button class="btn ghost sm" onclick="home()">Back to home</button></div>`;
 }
-function cardStart(d,dueOnly){
+function cardStart(d,dueOnly,len){
   AT_SECTION=false; view="cards";
   const now=Date.now();
   let ids=allCards().filter(c=>(!d||c.d===d)&&(!dueOnly||srsOf(c.id).due<=now)).map(c=>c.id);
   if(!ids.length){ toast("Nothing due in that deck yet"); return; }
-  sess={mode:"cards",queue:shuffle(ids),done:0,total:ids.length,again:[]};
+  ids=shuffle(ids); if(len) ids=ids.slice(0,len);
+  sess={mode:"cards",queue:ids,done:0,total:ids.length,again:[]};
+  startSess(); nextCard();
+}
+function cardStartAcr(len){
+  AT_SECTION=false; view="cards";
+  let ids=allAcr().map((a,i)=>200000+i);
+  ids=shuffle(ids); if(len) ids=ids.slice(0,len);
+  if(!ids.length){ toast("No acronyms available"); return; }
+  sess={mode:"cards",queue:ids,done:0,total:ids.length,again:[]};
   startSess(); nextCard();
 }
 function cardStartIds(ids,josh){
@@ -9405,10 +9399,12 @@ function nextCard(){
 function renderCard(revealed){
   if(!revealed&&window.scrollTo) window.scrollTo(0,0);
   const c=cardById(sess.ci);
-  strip("flashcards",Math.round(sess.done/sess.total*100),"on","Card <b>"+(sess.done+1)+"</b> of <b>"+sess.total+"</b>","Domain <b>"+c.d+".0</b> obj "+c.o);
+  const isAcr=sess.ci>=200000;
+  strip("flashcards",Math.round(sess.done/sess.total*100),"on","Card <b>"+(sess.done+1)+"</b> of <b>"+sess.total+"</b>","Domain <b>"+c.d+".0</b>"+(c.o?" obj "+c.o:""));
   $("app").innerHTML=`
-  <div class="fc"><div class="front">${esc(c.f)}</div>
-    ${revealed?`<div class="back">${esc(c.b)}</div>`:""}</div>
+  <div class="fc"${isAcr?' style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:120px;padding:20px 24px"':''}>
+    <div class="front"${isAcr?' style="font-family:var(--mono);font-size:26px;letter-spacing:.03em;font-weight:700"':''}>${esc(c.f)}</div>
+    ${revealed?`<div class="back"${isAcr?' style="border-top:none;text-align:center"':''}>${esc(c.b)}</div>`:""}</div>
   ${revealed?`<div class="rate">
       <button onclick="rate(0)">Again<small>&lt; 1m</small></button>
       <button onclick="rate(1)">Hard<small>short</small></button>
@@ -9550,7 +9546,7 @@ function jcCardStart(){
   cardStartIds(cs.map(c=>c.id),true);
 }
 
-/* ================= ACRONYM RANGE ================= */
+/* ================= ACRONYM RECALL ================= */
 function srsAcrOf(a){ const s=S.acrStat[a]; const base={s:0,m:0,ease:2.3,iv:0,due:0,reps:0}; return s?Object.assign({},base,s):base; }
 function acrDueCount(){ const now=Date.now(); return acrU().filter(a=>srsAcrOf(a.a).due<=now).length; }
 function acrSrsUpdate(a,ok){
@@ -9561,19 +9557,24 @@ function acrSrsUpdate(a,ok){
   st.reps=(st.reps||0)+1;
   S.acrStat[a]=st;
 }
+let ACR_LEN=25;
+function acrSetLen(n){ ACR_LEN=n; acrSetup(); }
 function acrSetup(){
   SECTION=acrSetup; AT_SECTION=true; ENTRY_TILE="t-acr";
-  view="setup"; strip("acronym range / setup",0); stopTimer();
+  view="setup"; strip("acronym recall / setup",0); stopTimer();
   $("app").innerHTML=`
-  <p class="eyebrow">Range</p><h1>Acronym Range</h1>
+  <p class="eyebrow">Recall</p><h1>Acronym Recall</h1>
   <p class="lede">${acrU().length} drillable acronyms out of ${allAcr().length} total. Distractors come from the same family, so guessing by category will not save you. Each acronym schedules itself like a flashcard: miss it and it comes back soon, know it and it fades out.</p>
+  <p class="eyebrow" style="margin-top:16px">Length</p>
   <div class="row">
-    <button class="btn pri" onclick="acrStart('fun',true)">Due now (${acrDueCount()})</button>
-    <button class="btn" onclick="acrStart('fun',false)">Full 20-item range</button>
+    ${[15,25,45,90].map(n=>`<button class="btn ${ACR_LEN===n?"pri":""}" onclick="acrSetLen(${n})">${n} items</button>`).join("")}
+  </div>
+  <div class="row" style="margin-top:8px">
+    <button class="btn pri" onclick="acrStart('fun',false,ACR_LEN,0)">Start (${ACR_LEN} items)</button>
   </div>
   <div class="tiles" style="margin-top:14px">
-    <button class="tile" style="--accent:var(--red)" onclick="acrStart('fun',false)"><span class="tag">Drill</span>
-      <h3>What does it do</h3><p>You get a plain-language description of a function. Every answer choice is a bare acronym with no context. This is the format you keep getting caught by.</p></button>
+    <button class="tile" style="--accent:var(--red)" onclick="acrStart('fun',false,ACR_LEN,0)"><span class="tag">Drill</span>
+      <h3>What does it do</h3><p>You get a plain-language description of a function. Every answer choice is a bare acronym with no context.</p></button>
     <button class="tile" style="--accent:var(--violet)" onclick="acrRef()"><span class="tag">Reference</span>
       <h3>Full acronym list</h3><p>Every acronym with its expansion and what it actually does. Searchable and filterable by family.</p></button>
   </div>
@@ -9683,12 +9684,13 @@ function glossRender(){
     </div>`).join(""):`<p class="dim" style="padding:16px;margin:0">Nothing matches that search.</p>`}
   </div>`;
 }
-function acrStart(kind,dueOnly){ AT_SECTION=false; view="acr"; sess={mode:"acr",kind:"fun",i:0,correct:0,used:new Set(),misses:[],dueOnly:!!dueOnly}; startSess(); nextAcr(); }
+function acrStart(kind,dueOnly,len,domain){ AT_SECTION=false; view="acr"; sess={mode:"acr",kind:"fun",i:0,correct:0,used:new Set(),misses:[],dueOnly:!!dueOnly,n:len||20,domain:domain||0}; startSess(); nextAcr(); }
 function nextAcr(){
   checkBreak();
-  if(sess.i>=20) return acrReport();
+  if(sess.i>=sess.n) return acrReport();
   let kind="fun";
   let pool=acrU();
+  if(sess.domain) pool=pool.filter(a=>ACR_DOMAIN[a.a]===sess.domain);
   if(sess.dueOnly){ const now=Date.now(); pool=pool.filter(a=>srsAcrOf(a.a).due<=now); }
   const cand=pool.filter(a=>!sess.used.has(a.a));
   if(!cand.length) return acrReport();
@@ -9712,7 +9714,7 @@ function renderAcr(done,chosen){
   const A=sess.acr, k=A.kind;
   const prompt = k==="exp" ? A.target.a : k==="rev" ? A.target.d : A.target.u;
   const label  = k==="exp" ? "What does this stand for" : k==="rev" ? "Which acronym is this" : "Which acronym does this";
-  strip("acronym range",Math.round(sess.i/20*100),"on","Item <b>"+sess.i+"</b>/20 &nbsp; <b>"+sess.correct+"</b> correct","<b id='clk'>--</b>s");
+  strip("acronym recall",Math.round(sess.i/sess.n*100),"on","Item <b>"+sess.i+"</b>/"+sess.n+" &nbsp; <b>"+sess.correct+"</b> correct","<b id='clk'>--</b>s");
   const opts=A.all.map((o,pos)=>{
     let cls="opt";
     if(done){ if(pos===A.ans) cls+=" correct"; else if(pos===chosen) cls+=" wrong"; else cls+=" faded"; }
@@ -9746,14 +9748,13 @@ function aAnswer(chosen){
 function acrReport(){
   stopTimer();
   const p=pct(sess.correct,sess.i);
-  strip("range complete",p,p>=85?"on":p>=70?"warn":"crit","Score <b>"+p+"%</b>","");
+  strip("recall complete",p,p>=85?"on":p>=70?"warn":"crit","Score <b>"+p+"%</b>","");
   const miss=sess.misses.length?sess.misses.map(m=>`<li><span><b class="mono">${esc(m.a)}</b> ${esc(m.d)}</span><span class="ct">${esc(m.g)}</span></li>`).join(""):`<li class="dim">Clean run.</li>`;
   $("app").innerHTML=`
-  <p class="eyebrow">Range complete</p><h1>${sess.correct} of ${sess.i} - ${p}%</h1>
+  <p class="eyebrow">Recall complete</p><h1>${sess.correct} of ${sess.i} - ${p}%</h1>
   <p class="lede">Missed acronyms come back more often until you clear them.</p>
   <h2>Missed</h2><div class="card"><ul class="weaklist">${miss}</ul></div>
-  <div class="row" style="margin-top:18px"><button class="btn pri" onclick="acrStart('${sess.kind}',false)">Run again</button>
-    ${sess.misses.length?`<button class="btn" onclick="exportAcr([${sess.misses.map(m=>"'"+m.a+"'").join(",")}])">Export as flashcards</button>`:""}
+  <div class="row" style="margin-top:18px"><button class="btn pri" onclick="acrStart('${sess.kind}',false,sess.n,sess.domain)">Run again</button>
     <button class="btn ghost" onclick="acrSetup()">Change format</button>
     <button class="btn ghost" onclick="home()">Home</button></div>`;
 }
@@ -10747,7 +10748,7 @@ function stats(){
   }).join("");
   const missedCombined=(termRows+acrRows)||`<li class="dim">No misses recorded yet.</li>`;
   const g=gateStatus();
-  const modeLabel=m=>m==="shift"?"SOC Watch":m==="pbq"?"PBQ":m==="exam"?"Practice Exam (timed)":m==="exam-practice"?"Practice Exam (untimed)":"Rapid Response";
+  const modeLabel=m=>m==="shift"?"Question Queue":m==="pbq"?"PBQ":m==="exam"?"Practice Exam (timed)":m==="exam-practice"?"Practice Exam (untimed)":"Rapid Response";
   const recent=S.sessions.slice(-8).reverse().map(s=>`<li><span>${new Date(s.t).toLocaleDateString()} &nbsp;<span class="dim">${modeLabel(s.mode)}, ${s.n} items</span></span><span class="ct" style="color:${s.pct>=85?"var(--cyan)":s.pct>=75?"var(--amber)":"var(--red)"}">${s.pct}%</span></li>`).join("")||`<li class="dim">No sessions yet.</li>`;
   $("app").innerHTML=`
   <p class="eyebrow">Tracking</p><h1>Weak areas &amp; stats</h1>
@@ -10955,11 +10956,6 @@ function exportCards(list){
   dl("cards-to-review-"+new Date().toISOString().slice(0,10)+".txt",out);
   toast("Paste this into Add Content");
 }
-function exportAcr(list){
-  let out=""; list.forEach(a=>{ const o=allAcr().find(x=>x.a===a); if(o) out+=o.a+" || "+o.d+(o.u?" || "+o.u:"")+"\n"; });
-  dl("acronyms-to-review-"+new Date().toISOString().slice(0,10)+".txt",out);
-  toast("Paste this into Add Content");
-}
 /* ---- coaching brief: a prompt-ready diagnostic for any AI assistant ---- */
 function coachBrief(){
   const total=Object.values(S.dom).reduce((a,b)=>a+b.s,0);
@@ -11041,7 +11037,7 @@ function coachBrief(){
   L.push("## Recent session history");
   if(S.sessions.length){
     S.sessions.slice(-12).reverse().forEach(s=>{
-      const nm={shift:"SOC Watch",drill:"Rapid Response",pbq:"PBQ"}[s.mode]||s.mode;
+      const nm={shift:"Question Queue",drill:"Rapid Response",pbq:"PBQ"}[s.mode]||s.mode;
       L.push("- "+new Date(s.t).toISOString().slice(0,10)+"  "+nm+", "+s.n+" items, "+s.pct+"%");
     });
   } else L.push("- None.");
