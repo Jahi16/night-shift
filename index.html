@@ -4830,6 +4830,7 @@ const GLOSS = [
 {term:"TOC (Time-of-check)",d:2,g:"vulns",def:"A TOC vulnerability occurs when an attacker exploits the time gap between the verification of data and its use, potentially leading to unauthorized or malicious activities. TOC specifically refers to the validation moment itself, the first half of a time-of-check to time-of-use race condition."},
 {term:"TOU (Time-of-use)",d:2,g:"vulns",def:"The moment a previously validated resource is actually acted upon, the second half of a time-of-check to time-of-use race condition. If the resource changed in the gap since TOC, the action executes against something different than what was approved."},
 {term:"SQLi (SQL injection)",d:2,g:"vulns",def:"Inserting malicious SQL code into an input field so it is executed by the backend database, often to bypass authentication or extract data. Proper input validation and parameterized queries are the standard defenses against it."},
+{term:"Tautology (SQL injection)",d:2,g:"vulns",def:"A SQL injection payload built around a condition that is always true, classically OR '1'='1', tricking the query into returning every row or granting access regardless of the real credentials. It's the single most recognizable SQL injection pattern, and usually the fastest tell in a log or packet capture."},
 {term:"XSS (Cross-site scripting)",d:2,g:"vulns",def:"Injecting malicious script into a web page viewed by other users, allowing the attacker to run code in the victim's browser session. The HttpOnly cookie attribute exists specifically to limit what an XSS attack can steal."},
 {term:"Secure cookie attribute",d:4,g:"app-sec",def:"A flag set on a cookie instructing the browser to never transmit it over plain HTTP, only over HTTPS, closing off interception on an unencrypted connection. It protects against network eavesdropping specifically, not against script-based theft, that's HttpOnly's job."},
 {term:"HttpOnly cookie attribute",d:4,g:"app-sec",def:"A flag set on a cookie that hides it from JavaScript entirely, so client-side script cannot read or steal it, blunting theft via cross-site scripting. It protects against script-based theft specifically, not network interception, that's the Secure attribute's job."},
@@ -5543,6 +5544,7 @@ const GLOSS = [
 {term:"Telnet",d:4,g:"proto",def:"An unencrypted protocol for remote command-line access, using TCP port 23. Sends all data, including passwords, in plaintext, which is why SSH replaced it."},
 {term:"POP3 (Post Office Protocol)",d:4,g:"acronym-proto",def:"Downloads email from a server to a single device and typically removes it from the server, using TCP port 110, or TCP 995 for the encrypted POP3S."},
 {term:"SHA (Secure Hashing Algorithm)",d:1,g:"acronym-crypto",def:"Standard family of hash functions used for integrity. Modern variants like SHA-256 are the current standard for integrity verification, having replaced the broken MD5 and SHA-1 in most serious applications."},
+{term:"SHA-256",d:1,g:"crypto",def:"The specific 256-bit member of the SHA-2 family, the current standard hash function for integrity verification and digital signatures. It replaced the broken SHA-1 and MD5, and its 256-bit output is what usually gets shown as that long hexadecimal string when verifying a downloaded file."},
 {term:"SIM",d:3,g:"acronym-hw",def:"Subscriber Identity Module. Removable card identifying a subscriber, and the target of SIM swap fraud. In a SIM swap, an attacker tricks a carrier into porting a victim's number to a new SIM, hijacking SMS-based two-factor codes in the process."},
 {term:"SMB",d:4,g:"acronym-proto",def:"Server Message Block, a file and printer sharing protocol on TCP port 445. It's the protocol behind Windows file sharing, and its exploitation, including the EternalBlue vulnerability, has been behind some of the most damaging worms in recent history."},
 {term:"SMS",d:2,g:"acronym-threat",def:"Short Message Service. Text messaging, the delivery channel for smishing and a weak second factor. SMS-based MFA is considered weaker than an authenticator app precisely because of risks like SIM swapping."},
@@ -8852,18 +8854,27 @@ function noteRecent(id){ S.recent=(S.recent||[]).filter(x=>x!==id); S.recent.pus
 function pick(pool,used){
   let cand=pool.filter(q=>!used.has(q.i));
   if(!cand.length) return null;
-  // freshness window scales with the active pool size: 60% of it, floor 30, so small
-  // domain-filtered pools get proportionally meaningful protection instead of a flat cap
-  const win=Math.max(30,Math.floor(cand.length*0.6));
-  const recentSlice=(S.recent||[]).slice(-win);
-  const fresh=cand.filter(q=>recentSlice.indexOf(q.i)<0);
-  if(fresh.length>=6) cand=fresh;
+  // strict unseen-first: as long as any question in this pool has never been shown,
+  // repeats are off the table entirely - no soft weighting, a hard filter
+  const unseen=cand.filter(q=>!S.qStat[q.i]||S.qStat[q.i].s===0);
+  if(unseen.length){
+    cand=unseen;
+  } else {
+    // every candidate has been seen at least once - fall back to the recency-weighted system
+    // freshness window scales with the active pool size: 60% of it, floor 30, so small
+    // domain-filtered pools get proportionally meaningful protection instead of a flat cap
+    const win=Math.max(30,Math.floor(cand.length*0.6));
+    const recentSlice=(S.recent||[]).slice(-win);
+    const fresh=cand.filter(q=>recentSlice.indexOf(q.i)<0);
+    if(fresh.length>=6) cand=fresh;
+  }
   // occasional targeted resurfacing of a past miss, but much lighter than before
   const missed=cand.filter(q=>(S.qStat[q.i]&&S.qStat[q.i].m>0));
   if(missed.length&&Math.random()<.18){ const m=missed[Math.floor(Math.random()*missed.length)]; noteRecent(m.i); return m; }
   const ws=cand.map(q=>{
     let w=domWeight(q.d);
-    const pos=recentSlice.indexOf(q.i);
+    const recentSlice2=(S.recent||[]).slice(-Math.max(30,Math.floor(cand.length*0.6)));
+    const pos=recentSlice2.indexOf(q.i);
     if(pos>=0) w*=0.12+0.02*pos;              // heavy penalty, easing as it ages out
     w*=0.75+Math.random()*0.5;                 // jitter so ordering is never deterministic
     return w;
@@ -9110,7 +9121,9 @@ function setShiftDom(d){ S.shiftDom=d; save(); shiftSetup(); }
 function shiftSetup(){
   view="setup"; SECTION=shiftSetup; AT_SECTION=true; ENTRY_TILE="t-soc"; strip("question queue / setup",0);
   const sd=S.shiftDom||0;
-  const pool=sd?QUESTIONS.filter(q=>q.d===sd).length:QUESTIONS.length;
+  const poolQ=sd?QUESTIONS.filter(q=>q.d===sd):QUESTIONS;
+  const pool=poolQ.length;
+  const seen=poolQ.filter(q=>S.qStat[q.i]&&S.qStat[q.i].s>0).length;
   const rapid=S.shiftMode==="drill";
   $("app").innerHTML=`
   <p class="eyebrow">Mode 01</p><h1>Question Queue</h1>
@@ -9126,7 +9139,7 @@ function shiftSetup(){
     <button class="${sd===0?"on":""}" onclick="setShiftDom(0)">All domains</button>
     ${[1,2,3,4,5].map(d=>`<button class="${sd===d?"on":""}" onclick="setShiftDom(${d})">D${d}.0</button>`).join("")}
   </div>
-  <p class="dim" style="font-size:12.5px;margin:8px 0 0">${sd?`Locked to Domain ${sd}.0 (${DNAME[sd]}) \u00b7 ${pool} questions in this pool \u00b7 misses from other domains will not appear`:`Blueprint weighting across all 5 domains \u00b7 ${pool} questions in the pool`}</p>
+  <p class="dim" style="font-size:12.5px;margin:8px 0 0">${sd?`Locked to Domain ${sd}.0 (${DNAME[sd]}) \u00b7 ${pool} questions in this pool \u00b7 misses from other domains will not appear`:`Blueprint weighting across all 5 domains \u00b7 ${pool} questions in the pool`} \u00b7 <b>${seen}</b> of ${pool} seen at least once \u2014 unseen questions always come first, nothing repeats until the pool runs dry</p>
   ${rapid?`
   <div class="row" style="margin-top:20px"><button class="btn pri" onclick="drillStart()">Start Rapid Response</button></div>
   `:`
@@ -9651,13 +9664,14 @@ function glossRender(){
   if(GREF.d!==0) list=list.filter(g=>g.d===GREF.d);
   if(GREF.q){
     const norm=s=>s.toLowerCase().replace(/[-\s]+/g,' ').trim();
-    const q=norm(GREF.q);
-    list=list.filter(g=>norm(g.term).includes(q)||norm(g.def).includes(q));
+    const strip=s=>s.toLowerCase().replace(/[-\s]+/g,'');
+    const q=norm(GREF.q), qs=strip(GREF.q);
+    list=list.filter(g=>norm(g.term).includes(q)||norm(g.def).includes(q)||strip(g.term).includes(qs)||strip(g.def).includes(qs));
     const rank=g=>{
-      const term=norm(g.term);
-      if(term===q) return 0;
-      if(term.startsWith(q)) return 1;
-      if(term.includes(q)) return 2;
+      const term=norm(g.term), termS=strip(g.term);
+      if(term===q||termS===qs) return 0;
+      if(term.startsWith(q)||termS.startsWith(qs)) return 1;
+      if(term.includes(q)||termS.includes(qs)) return 2;
       return 3;
     };
     list=list.sort((a,b)=>{
