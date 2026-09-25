@@ -6446,7 +6446,7 @@ const STUDY = {
 };
 function studyLine(o){
   const s=STUDY[o]||{t:"",g:""};
-  return "Messer videos & course notes, section "+o+(s.t?" ("+s.t+")":"")+" \u00b7 Gibson GCGA "+s.g;
+  return "Messer's free YouTube videos, section "+o+(s.t?" ("+s.t+")":"");
 }
 function studyLineFor(o){
   const s=STUDY[o]||{t:"",g:""};
@@ -9086,17 +9086,17 @@ function home(){
     <button class="tile" id="t-pbq" style="--accent:var(--blue)" onclick="pbqSetup()">
       <span class="tag-row"><span class="tag">Mode 03</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>PBQ Lab</h3>
       <p>${PBQ.length} performance-based questions. Drag to order, drag to classify, configure rule sets, analyse logs. Partial credit, same as the real thing.</p></button>
+    <button class="tile" id="t-exams" style="--accent:var(--amber)" onclick="examHome()">
+      <span class="tag-row"><span class="tag">Full length</span><span class="tile-plus" aria-hidden="true">+</span></span>
+      <h3>Practice Exam</h3>
+      <p>Up to 90 items, blueprint weighted, genuinely different every attempt. Feedback and a restudy plan only after you submit.</p>
+    </button>
     <button class="tile" id="t-cards" style="--accent:var(--cyan)" onclick="cardSetup()">
       <span class="tag-row"><span class="tag">Recall</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Flashcards</h3>
       <p>Free-recall with spaced repetition. ${allCards().length} concept cards plus a dedicated ${allAcr().length}-acronym deck.</p></button>
     <button class="tile" id="t-josh" style="--accent:var(--red)" onclick="jcSetup()">
       <span class="tag-row"><span class="tag">Focused drilling</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>The Drill Down</h3>
       <p>High-repetition drilling on whatever you keep missing. Fed from your tracked weak terms and acronyms.</p></button>
-    <button class="tile" id="t-exams" style="--accent:var(--amber)" onclick="examHome()">
-      <span class="tag-row"><span class="tag">Full length</span><span class="tile-plus" aria-hidden="true">+</span></span>
-      <h3>Practice Exam</h3>
-      <p>Up to 90 items, blueprint weighted, genuinely different every attempt. Feedback and a restudy plan only after you submit.</p>
-    </button>
     <button class="tile" id="t-acr" style="--accent:var(--violet)" onclick="acrSetup()">
       <span class="tag-row"><span class="tag">Recall</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Acronym Recall</h3>
       <p>${acrU().length} of 330 official CompTIA acronyms, quizzed multiple-choice until they stick. Choose a length or a specific domain, plus a full searchable list.</p></button>
@@ -10569,7 +10569,7 @@ function examReview(){
   <h2>Restudy plan: hit these first</h2>
   <div class="card"><ul class="weaklist">${planHtml}</ul></div>
   ${missTagsArr.length?`<div class="row" style="margin-top:10px"><button class="btn" onclick='jcAddTopicsBulk(${JSON.stringify(missTagsArr)})'>Send ${missTagsArr.length} missed concept${missTagsArr.length>1?"s":""} to The Drill Down</button></div>`:""}
-  <p class="dim" style="font-size:11.5px;margin:8px 0 0">Messer sections are numbered by exam objective in both his videos and course notes PDF. Gibson chapters follow the Get Certified Get Ahead SY0-701 edition.</p>
+  <p class="dim" style="font-size:11.5px;margin:8px 0 0">Messer's free YouTube course numbers sections by exam objective, matching the section numbers shown here.</p>
   <h2 style="margin-top:20px">Every item, reviewed</h2>
   ${items}
   <div class="row" style="margin-top:18px">
