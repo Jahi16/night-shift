@@ -8850,6 +8850,7 @@ function domWeight(d){
   return w/(DCOUNT[d]||1);              // per-question, so bank size cannot skew the blueprint
 }
 function noteRecent(id){ S.recent=(S.recent||[]).filter(x=>x!==id); S.recent.push(id); if(S.recent.length>300) S.recent.shift(); }
+function noteRecentObj(o){ S.recentObj=(S.recentObj||[]).filter(x=>x!==o); S.recentObj.push(o); if(S.recentObj.length>12) S.recentObj.shift(); }
 function pick(pool,used){
   let cand=pool.filter(q=>!used.has(q.i));
   if(!cand.length) return null;
@@ -8869,18 +8870,20 @@ function pick(pool,used){
   }
   // occasional targeted resurfacing of a past miss, but much lighter than before
   const missed=cand.filter(q=>(S.qStat[q.i]&&S.qStat[q.i].m>0));
-  if(missed.length&&Math.random()<.18){ const m=missed[Math.floor(Math.random()*missed.length)]; noteRecent(m.i); return m; }
+  if(missed.length&&Math.random()<.18){ const m=missed[Math.floor(Math.random()*missed.length)]; noteRecent(m.i); noteRecentObj(m.o); return m; }
   const ws=cand.map(q=>{
     let w=domWeight(q.d);
     const recentSlice2=(S.recent||[]).slice(-Math.max(30,Math.floor(cand.length*0.6)));
     const pos=recentSlice2.indexOf(q.i);
     if(pos>=0) w*=0.12+0.02*pos;              // heavy penalty, easing as it ages out
+    const objHits=(S.recentObj||[]).filter(o=>o===q.o).length;
+    w/=(1+objHits*3);                          // spread objectives within a domain, not just individual questions
     w*=0.75+Math.random()*0.5;                 // jitter so ordering is never deterministic
     return w;
   });
   let r=Math.random()*ws.reduce((a,b)=>a+b,0);
-  for(let i=0;i<cand.length;i++){ r-=ws[i]; if(r<=0){ noteRecent(cand[i].i); return cand[i]; } }
-  const last=cand[cand.length-1]; noteRecent(last.i); return last;
+  for(let i=0;i<cand.length;i++){ r-=ws[i]; if(r<=0){ noteRecent(cand[i].i); noteRecentObj(cand[i].o); return cand[i]; } }
+  const last=cand[cand.length-1]; noteRecent(last.i); noteRecentObj(last.o); return last;
 }
 
 /* ================= scoring ================= */
@@ -11038,7 +11041,7 @@ function restoreIn(){
   askConfirm("Replace all progress in this browser with the pasted backup?",()=>{
     S=Object.assign(S,v);
     for(let d=1;d<=5;d++) if(!S.dom[d]) S.dom[d]={s:0,c:0};
-    S.customCards=S.customCards||[]; S.customAcr=S.customAcr||[]; S.recent=S.recent||[]; S.pbqStat=S.pbqStat||{}; S.contentReports=S.contentReports||[];
+    S.customCards=S.customCards||[]; S.customAcr=S.customAcr||[]; S.recent=S.recent||[]; S.recentObj=S.recentObj||[]; S.pbqStat=S.pbqStat||{}; S.contentReports=S.contentReports||[];
     save(); toast("Progress restored"); home();
   });
 }
