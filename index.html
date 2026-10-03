@@ -9129,12 +9129,26 @@ function shiftSetup(){
   $("app").innerHTML=`
   <p class="eyebrow">Mode 01</p><h1>Question Queue</h1>
   <p class="lede">Drawing from <b>${QUESTIONS.length}</b> questions, weighted to the real exam domain blueprint so what you see reflects the actual test's balance, not an even split. Tickets arrive that way, or locked to a single domain when you need to drill one down.</p>
+  ${(S.activeShift&&S.activeShift.i<S.activeShift.n&&S.activeShift.integrity>0&&qById(S.activeShift.qid))?`
+  <div class="card" style="margin-bottom:16px">
+    <p class="dim" style="font-size:12.5px;margin:0 0 10px">You left a shift mid-way \u2014 ticket <b>${S.activeShift.i}</b> of <b>${S.activeShift.n}</b>, integrity at <b>${S.activeShift.integrity}%</b>.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn ghost sm" style="color:var(--red);border-color:var(--red)" onclick="shiftDiscard()">Discard</button>
+      <button class="btn sm pri" onclick="shiftResume()">Resume shift</button>
+    </div>
+  </div>`:""}
   <h2>Focus</h2>
   <div class="seg">
     <button class="${sd===0?"on":""}" onclick="setShiftDom(0)">All domains</button>
     ${[1,2,3,4,5].map(d=>`<button class="${sd===d?"on":""}" onclick="setShiftDom(${d})">D${d}.0</button>`).join("")}
   </div>
   <p class="dim" style="font-size:12.5px;margin:8px 0 0">${sd?`Locked to Domain ${sd}.0 (${DNAME[sd]}) \u00b7 ${pool} questions in this pool \u00b7 misses from other domains will not appear`:`Blueprint weighting across all 5 domains \u00b7 ${pool} questions in the pool`} \u00b7 <b>${seen}</b> of ${pool} seen at least once \u2014 unseen questions always come first, nothing repeats until the pool runs dry</p>
+  <h2 style="margin-top:20px">Timer</h2>
+  <div class="seg">
+    <button class="${S.timerOff?"":"on"}" onclick="setTimerOff(false)">Adaptive</button>
+    <button class="${S.timerOff?"on":""}" onclick="setTimerOff(true)">Untimed</button>
+  </div>
+  <p class="dim" style="margin-top:12px;font-size:13px">${S.timerOff?"No clock. Answer at your own pace \u2014 useful for learning a domain before speed matters.":"Currently at "+limit()+" seconds per ticket. It tightens as your rolling accuracy climbs, and loosens if you drop below 60%."}</p>
   <h2 style="margin-top:20px">Shift length</h2>
   <div class="row">
     <button class="btn pri" onclick="shiftStart(15)">Short - 15 tickets</button>
@@ -9143,21 +9157,38 @@ function shiftSetup(){
     <button class="btn" onclick="shiftStart(75)">Long - 75 tickets</button>
     <button class="btn" onclick="shiftStart(100)">Full shift - 100 tickets</button>
   </div>
-  <h2 style="margin-top:20px">Timer</h2>
-  <div class="seg">
-    <button class="${S.timerOff?"":"on"}" onclick="setTimerOff(false)">Adaptive</button>
-    <button class="${S.timerOff?"on":""}" onclick="setTimerOff(true)">Untimed</button>
-  </div>
-  <p class="dim" style="margin-top:12px;font-size:13px">${S.timerOff?"No clock. Answer at your own pace \u2014 useful for learning a domain before speed matters.":"Currently at "+limit()+" seconds per ticket. It tightens as your rolling accuracy climbs, and loosens if you drop below 60%."}</p>
   <div class="row" style="margin-top:20px"><button class="btn ghost sm" onclick="home()">Back to home</button></div>`;
 }
 function setTimerOff(on){ S.timerOff=on; save(); shiftSetup(); }
 function shiftStart(n){
   AT_SECTION=false; view="shift";
+  S.activeShift=null; save();
   sess={mode:"shift",n:n,i:0,used:new Set(),correct:0,integrity:100,byDom:{},misses:[],dom:S.shiftDom||0,untimed:!!S.timerOff};
   startSess(); nextTicket();
 }
+function shiftResume(){
+  const a=S.activeShift;
+  if(!a){ return shiftSetup(); }
+  const q=qById(a.qid);
+  if(!q){ S.activeShift=null; save(); return shiftSetup(); }
+  AT_SECTION=false; view="shift";
+  sess={mode:"shift",n:a.n,i:a.i,used:new Set(a.used),correct:a.correct,integrity:a.integrity,
+    byDom:a.byDom,misses:a.misses.map(id=>qById(id)).filter(Boolean),dom:a.dom,untimed:!!a.untimed,
+    sev:a.sev,order:a.order,q:q};
+  startSess();
+  renderTicket(false);
+  if(!sess.untimed) runTimer(limit(),()=>answer(-1));
+}
+function shiftDiscard(){ S.activeShift=null; save(); shiftSetup(); }
 function sevFor(){ const r=Math.random(); return r<.22?"p1":(r<.6?"p2":"p3"); }
+function persistShift(){
+  if(sess&&sess.mode==="shift"&&!sess.customPool&&sess.q){
+    S.activeShift={n:sess.n,i:sess.i,used:[...sess.used],correct:sess.correct,integrity:sess.integrity,
+      byDom:sess.byDom,misses:sess.misses.map(q=>q.i),dom:sess.dom,untimed:!!sess.untimed,
+      sev:sess.sev,order:sess.order,qid:sess.q.i};
+    save();
+  }
+}
 function nextTicket(){
   checkBreak();
   if(sess.customPool){ if(sess.integrity<=0) return shiftReport(); }
@@ -9167,6 +9198,7 @@ function nextTicket(){
   if(!q&&sess.customPool){ sess.used=new Set(); q=pick(shiftPool,sess.used); }
   if(!q) return shiftReport();
   sess.used.add(q.i); sess.i++; sess.q=q; sess.sev=sevFor(); sess.order=shuffle([0,1,2,3]);
+  persistShift();
   renderTicket(false);
   if(!sess.customPool&&!sess.untimed) runTimer(limit(),()=>answer(-1));
 }
@@ -9199,6 +9231,7 @@ function answer(chosen){
   sess.byDom[q.d].s++; if(ok) sess.byDom[q.d].c++;
   if(ok){ sess.correct++; sess.integrity=Math.min(100,sess.integrity+2); }
   else{ sess.integrity=Math.max(0,sess.integrity-({p1:14,p2:9,p3:5}[sess.sev])); sess.misses.push(q); }
+  persistShift();
   renderTicket(true,chosen);
   $("fb").innerHTML=feedback(q,ok,chosen,pat)+
     `<div class="row"><button class="btn pri" id="nx" onclick="nextTicket()">${sess.i>=sess.n||sess.integrity<=0?"End shift":"Next ticket"}</button>
@@ -9217,6 +9250,7 @@ function feedback(q,ok,chosen,pat){
 function shiftReport(){
   stopTimer();
   const p=pct(sess.correct,sess.i);
+  if(!sess.customPool){ S.activeShift=null; }
   S.sessions.push({t:Date.now(),mode:"shift",n:sess.i,pct:p,byDom:sess.byDom}); save();
   const g=gateStatus();
   const bars=Object.keys(sess.byDom).sort().map(d=>{
