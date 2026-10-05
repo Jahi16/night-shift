@@ -322,6 +322,11 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 .hero h1{margin:0 0 8px;font-size:29px;line-height:1.15}
 .hero .sub{color:var(--txt);font-size:15.5px;line-height:1.62;margin:0 0 16px;max-width:none}
 .hero .sub b{color:var(--violet)}
+.hero .sub.sub-clip{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:8px;scrollbar-width:thin;scrollbar-color:var(--amber) var(--line)}
+.hero .sub.sub-clip .sub-rest{display:block}
+.hero .sub.sub-clip::-webkit-scrollbar{width:4px}
+.hero .sub.sub-clip::-webkit-scrollbar-track{background:var(--line);border-radius:2px}
+.hero .sub.sub-clip::-webkit-scrollbar-thumb{background:var(--amber);border-radius:2px}
 .tile.jump-flash{position:relative;animation:jumpFlash 1.7s ease-out}
 .tile.jump-flash::before{content:"";position:absolute;inset:-6px;border-radius:14px;
   border:2px solid var(--accent,var(--amber));opacity:0;pointer-events:none;animation:jumpPing 1.7s ease-out}
@@ -1208,7 +1213,7 @@ e:"Microwave sensors actively emit radio energy and detect disturbance in the re
 w:["Infrared depends on detecting heat signatures, degraded by obstructions and ambient temperature.","Pressure sensors detect weight on a surface, not motion through a space.","","Camera analytics need visibility, which dust and darkness defeat."]},
 {i:803,d:1,o:"1.4",t:"b",g:"blockchain",
 q:"A logistics consortium wants shipment records that every member can read and append to, where each new record cryptographically chains to the previous one and no single member can quietly alter history. Which technology fits?",
-c:["An open public ledger (blockchain)","A relational database with nightly backups","Full-disk encryption","A SIEM with write-once storage"],a:0,
+c:["A shared, tamper-evident ledger (blockchain)","A relational database with nightly backups","Full-disk encryption","A SIEM with write-once storage"],a:0,
 e:"A blockchain is a distributed ledger where each block hashes the previous block, making history tamper-evident and removing the need to trust any single member's copy.",
 w:["","A conventional database has an administrator who can alter records, exactly what the consortium wants to prevent.","FDE protects a disk at rest; it does nothing for shared multi-party integrity.","A SIEM (Security Information and Event Management) centralizes logs under one owner's control, the opposite of the trust model described."]},
 {i:804,d:1,o:"1.4",t:"s",g:"encryption-levels",
@@ -4734,7 +4739,7 @@ const ACR = [
 {a:"VPC",d:"Virtual Private Cloud",g:"cloud",u:"Logically isolated network section within a public cloud"},
 {a:"VPN",d:"Virtual Private Network",g:"net",u:"Encrypted tunnel carrying private traffic across an untrusted network"},
 {a:"WAF",d:"Web Application Firewall",g:"ops",u:"Inspects web request payloads to block SQL injection and cross-site scripting"},
-{a:"WAP",d:"Wireless Access Point",g:"wifi",u:"Older term for a wireless access point, also historically referring to the Wireless Application Protocol for mobile internet"},
+{a:"WAP",d:"Wireless Access Point",g:"wifi",u:"The hardware device that lets wireless clients join a wired network, broadcasting the SSID clients connect to"},
 {a:"WEP",d:"Wired Equivalent Privacy",g:"wifi",u:"Broken legacy wireless encryption, must never be used"},
 {a:"WIDS",d:"Wireless Intrusion Detection System",g:"wifi",u:"Wireless intrusion detection system, monitoring the airwaves for rogue APs and attack signatures"},
 {a:"WIPS",d:"Wireless Intrusion Prevention System",g:"wifi",u:"Detects and blocks rogue access points and wireless attacks"},
@@ -7214,8 +7219,8 @@ e:"Data masking replaces sensitive values with realistic but fictitious substitu
 w:["Encryption is designed to be reversible with the correct key, which is more capability than this one-way testing scenario actually requires.","Tokenization substitutes data with a reference token tied to a securely vaulted original, which implies a need to look up the original value later, unlike this scenario.","",  "Hashing produces a one-way fingerprint used for integrity verification, not a realistic-looking substitute dataset for application testing."]},
 {i:2229,d:3,o:"3.1",t:"s",g:"cloud-vs-onprem-tradeoff",
 q:"Kanon's finance team wants predictable fixed costs and full physical control over servers holding regulated data, choosing to keep everything in their own data center rather than moving to the cloud. What consideration is Kanon's team prioritizing?",
-c:["Ease of deployment","On-premises infrastructure","Serverless scalability","Multi-tenancy efficiency"],a:1,
-e:"On-premises infrastructure gives an organization full physical control over its hardware and more predictable, fixed costs compared to variable cloud billing, exactly matching what Kanon's finance team is prioritizing.",
+c:["Ease of deployment","Cost and control","Serverless scalability","Multi-tenancy efficiency"],a:1,
+e:"Keeping infrastructure on-premises gives an organization full physical control over its hardware and more predictable, fixed costs compared to variable cloud billing, exactly matching what Kanon's finance team is prioritizing.",
 w:["Ease of deployment typically favors cloud solutions, which are usually faster to provision than building out on-premises infrastructure.","",  "Serverless scalability is a cloud-native benefit that doesn't apply to a decision to keep everything on-premises.","Multi-tenancy efficiency describes shared cloud resource models, which is the opposite of the dedicated, controlled infrastructure Kanon's team chose."]},
 {i:2230,d:3,o:"3.3",t:"s",g:"backup-encryption-transit-rest",
 q:"Jesse's company encrypts its nightly database backups both while they sit on the backup server and again while they're transmitted to an offsite cloud storage location. Which two states of data is Jesse's company protecting, respectively?",
@@ -9053,7 +9058,7 @@ function home(){
   <div class="hero">
     ${S.name?`<p class="greet">${timeGreeting()}, ${esc(S.name)}</p>`:""}
     <h1 class="neon" style="font-family:var(--mono);letter-spacing:.03em;word-spacing:-0.2em;text-transform:uppercase">Night Shift</h1>
-    <p class="sub">A full <b>CompTIA Security+ (SY0-701)</b> trainer built around the official exam blueprint. Every question, flashcard, and PBQ (performance-based question) maps to one of the 28 exam objectives, weighted to match the real domain percentages, so your study time mirrors what's actually tested. Whatever concept you keep getting wrong shows up more often until you've actually cleared it. And it separates the exam date from exam readiness, tracking a real readiness gate based on your practice-exam performance, so you know when you're prepared, not just when the calendar says to show up.</p>
+    <p class="sub"><span class="sub-lead">A full <b>CompTIA Security+ (SY0-701)</b> trainer built around the official exam blueprint. Every question, flashcard, and PBQ (performance-based question) maps to one of the 28 exam objectives, weighted to match the real domain percentages, so your study time mirrors what's actually tested.</span> <span class="sub-rest">Whatever concept you keep getting wrong shows up more often until you've actually cleared it. And it separates the exam date from exam readiness, tracking a real readiness gate based on your practice-exam performance, so you know when you're prepared, not just when the calendar says to show up.</span></p>
   </div>
   <details class="hiw" id="hiw">
     <summary>How this works &nbsp;\u00b7&nbsp; read this first</summary>
@@ -9081,7 +9086,7 @@ function home(){
         <p class="why">This is the real decision point for booking the exam, not the calendar date. A date means CompTIA is ready for you. The gate means you're ready for CompTIA.</p>
       </div>
       <h4>Your data stays on this device</h4>
-      <p>Your name, answers, progress, and any custom content you add are stored only in this browser's local storage. Nothing is sent to a server, and nothing is shared.</p>
+      <p>Your name, answers, progress, and any custom content you add are stored in this browser on this device. Night Shift has no accounts and no server of its own, and nothing is shared.</p>
       <p class="dim" style="font-size:12px">Night Shift is an independent, unofficial study tool and is not affiliated with, endorsed by, or sponsored by CompTIA.</p>
       <div class="closebar"><button onclick="closeHiw()">Close &nbsp;&#8963;</button></div>
     </div>
@@ -9130,9 +9135,26 @@ function home(){
     <button class="btn ghost sm" onclick="coachBrief()">Export coaching brief for AI</button>
     <button class="btn ghost sm" onclick="profile(false)">Settings</button>
   </div>`;
+  fitHeroSub(true);
   if(PENDING_JUMP){ const t=PENDING_JUMP; PENDING_JUMP=null; heroJump([t],true); }
   else if(window.scrollTo) window.scrollTo(0,0);
 }
+/* On phones, show only the first two sentences of the hero description; the rest scrolls inside the box */
+let HERO_W=0;
+function fitHeroSub(force){
+  const sub=document.querySelector(".hero .sub"), rest=sub&&sub.querySelector(".sub-rest");
+  if(!sub||!rest) return;
+  const w=window.innerWidth;
+  if(!force&&w===HERO_W) return;
+  HERO_W=w;
+  if(window.matchMedia("(max-width:620px)").matches){
+    sub.classList.add("sub-clip"); sub.style.maxHeight="none"; sub.scrollTop=0;
+    const h=rest.getBoundingClientRect().top-sub.getBoundingClientRect().top;
+    if(h>0) sub.style.maxHeight=Math.ceil(h)+"px";
+  } else { sub.classList.remove("sub-clip"); sub.style.maxHeight=""; }
+}
+window.addEventListener("resize",()=>fitHeroSub());
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fitHeroSub(true));
 
 /* ================= QUESTION QUEUE ================= */
 function setShiftDom(d){ S.shiftDom=d; save(); shiftSetup(); }
@@ -10828,10 +10850,11 @@ function profile(first){
   ${first?`<div style="text-align:left;padding:28px 0 4px">
     <h1 style="margin:0;font-size:26px;font-weight:600;line-height:1.15">Welcome to<br><span class="neon" style="font-family:var(--mono);text-transform:uppercase;font-size:1.5em;word-spacing:-0.2em">Night Shift</span></h1>
     <p class="dim" style="margin:2px 0 0;font-size:14.5px">A CompTIA Security+ Study Companion</p>
+    <p class="dim" style="margin:6px 0 0;font-size:12px">Independent study tool. Not affiliated with, endorsed by, or sponsored by CompTIA.</p>
     <span class="betatag" style="font-size:12px;display:inline-block;margin-top:10px">BETA</span>
   </div>`:""}
   ${first?"":`<p class="eyebrow">Settings</p>`}
-  <h1 style="${first?"font-size:19px;margin-top:14px":""}">${first?"Sign in":"Settings"}</h1>
+  <h1 style="${first?"font-size:19px;margin-top:14px":""}">${first?"Get started":"Settings"}</h1>
   <p class="lede" style="${first?"color:var(--txt)":""}">${first?"Name and target exam date, then start your shift. Everything saves in this browser on this device.":"Update your name or exam date."}</p>
   <div class="card">
     <label style="display:block;margin-bottom:16px"><div class="zlab-lg">Your name (optional)</div>
