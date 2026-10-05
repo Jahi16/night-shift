@@ -132,13 +132,21 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 .gcell .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:6px;font-weight:600}
 .gcell .v{font-size:19px;font-weight:600;font-family:var(--mono)}
 .gcell .s{font-size:14px;color:var(--dim);margin-top:2px;line-height:1.4}
+.gcell .ks,.gcell .ss{display:none}
 @media(max-width:620px){
-  .gate{margin-bottom:12px}
-  .gcell{padding:10px 12px}
-  .gcell .k{margin-bottom:3px;font-size:9.5px}
-  .gcell .v{font-size:16px}
-  .gcell.key .v{font-size:18px}
-  .gcell .s{margin-top:2px;font-size:14px;line-height:1.4}
+  .gate{margin-bottom:12px;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .gcell{padding:8px 10px}
+  .gcell .k{margin-bottom:2px;font-size:9.5px;letter-spacing:.08em;white-space:nowrap}
+  .gcell .v{font-size:16px;line-height:1.2}
+  .gcell.key .v{font-size:16px}
+  .gcell .s{margin-top:1px;font-size:12px;line-height:1.25;white-space:nowrap}
+  .gcell .kf,.gcell .sf{display:none}
+  .gcell .ks,.gcell .ss{display:inline}
+}
+@media(max-width:340px){
+  .gcell{padding:8px 8px}
+  .gcell .v,.gcell.key .v{font-size:14px}
+  .gcell .s{font-size:11px}
 }
 
 /* ---- ticket / question ---- */
@@ -8921,7 +8929,7 @@ function gateStatus(){
   const qualExams=S.sessions.filter(x=>x.mode==="exam"&&x.pct>=85&&domOk(x)&&x.t>=cutoff);
   const met=Math.min(2,qualExams.length);
   const pass=met===2;
-  return {pass:pass,label:met+" of 2 practice exams met"};
+  return {pass:pass,met:met,label:met+" of 2 practice exams met"};
 }
 
 /* ================= status strip ================= */
@@ -9092,14 +9100,14 @@ function home(){
     </div>
   </details>
   <div class="gate">
-    <div class="gcell"><div class="k">Exam countdown</div><div class="v">${dOpen===null?"--":(dOpen>0?dOpen+"d":dOpen===0?"today":"passed")}</div><div class="s">${e?e.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}):"Set a date in settings"}</div></div>
-    <div class="gcell"><div class="k">Lifetime accuracy</div><div class="v">${pct(corr,total)}%</div><div class="s">${corr} of ${total} items</div></div>
+    <div class="gcell"><div class="k"><span class="kf">Exam countdown</span><span class="ks">Countdown</span></div><div class="v">${dOpen===null?"--":(dOpen>0?dOpen+"d":dOpen===0?"today":"passed")}</div><div class="s">${e?e.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}):'<span class="sf">Set a date in settings</span><span class="ss">Set a date</span>'}</div></div>
+    <div class="gcell"><div class="k"><span class="kf">Lifetime accuracy</span><span class="ks">Accuracy</span></div><div class="v">${pct(corr,total)}%</div><div class="s"><span class="sf">${corr} of ${total} items</span><span class="ss">${corr}/${total}</span></div></div>
     <div class="gcell key" style="--gatecolor:${g.pass?"var(--green)":"var(--red)"};background:${g.pass?"linear-gradient(160deg,rgba(62,208,122,.12),rgba(62,208,122,.02))":"linear-gradient(160deg,rgba(224,87,74,.10),rgba(224,87,74,.02))"}">
-      <div class="k" style="color:${g.pass?"var(--green)":"var(--red)"}">Readiness gate</div>
+      <div class="k" style="color:${g.pass?"var(--green)":"var(--red)"}"><span class="kf">Readiness gate</span><span class="ks">Readiness</span></div>
       <div class="v" style="color:${g.pass?"var(--green)":"var(--red)"};display:flex;align-items:center;gap:6px;margin-left:-2px">
         <span aria-hidden="true" style="font-size:0.8em;line-height:1">${g.pass?"\ud83d\udd13":"\ud83d\udd12"}</span><span style="font-weight:700">${g.pass?"OPEN":"CLOSED"}</span>
       </div>
-      <div class="s" style="line-height:1.25">${esc(g.label)}</div></div>
+      <div class="s" style="line-height:1.25"><span class="sf">${esc(g.label)}</span><span class="ss">${g.met}/2 exams met</span></div></div>
   </div>
 
   <div class="tiles">
