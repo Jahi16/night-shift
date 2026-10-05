@@ -164,6 +164,9 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 .opt:hover:not(:disabled){border-color:var(--faint)}
 .opt:disabled{cursor:default}
 .opt .key{font-family:var(--mono);font-size:12px;color:var(--dim);flex:0 0 auto;margin-top:2px;width:14px}
+.qtext .acrx{color:var(--dim);font-size:.88em}
+.opt .acrch{display:flex;flex-direction:column;gap:2px;min-width:0}
+.opt .acrfull{font-family:var(--sans);font-size:12.5px;line-height:1.3;color:var(--dim);overflow-wrap:anywhere}
 .opt.correct{border-color:var(--green);background:rgba(62,208,122,.09)}
 .opt.correct .key{color:var(--green)}
 .opt.wrong{border-color:var(--red);background:rgba(224,87,74,.09)}
@@ -4453,7 +4456,7 @@ const ACR = [
 {a:"AI",d:"Artificial Intelligence",g:"misc",u:"Broad field of computing systems performing tasks that normally require human judgment, increasingly used in both attack tooling and defensive analytics"},
 {a:"AIS",d:"Automated Indicator Sharing",g:"threat",u:"Machine-speed exchange of threat indicators between organizations"},
 {a:"ALE",d:"Annualized Loss Expectancy",g:"risk",u:"Expected yearly financial loss from a risk, equal to SLE times ARO"},
-{a:"AP",d:"Access Point",g:"wifi",u:"Wireless access point providing the physical entry to a WLAN, a common target for evil-twin and rogue-AP attacks"},
+{a:"AP",d:"Access Point",g:"wifi",u:"Radio device that gives wireless clients their physical entry onto a WLAN, a common target for evil-twin and rogue-device attacks"},
 {a:"API",d:"Application Programming Interface",g:"misc",u:"Interface letting applications exchange data programmatically, a frequent attack surface when authentication or rate limiting is weak"},
 {a:"APT",d:"Advanced Persistent Threat",g:"threat",u:"A well-resourced actor maintaining long-term stealthy access, usually nation-state"},
 {a:"ARO",d:"Annualized Rate of Occurrence",g:"risk",u:"How many times per year a loss event is expected to happen"},
@@ -4468,7 +4471,7 @@ const ACR = [
 {a:"BIA",d:"Business Impact Analysis",g:"risk",u:"Identifies critical processes and produces RTO, RPO, MTTR, and MTBF"},
 {a:"BIOS",d:"Basic Input/Output System",g:"hw",u:"Legacy firmware that initializes hardware at boot, largely superseded by UEFI but still found on older systems"},
 {a:"BPA",d:"Business Partners Agreement",g:"gov",u:"Contract setting terms between two partnering businesses"},
-{a:"BPDU",d:"Bridge Protocol Data Unit",g:"net",u:"Switch-to-switch message used by Spanning Tree Protocol, which a BPDU guard is specifically deployed to block from unauthorized ports"},
+{a:"BPDU",d:"Bridge Protocol Data Unit",g:"net",u:"Switch-to-switch message used by Spanning Tree Protocol, which a guard feature is specifically deployed to block from unauthorized ports"},
 {a:"BYOD",d:"Bring Your Own Device",g:"ops",u:"Employees use personally owned devices for work, least organizational control"},
 {a:"CA",d:"Certificate Authority",g:"crypto",u:"Trusted entity that issues and signs digital certificates"},
 {a:"CAPTCHA",d:"Completely Automated Public Turing Test to Tell Computers and Humans Apart",g:"auth",u:"Challenge designed to be easy for a human and hard for a bot, commonly used to block automated credential stuffing"},
@@ -4508,7 +4511,7 @@ const ACR = [
 {a:"DHCP",d:"Dynamic Host Configuration Protocol",g:"proto",u:"Automatically assigns IP addressing to clients, using UDP port 67 for the server and UDP port 68 for the client"},
 {a:"DHE",d:"Diffie-Hellman Ephemeral",g:"crypto",u:"Key exchange generating a fresh key per session for forward secrecy"},
 {a:"DKIM",d:"DomainKeys Identified Mail",g:"mail",u:"Cryptographically signs outbound mail so tampering is detectable"},
-{a:"DLL",d:"Dynamic Link Library",g:"misc",u:"Windows shared-code library, a common vector for DLL injection and DLL hijacking attacks"},
+{a:"DLL",d:"Dynamic Link Library",g:"misc",u:"Windows shared-code library, a common vector for injection and search-order hijacking attacks"},
 {a:"DLP",d:"Data Loss Prevention",g:"ops",u:"Inspects content and blocks sensitive data from leaving through unapproved channels"},
 {a:"DMARC",d:"Domain Message Authentication Reporting and Conformance",g:"mail",u:"Sets the policy for what to do when SPF or DKIM fails, and requests reports"},
 {a:"DNAT",d:"Destination Network Address Translation",g:"net",u:"Rewrites a packet's destination address, commonly used to expose an internal server through a single public IP"},
@@ -4576,7 +4579,7 @@ const ACR = [
 {a:"IR",d:"Incident Response",g:"ops",u:"The structured, phased process of detecting, containing, and recovering from a security incident"},
 {a:"IRC",d:"Internet Relay Chat",g:"misc",u:"Older real-time chat protocol historically abused as a command-and-control channel for botnets"},
 {a:"IRP",d:"Incident Response Plan",g:"ops",u:"Documented plan defining roles, procedures, and communication paths to follow during a security incident"},
-{a:"ISO",d:"International Standards Organization",g:"gov",u:"International body that publishes widely referenced standards, including ISO 27001 for information security management"},
+{a:"ISO",d:"International Standards Organization",g:"gov",u:"International body that publishes widely referenced standards, including the 27001 standard for information security management"},
 {a:"ISP",d:"Internet Service Provider",g:"net",u:"Company providing an organization's connection to the internet"},
 {a:"ISSO",d:"Information Systems Security Officer",g:"gov",u:"Role accountable for the security posture of one specific information system, narrower in scope than a CISO"},
 {a:"IV",d:"Initialization Vector",g:"crypto",u:"Random value ensuring identical plaintext does not produce identical ciphertext"},
@@ -4686,12 +4689,12 @@ const ACR = [
 {a:"SDLC",d:"Software Development Lifecycle",g:"gov",u:"Structured process for planning, building, testing, and deploying software, where security should be integrated at every stage"},
 {a:"SDN",d:"Software-defined Networking",g:"net",u:"Separates the control plane from the data plane for programmable networks"},
 {a:"SED",d:"Self-encrypting Drives",g:"crypto",u:"Storage device performing encryption in hardware"},
-{a:"SEH",d:"Structured Exception Handler",g:"misc",u:"Windows mechanism for catching runtime errors, historically abused in SEH-overwrite exploitation techniques"},
+{a:"SEH",d:"Structured Exception Handler",g:"misc",u:"Windows mechanism for catching runtime errors, historically abused in handler-overwrite exploitation techniques"},
 {a:"SE Linux",d:"Security-enhanced Linux",g:"ops",u:"Kernel module enforcing mandatory access control on Linux"},
 {a:"SFTP",d:"Secured File Transfer Protocol",g:"proto",u:"File transfer tunneled over SSH on TCP port 22"},
 {a:"SHA",d:"Secure Hashing Algorithm",g:"crypto",u:"Standard family of hash functions used for integrity"},
 {a:"SIEM",d:"Security Information and Event Management",g:"ops",u:"Aggregates and correlates log data from many sources into alerts"},
-{a:"SIM",d:"Subscriber Identity Module",g:"hw",u:"Card storing a mobile subscriber's identity, the target of SIM-swapping attacks used to hijack SMS-based MFA"},
+{a:"SIM",d:"Subscriber Identity Module",g:"hw",u:"Card storing a mobile subscriber's identity, the target of swapping attacks used to hijack SMS-based MFA"},
 {a:"SLA",d:"Service-level Agreement",g:"gov",u:"Defines measurable performance commitments such as uptime"},
 {a:"SLE",d:"Single Loss Expectancy",g:"risk",u:"Expected loss from one occurrence, asset value times exposure factor"},
 {a:"SMB",d:"Server Message Block",g:"proto",u:"File and printer sharing protocol on TCP port 445"},
@@ -4706,7 +4709,7 @@ const ACR = [
 {a:"SOW",d:"Statement of Work",g:"gov",u:"Defines the specific deliverables and scope of an engagement"},
 {a:"SPF",d:"Sender Policy Framework",g:"mail",u:"DNS record listing which servers may send mail for a domain"},
 {a:"SPIM",d:"Spam over Internet Messaging",g:"threat",u:"Unsolicited spam delivered over instant messaging platforms rather than email"},
-{a:"SQL",d:"Structured Query Language",g:"misc",u:"Language for querying and managing relational databases, the target of SQL injection attacks"},
+{a:"SQL",d:"Structured Query Language",g:"misc",u:"Language for querying and managing relational databases, the target of classic database injection attacks"},
 {a:"SQLi",d:"SQL Injection",g:"threat",u:"Injecting database commands through unsanitized application input"},
 {a:"SRTP",d:"Secure Real-Time Protocol",g:"proto",u:"Secure version of RTP, adding encryption and authentication to real-time voice and video traffic"},
 {a:"SSD",d:"Solid State Drive",g:"hw",u:"Flash-based storage drive, requiring cryptographic erase rather than traditional degaussing for secure disposal"},
@@ -4742,7 +4745,7 @@ const ACR = [
 {a:"VBA",d:"Visual Basic",g:"misc",u:"Scripting language embedded in Microsoft Office documents, heavily abused to deliver macro-based malware"},
 {a:"VDI",d:"Virtual Desktop Infrastructure",g:"cloud",u:"Centrally hosted desktops streamed to thin clients"},
 {a:"VLAN",d:"Virtual Local Area Network",g:"net",u:"Logically segments one physical network into isolated broadcast domains"},
-{a:"VM",d:"Virtual Machine",g:"cloud",u:"Software-emulated computer running on shared physical hardware, isolated from other VMs by the hypervisor"},
+{a:"VM",d:"Virtual Machine",g:"cloud",u:"Software-emulated computer running on shared physical hardware, kept isolated from its neighbors by the hypervisor"},
 {a:"VoIP",d:"Voice over IP",g:"net",u:"Voice communication carried over an IP network instead of traditional telephone lines"},
 {a:"VPC",d:"Virtual Private Cloud",g:"cloud",u:"Logically isolated network section within a public cloud"},
 {a:"VPN",d:"Virtual Private Network",g:"net",u:"Encrypted tunnel carrying private traffic across an untrusted network"},
@@ -4754,7 +4757,7 @@ const ACR = [
 {a:"WPA",d:"Wi-Fi Protected Access",g:"wifi",u:"Wireless security standard family that replaced WEP, initially with the still-flawed TKIP"},
 {a:"WPS",d:"Wi-Fi Protected Setup",g:"wifi",u:"Convenience feature with a brute-forceable PIN, should be disabled"},
 {a:"XDR",d:"Extended Detection and Response",g:"ops",u:"Correlates detection across endpoint, network, email, and cloud"},
-{a:"XML",d:"Extensible Markup Language",g:"misc",u:"Structured markup language for encoding data, the target of XML external entity (XXE) injection attacks"},
+{a:"XML",d:"Extensible Markup Language",g:"misc",u:"Structured markup language for encoding data, the target of external entity (XXE) injection attacks"},
 {a:"XOR",d:"Exclusive Or",g:"crypto",u:"Bitwise operation used as a basic building block in many encryption algorithms and simple obfuscation"},
 {a:"XSRF",d:"Cross-site Request Forgery",g:"threat",u:"Alternate abbreviation for cross-site request forgery, identical to CSRF"},
 {a:"XSS",d:"Cross-site Scripting",g:"threat",u:"Injecting script that executes in another user's browser session"},
@@ -9557,16 +9560,18 @@ function jcCardStart(){
 /* ================= ACRONYM RECALL ================= */
 function srsAcrOf(a){ const s=S.acrStat[a]; const base={s:0,m:0,ease:2.3,iv:0,due:0,reps:0}; return s?Object.assign({},base,s):base; }
 function acrDueCount(){ const now=Date.now(); return acrU().filter(a=>srsAcrOf(a.a).due<=now).length; }
-function acrSrsUpdate(a,ok){
+function acrSrsUpdate(a,ok,easy){
   const st=srsAcrOf(a), D=86400000;
   st.s++; if(!ok) st.m++;
   if(!ok){ st.ease=Math.max(1.3,st.ease-.2); st.iv=0; st.due=Date.now(); }
+  else if(easy){ st.iv=Math.max(1,st.iv||1); st.due=Date.now()+st.iv*D; }
   else { st.ease=Math.min(3.2,st.ease+.05); st.iv=st.iv?st.iv*st.ease:1; st.due=Date.now()+st.iv*D; }
   st.reps=(st.reps||0)+1;
   S.acrStat[a]=st;
 }
 let ACR_LEN=25;
 function acrSetLen(n){ ACR_LEN=n; acrSetup(); }
+function setAcrEasy(on){ S.acrEasy=!!on; save(); acrSetup(); }
 function acrSetup(){
   SECTION=acrSetup; AT_SECTION=true; ENTRY_TILE="t-acr";
   view="setup"; strip("acronym recall / setup",0); stopTimer();
@@ -9586,12 +9591,18 @@ function acrSetup(){
   <div class="row">
     ${[15,25,45,90].map(n=>`<button class="btn ${ACR_LEN===n?"pri":""}" onclick="acrSetLen(${n})">${n} items</button>`).join("")}
   </div>
-  <div class="row" style="margin-top:8px">
+  <p class="eyebrow" style="margin-top:16px">Answer choices</p>
+  <div class="seg" style="margin-bottom:8px">
+    <button class="${S.acrEasy?"":"on"}" onclick="setAcrEasy(false)">Hard</button>
+    <button class="${S.acrEasy?"on":""}" onclick="setAcrEasy(true)">Easy</button>
+  </div>
+  <p class="dim" style="font-size:12.5px;margin:0">${S.acrEasy?"Each choice shows the acronym with its full name beneath it, and any acronym inside the question gets its full name in parentheses. Easy hits keep an acronym in rotation at its current interval; only Hard hits push it further out.":"Each choice is a bare acronym, so you have to recall what it stands for."}</p>
+  <div class="row" style="margin-top:16px">
     <button class="btn pri" onclick="acrStart('fun',false,ACR_LEN,0)">Start (${ACR_LEN} items)</button>
   </div>
   <div class="tiles" style="margin-top:14px">
     <button class="tile" style="--accent:var(--red)" onclick="acrStart('fun',false,ACR_LEN,0)"><span class="tag">Drill</span>
-      <h3>What does it do</h3><p>You get a plain-language description of a function. Every answer choice is a bare acronym with no context.</p></button>
+      <h3>What does it do</h3><p>You get a plain-language description of a function and pick the acronym it describes.</p></button>
     <button class="tile" style="--accent:var(--violet)" onclick="acrRef()"><span class="tag">Reference</span>
       <h3>Full acronym list</h3><p>Every acronym with its expansion and what it actually does. Searchable and filterable by family.</p></button>
   </div>
@@ -9702,7 +9713,7 @@ function glossRender(){
     </div>`).join(""):`<p class="dim" style="padding:16px;margin:0">Nothing matches that search.</p>`}
   </div>`;
 }
-function acrStart(kind,dueOnly,len,domain){ AT_SECTION=false; view="acr"; sess={mode:"acr",kind:"fun",i:0,correct:0,used:new Set(),misses:[],dueOnly:!!dueOnly,n:len||20,domain:domain||0}; startSess(); nextAcr(); }
+function acrStart(kind,dueOnly,len,domain){ AT_SECTION=false; view="acr"; sess={mode:"acr",kind:"fun",i:0,correct:0,used:new Set(),misses:[],dueOnly:!!dueOnly,n:len||20,domain:domain||0,easy:!!S.acrEasy}; startSess(); nextAcr(); }
 function nextAcr(){
   checkBreak();
   if(sess.i>=sess.n) return acrReport();
@@ -9727,6 +9738,36 @@ function nextAcr(){
   renderAcr(false);
   runTimer(kind==="fun"?limit():Math.round(limit()*.6),()=>aAnswer(-1));
 }
+/* Easy mode: put each known acronym's full name in parentheses right next to it inside the question text */
+let ACR_X=null;
+const ACR_CTX={ARP:{MAC:"Media Access Control"}};   /* multi-meaning acronyms resolved by context */
+function acrExpandBuild(){
+  const list=allAcr();
+  if(ACR_X&&ACR_X.n===list.length) return ACR_X;
+  const map={}; list.forEach(x=>{ map[x.a]=x.d; });
+  const keys=Object.keys(map).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
+  ACR_X={n:list.length,map:map,rx:new RegExp("(^|[^A-Za-z0-9])("+keys.join("|")+")(s|'s)?(?![A-Za-z0-9]|-\\d)","g")};
+  return ACR_X;
+}
+function acrPlural(full){
+  if(/\band\b|&/.test(full)) return full;
+  const parts=full.split(/(\s+(?:of|for|over|to)\s+)/);
+  parts[0]=parts[0].replace(/([A-Za-z]+)$/,w=>/s$/i.test(w)?w:(/[^aeiou]y$/i.test(w)?w.slice(0,-1)+"ies":(/(x|z|ch|sh)$/i.test(w)?w+"es":w+"s")));
+  return parts.join("");
+}
+function acrExpand(text,target){
+  const X=acrExpandBuild(), ctx=ACR_CTX[target]||{};
+  let out="", last=0, m; X.rx.lastIndex=0;
+  while((m=X.rx.exec(text))){
+    const key=m[2], start=m.index+m[1].length, end=start+key.length+(m[3]?m[3].length:0);
+    if(key===target) continue;
+    if(m[1]==="("&&text.charAt(start+key.length)===")") continue;
+    const full0=ctx[key]||X.map[key], full=(m[3]==="s")?acrPlural(full0):full0;
+    out+=esc(text.slice(last,end))+' <span class="acrx">('+esc(full)+')</span>';
+    last=end;
+  }
+  return out+esc(text.slice(last));
+}
 function renderAcr(done,chosen){
   if(!done&&window.scrollTo) window.scrollTo(0,0);
   const A=sess.acr, k=A.kind;
@@ -9737,29 +9778,33 @@ function renderAcr(done,chosen){
     let cls="opt";
     if(done){ if(pos===A.ans) cls+=" correct"; else if(pos===chosen) cls+=" wrong"; else cls+=" faded"; }
     const text = k==="exp" ? o.d : o.a;
+    const inner = (sess.easy&&k!=="exp")
+      ? `<span class="acrch"><span class="mono">${esc(o.a)}</span><span class="acrfull">${esc(o.d)}</span></span>`
+      : `<span${k!=="exp"?' class="mono"':''}>${esc(text)}</span>`;
     return `<button class="${cls}" ${done?"disabled":""} onclick="aAnswer(${pos})">
-      <span class="key">${String.fromCharCode(65+pos)}</span><span${k!=="exp"?' class="mono"':''}>${esc(text)}</span></button>`;
+      <span class="key">${String.fromCharCode(65+pos)}</span>${inner}</button>`;
   }).join("");
   $("app").innerHTML=`
   <div class="ticket">
-    <div class="thead"><span style="color:var(--violet)">${label}</span><span>${A.target.g.toUpperCase()} family</span>${reportBtn("acronym",A.target.a)}</div>
-    <div class="tbody"><p class="qtext" ${k==="exp"?'style="font-family:var(--mono);font-size:30px;letter-spacing:.02em"':''}>${esc(prompt)}</p></div>
+    <div class="thead"><span style="color:var(--violet)">${label}</span><span>${A.target.g.toUpperCase()} family${sess.easy?" \u00b7 easy":""}</span>${reportBtn("acronym",A.target.a)}</div>
+    <div class="tbody"><p class="qtext" ${k==="exp"?'style="font-family:var(--mono);font-size:30px;letter-spacing:.02em"':''}>${(sess.easy&&k!=="exp"&&k!=="rev")?acrExpand(prompt,A.target.a):esc(prompt)}</p></div>
     <div class="opts">${opts}</div></div>
   <div id="fb"></div>`;
 }
 function aAnswer(chosen){
   stopTimer();
   const A=sess.acr, ok=chosen===A.ans, t=A.target;
-  acrSrsUpdate(t.a,ok); if(!ok) sess.misses.push(t);
+  acrSrsUpdate(t.a,ok,sess.easy); if(!ok) sess.misses.push(t);
   if(ok) sess.correct++;
-  adapt(ok); save();
+  if(!sess.easy) adapt(ok);
+  save();
   renderAcr(true,chosen);
   const others=A.all.filter((o,i)=>i!==A.ans).map(o=>`<li><b>${esc(o.a)}</b> is ${esc(o.d)}.${o.u?" "+esc(o.u)+".":""}</li>`).join("");
   $("fb").innerHTML=`
   <div class="fb ${ok?"ok":"no"}"><div class="verdict">${ok?"Hit":(chosen<0?"Timed out":"Miss")}</div>
     <p><b class="mono">${esc(t.a)}</b> &mdash; ${esc(t.d)}</p>${t.u?`<p>${esc(t.u)}.</p>`:""}
     <div class="traps"><div class="th">The near neighbours</div><ul>${others}</ul></div></div>
-  <div class="row"><button class="btn pri" id="nx" onclick="nextAcr()">${sess.i>=20?"See results":"Next"}</button>
+  <div class="row"><button class="btn pri" id="nx" onclick="nextAcr()">${sess.i>=sess.n?"See results":"Next"}</button>
    <button class="btn ghost" onclick="acrReport()">Stop</button></div>`;
   $("nx").focus();
 }
