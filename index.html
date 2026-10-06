@@ -758,8 +758,8 @@ e:"The baseline is the documented secure configuration, deployment applies it co
 w:["","Scanning finds vulnerabilities but does not define or enforce a configuration standard.","HIPS (Host-based Intrusion Prevention System) blocks malicious behavior. It has no opinion about configuration drift.","Install approval is one hardening control that would live inside a baseline, not the overall practice."]},
 
 {i:402,d:4,o:"4.1",t:"a",g:"wireless-security",
-q:"An enterprise deploys wireless authentication where each user authenticates with their own directory credentials against a central AAA server, with no shared passphrase. Which combination is in use?",
-c:["WPA3-Personal with SAE","WPA2-Personal with PSK","WPA3-Enterprise with 802.1X and RADIUS","WEP"],a:2,
+q:"An organization deploys wireless authentication where each user authenticates with their own directory credentials against a central AAA server, with no shared passphrase. Which combination is in use?",
+c:["WPA3-Personal with SAE","WPA2-Personal with PSK","WPA3-Enterprise with 802.1X","WEP"],a:2,
 e:"Enterprise wireless uses 802.1X for port-based authentication and RADIUS as the AAA server, so each user has individual credentials rather than one shared passphrase.",
 w:["SAE (Simultaneous Authentication of Equals) strengthens the Personal tier, but Personal by definition still uses one shared passphrase for every user, which the question rules out.","PSK is the single-passphrase model the question explicitly describes as absent here.","","WEP (Wired Equivalent Privacy) is both obsolete and still shared-key based, so it fails on two counts."]},
 
@@ -976,9 +976,9 @@ w:["Fines are the definitional financial penalty.","","Contractual penalties are
 
 {i:514,d:5,o:"5.4",t:"m",g:"privacy",
 q:"A customer requests that a company delete all personal data it holds about them. Which privacy concept does this request invoke?",
-c:["Data minimization","Right to be forgotten","Data sovereignty","Purpose limitation"],a:1,
+c:["Data minimization","Right to be forgotten","Data sovereignty","Right to access"],a:1,
 e:"The right to be forgotten, or right to erasure, lets a data subject require deletion of their personal data when there is no overriding lawful basis to retain it.",
-w:["Data minimization is the principle of collecting only what is necessary. It governs collection, not deletion on request.","","Data sovereignty concerns which country's laws apply based on where data physically resides.","Purpose limitation restricts using data beyond the purpose it was collected for. Related, but not a deletion right."]}
+w:["Data minimization is the principle of collecting only what is necessary. It governs collection, not deletion on request.","","Data sovereignty concerns which country's laws apply based on where data physically resides.","The right to access lets a person obtain a copy of the data held about them. Related, but it does not compel deletion."]}
 ];
 
 const Q3 = [
@@ -1219,7 +1219,7 @@ w:["Development is building the program content itself.","","Execution is delive
 const Q5 = [
 {i:801,d:1,o:"1.2",t:"b",g:"authenticating-systems",
 q:"A network requires every device to present a valid machine certificate before its switch port will pass traffic, regardless of which user is logged in. Which concept does this demonstrate?",
-c:["User provisioning","Authenticating systems with 802.1X device certificates","Federation","Password vaulting"],a:1,
+c:["User provisioning","Authenticating systems","Federation","Password vaulting"],a:1,
 e:"Authenticating systems, not just people, means the device itself proves identity, typically with a certificate presented through 802.1X before the port opens.",
 w:["Provisioning is about creating user accounts; no user identity is what's being checked at this port gate.","","Federation extends user identity across organizational boundaries, not device identity within one network.","Vaulting stores privileged human credentials for checkout, unrelated to a device certificate at a switch port."]},
 {i:802,d:1,o:"1.2",t:"m",g:"physical-sensors",
@@ -1713,7 +1713,7 @@ e:"Diffie-Hellman lets both parties compute the same secret from exchanged publi
 w:["Encrypting a key with itself is circular; the recipient cannot decrypt it.","An emailed attachment transmits the secret through the monitored channel, protected only by a password that must also travel somehow.","","A shared drive still transmits and stores the secret where an observer could reach it."]},
 {i:1107,d:2,o:"2.3",t:"s",g:"race-conditions",
 q:"An installer checks that a target file is safe, then a moment later writes to it with elevated privileges. An attacker swaps the file for a link to a system file in the gap between the check and the write. Which vulnerability is exploited?",
-c:["Buffer overflow","Time-of-check to time-of-use race condition","Memory injection","Cross-site scripting"],a:1,
+c:["Buffer overflow","TOC/TOU race condition","Memory injection","Cross-site scripting"],a:1,
 e:"The attack succeeds because the resource changed between validation (time-of-check) and action (time-of-use), the defining TOC/TOU race condition.",
 w:["No memory boundary is overrun here; the file simply changed identity between two steps.","","Memory injection inserts code into a process's memory space, a different mechanism from swapping a file reference.","XSS runs script in a victim's browser and has nothing to do with a swapped file on disk."]},
 {i:1108,d:2,o:"2.4",t:"s",g:"crypto-attacks",
@@ -1911,7 +1911,7 @@ e:"SDN centralizes the control plane in a controller that programs all forwardin
 w:["","Air gaps isolate; they do not centralize control.","Thick clients describe where application processing occurs.","Peer-to-peer removes central control, the opposite direction."]},
 {i:1210,d:3,o:"3.1",t:"s",g:"iac",
 q:"A production outage is traced to an engineer's manual console change that no one documented. The team wants any manual drift automatically detected and reverted to the approved definition. Which practice provides this?",
-c:["Serverless computing","Manual change logs","Infrastructure as code with enforced state","Vertical scaling"],a:2,
+c:["Serverless computing","Manual change logs","Infrastructure as code","Vertical scaling"],a:2,
 e:"With IaC, the version-controlled definition is the source of truth; tooling continuously compares reality against it and reverts undocumented drift, making the console change visible and reversible.",
 w:["Serverless changes the compute model entirely; it says nothing about how configuration drift is governed.","Manual logs depend entirely on the person remembering to write them, which is exactly what failed in this scenario.","","Scaling adds capacity to handle load; it has nothing to do with detecting or reverting configuration drift."]},
 {i:1211,d:3,o:"3.3",t:"b",g:"data-states",
@@ -1976,7 +1976,7 @@ e:"An agent on the endpoint enforces filtering wherever the device goes, indepen
 w:["Traffic from a coffee shop never reaches the office proxy.","","The office perimeter never sees remote traffic.","Remote devices use whatever resolver their network provides unless an agent redirects them."]},
 {i:1223,d:4,o:"4.1",t:"m",g:"wireless-security",
 q:"Which WPA3 improvement specifically addresses the weakness that let attackers capture a WPA2 handshake and crack the password offline?",
-c:["Longer SSID names","Hidden network broadcast","Simultaneous Authentication of Equals replacing the PSK handshake","MAC address randomization"],a:2,
+c:["Longer SSID names","Hidden network broadcast","Simultaneous Authentication of Equals","MAC address randomization"],a:2,
 e:"SAE replaces WPA2's crackable four-way handshake with an exchange resistant to offline dictionary attacks: captured traffic no longer lets attackers grind passwords at leisure.",
 w:["SSID length is purely cosmetic and has no bearing on the handshake or how it's cracked.","Hiding an SSID is a weak form of obscurity that does nothing to protect the handshake exchange itself.","","MAC randomization is a client-side privacy feature that limits device tracking; it has no relationship to handshake security."]},
 {i:1224,d:4,o:"4.1",t:"b",g:"wireless-security",
@@ -2124,7 +2124,7 @@ e:"Fail-open chooses availability over inspection: a dead IPS passes traffic thr
 w:["A failed device inspects nothing at all; fail-open specifically means it passes traffic unblocked instead of catching attacks.","","Halting all traffic on failure is the definition of fail-closed, the opposite configuration from what's described here.","Redundancy is still exactly how an organization avoids ever having to face this tradeoff in the first place."]},
 {i:1316,d:4,o:"4.5",t:"s",g:"host-firewall",
 q:"Policy requires that on each laptop, only the approved mail client may reach port 443 on the mail server, while the browser and all other applications on the same laptop must be blocked from that destination. Which control can enforce this per-application distinction?",
-c:["Network perimeter firewall","Screened subnet","Host-based firewall with per-application rules","DNS filtering"],a:2,
+c:["Network perimeter firewall","Screened subnet","Host-based firewall","DNS filtering"],a:2,
 e:"Only a control on the endpoint can see which local application generated a connection; a host-based firewall filters by program, something network devices, which see only addresses and ports, cannot distinguish.",
 w:["A perimeter firewall sees identical packets on the wire regardless of which local application generated them.","A screened subnet is a network zone design concept, unrelated to distinguishing between applications on a single laptop.","","DNS filtering gates name resolution for the whole device; it can't tell which specific application initiated a given lookup."]},
 {i:1317,d:4,o:"4.5",t:"m",g:"ids-ips",
@@ -2615,7 +2615,7 @@ e:"A file-based vector delivers malicious code inside a document or attachment t
 w:["","Image-based vectors hide malicious code or payloads within image files specifically, not a PDF document.","A removable device requires physical media like a USB drive; this attack arrived by email.","A voice call is a spoken vector; nothing in this scenario involves a phone call."]},
 {i:1549,d:2,o:"2.2",t:"s",g:"threat-vectors",
 q:"A hospital continues running critical equipment on an operating system the vendor stopped issuing security updates for years ago, because replacing the equipment is too costly. What kind of threat vector does this unpatched system represent?",
-c:["Unsupported systems and applications","Zero-day","Malicious update","Firmware vulnerability"],a:0,
+c:["Unsupported systems","Zero-day","Malicious update","Firmware vulnerability"],a:0,
 e:"Unsupported systems and applications are software or platforms no longer receiving vendor security updates, leaving known vulnerabilities permanently unpatched and exploitable, exactly the situation with the aging equipment.",
 w:["","A zero-day is a previously unknown flaw with no fix yet available; this scenario is the opposite, a well-known platform whose vendor has simply stopped supporting it.","A malicious update describes a compromised legitimate update being pushed to users, not the absence of updates entirely.","A firmware vulnerability specifically concerns flaws in low-level device firmware; this scenario is about the operating system lacking vendor support generally, a broader concept."]},
 {i:1550,d:2,o:"2.2",t:"s",g:"threat-vectors",
@@ -3190,7 +3190,7 @@ e:"Provisioning and de-provisioning is the lifecycle process of creating account
 w:["","Federation allows identities to be trusted across separate organizations without creating a duplicate account in each one, a different concept than the internal lifecycle of creating and removing one company's own accounts.","Identity proofing verifies a person's real-world identity before an account is ever created, an earlier step than the ongoing lifecycle of provisioning and de-provisioning being tested here.","Attestation is a periodic review confirming existing access is still appropriate, not the initial creation or final removal of an account."]},
 {i:1664,d:4,o:"4.6",t:"s",g:"iam-lifecycle",
 q:"An administrator grants a new database administrator hire both read and write access to production systems, but the security team later realizes this exceeds what the role actually requires and creates unnecessary risk if the account is ever compromised. Which IAM concern does this represent?",
-c:["Permission assignments and implications","Identity proofing","Interoperability","Federation"],a:0,
+c:["Permission assignments","Identity proofing","Interoperability","Federation"],a:0,
 e:"Permission assignments and implications is the concept of considering the consequences of what access is granted, exactly the realization that overly broad write access to production creates unnecessary risk.",
 w:["","Identity proofing verifies a person is who they claim to be before account creation, not a review of whether granted access is appropriately scoped.","Interoperability concerns whether different identity systems can work together, unrelated to whether one account's specific permissions are too broad.","Federation allows identities to be trusted across organizations, unrelated to evaluating whether a single account's granted permissions are excessive."]},
 {i:1665,d:4,o:"4.6",t:"s",g:"iam-lifecycle",
@@ -3310,7 +3310,7 @@ e:"Security groups are automated, predefined network access rule sets applied to
 w:["","Guard rails are broader automated checks preventing unsafe configurations generally, while this scenario describes the specific mechanism of applying a predefined network rule set, which is a security group.","Resource provisioning is standing up the server itself; this scenario is specifically about the network access rules automatically applied to it afterward.","Enabling/disabling services and access typically refers to turning specific services on or off, not assigning a predefined network rule group."]},
 {i:1688,d:4,o:"4.7",t:"s",g:"automation-use-cases",
 q:"When an employee is terminated, a script automatically turns off their VPN access and disables their badge at every door within minutes, without a security team member manually walking through each system. Which automation use case is this?",
-c:["Enabling/disabling services and access","User provisioning","Security groups","Guard rails"],a:0,
+c:["Enabling/disabling access","User provisioning","Security groups","Guard rails"],a:0,
 e:"Enabling and disabling services and access is automatically turning access on or off across systems, exactly the automatic VPN and badge deactivation described here.",
 w:["","User provisioning specifically refers to creating accounts and access for a new user, the opposite direction of the termination scenario described.","Security groups are predefined network access rule sets applied to resources, not the act of disabling an individual's access across multiple systems.","Guard rails are automated checks preventing unsafe configurations, not the specific act of disabling an already-departed employee's access."]},
 {i:1689,d:4,o:"4.7",t:"s",g:"automation-use-cases",
@@ -3330,7 +3330,7 @@ e:"Standard infrastructure configurations is ensuring every deployment is built 
 w:["","Enforcing baselines is the broader ongoing practice of checking systems stay compliant with a security standard over time, a related but distinct benefit from templates producing identical initial builds.","Scaling in a secure manner is about growing capacity without introducing new risk, not specifically about identical initial configuration across deployments.","Efficiency/time saving is about reducing how long a task takes, a different benefit than the consistency-across-deployments described here."]},
 {i:1692,d:4,o:"4.7",t:"s",g:"automation-benefits",
 q:"During a holiday traffic surge, automation adds new web servers on demand, each one automatically built with the same hardened security baseline as every existing server, rather than an administrator manually configuring each new instance under time pressure. Which automation benefit is this?",
-c:["Scaling in a secure manner","Standard infrastructure configurations","Workforce multiplier","Reaction time"],a:0,
+c:["Secure scaling","Standard infrastructure configurations","Workforce multiplier","Reaction time"],a:0,
 e:"Scaling in a secure manner is growing capacity automatically while keeping every new resource just as secure as existing ones, exactly the automatically-hardened new servers described during the surge.",
 w:["","Standard infrastructure configurations is about deployments being identical regardless of who builds them; this scenario is specifically about growing capacity securely during a demand surge, the scaling benefit.","A workforce multiplier is about one person accomplishing more, a related but distinct benefit from the specific security-during-growth framing described here.","Reaction time is about how quickly a system responds to a security event, not capacity growing to meet demand."]},
 {i:1693,d:4,o:"4.7",t:"s",g:"automation-benefits",
@@ -3700,9 +3700,9 @@ e:"Password management training covers credential hygiene practices like avoidin
 w:["","Policy/handbooks training covers the organization's written rules broadly, a different topic than the specific credential-hygiene practices described here.","Removable media and cables training covers the risks of USB drives and untrusted cables, unrelated to password hygiene.","Operational security concerns protecting sensitive operational details from exposure, a different topic than personal credential practices."]},
 {i:1766,d:5,o:"5.6",t:"s",g:"awareness-topics",
 q:"Employees are warned never to plug an unknown USB drive found in a parking lot into a company laptop, and never to charge their phone using an unfamiliar public charging cable or kiosk. Which user guidance topic is this?",
-c:["Removable media and cables","Password management","Operational security","Social engineering"],a:0,
+c:["Removable media and cables","Hybrid/remote work environments","Operational security","Social engineering"],a:0,
 e:"Removable media and cables training warns employees about the risks of untrusted USB drives and charging cables, exactly the parking-lot-USB and public-charger warning described here.",
-w:["","Password management training covers credential hygiene, unrelated to physical media and cable risks.","Operational security concerns protecting sensitive operational information from exposure, a different topic than physical device and cable risks.","Social engineering training covers manipulation tactics used against a person directly, a different topic than the physical hardware risk described here."]},
+w:["","Hybrid and remote work guidance covers securing work done away from the office, a different topic than the physical risk of untrusted USB drives and charging cables.","Operational security concerns protecting sensitive operational information from exposure, a different topic than physical device and cable risks.","Social engineering training covers manipulation tactics used against a person directly, a different topic than the physical hardware risk described here."]},
 {i:1767,d:5,o:"5.6",t:"s",g:"awareness-topics",
 q:"Employees are trained never to discuss upcoming product launch dates or unpublished financial results in public spaces like elevators, restaurants, or on social media, even casually. Which user guidance topic is this?",
 c:["Operational security","Situational awareness","Password management","Policy/handbooks"],a:0,
@@ -3900,9 +3900,9 @@ e:"Medical embedded devices like pacemakers combine severely constrained hardwar
 w:["","Medical embedded devices like pacemakers are typically expected to last many years once implanted, the opposite of a short deployment lifespan.","A pacemaker has no meaningful exposure to public internet threat feeds directly; its patching difficulty comes from hardware and regulatory constraints, not internet exposure.","While timing guarantees matter for many embedded medical devices, the specific difficulty described here centers on hardware constraints and regulatory recertification, not RTOS timing alone."]},
 {i:1806,d:3,o:"3.2",t:"s",g:"firewall-types",
 q:"A firewall rule permits traffic from any source to reach TCP port 443 on the web server, and separately denies all other inbound traffic to that server by default. Which firewall configuration concept does this pair of rules represent?",
-c:["Explicit allow with implicit deny","Fail-open configuration","Screened subnet","Layer 7 inspection"],a:0,
+c:["Explicit allow with implicit deny","Explicit deny with implicit allow","Screened subnet","Layer 7 inspection"],a:0,
 e:"An explicit allow with implicit deny is a rule set that specifically permits only what's needed, here port 443, while denying everything else by default, exactly the pattern described.",
-w:["","Fail-open describes what happens when a device fails, letting traffic through uninspected, not the normal rule configuration of a working firewall.","A screened subnet is a network architecture isolating a public-facing server between two firewalls, not the specific allow and deny rule logic itself.","Layer 7 inspection examines application content like HTTP methods and URLs; this scenario describes port-based rules, which is Layer 4 filtering, not Layer 7."]},
+w:["","That is the reverse arrangement: it permits everything by default and blocks only named traffic, whereas this scenario permits one port and denies everything else by default.","A screened subnet is a network architecture isolating a public-facing server between two firewalls, not the specific allow and deny rule logic itself.","Layer 7 inspection examines application content like HTTP methods and URLs; this scenario describes port-based rules, which is Layer 4 filtering, not Layer 7."]},
 {i:1807,d:3,o:"3.3",t:"s",g:"data-classification",
 q:"A company's marketing team publishes a press release on its public website, freely available to anyone including competitors and journalists, with no login or restriction required to view it. Which data classification does this represent?",
 c:["Public","Private","Confidential","Restricted"],a:0,
@@ -6625,7 +6625,7 @@ e:"An end-of-life vulnerability exists when a vendor has officially stopped supp
 w:["A firmware vulnerability specifically concerns the low-level software controlling a hardware device, not an operating system's support lifecycle.","","A legacy vulnerability refers broadly to outdated systems still in use, but the specific detail of the vendor having formally ended support points to end-of-life.","Side loading refers to installing applications from unofficial sources, unrelated to an operating system's support status."]},
 {i:2054,d:2,o:"2.3",t:"s",g:"insecure-apis",
 q:"Jesse's development team publishes a cloud API that accepts requests without validating the caller's identity or the format of submitted data, allowing anyone to manipulate customer records directly. What kind of vulnerability does this represent?",
-c:["Insecure interfaces and APIs","Side loading","Firmware vulnerability","Buffer overflow"],a:0,
+c:["Insecure APIs","Side loading","Firmware vulnerability","Buffer overflow"],a:0,
 e:"Insecure interfaces and APIs occur when the interaction points between users, applications, and cloud services lack adequate authentication or validation, exposing systems to unauthorized access and data manipulation.",
 w:["",  "Side loading involves installing apps outside an official app store, which is unrelated to an unsecured cloud API.","A firmware vulnerability concerns a hardware device's embedded control software, not a cloud API's access controls.","A buffer overflow is a memory-handling flaw in how a program processes data, not a missing authentication check on an API."]},
 {i:2055,d:2,o:"2.4",t:"s",g:"credential-stuffing",
@@ -7536,7 +7536,7 @@ e:"Operational controls are the day-to-day procedures carried out by people, suc
 w:["Managerial controls are the policies set by leadership requiring these checks, not the hands-on physical verification itself.","Technical controls are enforced through technology, not a person's physical walkthrough and verification.","","A compensating control is an alternative safeguard used when a primary control isn't feasible, which isn't what's being described in this routine review."]},
 {i:2237,d:1,o:"1.2",t:"s",g:"aaa-framework",
 q:"Veda's network logs in a user with a username and password, then checks what resources that user is permitted to access, and finally records exactly which files the user opened during the session. Which three-part security framework does this describe?",
-c:["CIA triad","AAA (Authentication, Authorization, Accounting)","Zero Trust","Non-repudiation"],a:1,
+c:["CIA triad","AAA framework","Zero Trust","Non-repudiation"],a:1,
 e:"AAA stands for Authentication, Authorization, and Accounting, matching verifying identity (login), determining permitted access, and recording activity, exactly the three steps described in this scenario.",
 w:["The CIA triad refers to Confidentiality, Integrity, and Availability, which is a different security framework than verifying identity and tracking access.","","Zero Trust is a broader architectural philosophy of continuous verification, not specifically the three-part login, permission, and logging sequence described here.","Non-repudiation proves a party cannot deny an action, which is a single concept, not this three-part framework."]},
 {i:2238,d:1,o:"1.2",t:"s",g:"authentication-vs-authorization",
@@ -7556,7 +7556,7 @@ e:"Regular documentation review and updates ensure that diagrams and records sta
 w:["Sandboxing isolates software for safe testing, which is unrelated to keeping network documentation accurate and current.","","Disabling old ports is a technical cleanup action, but it doesn't address the underlying process failure of documentation never being updated.","A penetration test evaluates security by simulating attacks, which is unrelated to correcting outdated network diagrams."]},
 {i:2241,d:1,o:"1.3",t:"s",g:"change-technical-implications",
 q:"Jesse's team proposes adding a new firewall rule that will allow a wider range of traffic through, and part of the review specifically considers whether this change could unintentionally weaken existing segmentation between network zones. What is this consideration an example of?",
-c:["A backout plan","Considering the technical implications of a change","Version control","An approval process"],a:1,
+c:["A backout plan","Technical implications","Version control","An approval process"],a:1,
 e:"Considering technical implications means evaluating how a proposed change might affect other systems or security measures, exactly matching the review of whether the new firewall rule could weaken existing network segmentation.",
 w:["A backout plan describes how to reverse the change if problems arise, not the upfront consideration of its potential technical side effects.","","Version control tracks historical changes to files or configurations, which is different from evaluating a change's potential technical impact beforehand.","An approval process is the formal sign-off step, which is related but distinct from the specific technical impact analysis being described."]},
 {i:2242,d:1,o:"1.4",t:"s",g:"salting",
@@ -7821,9 +7821,9 @@ e:"Alert fatigue occurs when analysts become desensitized to a high volume of al
 w:["Alert tuning is the corrective action of adjusting thresholds to reduce unnecessary alerts, which is different from the fatigue phenomenon itself being described here.","","Log aggregation centralizes log data for review, which is unrelated to analysts becoming desensitized to alert volume.","Benchmarking compares configurations against a published standard, which is unrelated to analyst desensitization from alert volume."]},
 {i:2294,d:4,o:"4.4",t:"s",g:"casb-logs",
 q:"Kilmer's company deploys a tool specifically to monitor and control employee usage of approved and unapproved cloud applications, logging every file uploaded to cloud storage services from company devices. What is this tool called?",
-c:["A cloud access security broker","A load balancer","A jump server","A VPN concentrator"],a:0,
+c:["A cloud access security broker","A web application firewall","A jump server","A VPN concentrator"],a:0,
 e:"A cloud access security broker (CASB) monitors and controls employee usage of cloud applications, including logging file uploads to cloud storage, exactly matching this described tool's function.",
-w:["","A load balancer distributes traffic across multiple servers for performance, unrelated to monitoring cloud application usage.","A jump server provides a controlled administrative access checkpoint, unrelated to monitoring cloud application and file upload activity.","A VPN concentrator manages encrypted remote-access tunnels, unrelated to monitoring cloud application usage specifically."]},
+w:["","A web application firewall inspects inbound web traffic to protect a web application from attacks, not to monitor how employees use cloud services.","A jump server provides a controlled administrative access checkpoint, unrelated to monitoring cloud application and file upload activity.","A VPN concentrator manages encrypted remote-access tunnels, unrelated to monitoring cloud application usage specifically."]},
 {i:2295,d:4,o:"4.4",t:"s",g:"syslog-centralization",
 q:"Clarence configures every network device, server, and application to forward its log messages to one centralized syslog server, rather than leaving logs scattered across dozens of individual systems. What is the PRIMARY benefit of this centralization?",
 c:["It eliminates the need for any future patching","It simplifies correlation and analysis of events across the entire environment","It automatically fixes any misconfiguration found in the logs","It replaces the need for a SIEM entirely"],a:1,
@@ -8163,9 +8163,9 @@ const Q17 = [
 {i:2353,d:1,o:"1.2",t:"s",g:"access-control-vestibule",
 pre:"Access Control Vestibule Log:\n14:02:03 - Outer door (Door A) unlocked, badge validated\n14:02:07 - Door A closed and locked\n14:02:08 - Weight sensor confirms single occupant\n14:02:09 - Inner door (Door B) unlocked",
 q:"Which physical security control does this log describe?",
-c:["Access control vestibule","Turnstile","Bollard","Fencing"],a:0,
+c:["Access control vestibule","Turnstile","Security guard","Video surveillance"],a:0,
 e:"An access control vestibule (mantrap) only unlocks the second door after the first is fully closed and a single occupant is confirmed, exactly matching the sequential door logic and occupancy check in this log.",
-w:["","A turnstile mechanically limits passage to one person per rotation but does not use a two-door interlock sequence like the one shown here.","Bollards are fixed posts that stop vehicles; they have no doors, badges, or occupancy sensors.","Fencing is a perimeter barrier and has no relationship to sequential door unlocking or occupancy sensing."]},
+w:["","A turnstile mechanically limits passage to one person per rotation but does not use a two-door interlock sequence like the one shown here.","A security guard is a person who checks identity and monitors access; this log shows an automated two-door interlock with an occupancy sensor, not human staff.","Video surveillance records or monitors activity; it does not lock doors or check occupancy, which is what this log shows."]},
 
 {i:2354,d:2,o:"2.1",t:"s",g:"threat-actor-profile",
 pre:"SOC case notes:\nInitial access: single spear-phishing email to two R&D engineers\nDwell time before first lateral movement: 6 weeks\nTechniques: custom malware, no reused public tooling, avoided all EDR-monitored hosts\nData targeted: unpublished chemical formulas\nNo ransom note, no data listed for sale on any forum",
@@ -8627,7 +8627,7 @@ w:["","SD-WAN focuses on optimizing and directing WAN traffic between sites, not
 {i:2418,d:2,o:"2.3",t:"s",g:"toc-tou-race-condition",
 pre:"Application vulnerability report:\nA file's permissions are checked at time T1 (check: read-only)\nBefore the file is actually opened at time T2, an attacker swaps it with a different, writable file\nThe application proceeds to operate on the swapped file believing its original permissions still apply",
 q:"Which vulnerability class does this describe?",
-c:["Buffer overflow","Time-of-check/time-of-use (TOC/TOU) race condition","Memory injection","Malicious update"],a:1,
+c:["Buffer overflow","TOC/TOU race condition","Memory injection","Malicious update"],a:1,
 e:"Exploiting the timing gap between when a resource is checked and when it's actually used, by swapping the resource in between, is the definition of a TOC/TOU race condition.",
 w:["Buffer overflow involves writing past an allocated memory boundary, unrelated to a timing gap between checking and using a resource.","","Memory injection involves injecting and executing code into a running process's memory, not swapping a file between a check and its use.","A malicious update refers to a compromised legitimate software update, not a timing-based file-swap exploit."]},
 
@@ -8704,9 +8704,9 @@ w:["An NDA covers confidentiality of shared information, not the right to physic
 {i:2429,d:5,o:"5.4",t:"s",g:"right-to-be-forgotten",
 pre:"Privacy request log:\nData subject submitted a formal request under applicable privacy law to have all personal data associated with their account permanently deleted\nCompany privacy team confirmed deletion across all systems, including backups, within the required timeframe",
 q:"Which privacy concept does this request represent?",
-c:["Right to be forgotten","Data sovereignty","Data classification","Attestation"],a:0,
+c:["Right to be forgotten","Data sovereignty","Data classification","Right to access"],a:0,
 e:"An individual formally requesting the permanent deletion of their personal data, and the organization complying across all systems including backups, is the right to be forgotten in action.",
-w:["","Data sovereignty concerns which country's laws govern data based on its physical location, not an individual's right to request deletion.","Data classification is the process of labeling data by sensitivity level, unrelated to a deletion request.","Attestation is a formal confirmation or sign-off on a control, not the underlying privacy right being exercised here."]},
+w:["","Data sovereignty concerns which country's laws govern data based on its physical location, not an individual's right to request deletion.","Data classification is the process of labeling data by sensitivity level, unrelated to a deletion request.","The right to access lets a person obtain a copy of their data held by the company; it does not compel deletion."]},
 
 {i:2430,d:3,o:"3.4",t:"s",g:"tabletop-exercise",
 pre:"Business continuity activity log:\nParticipants: IT director, legal counsel, communications lead, CEO\nScenario discussed verbally in a conference room: 'Ransomware encrypts the primary data center - walk through your response'\nNo systems were actually taken offline or tested",
@@ -9190,7 +9190,7 @@ function shiftSetup(){
     <button class="${sd===0?"on":""}" onclick="setShiftDom(0)">All domains</button>
     ${[1,2,3,4,5].map(d=>`<button class="${sd===d?"on":""}" onclick="setShiftDom(${d})">D${d}.0</button>`).join("")}
   </div>
-  <p class="dim" style="font-size:12.5px;margin:8px 0 0">${sd?`Locked to Domain ${sd}.0 (${DNAME[sd]}) \u00b7 misses from other domains will not appear`:`Blueprint weighting across all 5 domains`} \u00b7 unseen questions come first, and anything you miss comes back within a few tickets</p>
+  <p class="dim" style="font-size:12.5px;margin:8px 0 0">${sd?`Locked to Domain ${sd}.0 (${DNAME[sd]}) \u00b7 misses from other domains will not appear`:`Blueprint weighting across all 5 domains`} \u00b7 unseen questions come first, and anything you miss waits for a later shift before it can return</p>
   <h2 style="margin-top:20px">Timer</h2>
   <div class="seg">
     <button class="${S.timerOff?"":"on"}" onclick="setTimerOff(false)">Adaptive</button>
@@ -9210,7 +9210,7 @@ function shiftSetup(){
 function setTimerOff(on){ S.timerOff=on; save(); shiftSetup(); }
 function shiftStart(n){
   AT_SECTION=false; view="shift";
-  S.activeShift=null; save();
+  S.activeShift=null; S.sessSeq=(S.sessSeq||0)+1; save();
   sess={mode:"shift",n:n,i:0,used:new Set(),correct:0,integrity:100,byDom:{},misses:[],dom:S.shiftDom||0,untimed:!!S.timerOff};
   startSess(); nextTicket();
 }
@@ -9229,21 +9229,19 @@ function shiftResume(){
 }
 function shiftDiscard(){ S.activeShift=null; save(); shiftSetup(); }
 function sevFor(){ const r=Math.random(); return r<.22?"p1":(r<.6?"p2":"p3"); }
-/* A miss is already counted as seen (coverage). It also returns 3-6 tickets later instead of waiting for the whole pool to run dry. */
+/* A miss is already counted as seen (coverage). It never returns in the same shift: it becomes eligible from the NEXT shift on,
+   and even then it is only mixed in now and then (not stacked at the start). */
 function qRetrySchedule(id){
-  S.missQ=S.missQ||[];
-  const e=S.missQ.find(x=>x.i===id), tries=(e?e.n:0)+1;
-  S.missQ=S.missQ.filter(x=>x.i!==id);
-  if(tries>3) return;
-  S.missQ.push({i:id,due:(S.qSeq||0)+3+Math.floor(Math.random()*4),n:tries});
-  if(S.missQ.length>40) S.missQ.shift();
+  S.missQ=(S.missQ||[]).filter(x=>x.i!==id);
+  S.missQ.push({i:id,after:(S.sessSeq||0)+1});
+  if(S.missQ.length>60) S.missQ.shift();
 }
 function qRetryClear(id){ if(S.missQ) S.missQ=S.missQ.filter(x=>x.i!==id); }
-function qRetryTake(pool,lastId){
-  if(!S.missQ||!S.missQ.length) return null;
-  const now=S.qSeq||0;
-  const ready=S.missQ.filter(x=>x.due<=now&&x.i!==lastId&&pool.some(q=>q.i===x.i)).sort((a,b)=>a.due-b.due);
-  return ready.length?(qById(ready[0].i)||null):null;
+function qRetryTake(pool,lastId,used){
+  if(!S.missQ||!S.missQ.length||Math.random()>=.3) return null;
+  const now=S.sessSeq||0;
+  const ready=S.missQ.filter(x=>x.after<=now&&x.i!==lastId&&!used.has(x.i)&&pool.some(q=>q.i===x.i));
+  return ready.length?(qById(ready[Math.floor(Math.random()*ready.length)].i)||null):null;
 }
 function persistShift(){
   if(sess&&sess.mode==="shift"&&!sess.customPool&&sess.q){
@@ -9259,12 +9257,11 @@ function nextTicket(){
   else if(sess.i>=sess.n||sess.integrity<=0) return shiftReport();
   const shiftPool=sess.customPool?sess.customPool:((sess.mode==="shift"&&sess.dom)?QUESTIONS.filter(x=>x.d===sess.dom):QUESTIONS);
   let q=null, retry=false;
-  if(!sess.customPool){ q=qRetryTake(shiftPool,sess.q?sess.q.i:null); retry=!!q; }
+  if(!sess.customPool){ q=qRetryTake(shiftPool,sess.q?sess.q.i:null,sess.used); retry=!!q; }
   if(!q) q=pick(shiftPool,sess.used);
   if(!q&&sess.customPool){ sess.used=new Set(); q=pick(shiftPool,sess.used); }
   if(!q) return shiftReport();
   if(retry){ noteRecent(q.i); noteRecentObj(q.o); }
-  if(!sess.customPool) S.qSeq=(S.qSeq||0)+1;
   sess.used.add(q.i); sess.i++; sess.q=q; sess.sev=sevFor(); sess.order=shuffle([0,1,2,3]);
   persistShift();
   renderTicket(false);
@@ -9592,7 +9589,7 @@ function acrSetup(){
   const acrSeen=acrU().filter(a=>S.acrStat[a.a]&&S.acrStat[a.a].s>0).length;
   $("app").innerHTML=`
   <p class="eyebrow">Recall</p><h1>Acronym Recall</h1>
-  <p class="lede">${acrTotal} drillable acronyms out of ${allAcr().length} total. Distractors come from the same family, so guessing by category will not save you. Each acronym schedules itself like a flashcard: miss it and it comes back soon, know it and it fades out.</p>
+  <p class="lede">${acrTotal} drillable acronyms out of ${allAcr().length} total. Distractors come from the same family, so guessing by category will not save you. Each acronym schedules itself like a flashcard: miss it and it comes back in a later session, know it and it fades out.</p>
   <div style="margin:4px 0 16px">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
       <span class="dim" style="font-size:11px;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase">Coverage</span>
@@ -9725,7 +9722,7 @@ function glossRender(){
     </div>`).join(""):`<p class="dim" style="padding:16px;margin:0">Nothing matches that search.</p>`}
   </div>`;
 }
-function acrStart(kind,dueOnly,len,domain){ AT_SECTION=false; view="acr"; sess={mode:"acr",kind:"fun",i:0,correct:0,used:new Set(),misses:[],dueOnly:!!dueOnly,n:len||20,domain:domain||0,easy:!!S.acrEasy,retry:[],retryN:{}}; startSess(); nextAcr(); }
+function acrStart(kind,dueOnly,len,domain){ AT_SECTION=false; view="acr"; sess={mode:"acr",kind:"fun",i:0,correct:0,used:new Set(),misses:[],dueOnly:!!dueOnly,n:len||20,domain:domain||0,easy:!!S.acrEasy}; startSess(); nextAcr(); }
 function nextAcr(){
   checkBreak();
   if(sess.i>=sess.n) return acrReport();
@@ -9735,8 +9732,6 @@ function nextAcr(){
   if(sess.dueOnly){ const now=Date.now(); pool=pool.filter(a=>srsAcrOf(a.a).due<=now); }
   let target=null;
   const lastA=sess.acr?sess.acr.target.a:null;
-  const ready=(sess.retry||[]).filter(x=>x.at<=sess.i&&x.a!==lastA).sort((a,b)=>a.at-b.at);
-  if(ready.length){ target=pool.find(a=>a.a===ready[0].a)||null; sess.retry=sess.retry.filter(x=>x.a!==ready[0].a); }
   if(!target){
     const cand=pool.filter(a=>!sess.used.has(a.a));
     if(!cand.length) return acrReport();
@@ -9814,9 +9809,6 @@ function aAnswer(chosen){
   const A=sess.acr, ok=chosen===A.ans, t=A.target;
   acrSrsUpdate(t.a,ok,sess.easy); if(!ok) sess.misses.push(t);
   if(ok) sess.correct++;
-  else{ sess.retry=sess.retry||[]; sess.retryN=sess.retryN||{};
-    const n=(sess.retryN[t.a]||0)+1; sess.retryN[t.a]=n;
-    if(n<=2) sess.retry.push({a:t.a,at:sess.i+3+Math.floor(Math.random()*4)}); }
   if(!sess.easy) adapt(ok);
   save();
   renderAcr(true,chosen);
