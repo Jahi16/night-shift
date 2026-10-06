@@ -232,6 +232,11 @@ textarea{width:100%;background:var(--raise);border:1px solid var(--line);border-
   padding:10px 12px;color:var(--txt);font-family:var(--sans);font-size:15px;line-height:1.5;resize:vertical}
 select{width:100%;background:var(--raise);border:1px solid var(--line);border-radius:7px;
   padding:10px 12px;color:var(--txt);font-family:var(--sans);font-size:14px}
+select.fld{font-size:16px;appearance:none;-webkit-appearance:none;padding-right:38px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--dim) 50%),linear-gradient(135deg,var(--dim) 50%,transparent 50%);
+  background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+select.fld:focus{outline:2px solid var(--amber);outline-offset:1px}
+select.fld option,select.fld optgroup{background:var(--panel);color:var(--txt)}
 input:focus{outline:2px solid var(--amber);outline-offset:1px}
 textarea:focus{outline:2px solid var(--amber);outline-offset:1px}
 input[type=date]::-webkit-calendar-picker-indicator{
@@ -6478,21 +6483,9 @@ const STUDY = {
 "5.5":{t:"Audits and assessments (including penetration testing)"},
 "5.6":{t:"Security awareness practices"}
 };
-function studyLine(o){
-  const s=STUDY[o]||{t:""};
-  return "Messer's free YouTube videos, section "+o+(s.t?" ("+s.t+")":"");
-}
-function studyLineFor(o){
-  const s=STUDY[o]||{t:"",g:""};
-  const src=(S.studySource||"").trim();
-  if(!src){
-    return "Objective "+o+(s.t?" ("+s.t+")":"");
-  }
-  if(src.toLowerCase().includes("messer")){
-    return "Messer's free YouTube videos, section "+o+(s.t?" ("+s.t+")":"");
-  }
-  return "Objective "+o+(s.t?" ("+s.t+")":"")+" in "+src;
-}
+function topicOf(o){ const s=STUDY[o]; return s&&s.t?s.t:""; }
+function studyLine(o){ const t=topicOf(o); return "Objective "+o+(t?": "+t:""); }
+function studyLineFor(o){ return studyLine(o); }
 
 
 /* ================= storage ================= */
@@ -8748,14 +8741,14 @@ function acrU(){ return allAcr().filter(a=>a.u); }
 const TIGHT=[115,98,84,70,58];
 function examDate(){ return S.exam?new Date(S.exam+"T12:00:00"):null; }
 
-let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},manualTimer:false,manualTimerSec:45,shiftMode:"shift",studySource:"",jcTopics:["jump server","proxy","secure enclave","hsm","spf","dkim","dmarc"]};
+let S={v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{},manualTimer:false,manualTimerSec:45,shiftMode:"shift",jcTopics:["jump server","proxy","secure enclave","hsm","spf","dkim","dmarc"]};
 for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0};
 
 let view="home", sess=null, sessStart=0, breakShown=false, tickHandle=null;
 let SECTION=null, AT_SECTION=true;
 let ENTRY_TILE=null, PENDING_JUMP=null;
 
-async function load(){ const v=await store.get("ns_state"); if(v&&v.v===2){ S=Object.assign(S,v); for(let d=1;d<=5;d++) if(!S.dom[d]) S.dom[d]={s:0,c:0}; } S.jcTopics=S.jcTopics||["jump server","proxy","secure enclave","hsm","spf","dkim","dmarc"]; }
+async function load(){ const v=await store.get("ns_state"); if(v&&v.v===2){ S=Object.assign(S,v); for(let d=1;d<=5;d++) if(!S.dom[d]) S.dom[d]={s:0,c:0}; } S.jcTopics=S.jcTopics||["jump server","proxy","secure enclave","hsm","spf","dkim","dmarc"]; delete S.studySource; }
 function save(){ store.set("ns_state",S); }
 
 /* ================= helpers ================= */
@@ -9050,6 +9043,7 @@ function heroJump(ids,instant){
     setTimeout(()=>el.classList.remove("jump-flash"),1750);
   });
 }
+function whoName(){ return [S.title,S.name].filter(Boolean).join(" "); }
 function timeGreeting(){
   const h=new Date().getHours();
   if(h<5) return "Good night";
@@ -9067,7 +9061,7 @@ function home(){
   const e=examDate(), dOpen=e?days(e):null;
   $("app").innerHTML=`
   <div class="hero">
-    ${S.name?`<p class="greet">${timeGreeting()}, ${esc(S.name)}</p>`:""}
+    ${whoName()?`<p class="greet">${timeGreeting()}, ${esc(whoName())}</p>`:""}
     <h1 class="neon" style="font-family:var(--mono);letter-spacing:.03em;word-spacing:-0.2em;text-transform:uppercase">Night Shift</h1>
     <p class="sub"><span class="sub-lead">A full <b>CompTIA Security+ (SY0-701)</b> trainer built around the official exam blueprint. Every question, flashcard, and PBQ (performance-based question) maps to one of the 28 exam objectives, weighted to match the real domain percentages, so your study time mirrors what's actually tested.</span> <span class="sub-rest">Whatever concept you keep getting wrong shows up more often until you've actually cleared it. And it separates the exam date from exam readiness, tracking a real readiness gate based on your practice-exam performance, so you know when you're prepared, not just when the calendar says to show up.</span></p>
   </div>
@@ -9142,8 +9136,6 @@ function home(){
       <p>Domain accuracy, repeated misses, PBQ history, and readiness gate status.</p></button>
   </div>
   <div class="row" style="margin-top:14px">
-    <button class="btn ghost sm" onclick="content('cards')">Add new content</button>
-    <button class="btn ghost sm" onclick="coachBrief()">Export coaching brief for AI</button>
     <button class="btn ghost sm" onclick="profile(false)">Settings</button>
   </div>`;
   fitHeroSub(true);
@@ -9198,7 +9190,7 @@ function shiftSetup(){
     <button class="${sd===0?"on":""}" onclick="setShiftDom(0)">All domains</button>
     ${[1,2,3,4,5].map(d=>`<button class="${sd===d?"on":""}" onclick="setShiftDom(${d})">D${d}.0</button>`).join("")}
   </div>
-  <p class="dim" style="font-size:12.5px;margin:8px 0 0">${sd?`Locked to Domain ${sd}.0 (${DNAME[sd]}) \u00b7 misses from other domains will not appear`:`Blueprint weighting across all 5 domains`} \u00b7 unseen questions always come first, nothing repeats until the pool runs dry</p>
+  <p class="dim" style="font-size:12.5px;margin:8px 0 0">${sd?`Locked to Domain ${sd}.0 (${DNAME[sd]}) \u00b7 misses from other domains will not appear`:`Blueprint weighting across all 5 domains`} \u00b7 unseen questions come first, and anything you miss comes back within a few tickets</p>
   <h2 style="margin-top:20px">Timer</h2>
   <div class="seg">
     <button class="${S.timerOff?"":"on"}" onclick="setTimerOff(false)">Adaptive</button>
@@ -9237,6 +9229,22 @@ function shiftResume(){
 }
 function shiftDiscard(){ S.activeShift=null; save(); shiftSetup(); }
 function sevFor(){ const r=Math.random(); return r<.22?"p1":(r<.6?"p2":"p3"); }
+/* A miss is already counted as seen (coverage). It also returns 3-6 tickets later instead of waiting for the whole pool to run dry. */
+function qRetrySchedule(id){
+  S.missQ=S.missQ||[];
+  const e=S.missQ.find(x=>x.i===id), tries=(e?e.n:0)+1;
+  S.missQ=S.missQ.filter(x=>x.i!==id);
+  if(tries>3) return;
+  S.missQ.push({i:id,due:(S.qSeq||0)+3+Math.floor(Math.random()*4),n:tries});
+  if(S.missQ.length>40) S.missQ.shift();
+}
+function qRetryClear(id){ if(S.missQ) S.missQ=S.missQ.filter(x=>x.i!==id); }
+function qRetryTake(pool,lastId){
+  if(!S.missQ||!S.missQ.length) return null;
+  const now=S.qSeq||0;
+  const ready=S.missQ.filter(x=>x.due<=now&&x.i!==lastId&&pool.some(q=>q.i===x.i)).sort((a,b)=>a.due-b.due);
+  return ready.length?(qById(ready[0].i)||null):null;
+}
 function persistShift(){
   if(sess&&sess.mode==="shift"&&!sess.customPool&&sess.q){
     S.activeShift={n:sess.n,i:sess.i,used:[...sess.used],correct:sess.correct,integrity:sess.integrity,
@@ -9250,9 +9258,13 @@ function nextTicket(){
   if(sess.customPool){ if(sess.integrity<=0) return shiftReport(); }
   else if(sess.i>=sess.n||sess.integrity<=0) return shiftReport();
   const shiftPool=sess.customPool?sess.customPool:((sess.mode==="shift"&&sess.dom)?QUESTIONS.filter(x=>x.d===sess.dom):QUESTIONS);
-  let q=pick(shiftPool,sess.used);
+  let q=null, retry=false;
+  if(!sess.customPool){ q=qRetryTake(shiftPool,sess.q?sess.q.i:null); retry=!!q; }
+  if(!q) q=pick(shiftPool,sess.used);
   if(!q&&sess.customPool){ sess.used=new Set(); q=pick(shiftPool,sess.used); }
   if(!q) return shiftReport();
+  if(retry){ noteRecent(q.i); noteRecentObj(q.o); }
+  if(!sess.customPool) S.qSeq=(S.qSeq||0)+1;
   sess.used.add(q.i); sess.i++; sess.q=q; sess.sev=sevFor(); sess.order=shuffle([0,1,2,3]);
   persistShift();
   renderTicket(false);
@@ -9287,6 +9299,7 @@ function answer(chosen){
   sess.byDom[q.d].s++; if(ok) sess.byDom[q.d].c++;
   if(ok){ sess.correct++; sess.integrity=Math.min(100,sess.integrity+2); }
   else{ sess.integrity=Math.max(0,sess.integrity-({p1:14,p2:9,p3:5}[sess.sev])); sess.misses.push(q); }
+  if(!sess.customPool){ if(ok) qRetryClear(q.i); else qRetrySchedule(q.i); }
   persistShift();
   renderTicket(true,chosen);
   $("fb").innerHTML=feedback(q,ok,chosen,pat)+
@@ -9606,8 +9619,7 @@ function acrSetup(){
     <button class="tile" style="--accent:var(--violet)" onclick="acrRef()"><span class="tag">Reference</span>
       <h3>Full acronym list</h3><p>Every acronym with its expansion and what it actually does. Searchable and filterable by family.</p></button>
   </div>
-  <div class="row" style="margin-top:18px"><button class="btn ghost sm" onclick="home()">Back to home</button>
-    <button class="btn ghost sm" onclick="content('acr')">Add new acronyms</button></div>`;
+  <div class="row" style="margin-top:18px"><button class="btn ghost sm" onclick="home()">Back to home</button></div>`;
 }
 /* ---- reference browser ---- */
 let REF={q:"",g:"all"};
@@ -9713,7 +9725,7 @@ function glossRender(){
     </div>`).join(""):`<p class="dim" style="padding:16px;margin:0">Nothing matches that search.</p>`}
   </div>`;
 }
-function acrStart(kind,dueOnly,len,domain){ AT_SECTION=false; view="acr"; sess={mode:"acr",kind:"fun",i:0,correct:0,used:new Set(),misses:[],dueOnly:!!dueOnly,n:len||20,domain:domain||0,easy:!!S.acrEasy}; startSess(); nextAcr(); }
+function acrStart(kind,dueOnly,len,domain){ AT_SECTION=false; view="acr"; sess={mode:"acr",kind:"fun",i:0,correct:0,used:new Set(),misses:[],dueOnly:!!dueOnly,n:len||20,domain:domain||0,easy:!!S.acrEasy,retry:[],retryN:{}}; startSess(); nextAcr(); }
 function nextAcr(){
   checkBreak();
   if(sess.i>=sess.n) return acrReport();
@@ -9721,14 +9733,20 @@ function nextAcr(){
   let pool=acrU();
   if(sess.domain) pool=pool.filter(a=>ACR_DOMAIN[a.a]===sess.domain);
   if(sess.dueOnly){ const now=Date.now(); pool=pool.filter(a=>srsAcrOf(a.a).due<=now); }
-  const cand=pool.filter(a=>!sess.used.has(a.a));
-  if(!cand.length) return acrReport();
-  const now=Date.now();
-  const due=cand.filter(a=>srsAcrOf(a.a).due<=now);
-  const weighted=cand.filter(a=>S.acrStat[a.a]&&S.acrStat[a.a].m>0);
-  const target=(due.length&&Math.random()<.5)?due[Math.floor(Math.random()*due.length)]
-    :(weighted.length&&Math.random()<.4)?weighted[Math.floor(Math.random()*weighted.length)]
-    :cand[Math.floor(Math.random()*cand.length)];
+  let target=null;
+  const lastA=sess.acr?sess.acr.target.a:null;
+  const ready=(sess.retry||[]).filter(x=>x.at<=sess.i&&x.a!==lastA).sort((a,b)=>a.at-b.at);
+  if(ready.length){ target=pool.find(a=>a.a===ready[0].a)||null; sess.retry=sess.retry.filter(x=>x.a!==ready[0].a); }
+  if(!target){
+    const cand=pool.filter(a=>!sess.used.has(a.a));
+    if(!cand.length) return acrReport();
+    const now=Date.now();
+    const due=cand.filter(a=>srsAcrOf(a.a).due<=now);
+    const weighted=cand.filter(a=>S.acrStat[a.a]&&S.acrStat[a.a].m>0);
+    target=(due.length&&Math.random()<.5)?due[Math.floor(Math.random()*due.length)]
+      :(weighted.length&&Math.random()<.4)?weighted[Math.floor(Math.random()*weighted.length)]
+      :cand[Math.floor(Math.random()*cand.length)];
+  }
   sess.used.add(target.a); sess.i++;
   let sib=pool.filter(a=>a.g===target.g&&a.a!==target.a);
   if(sib.length<3) sib=sib.concat(pool.filter(a=>a.g!==target.g&&a.a!==target.a&&sib.indexOf(a)<0));
@@ -9796,6 +9814,9 @@ function aAnswer(chosen){
   const A=sess.acr, ok=chosen===A.ans, t=A.target;
   acrSrsUpdate(t.a,ok,sess.easy); if(!ok) sess.misses.push(t);
   if(ok) sess.correct++;
+  else{ sess.retry=sess.retry||[]; sess.retryN=sess.retryN||{};
+    const n=(sess.retryN[t.a]||0)+1; sess.retryN[t.a]=n;
+    if(n<=2) sess.retry.push({a:t.a,at:sess.i+3+Math.floor(Math.random()*4)}); }
   if(!sess.easy) adapt(ok);
   save();
   renderAcr(true,chosen);
@@ -9851,9 +9872,9 @@ function pbqSetup(){
   <p class="eyebrow">Mode 03</p><h1>PBQ Lab</h1>
   <p class="lede">Performance-based questions work like the real exam: partial credit per item, no time limit, and you can reset a question and retry it. Grouped below by how you actually interact with each one.</p>
   <div class="row" style="margin-bottom:16px">
-    <button class="btn pri" onclick="pbqStart(0)">Random PBQ</button>
-    <button class="btn" onclick="pbqStart(-1)">Weakest first</button>
-    <button class="btn" style="border-color:var(--violet);color:var(--violet)" onclick="pbqStart(-2)">Sec Arch focus (${PBQ.filter(p=>p.d===3).length})</button>
+    <button class="btn pri sm" onclick="pbqStart(0)">Random PBQ</button>
+    <button class="btn sm" onclick="pbqStart(-1)">Weakest first</button>
+    <button class="btn sm" style="border-color:var(--violet);color:var(--violet)" onclick="pbqStart(-2)">Sec Arch focus (${PBQ.filter(p=>p.d===3).length})</button>
   </div>
   ${sections}
   <div class="row" style="margin-top:18px"><button class="btn ghost sm" onclick="home()">Back to home</button></div>`;
@@ -10610,7 +10631,7 @@ function examReview(){
       <span class="mono" style="font-size:11px;width:76px;text-align:right">${Math.round(b.c*10)/10}/${b.s} \u00b7 ${p2}%</span></div>`;
   }).join("");
   const planHtml=plan.length?plan.map(o=>`<li><span><b>Objective ${o}</b>: ${missObj[o]} miss${missObj[o]>1?"es":""}<br>
-    <span class="dim" style="font-size:12.5px">${esc(studyLine(o))}</span></span></li>`).join(""):`<li><span class="dim">Nothing missed. Nothing to restudy.</span></li>`;
+    <span class="dim" style="font-size:12.5px">${esc(topicOf(o))}</span></span></li>`).join(""):`<li><span class="dim">Nothing missed. Nothing to restudy.</span></li>`;
   let items="";
   r.detail.forEach((d,ix)=>{
     if(d.t==="q"){
@@ -10658,7 +10679,6 @@ function examReview(){
   <h2>Restudy plan: hit these first</h2>
   <div class="card"><ul class="weaklist">${planHtml}</ul></div>
   ${missTagsArr.length?`<div class="row" style="margin-top:10px"><button class="btn" onclick='jcAddTopicsBulk(${JSON.stringify(missTagsArr)})'>Send ${missTagsArr.length} missed concept${missTagsArr.length>1?"s":""} to The Drill Down</button></div>`:""}
-  <p class="dim" style="font-size:11.5px;margin:8px 0 0">Messer's free YouTube course numbers sections by exam objective, matching the section numbers shown here.</p>
   <h2 style="margin-top:20px">Every item, reviewed</h2>
   ${items}
   <div class="row" style="margin-top:18px">
@@ -10710,7 +10730,7 @@ function examExport(fmt){
     });
     L.push("");
     L.push("## Restudy plan, ranked by miss count");
-    if(plan.length) plan.forEach(o=>L.push("- Objective "+o+" ("+missObj[o]+" miss"+(missObj[o]>1?"es":"")+"): "+studyLineFor(o)));
+    if(plan.length) plan.forEach(o=>L.push("- Objective "+o+" ("+missObj[o]+" miss"+(missObj[o]>1?"es":"")+")"+(topicOf(o)?": "+topicOf(o):"")));
     else L.push("- Nothing missed.");
     L.push("");
     L.push("## Every item");
@@ -10799,7 +10819,7 @@ function examExportAll(fmt){
         });
         L.push("");
         L.push("Restudy plan, ranked by miss count:");
-        if(plan.length) plan.forEach(o=>L.push("- Objective "+o+" ("+missObj[o]+" miss"+(missObj[o]>1?"es":"")+"): "+studyLineFor(o)));
+        if(plan.length) plan.forEach(o=>L.push("- Objective "+o+" ("+missObj[o]+" miss"+(missObj[o]>1?"es":"")+")"+(topicOf(o)?": "+topicOf(o):"")));
         else L.push("- Nothing missed.");
         L.push("");
         L.push("Missed items:");
@@ -10856,17 +10876,21 @@ function stats(){
   $("app").innerHTML=`
   <p class="eyebrow">Tracking</p><h1>Weak areas &amp; stats</h1>
   <div class="card"><h2 style="margin-top:0">Accuracy by domain</h2>${bars}
-    <p class="dim" style="font-size:13px;margin:14px 0 0">Readiness gate: ${g.pass?"<b style='color:var(--green)'><span aria-hidden='true'>\ud83d\udd13</span> OPEN</b>":"<b style='color:var(--red)'><span aria-hidden='true'>\ud83d\udd12</span> CLOSED</b>"}. ${esc(g.label)}.</p></div>
+    <p class="dim" style="font-size:13px;margin:14px 0 0">Readiness gate: ${g.pass?"<b style='color:var(--green)'><span aria-hidden='true'>\ud83d\udd13</span> OPEN</b>":"<b style='color:var(--red)'><span aria-hidden='true'>\ud83d\udd12</span> CLOSED</b>"}. ${esc(g.label)}.</p>
+    <div class="row" style="margin-top:14px"><button class="btn ghost sm" onclick="exportSectionToAI('domains')">Export to AI</button></div></div>
   <h2>Terms and acronyms you keep missing</h2>
   <p class="dim" style="font-size:13px;margin:-6px 0 12px">Stored here, and this is what feeds The Drill Down. Tap "+ Drill Down" on anything you want higher-repetition practice on.</p>
-  <div class="card"><ul class="weaklist">${missedCombined}</ul></div>
+  <div class="card"><ul class="weaklist">${missedCombined}</ul>
+    <div class="row" style="margin-top:14px"><button class="btn ghost sm" onclick="exportSectionToAI('missed')">Export to AI</button></div></div>
   <h2>PBQ history</h2><div class="card"><ul class="weaklist">${
     PBQ.filter(p=>S.pbqStat[p.id]).length
       ? PBQ.filter(p=>S.pbqStat[p.id]).map(p=>{const st=S.pbqStat[p.id];
           return `<li><span>${esc(p.title)} <span class="dim" style="font-size:12px">(${st.tries} attempt${st.tries>1?"s":""})</span></span>
           <span class="ct" style="color:${st.best>=90?"var(--cyan)":st.best>=70?"var(--amber)":"var(--red)"}">best ${st.best}%</span></li>`;}).join("")
-      : `<li class="dim">No PBQs attempted yet.</li>`}</ul></div>
-  <h2>Recent sessions</h2><div class="card"><ul class="weaklist">${recent}</ul></div>
+      : `<li class="dim">No PBQs attempted yet.</li>`}</ul>
+    <div class="row" style="margin-top:14px"><button class="btn ghost sm" onclick="exportSectionToAI('pbq')">Export to AI</button></div></div>
+  <h2>Recent sessions</h2><div class="card"><ul class="weaklist">${recent}</ul>
+    <div class="row" style="margin-top:14px"><button class="btn ghost sm" onclick="exportSectionToAI('sessions')">Export to AI</button></div></div>
   <h2>Practice exam history</h2><div class="card"><ul class="weaklist">${
     S.examHist&&Object.keys(S.examHist).length
       ? Object.keys(S.examHist).sort().map(n=>{const h=S.examHist[n];
@@ -10887,12 +10911,45 @@ function stats(){
       <button class="btn ghost sm" onclick="examExportAll('md')">Export all exam results (text)</button>
       <button class="btn ghost sm" onclick="examExportAll('json')">Export all exam results (JSON)</button>
     </div></div>
-  <div class="row" style="margin-top:18px"><button class="btn pri" onclick="coachBrief()">Export coaching brief for AI</button>
-    <button class="btn" onclick="reportedIssues()">Flagged items ${(S.contentReports||[]).length?"("+S.contentReports.length+")":""}</button>
-    <button class="btn" onclick="restoreScreen()">Backup / restore</button>
-    <button class="btn ghost" onclick="wipe()">Reset all progress</button></div>`;
+  <div class="row" style="margin-top:18px"><button class="btn pri sm" onclick="coachBrief()">Export coaching brief for AI</button>
+    <button class="btn sm" onclick="reportedIssues()">Flagged items ${(S.contentReports||[]).length?"("+S.contentReports.length+")":""}</button>
+    <button class="btn sm" onclick="restoreScreen()">Backup / restore</button>
+    <button class="btn ghost sm" onclick="wipe()">Reset all progress</button></div>
+  <div class="row" style="margin-top:18px"><button class="btn ghost sm" onclick="home()">Back to home</button></div>`;
+}
+const TITLE_GROUPS=[
+  {g:"Starting out",items:["Cybersecurity Student","Aspiring Analyst","Help Desk Technician","IT Support Specialist"]},
+  {g:"Defense and operations",items:["Security Analyst","Security Operations Analyst","Incident Responder","Threat Hunter","Threat Intelligence Analyst","Digital Forensics Analyst"]},
+  {g:"Engineering and administration",items:["Security Engineer","Security Administrator","Network Administrator","Systems Administrator","Cloud Security Engineer","Security Architect"]},
+  {g:"Offense and testing",items:["Penetration Tester","Red Team Operator","Vulnerability Analyst"]},
+  {g:"Governance and leadership",items:["Compliance Analyst","Risk Analyst","Security Manager","Security Director"]}
+];
+function titleInList(t){ return TITLE_GROUPS.some(x=>x.items.indexOf(t)>=0); }
+function titleOptions(cur){
+  const sel=cur?(titleInList(cur)?cur:"__other"):"";
+  const opt=(v,l)=>`<option value="${esc(v)}"${v===sel?" selected":""}>${esc(l)}</option>`;
+  return opt("","No title")
+    +TITLE_GROUPS.map(x=>`<optgroup label="${esc(x.g)}">${x.items.map(i=>opt(i,i)).join("")}</optgroup>`).join("")
+    +opt("__other","Other (type your own)");
+}
+function cleanTitle(s){ return String(s||"").replace(/\s+/g," ").trim().slice(0,40); }
+function profTitleValue(){
+  const sel=$("pt"); if(!sel) return "";
+  return sel.value==="__other"?cleanTitle($("ptc").value):sel.value;
+}
+function profTitleChange(){
+  const other=$("pt").value==="__other", box=$("ptc");
+  box.style.display=other?"block":"none";
+  if(other) box.focus();
+  profPreview();
+}
+function profPreview(){
+  const el=$("ptp"); if(!el) return;
+  const who=[profTitleValue(),($("pn").value||"").trim().slice(0,40)].filter(Boolean).join(" ");
+  el.textContent=who?("Your home screen will greet you: "+timeGreeting()+", "+who):"Shown in the greeting on your home screen.";
 }
 function profile(first){
+  const curT=S.title||"", customT=!!curT&&!titleInList(curT);
   view="setup"; SECTION=()=>profile(false); AT_SECTION=true;
   const stripEl=document.querySelector(".strip");
   if(first){ if(stripEl) stripEl.classList.add("strip-hidden"); }
@@ -10908,32 +10965,34 @@ function profile(first){
   </div>`:""}
   ${first?"":`<p class="eyebrow">Settings</p>`}
   <h1 style="${first?"font-size:19px;margin-top:14px":""}">${first?"Get started":"Settings"}</h1>
-  <p class="lede" style="${first?"color:var(--txt)":""}">${first?"Name and target exam date, then start your shift. Everything saves in this browser on this device.":"Update your name or exam date."}</p>
+  <p class="lede" style="${first?"color:var(--txt)":""}">${first?"Name, role, and target exam date, then start your shift. Everything saves in this browser on this device.":"Update your name, role, or exam date."}</p>
   <div class="card">
     <label style="display:block;margin-bottom:16px"><div class="zlab-lg">Your name (optional)</div>
-      <input id="pn" type="text" value="${esc(S.name||"")}" placeholder="What should the console call you"></label>
-    <label style="display:block${first?"":";margin-bottom:16px"}"><div class="zlab-lg">Target exam date</div>
+      <input id="pn" type="text" value="${esc(S.name||"")}" placeholder="What should the console call you" oninput="profPreview()"></label>
+    <div style="margin-bottom:16px"><label for="pt" class="zlab-lg" style="display:block">Your role or title (optional)</label>
+      <select id="pt" class="fld" onchange="profTitleChange()">${titleOptions(curT)}</select>
+      <input id="ptc" type="text" maxlength="40" aria-label="Your own title" placeholder="Type your own, e.g. Threat Intel Lead" value="${esc(customT?curT:"")}" oninput="profPreview()" style="margin-top:8px;font-size:16px;${customT?"":"display:none"}">
+      <p id="ptp" class="dim" style="font-size:12.5px;margin:8px 0 0"></p></div>
+    <label style="display:block"><div class="zlab-lg">Target exam date</div>
       <input id="pd" type="date" value="${esc(S.exam||"")}"></label>
-    ${first?"":`<label style="display:block"><div class="zlab-lg">Study guide or material (optional)</div>
-      <input id="pss" type="text" value="${esc(S.studySource||"")}" placeholder="e.g. Messer, Dion, or your own notes">
-      <p class="dim" style="font-size:12px;margin:6px 0 0">Used when exporting to an AI assistant. Type Messer to get the built-in section references; anything else gets a generic objective citation instead.</p></label>`}
   </div>
   <div class="row" style="margin-top:16px">
     <button class="btn pri" onclick="saveProfile()">${first?"Start Your Shift":"Save"}</button>
     ${first?"":`<button class="btn ghost" onclick="home()">Cancel</button>`}
   </div>`;
+  profPreview();
   if($("pn")) $("pn").focus();
 }
 function saveProfile(){
   S.name=($("pn").value||"").trim().slice(0,40);
+  S.title=profTitleValue();
   S.exam=$("pd").value||"";
-  const ssEl=$("pss"); if(ssEl) S.studySource=(ssEl.value||"").trim().slice(0,60);
   save(); toast("Saved"); home();
 }
 function wipe(){
   askConfirm("Erase all progress, weak areas, and card scheduling? Flashcards, acronyms, and notes you added are kept.",()=>{
     const cc=S.customCards,ca=S.customAcr,cs=S.cardSeq,jt=S.jcTopics;
-    S={v:2,name:S.name,exam:S.exam,dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:cc,customAcr:ca,cardSeq:cs,recent:[],pbqStat:{},jcTopics:jt};
+    S={v:2,name:S.name,title:S.title,exam:S.exam,dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:cc,customAcr:ca,cardSeq:cs,recent:[],pbqStat:{},jcTopics:jt};
     for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0}; save(); toast("Progress reset"); home();
   });
 }
@@ -11061,6 +11120,92 @@ function exportCards(list){
   toast("Paste this into Add Content");
 }
 /* ---- coaching brief: a prompt-ready diagnostic for any AI assistant ---- */
+function modeName(m){
+  return m==="shift"?"Question Queue":m==="pbq"?"PBQ":m==="exam"?"Practice Exam (timed)":m==="exam-practice"?"Practice Exam (untimed)":m==="drill"?"Rapid Response (retired mode)":m;
+}
+function exportSectionToAI(kind){
+  const today=new Date().toISOString().slice(0,10);
+  const L=[]; let name="";
+  const head=(title,ask)=>{
+    L.push("# CompTIA Security+ SY0-701 - "+title);
+    L.push("Generated "+today+" from the Night Shift trainer.");
+    L.push("");
+    L.push("## How to use this");
+    L.push("Paste this whole document into an AI assistant along with a request such as:");
+    L.push("");
+    L.push("> "+ask);
+    L.push("");
+  };
+  const foot=()=>{
+    L.push("");
+    L.push("## Notes for the assistant");
+    L.push("- Spell out every acronym in parentheses on first use.");
+    L.push("- Flag whenever the exam-correct answer differs from real-world practice.");
+    L.push("- Choose the study approach and resources yourself based on what works best for me; the trainer does not prescribe any.");
+  };
+  if(kind==="domains"){
+    const total=Object.values(S.dom).reduce((a,b)=>a+b.s,0);
+    if(!total){ toast("Answer some questions first, then export"); return; }
+    const corr=Object.values(S.dom).reduce((a,b)=>a+b.c,0);
+    const ed=(typeof examDate==="function")?examDate():(typeof EXAM_OPEN!=="undefined"?EXAM_OPEN:null);
+    const g=gateStatus();
+    head("Accuracy by Domain","I am studying for CompTIA Security+ SY0-701. Below is my accuracy in each exam domain next to that domain's weight on the real exam. Tell me where I am losing the most points, what the pattern suggests, and how I should divide my remaining study time.");
+    L.push("## Snapshot");
+    if(ed) L.push("- Target exam date: "+ed.toISOString().slice(0,10)+" ("+days(ed)+" days out)");
+    L.push("- Questions answered: "+total+", correct "+corr+" ("+pct(corr,total)+"%)");
+    L.push("- Readiness gate (two practice exams, both 85%+, no domain under 75%, both within the last 14 days): "+(g.pass?"MET":"NOT MET")+" - "+g.label);
+    L.push("");
+    L.push("## Accuracy by domain");
+    L.push("Exam weight is in parentheses. Weighted miss is the weight multiplied by the miss rate, so the largest number is where the most exam points are being lost. Domains with fewer than 5 attempts are low confidence.");
+    L.push("");
+    [1,2,3,4,5].forEach(d=>{
+      const b=S.dom[d];
+      if(!b.s){ L.push("- Domain "+d+".0 "+DNAME[d]+" ("+DWEIGHT[d]+"% of exam): not yet attempted"); return; }
+      const acc=pct(b.c,b.s), wm=Math.round(DWEIGHT[d]*(100-acc))/100;
+      L.push("- Domain "+d+".0 "+DNAME[d]+" ("+DWEIGHT[d]+"% of exam): "+b.c+"/"+b.s+" = "+acc+"%, weighted miss "+wm+(b.s<5?" [low sample]":""));
+    });
+    name="domain-accuracy-for-ai-"+today+".md";
+  } else if(kind==="missed"){
+    const weak=Object.keys(S.tag).filter(t=>S.tag[t].m>0).sort((a,b)=>S.tag[b].m-S.tag[a].m);
+    const missedA=Object.keys(S.acrStat).filter(a=>S.acrStat[a].m>0).sort((a,b)=>S.acrStat[b].m-S.acrStat[a].m);
+    if(!weak.length&&!missedA.length){ toast("No misses recorded yet"); return; }
+    head("Terms and Acronyms I Keep Missing","I am studying for CompTIA Security+ SY0-701. These are the concepts and acronyms I keep missing in practice. Find the reasoning errors behind them rather than just restating them, give me a short refresher on each with a real-world analogy, then quiz me with new scenario-based questions on the same concepts.");
+    L.push("## Concepts missed, ranked by miss count"+(weak.length>60?" (top 60 of "+weak.length+")":""));
+    if(weak.length) weak.slice(0,60).forEach(t=>L.push("- "+t.replace(/-/g," ")+": missed "+S.tag[t].m+" of "+S.tag[t].s+" attempts"+(S.flagged.indexOf(t)>=0?"  [FLAGGED AS A REPEATING PATTERN]":"")));
+    else L.push("- None.");
+    L.push("");
+    L.push("## Acronyms missed, ranked by miss count"+(missedA.length>60?" (top 60 of "+missedA.length+")":""));
+    if(missedA.length) missedA.slice(0,60).forEach(a=>{ const o=allAcr().find(x=>x.a===a);
+      L.push("- "+a+" ("+(o?o.d:"?")+"): missed "+S.acrStat[a].m+" of "+S.acrStat[a].s+(o&&o.u?" - function: "+o.u:"")); });
+    else L.push("- None.");
+    name="missed-terms-for-ai-"+today+".md";
+  } else if(kind==="pbq"){
+    const attempted=PBQ.filter(p=>S.pbqStat[p.id]).sort((a,b)=>S.pbqStat[a.id].best-S.pbqStat[b.id].best);
+    if(!attempted.length){ toast("No PBQs attempted yet"); return; }
+    head("Performance-Based Question History","I am studying for CompTIA Security+ SY0-701. Below are my scores on performance-based questions. For the ones I scored lowest on, explain how to approach that kind of task step by step, then give me new practice scenarios of the same type so I can rehearse without memorizing the originals.");
+    L.push("## Scores, lowest best score first");
+    attempted.forEach(p=>{ const st=S.pbqStat[p.id];
+      L.push("- "+p.title+" (Domain "+p.d+".0, objective "+p.o+", "+p.t+" type): best "+st.best+"%, last "+st.last+"%, "+st.tries+" attempt"+(st.tries>1?"s":"")); });
+    const never=PBQ.filter(p=>!S.pbqStat[p.id]);
+    L.push("");
+    L.push("## Not yet attempted");
+    L.push(never.length?"- "+never.map(p=>p.title).join("; "):"- None.");
+    name="pbq-history-for-ai-"+today+".md";
+  } else if(kind==="sessions"){
+    if(!S.sessions.length){ toast("No sessions yet"); return; }
+    head("Recent Session History","I am studying for CompTIA Security+ SY0-701. Below are my most recent practice sessions. Tell me whether I am improving, plateauing, or slipping, which domains drag my scores down, and how I should change my practice.");
+    L.push("## Sessions, newest first (up to 20)");
+    S.sessions.slice(-20).reverse().forEach(s=>{
+      let line="- "+new Date(s.t).toISOString().slice(0,10)+"  "+modeName(s.mode)+", "+s.n+" items, "+s.pct+"%";
+      if(s.byDom){ const parts=[1,2,3,4,5].filter(d=>s.byDom[d]&&s.byDom[d].s>0).map(d=>"D"+d+" "+pct(s.byDom[d].c,s.byDom[d].s)+"%"); if(parts.length) line+="  ("+parts.join(", ")+")"; }
+      L.push(line);
+    });
+    name="recent-sessions-for-ai-"+today+".md";
+  } else return;
+  foot();
+  dl(name,L.join("\n"));
+  toast("Downloaded - paste it into any AI assistant");
+}
 function coachBrief(){
   const total=Object.values(S.dom).reduce((a,b)=>a+b.s,0);
   if(!total){ toast("Answer some questions first, then export"); return; }
@@ -11230,7 +11375,7 @@ document.addEventListener("click",e=>{
     active.blur();
   }
 },true);
-load().then(()=>{ applyTheme(); if(!S.exam&&!S.name) profile(true); else home(); });
+load().then(()=>{ applyTheme(); if(!S.exam&&!S.name&&!S.title) profile(true); else home(); });
 </script>
 </body>
 </html>
