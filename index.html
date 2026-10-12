@@ -50,7 +50,10 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--amber);out
 .nav-left,.nav-right{display:flex;gap:8px}
 @media(max-width:640px){
   .strip-in{gap:6px;padding:7px 14px}
-  .nav-actions{justify-content:flex-start;margin-top:2px}
+  .nav-actions{justify-content:flex-start;margin-top:2px;flex:0 1 auto;order:1}
+  #sRight{order:2;margin-top:2px}
+  .rotate-hint{order:3}
+  .theme-toggle{order:3;margin-top:2px}
   .hbtn{padding:5px 12px;min-width:0}
 }
 .stn{color:var(--txt);font-weight:700;white-space:nowrap;letter-spacing:.02em}
@@ -64,6 +67,8 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--amber);out
 .readout{color:var(--dim);white-space:nowrap}
 .readout b{color:var(--txt)}
 .readout.hot b{color:var(--red)}
+#sRight:not(:empty){font-size:13px;font-weight:700;padding:2px 8px;border:1px solid var(--line);border-radius:6px;min-width:44px;text-align:center}
+#sRight.hot{border-color:var(--red)}
 .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;align-items:center;justify-content:center;padding:20px;padding-top:calc(20px + env(safe-area-inset-top,0px));padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 .confirm-overlay.on{display:flex}
 .confirm-box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;max-width:420px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.5)}
@@ -9267,11 +9272,13 @@ function nextTicket(){
   renderTicket(false);
   if(!sess.customPool&&!sess.untimed) runTimer(limit(),()=>answer(-1));
 }
+let _clkLast=null;
 function renderTicket(done,chosen){
+  { const c=document.getElementById('clk'); if(done&&c&&/^\d+$/.test(c.textContent)) _clkLast=c.textContent; else if(!done) _clkLast=null; }
   if(!done&&window.scrollTo) window.scrollTo(0,0);
   const q=sess.q, sv=sess.sev;
   const im=sess.integrity>60?"on":(sess.integrity>30?"warn":"crit");
-  strip("question queue",sess.integrity,im,"Integrity <b>"+sess.integrity+"%</b> &nbsp; "+(sess.customPool?"Rep <b>"+sess.i+"</b>":"Ticket <b>"+sess.i+"/"+sess.n+"</b>"),(sess.customPool||sess.untimed)?"":"<b id='clk'>--</b>s");
+  strip("question queue",sess.integrity,im,"Integrity <b>"+sess.integrity+"%</b> &nbsp; "+(sess.customPool?"Rep <b>"+sess.i+"</b>":"Ticket <b>"+sess.i+"/"+sess.n+"</b>"),(sess.customPool||sess.untimed)?"":"<b id='clk'>"+(done&&_clkLast!=null?_clkLast:limit())+"</b>s");
   const opts=sess.order.map((oi,pos)=>{
     let cls="opt";
     if(done){ if(oi===q.a) cls+=" correct"; else if(oi===chosen) cls+=" wrong"; else cls+=" faded"; }
