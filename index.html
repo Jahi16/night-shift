@@ -50,6 +50,7 @@ button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--amber);out
 .nav-left,.nav-right{display:flex;gap:8px}
 @media(max-width:640px){
   .strip-in{gap:6px;padding:7px 14px}
+  #sLamps{min-width:56px}
   .nav-actions{justify-content:flex-start;margin-top:2px;flex:0 1 auto;order:1}
   #sRight{order:2;margin-top:2px}
   .rotate-hint{order:3}
@@ -104,14 +105,30 @@ h2{font-size:18px;margin:30px 0 12px;letter-spacing:-.01em}
 
 /* ---- mode tiles ---- */
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 4px}
-@media(max-width:620px){.tiles{grid-template-columns:1fr}}
+@media(max-width:620px){
+  #homeTiles{grid-template-columns:1fr 1fr;gap:10px}
+  #homeTiles .tile{padding:12px 12px 13px}
+  #homeTiles .tile h3{font-size:15px;line-height:1.25}
+  #homeTiles .tile p.pl{display:none}
+  #homeTiles .tile p.ps{display:block;font-size:12.5px;line-height:1.35}
+  #homeTiles .tile .tag{font-size:9.5px;letter-spacing:.08em;margin-bottom:5px}
+  .tiles:not(#homeTiles){grid-template-columns:1fr}
+}
+.tile p.ps{display:none}
+.resume-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent,var(--amber));border-radius:10px;padding:12px 14px;margin:0 0 10px}
+.resume-card p{margin:0}
+.resume-card .rk{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--accent,var(--amber));margin-bottom:3px}
+.resume-card .rt{font-size:14.5px;color:var(--txt)}
 .tile{background:var(--panel);border:1px solid var(--accent,var(--line));border-left:3px solid var(--accent,var(--amber));
   border-radius:10px;padding:15px 16px;text-align:left;transition:transform .15s,border-color .15s;position:relative}
 .tile:hover{transform:translateY(-2px);border-color:var(--accent,var(--amber))}
-#t-soc,#t-pbq,#t-cards,#t-josh,#t-exams,#t-acr,#t-gloss,#t-weak{border:none;border-left:3px solid var(--accent,var(--amber))}
-#t-soc:hover,#t-pbq:hover,#t-cards:hover,#t-josh:hover,#t-exams:hover,#t-acr:hover,#t-gloss:hover,#t-weak:hover{border-color:transparent;border-left-color:var(--accent,var(--amber))}
+#t-soc,#t-pbq,#t-course,#t-josh,#t-exams,#t-acr,#t-gloss,#t-weak{border:none;border-left:3px solid var(--accent,var(--amber))}
+#t-soc:hover,#t-pbq:hover,#t-course:hover,#t-josh:hover,#t-exams:hover,#t-acr:hover,#t-gloss:hover,#t-weak:hover{border-color:transparent;border-left-color:var(--accent,var(--amber))}
 .tile::after{content:none}
 .tile .tag-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.home-foot{margin-top:18px;justify-content:space-between}
+.btn.reset-btn{color:var(--red);border-color:color-mix(in srgb,var(--red) 45%,transparent)}
+.btn.reset-btn:hover{background:color-mix(in srgb,var(--red) 12%,transparent);border-color:var(--red)}
 .tile-plus{font-size:19px;line-height:1;font-weight:400;color:var(--accent,var(--amber));display:inline-block;animation:tileCornerPulse 2s ease-in-out infinite}
 @keyframes tileCornerPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(1.25)}}
 @media(prefers-reduced-motion:reduce){.tile-plus{animation:none;opacity:.7}}
@@ -325,7 +342,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 .rvq.rvmiss{border-color:rgba(224,87,74,.4)}
 .hero{position:relative;background:linear-gradient(160deg,rgba(240,160,60,.10),rgba(69,211,192,.06));
   border:1px solid var(--line);border-left:3px solid var(--violet);border-radius:12px;padding:20px 22px;margin:4px 0 18px}
-@media(max-width:620px){.hero{margin:4px 0 12px;padding:16px 18px}}
+@media(max-width:620px){.hero{margin:4px 0 12px;padding:14px 18px 14px}.hero .sub{margin-bottom:0}}
 .hero .greet{margin:0 0 2px;font-size:13px;letter-spacing:.04em;color:var(--dim);font-family:var(--mono);text-transform:uppercase;font-weight:700}
 .theme-toggle{flex:0 0 auto;margin-left:auto;display:flex;align-items:center;justify-content:center;
   width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--dim);transition:color .15s,border-color .15s,background .15s}
@@ -334,6 +351,8 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 [data-theme="dark"] .theme-toggle{background:#FFFFFF;border-color:#D5E0E5;color:#132029}
 [data-theme="dark"] .theme-toggle:hover{color:#000000;border-color:#9CB0BC}
 .theme-toggle svg{width:16px;height:16px}
+.theme-toggle,.rotate-hint{position:relative}
+.theme-toggle::after,.rotate-hint::after{content:"";position:absolute;inset:-7px}
 .rotate-hint{display:none;flex:0 0 auto;width:30px;height:30px;border-radius:50%;
   background:var(--raise);border:1px solid var(--line);align-items:center;justify-content:center;cursor:pointer;
   color:var(--amber);animation:rotateHintPulse 2.4s ease-in-out infinite}
@@ -343,7 +362,7 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 .hero h1{margin:0 0 8px;font-size:29px;line-height:1.15}
 .hero .sub{color:var(--txt);font-size:15.5px;line-height:1.62;margin:0 0 16px;max-width:none}
 .hero .sub b{color:var(--violet)}
-.hero .sub.sub-clip{overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:8px;scrollbar-width:thin;scrollbar-color:var(--amber) var(--line)}
+.hero .sub.sub-clip{margin-bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:8px;scrollbar-width:thin;scrollbar-color:var(--amber) var(--line)}
 .hero .sub.sub-clip .sub-rest{display:block}
 .hero .sub.sub-clip::-webkit-scrollbar{width:4px}
 .hero .sub.sub-clip::-webkit-scrollbar-track{background:var(--line);border-radius:2px}
@@ -368,6 +387,11 @@ input[type=date]::-webkit-calendar-picker-indicator:hover{transform:scale(1.08)}
 .hiw{border:1px solid var(--violet);border-left:3px solid var(--violet);border-radius:12px;
   background:linear-gradient(160deg,rgba(155,135,245,.10),rgba(155,135,245,.02));margin:0 0 20px;overflow:hidden}
 @media(max-width:620px){.hiw{margin:0 0 12px}}
+.hiw.seen:not([open]){border-color:transparent;border-left-color:transparent;background:none;margin:-8px 0 8px}
+.hiw.seen:not([open])>summary{padding:6px 2px;justify-content:flex-end;gap:8px;font-size:10.5px;color:var(--dim);font-weight:500}
+.hiw.seen:not([open])>summary:hover{background:none;color:var(--txt)}
+.hiw.seen:not([open])>summary::after{animation:none;color:var(--dim);font-size:14px}
+.hiw.seen:not([open]) .sum-extra{display:none}
 .hiw .closebar{display:flex;justify-content:flex-end;padding:14px 18px 18px;border-top:1px solid var(--line);margin-top:8px}
 .hiw .closebar button{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
   color:var(--dim);background:var(--raise);border:1px solid var(--line);border-radius:8px;padding:8px 16px;cursor:pointer;transition:border-color .15s,color .15s}
@@ -5809,6 +5833,15 @@ const GLOSS = [
 {term:"URL scanning",d:4,g:"network-sec",def:"Filtering web access by evaluating a requested address against an allow or block list, often organized by category rather than individual site. Content categorization and reputation filtering are both specific techniques this scanning approach can rely on."},
 {term:"Agent-based web filtering",d:4,g:"network-sec",def:"A content filtering approach that installs software on each device, applying filtering rules locally regardless of the user's network location. A centralized proxy is the alternative approach, applying the same rules at one shared network point instead of on every individual device."},
 {term:"Centralized proxy",d:4,g:"network-sec",def:"A content filtering approach that routes all user traffic through a single managed point, applying filtering rules there rather than on each individual device. Agent-based filtering is the alternative approach, applying those same rules locally on every device instead of at one shared point."},
+{term:"Three-way handshake",d:3,g:"network",def:"The three-step exchange (SYN, SYN-ACK, ACK) that two devices use to open a TCP connection before any data is sent. A flood of SYN messages that are never completed is a classic denial-of-service technique."},
+{term:"Default gateway",d:3,g:"network",def:"The router a device sends traffic to when the destination is outside its own local network. An attacker who convinces devices that their machine is the default gateway can carry out an on-path attack."},
+{term:"Kernel",d:2,g:"fundamentals",def:"The core of an operating system, which controls memory, processes, and hardware and runs with the highest privileges. Malware that reaches the kernel, such as a rootkit, can hide from tools running above it."},
+{term:"Multi-tenant",d:3,g:"cloud",def:"A cloud arrangement in which many customers (tenants) share the same underlying hardware and platform while their data and workloads are kept logically separate. A failure of that separation exposes one customer to another."},
+{term:"Need to know",d:1,g:"fundamentals",def:"The principle that a person is given access to specific information only when their duties require it, even if their clearance or role would otherwise allow it. It narrows access further than role or clearance alone."},
+{term:"Change advisory board",d:1,g:"governance",def:"The group that reviews proposed changes to systems and approves or rejects them, weighing the purpose, risk, impact, and schedule of each. Commonly shortened to CAB."},
+{term:"Configuration drift",d:4,g:"ops",def:"The gradual movement of a system's settings away from its approved secure baseline as changes accumulate over time. It is found by auditing systems against the baseline and corrected through configuration enforcement."},
+{term:"Fuzzing",d:4,g:"app-sec",def:"A dynamic analysis technique that feeds a running application large amounts of random, malformed, or unexpected input to find crashes and flaws that only appear at run time."},
+{term:"Cryptographic erasure",d:4,g:"asset-mgmt",def:"A sanitization method for encrypted storage in which the encryption key is destroyed, leaving the remaining data unreadable. The media stays usable, and it works on solid-state drives where degaussing does not."},
 ];
 
 const EXTRA_U = {
@@ -8998,6 +9031,19 @@ function leaveSession(dest,label){
     proceed();
   }
 }
+/* The Academy (course.html) can add Drill Down topics to saved state while this app is open in another tab.
+   Merge them in so the next save() here does not overwrite them. */
+function mergeExternalTopics(){
+  try{
+    const L=ls(); if(!L) return; const raw=L.getItem("ns_state"); if(!raw) return;
+    const ext=JSON.parse(raw); if(!ext||!Array.isArray(ext.jcTopics)) return;
+    S.jcTopics=S.jcTopics||[]; const have=S.jcTopics.map(t=>String(t).toLowerCase()); let added=0;
+    ext.jcTopics.forEach(t=>{ const k=String(t).toLowerCase().trim(); if(k&&have.indexOf(k)<0){ S.jcTopics.push(String(t)); have.push(k); added++; } });
+    if(added){ save(); if(view==="setup"&&SECTION===jcSetup&&AT_SECTION) jcSetup(); }
+  }catch(e){}
+}
+window.addEventListener("storage",e=>{ if(e.key==="ns_state") mergeExternalTopics(); });
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden) mergeExternalTopics(); });
 function goHome(){ PENDING_JUMP=null; leaveSession(home,"home"); }
 /* Course link: new tab on GitHub Pages or a local file; in any other host (an embedded viewer) open in place so it never spills into the browser */
 function openCourse(){
@@ -9010,6 +9056,20 @@ function goBack(){
   PENDING_JUMP=canBack?null:ENTRY_TILE;
   leaveSession(canBack?SECTION:home, canBack?"back":"home");
 }
+/* Unfinished work surfaces on the home page so it is one tap away */
+function homeResume(){
+  const out=[];
+  const a=S.activeShift;
+  if(a&&a.i<a.n&&a.integrity>0&&qById(a.qid)) out.push(`<div class="resume-card" style="--accent:var(--amber)"><div><p class="rk">Continue where you left off</p><p class="rt">Question Queue \u00b7 ticket <b>${a.i}</b> of <b>${a.n}</b></p></div><button class="btn pri" onclick="homeResumeShift()">Resume</button></div>`);
+  const x=S.activeExam;
+  if(x&&!x.submitted&&examIsValid(x)){
+    const total=(x.items||[]).length;
+    out.push(`<div class="resume-card" style="--accent:var(--blue)"><div><p class="rk">Continue where you left off</p><p class="rt">Practice Exam in progress${total?` \u00b7 <b>${total}</b> items`:""}</p></div><button class="btn pri" onclick="homeResumeExam()">Resume</button></div>`);
+  }
+  return out.join("");
+}
+function homeResumeShift(){ SECTION=shiftSetup; ENTRY_TILE="t-soc"; shiftResume(); }
+function homeResumeExam(){ SECTION=examHome; ENTRY_TILE="t-exams"; examResume(); }
 function homeStrip(){
   strip("home",0,"on","","",true);
 }
@@ -9076,8 +9136,8 @@ function home(){
     <h1 class="neon" style="font-family:var(--mono);letter-spacing:.03em;word-spacing:-0.2em;text-transform:uppercase">Night Shift</h1>
     <p class="sub"><span class="sub-lead">A full <b>CompTIA Security+ (SY0-701)</b> trainer built around the official exam blueprint. Every question, flashcard, and PBQ (performance-based question) maps to one of the 28 exam objectives, weighted to match the real domain percentages, so your study time mirrors what's actually tested.</span> <span class="sub-rest">Whatever concept you keep getting wrong shows up more often until you've actually cleared it. And it separates the exam date from exam readiness, tracking a real readiness gate based on your practice-exam performance, so you know when you're prepared, not just when the calendar says to show up.</span></p>
   </div>
-  <details class="hiw" id="hiw">
-    <summary>How this works &nbsp;\u00b7&nbsp; read this first</summary>
+  <details class="hiw${S.hiwSeen?" seen":""}" id="hiw">
+    <summary><span>How this works<span class="sum-extra"> &nbsp;\u00b7&nbsp; read this first</span></span></summary>
     <div class="body">
       <h4>Question mix follows the real blueprint</h4>
       <p>Weighted to the official domain percentages: General Security Concepts 12, Threats &amp; Vulnerabilities 22, Security Architecture 18, Security Operations 28, Program Management 20. Weak domains get weighted up automatically.</p>
@@ -9085,8 +9145,10 @@ function home(){
       <p><b>One exam, up to 90 items, freshly randomized on every attempt.</b> Each run draws 3 to 5 PBQs at random, then fills the remaining slots up to 90 with multiple choice, weighted to the official domain percentages, so a heavier PBQ draw means fewer multiple choice items that attempt, matching how the extra time PBQs take gets balanced against the 90-minute clock. Untimed or your own clock. <b>No feedback until you submit</b>. Review maps every miss to its objective.</p>
       <h4>Question Queue</h4>
       <p>Severity-coded tickets; wrong calls cost network integrity, more for a P1. <b>Timer defaults to adaptive</b> (tightens above 85 percent, loosens below 60), or switch to untimed and answer at your own pace.</p>
-      <h4>Flashcards use spaced repetition</h4>
-      <p>Cards you keep missing come back sooner; cards you know fade out.</p>
+      <h4>Acronyms &amp; Flashcards use spaced repetition</h4>
+      <p>One section, two tabs: Acronym Recall (multiple-choice) and Flashcards (free recall). In both, items you keep missing come back sooner and items you know fade out.</p>
+      <h4>The Academy teaches; Night Shift drills</h4>
+      <p>The Academy is the companion course: a lesson for every exam objective, each ending with a specific drill to run here. It reads your results from this app on the same device, and can send a lesson's keywords to The Drill Down.</p>
       <h4>PBQs give partial credit</h4>
       <p>Drag or tap to place. Every item scores individually, like the real exam.</p>
       <h4>Nothing repeats the way you expect</h4>
@@ -9118,41 +9180,41 @@ function home(){
       <div class="s" style="line-height:1.25"><span class="sf">${esc(g.label)}</span><span class="ss">${g.met}/2 exams met</span></div></div>
   </div>
 
-  <div class="tiles">
-    <button class="tile" id="t-soc" style="--accent:var(--amber)" onclick="window.scrollTo(0,0);shiftSetup()">
-      <span class="tag-row"><span class="tag">Mode 01</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Question Queue</h3>
-      <p>One question at a time, timed, pulling from the full domain-weighted bank. Answer wrong and it costs you — this is where most of your reps happen.</p></button>
-    <button class="tile" id="t-pbq" style="--accent:var(--blue)" onclick="pbqSetup()">
-      <span class="tag-row"><span class="tag">Mode 03</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>PBQ Lab</h3>
-      <p>${PBQ.length} performance-based questions. Drag to order, drag to classify, configure rule sets, analyse logs. Partial credit, same as the real thing.</p></button>
-    <button class="tile" id="t-exams" style="--accent:var(--amber)" onclick="examHome()">
-      <span class="tag-row"><span class="tag">Full length</span><span class="tile-plus" aria-hidden="true">+</span></span>
-      <h3>Practice Exam</h3>
-      <p>Up to 90 items, blueprint weighted, genuinely different every attempt. Feedback and a restudy plan only after you submit.</p>
-    </button>
-    <button class="tile" id="t-cards" style="--accent:var(--cyan)" onclick="cardSetup()">
-      <span class="tag-row"><span class="tag">Recall</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Flashcards</h3>
-      <p>Free-recall with spaced repetition. ${allCards().length} concept cards plus a dedicated ${allAcr().length}-acronym deck.</p></button>
-    <button class="tile" id="t-josh" style="--accent:var(--red)" onclick="jcSetup()">
-      <span class="tag-row"><span class="tag">Focused drilling</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>The Drill Down</h3>
-      <p>High-repetition drilling on whatever you keep missing. Fed from your tracked weak terms and acronyms.</p></button>
-    <button class="tile" id="t-acr" style="--accent:var(--violet)" onclick="acrSetup()">
-      <span class="tag-row"><span class="tag">Recall</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Acronym Recall</h3>
-      <p>${acrU().length} of 330 official CompTIA acronyms, quizzed multiple-choice until they stick. Choose a length or a specific domain, plus a full searchable list.</p></button>
-    <button class="tile" id="t-gloss" style="--accent:var(--violet)" onclick="window.scrollTo(0,0);glossRef()">
-      <span class="tag-row"><span class="tag">Reference</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Glossary</h3>
-      <p>${GLOSS.length} terms and concepts, searchable by name or definition, filterable by domain.</p></button>
-    <button class="tile" id="t-weak" style="--accent:var(--faint)" onclick="stats()">
-      <span class="tag-row"><span class="tag">Tracking</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Weak areas &amp; stats</h3>
-      <p>Domain accuracy, repeated misses, PBQ history, and readiness gate status.</p></button>
+  ${homeResume()}
+  <div class="tiles" id="homeTiles">
     <button class="tile" id="t-course" style="--accent:var(--cyan)" onclick="openCourse()">
-      <span class="tag-row"><span class="tag">Learn</span><span class="tile-plus" aria-hidden="true">+</span></span><h3>Academy</h3>
-      <p>The companion course. Lessons for each exam objective, from zero or on a fast track, each ending with a drill to run here.</p></button>
+      <span class="tag-row"><span class="tag">Learn</span><span class="tile-plus" aria-hidden="true">\u2197</span></span><h3>Academy</h3>
+      <p class="pl">The companion course. A lesson for every exam objective, from zero or on a fast track, each ending with a drill to run here.</p><p class="ps">A lesson for every exam objective.</p></button>
+    <button class="tile" id="t-soc" style="--accent:var(--amber)" onclick="window.scrollTo(0,0);shiftSetup()">
+      <span class="tag-row"><span class="tag">Daily practice</span><span class="tile-plus" aria-hidden="true">\u2192</span></span><h3>Question Queue</h3>
+      <p class="pl">One question at a time, timed, pulling from the full domain-weighted bank. Answer wrong and it costs you — this is where most of your reps happen.</p><p class="ps">Timed questions, one at a time.</p></button>
+    <button class="tile" id="t-exams" style="--accent:var(--amber)" onclick="examHome()">
+      <span class="tag-row"><span class="tag">Full length</span><span class="tile-plus" aria-hidden="true">\u2192</span></span>
+      <h3>Practice Exam</h3>
+      <p class="pl">Up to 90 items, blueprint weighted, genuinely different every attempt. Feedback and a restudy plan only after you submit.</p><p class="ps">A full exam, different every time.</p>
+    </button>
+    <button class="tile" id="t-pbq" style="--accent:var(--blue)" onclick="pbqSetup()">
+      <span class="tag-row"><span class="tag">Hands-on</span><span class="tile-plus" aria-hidden="true">\u2192</span></span><h3>PBQ Lab</h3>
+      <p class="pl">${PBQ.length} performance-based questions. Drag to order, drag to classify, configure rule sets, analyse logs. Partial credit, same as the real thing.</p><p class="ps">${PBQ.length} hands-on tasks.</p></button>
+    <button class="tile" id="t-josh" style="--accent:var(--red)" onclick="jcSetup()">
+      <span class="tag-row"><span class="tag">Focused drilling</span><span class="tile-plus" aria-hidden="true">\u2192</span></span><h3>The Drill Down</h3>
+      <p class="pl">High-repetition drilling on whatever you keep missing. Fed from your tracked weak terms and acronyms.</p><p class="ps">Reps on what you keep missing.</p></button>
+    <button class="tile" id="t-acr" style="--accent:var(--violet)" onclick="afSetup()">
+      <span class="tag-row"><span class="tag">Recall</span><span class="tile-plus" aria-hidden="true">\u2192</span></span><h3>Acronyms &amp; Flashcards</h3>
+      <p class="pl">Two recall drills in one place. ${acrU().length} acronyms quizzed multiple-choice, and ${allCards().length} concept cards with spaced repetition.</p><p class="ps">Acronym quiz and concept cards.</p></button>
+    <button class="tile" id="t-gloss" style="--accent:var(--violet)" onclick="window.scrollTo(0,0);glossRef()">
+      <span class="tag-row"><span class="tag">Reference</span><span class="tile-plus" aria-hidden="true">\u2192</span></span><h3>Glossary</h3>
+      <p class="pl">${GLOSS.length.toLocaleString()} terms and concepts, searchable by name or definition, filterable by domain.</p><p class="ps">${GLOSS.length.toLocaleString()} searchable terms.</p></button>
+    <button class="tile" id="t-weak" style="--accent:var(--green)" onclick="stats()">
+      <span class="tag-row"><span class="tag">Tracking</span><span class="tile-plus" aria-hidden="true">\u2192</span></span><h3>Weak areas &amp; stats</h3>
+      <p class="pl">Domain accuracy, repeated misses, PBQ history, and readiness gate status.</p><p class="ps">Accuracy, misses, readiness gate.</p></button>
   </div>
-  <div class="row" style="margin-top:14px">
-    <button class="btn ghost sm" onclick="profile(false)">Settings</button>
+  <div class="row home-foot">
+    <button class="btn ghost" onclick="profile(false)">Settings</button>
+    <button class="btn ghost reset-btn" onclick="wipe()">Reset all progress</button>
   </div>`;
   fitHeroSub(true);
+  { const hw=$("hiw"); if(hw) hw.addEventListener("toggle",()=>{ if(hw.open&&!S.hiwSeen){ S.hiwSeen=true; save(); } }); }
   if(PENDING_JUMP){ const t=PENDING_JUMP; PENDING_JUMP=null; heroJump([t],true); }
   else if(window.scrollTo) window.scrollTo(0,0);
 }
@@ -9383,13 +9445,24 @@ function srsOf(i){ return S.srs[i]||{ease:2.3,iv:0,due:0,reps:0}; }
 function dueCount(){ const now=Date.now(); return allCards().filter(c=>srsOf(c.id).due<=now).length; }
 let CARD_LEN=25;
 function cardSetLen(n){ CARD_LEN=n; cardSetup(); }
+/* Acronyms & Flashcards: one home tile, two tabs. Each tab is its own setup screen so Back from a session returns to the tab it started from. */
+function afSetup(){ (S.afTab==="cards"?cardSetup:acrSetup)(); }
+function afTab(t){ S.afTab=t; save(); window.scrollTo(0,0); afSetup(); }
+function afHead(t){
+  return `<p class="eyebrow">Recall</p><h1>Acronyms &amp; Flashcards</h1>
+  <div class="seg" role="tablist" aria-label="Choose a drill" style="margin:10px 0 14px">
+    <button role="tab" aria-selected="${t==="acr"}" class="${t==="acr"?"on":""}" onclick="afTab('acr')">Acronym Recall</button>
+    <button role="tab" aria-selected="${t==="cards"}" class="${t==="cards"?"on":""}" onclick="afTab('cards')">Flashcards</button>
+  </div>
+  <h2 style="margin:0 0 6px">${t==="acr"?"Acronym Recall":"Flashcards"}</h2>`;
+}
 function cardSetup(){
-  SECTION=cardSetup; AT_SECTION=true; ENTRY_TILE="t-cards";
-  view="setup"; strip("flashcards / setup",0); stopTimer();
+  SECTION=cardSetup; AT_SECTION=true; ENTRY_TILE="t-acr"; S.afTab="cards";
+  view="setup"; strip("acronyms & flashcards / flashcards",0); stopTimer();
   const all=allCards();
   const per={}; all.forEach(c=>{ per[c.d]=(per[c.d]||0)+(srsOf(c.id).due<=Date.now()?1:0); });
   $("app").innerHTML=`
-  <p class="eyebrow">Recall</p><h1>Flashcards</h1>
+  ${afHead("cards")}
   <p class="lede">Read the front, answer out loud in your own words, then reveal. Rate yourself honestly. Anything you rate Again comes straight back.</p>
   <p class="eyebrow" style="margin-top:16px">Length</p>
   <div class="row">
@@ -9599,12 +9672,12 @@ let ACR_LEN=25;
 function acrSetLen(n){ ACR_LEN=n; acrSetup(); }
 function setAcrEasy(on){ S.acrEasy=!!on; save(); acrSetup(); }
 function acrSetup(){
-  SECTION=acrSetup; AT_SECTION=true; ENTRY_TILE="t-acr";
-  view="setup"; strip("acronym recall / setup",0); stopTimer();
+  SECTION=acrSetup; AT_SECTION=true; ENTRY_TILE="t-acr"; S.afTab="acr";
+  view="setup"; strip("acronyms & flashcards / acronym recall",0); stopTimer();
   const acrTotal=acrU().length;
   const acrSeen=acrU().filter(a=>S.acrStat[a.a]&&S.acrStat[a.a].s>0).length;
   $("app").innerHTML=`
-  <p class="eyebrow">Recall</p><h1>Acronym Recall</h1>
+  ${afHead("acr")}
   <p class="lede">${acrTotal} drillable acronyms out of ${allAcr().length} total. Distractors come from the same family, so guessing by category will not save you. Each acronym schedules itself like a flashcard: miss it and it comes back in a later session, know it and it fades out.</p>
   <div style="margin:4px 0 16px">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
@@ -10998,11 +11071,12 @@ function saveProfile(){
   save(); toast("Saved"); home();
 }
 function wipe(){
-  askConfirm("Erase all progress, weak areas, and card scheduling? Flashcards, acronyms, and notes you added are kept.",()=>{
-    const cc=S.customCards,ca=S.customAcr,cs=S.cardSeq,jt=S.jcTopics;
-    S={v:2,name:S.name,title:S.title,exam:S.exam,dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:cc,customAcr:ca,cardSeq:cs,recent:[],pbqStat:{},jcTopics:jt};
+  askConfirm("Reset all Night Shift progress? This erases your scores, question and acronym coverage, weak areas, flashcard scheduling, practice exam history, and any shift in progress. It cannot be undone. Kept: your name, role, exam date, settings, Drill Down topics, and anything you added. Academy lesson progress is separate; reset it from the Academy's Setup page.",()=>{
+    const keep={}; ["name","title","exam","theme","timerOff","acrEasy","afTab","shiftDom","hiwSeen","customCards","customAcr","cardSeq","jcTopics"].forEach(k=>{ if(S[k]!==undefined) keep[k]=S[k]; });
+    S=Object.assign({v:2,name:"",exam:"",dom:{},tag:{},qStat:{},srs:{},acrStat:{},sessions:[],bestDrill:0,tight:1,roll:[],flagged:[],customCards:[],customAcr:[],cardSeq:0,recent:[],pbqStat:{}},keep);
     for(let d=1;d<=5;d++) S.dom[d]={s:0,c:0}; save(); toast("Progress reset"); home();
   });
+  const cb=$("confirmBtn1"); if(cb) cb.textContent="Reset progress";
 }
 
 /* ================= ADD CONTENT ================= */
