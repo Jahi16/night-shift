@@ -9045,10 +9045,8 @@ function mergeExternalTopics(){
 window.addEventListener("storage",e=>{ if(e.key==="ns_state") mergeExternalTopics(); });
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden) mergeExternalTopics(); });
 function goHome(){ PENDING_JUMP=null; leaveSession(home,"home"); }
-/* Course link: new tab on GitHub Pages or a local file; in any other host (an embedded viewer) open in place so it never spills into the browser */
+/* Course link: always opens in this tab, so moving between Night Shift and the Academy never piles up tabs */
 function openCourse(){
-  const newTab=/github\.io$/.test(location.hostname)||location.protocol==="file:";
-  if(newTab){ let w=null; try{ w=window.open('course.html','_blank'); }catch(e){} if(w) return; }
   try{ location.href='course.html'; }catch(e){ toast('Open course.html from the same site as Night Shift'); }
 }
 function goBack(){
